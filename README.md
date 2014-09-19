@@ -1,5 +1,7 @@
 # cash
 
+http://kenwheeler.github.io/cash
+
 ## An absurdly small jQuery alternative for modern browsers
 
 ### what is cash?
@@ -14,17 +16,18 @@ It allows developers to use the jQuery syntax they already know, and utilizes mo
 ### $()
 
 
-$(selector,[context])  => collection
-$(collection)  => self
-$(DOM elements)  => collection
-$(HTML)  => collection
+    $(selector,[context])  => collection
+    $(collection)  => self
+    $(DOM elements)  => collection
+    $(HTML)  => collection
 
 This is the main selector method for cash. It returns an actionable collection of nodes.
 
 ### $.ajax
 
 
-$.ajax(options)
+    $.ajax(options)
+    
 
 Initiates an AJAX request with the given options and triggers the appropriate callback.
 
