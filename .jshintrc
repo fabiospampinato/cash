@@ -1,0 +1,26 @@
+{
+  "boss": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "expr": true,
+  "immed": true,
+  "noarg": true,
+  "onevar": true,
+  "quotmark": "double",
+  "smarttabs": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true,
+  "globals": { 
+    "document": true,
+    "cash": true,
+    "$": true,
+    "_": true,
+    "XMLHttpRequest": true,
+    "slice": true,
+    "event": true,
+    "window": true 
+  },
+  "node": true
+}
