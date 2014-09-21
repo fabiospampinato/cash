@@ -24,15 +24,29 @@ _.init = function(selector, context){
     result.push.apply(result, $.parseHTML(selector));
   } else {
     if(!context) {
-      result = document.querySelectorAll(selector);
+      result = querySelect(selector);
     } else {
-      context = document.querySelectorAll(context);
-      result = context[0].querySelectorAll(selector);
+      context = querySelect(context);
+      result = querySelect(selector,context[0]);
     }
   }
   $.extend(result, $.fn);
   return result;
 };
+
+function querySelect(selector, context) {
+
+  var idMatch,classMatch, root = context || document;
+  idMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/).exec(selector);
+  classMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|\.([\w-]*))$/).exec(selector);
+  if(idMatch){
+    return [document.getElementById(idMatch[2])];
+  } else if (classMatch) {
+    return document.getElementsByClassName(classMatch[2]);
+  } else {
+    return root.querySelectorAll(selector);
+  }
+}
 
 $.ajax = function(options){
   var request = new XMLHttpRequest();
@@ -60,7 +74,6 @@ $.ajax = function(options){
     request.send();
   }
 };
-
 
 _.addClass = function(className){
   this.each(function(v){
@@ -191,12 +204,52 @@ _.data = function(key,value){
   return this;
 };
 
+_.height = function(){
+  return this[0].getBoundingClientRect().height;
+};
+
+_.innerWidth = function(){
+  return this[0].clientWidth;
+};
+
+_.innerHeight = function(){
+  return this[0].clientHeight;
+};
+
+_.outerWidth = function(margins){
+  if(margins === true){
+    return this[0].offsetWidth +
+      (parseInt(getComputed(this,"margin-left"), 10) || 0) +
+      (parseInt(getComputed(this,"margin-right"), 10) || 0);
+  }
+  return this[0].offsetWidth;
+};
+
+_.outerHeight = function(margins){
+  if(margins === true){
+    return this[0].offsetHeight +
+      (parseInt(getComputed(this,"margin-top"), 10) || 0) +
+      (parseInt(getComputed(this,"margin-bottom"), 10) || 0 );
+  }
+  return this[0].offsetHeight;
+};
+
+_.width = function(){
+  return this[0].getBoundingClientRect().width;
+};
+
+function getComputed(el, prop) {
+  var computed;
+  computed = window.getComputedStyle(el[0],null);
+  return computed[prop];
+}
 
 _.off = function(){
   this.each(function(v){
     var eventName = arguments[0], callback = arguments[1];
     v.removeEventListener(eventName, callback);
   });
+  return this;
 };
 
 _.on = function(){
@@ -207,6 +260,7 @@ _.on = function(){
     this.each(function(v){
       v.addEventListener(eventName, callback);
     });
+    return this;
   } else {
     eventName = arguments[0];
     delegate = arguments[1];
@@ -218,11 +272,21 @@ _.on = function(){
         }
       });
     });
+    return this;
   }
 };
 
 _.ready = function(callback){
   this[0].addEventListener("DOMContentLoaded", callback);
+};
+
+_.trigger = function(eventName){
+  event = document.createEvent("HTMLEvents");
+  event.initEvent(eventName, true, false);
+  this.each(function(v){
+    v.dispatchEvent(event);
+  });
+  return this;
 };
 
 _.serialize = function(){
@@ -255,6 +319,7 @@ _.val = function(value){
       this.each(function(v){
         v.value = value;
       });
+      return this;
     }
 };
 
@@ -318,11 +383,9 @@ _.text = function(content){
     this.each(function(v){
       v.innerText = content;
     });
+    return this;
   }
 };
-
-
-
 
 _.children = function(selector) {
   if(!selector){

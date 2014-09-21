@@ -59,5 +59,6 @@ _.text = function(content){
     this.each(function(v){
       v.innerText = content;
     });
+    return this;
   }
 };

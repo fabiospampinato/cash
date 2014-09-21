@@ -234,6 +234,15 @@ Returns boolean result of the selector argument against the collection.
 Returns the boolean result of checking if the first element in
           the collection has the className attribute.
 
+### height
+
+
+
+    html()  => Integer
+
+
+Returns the height of the element
+
 ### html
 
             
@@ -254,6 +263,24 @@ Returns the HTML text of the first element in the collection,
         
 
 Returns the index of the element in its parent if an element or              selector isn't provided. Returns index within element or selector              if it is.
+
+### innerHeight
+
+
+
+    innerHeight()  => Integer
+
+
+Returns the height of the element + padding
+
+### innerWidth
+
+
+
+    innerWidth()  => Integer
+
+
+Returns the width of the element + padding
 
 ### insertAfter
 
@@ -319,6 +346,24 @@ Removes event listener from collection elments.
 
 Adds event listener to collection elments. Event is delegated if
           delegate is supplied.
+
+### outerHeight
+
+
+    outerHeight()  => Integer
+    outerHeight(true)  => Integer
+
+
+Returns the outer height of the element. Includes margins if margin is set to true.
+
+### outerWidth
+
+
+    outerWidth()  => Integer
+    outerWidth(true)  => Integer
+
+
+Returns the outer width of the element. Includes margins if margin is set to true.
 
 ### parent
 
@@ -455,6 +500,14 @@ Returns a collection of sibling elements.
 Returns the inner text of the first element in the collection,
           sets the text if textContent is provided.
 
+### trigger
+
+
+
+    trigger(eventName)  => collection
+
+Triggers supplied event on elements in collection.
+
 ### val
 
             
@@ -465,3 +518,11 @@ Returns the inner text of the first element in the collection,
 
 Returns an inputs value. If value is supplied, sets all inputs
           in collection's value to the value argument.
+
+### width
+
+
+    width()  => Integer
+
+
+Returns the width of the element.

@@ -29,5 +29,6 @@ _.val = function(value){
       this.each(function(v){
         v.value = value;
       });
+      return this;
     }
 };

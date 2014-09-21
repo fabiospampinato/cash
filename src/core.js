@@ -24,12 +24,26 @@ _.init = function(selector, context){
     result.push.apply(result, $.parseHTML(selector));
   } else {
     if(!context) {
-      result = document.querySelectorAll(selector);
+      result = querySelect(selector);
     } else {
-      context = document.querySelectorAll(context);
-      result = context[0].querySelectorAll(selector);
+      context = querySelect(context);
+      result = querySelect(selector,context[0]);
     }
   }
   $.extend(result, $.fn);
   return result;
 };
+
+function querySelect(selector, context) {
+
+  var idMatch,classMatch, root = context || document;
+  idMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/).exec(selector);
+  classMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|\.([\w-]*))$/).exec(selector);
+  if(idMatch){
+    return [document.getElementById(idMatch[2])];
+  } else if (classMatch) {
+    return document.getElementsByClassName(classMatch[2]);
+  } else {
+    return root.querySelectorAll(selector);
+  }
+}
