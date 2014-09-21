@@ -360,7 +360,7 @@ Returns the outer height of the element. Includes margins if margin is set to tr
 
 
     outerWidth()  => Integer
-    outerWidth(true)  => Integer
+    outerWidth(margin)  => Integer
 
 
 Returns the outer width of the element. Includes margins if margin is set to true.
