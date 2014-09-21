@@ -21,14 +21,13 @@ _.init = function(selector, context){
     }
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-    result.push($.parseHTML(selector));
+    result.push.apply(result, $.parseHTML(selector));
   } else {
     if(!context) {
       result = document.querySelectorAll(selector);
     } else {
-      if (context = document.querySelectorAll(context)){
-        result = context[0].querySelectorAll(selector);
-      }
+      context = document.querySelectorAll(context);
+      result = context[0].querySelectorAll(selector);
     }
   }
   $.extend(result, $.fn);
@@ -107,7 +106,9 @@ _.removeClass = function(className){
   return this;
 };
 
-_.each = Array.prototype.forEach;
+_.each = function(callback){
+  $.each(this, callback);
+};
 
 _.eq = function(index){
   return $(this[index]);
@@ -125,13 +126,11 @@ _.filter = function(){
 };
 
 _.first = function(){
-  return this[0];
+  return $(this[0]);
 };
 
 _.get = function( num ) {
-  return num != null ?
-    ( num < 0 ? this[ num + this.length ] : this[ num ] ) :
-    slice.call( this );
+  return this[num];
 };
 
 _.index = function(elem){
@@ -143,7 +142,7 @@ _.index = function(elem){
 };
 
 _.last = function(){
-  return this[this.length -1];
+  return $(this[this.length -1]);
 };
 
 _.css = function(){
@@ -382,8 +381,10 @@ _.siblings = function(){
   return this.parent().children();
 };
 
-$.each = function(list,callback){
-  list.forEach(callback);
+$.each = function(collection,callback){
+  for(var i = 0; i < collection.length; i++){
+    callback.call(collection[i]);
+  }
 };
 
 $.extend = function(obj) {
@@ -404,10 +405,31 @@ $.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
 };
 
+$.merge = function(first, second) {
+  var len = +second.length, j = 0, i = first.length;
+  for ( ; j < len; j++ ) {
+    first[ i++ ] = second[ j ];
+  }
+  first.length = i;
+  return first;
+};
+
 $.noop = function(){};
 
 $.parseHTML = function(str) {
-  var tmp = document.createElement("div");
+  var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
+  if(parsed) {
+    return [document.createElement(parsed[1])];
+  }
+  parsed = buildFragment(str);
+  return parsed.childNodes;
+};
+
+function buildFragment(str){
+  var fragment, tmp;
+  fragment = fragment || document.createDocumentFragment();
+  tmp = tmp || fragment.appendChild(document.createElement("div"));
   tmp.innerHTML = str;
-  return tmp.firstChild;
-};}.call(typeof window !== "undefined" ? window : this));
+  return tmp;
+}
+}.call(typeof window !== "undefined" ? window : this));

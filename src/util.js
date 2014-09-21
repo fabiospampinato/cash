@@ -1,6 +1,8 @@
 
-$.each = function(list,callback){
-  list.forEach(callback);
+$.each = function(collection,callback){
+  for(var i = 0; i < collection.length; i++){
+    callback.call(collection[i]);
+  }
 };
 
 $.extend = function(obj) {
@@ -21,10 +23,30 @@ $.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
 };
 
+$.merge = function(first, second) {
+  var len = +second.length, j = 0, i = first.length;
+  for ( ; j < len; j++ ) {
+    first[ i++ ] = second[ j ];
+  }
+  first.length = i;
+  return first;
+};
+
 $.noop = function(){};
 
 $.parseHTML = function(str) {
-  var tmp = document.createElement("div");
-  tmp.innerHTML = str;
-  return tmp.firstChild;
+  var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
+  if(parsed) {
+    return [document.createElement(parsed[1])];
+  }
+  parsed = buildFragment(str);
+  return parsed.childNodes;
 };
+
+function buildFragment(str){
+  var fragment, tmp;
+  fragment = fragment || document.createDocumentFragment();
+  tmp = tmp || fragment.appendChild(document.createElement("div"));
+  tmp.innerHTML = str;
+  return tmp;
+}

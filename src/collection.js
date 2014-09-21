@@ -1,5 +1,7 @@
 
-_.each = Array.prototype.forEach;
+_.each = function(callback){
+  $.each(this, callback);
+};
 
 _.eq = function(index){
   return $(this[index]);
@@ -17,13 +19,11 @@ _.filter = function(){
 };
 
 _.first = function(){
-  return this[0];
+  return $(this[0]);
 };
 
 _.get = function( num ) {
-  return num != null ?
-    ( num < 0 ? this[ num + this.length ] : this[ num ] ) :
-    slice.call( this );
+  return this[num];
 };
 
 _.index = function(elem){
@@ -35,5 +35,5 @@ _.index = function(elem){
 };
 
 _.last = function(){
-  return this[this.length -1];
+  return $(this[this.length -1]);
 };

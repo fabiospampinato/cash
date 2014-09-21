@@ -21,14 +21,13 @@ _.init = function(selector, context){
     }
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-    result.push($.parseHTML(selector));
+    result.push.apply(result, $.parseHTML(selector));
   } else {
     if(!context) {
       result = document.querySelectorAll(selector);
     } else {
-      if (context = document.querySelectorAll(context)){
-        result = context[0].querySelectorAll(selector);
-      }
+      context = document.querySelectorAll(context);
+      result = context[0].querySelectorAll(selector);
     }
   }
   $.extend(result, $.fn);
