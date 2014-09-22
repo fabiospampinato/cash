@@ -42,8 +42,8 @@ function querySelect(selector, context) {
   if(idMatch){
     return [document.getElementById(idMatch[2])];
   } else if (classMatch) {
-    return document.getElementsByClassName(classMatch[2]);
+    return [].slice.call(document.getElementsByClassName(classMatch[2]));
   } else {
-    return root.querySelectorAll(selector);
+    return [].slice.call(root.querySelectorAll(selector));
   }
 }

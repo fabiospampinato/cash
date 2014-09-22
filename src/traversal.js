@@ -53,5 +53,8 @@ _.prev = function(){
 };
 
 _.siblings = function(){
-  return this.parent().children();
+  var collection = this.parent().children(), el = this[0];
+  return Array.prototype.filter.call(collection,function(i){
+    return i !== el;
+  });
 };

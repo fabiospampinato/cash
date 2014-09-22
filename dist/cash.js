@@ -42,9 +42,9 @@ function querySelect(selector, context) {
   if(idMatch){
     return [document.getElementById(idMatch[2])];
   } else if (classMatch) {
-    return document.getElementsByClassName(classMatch[2]);
+    return [].slice.call(document.getElementsByClassName(classMatch[2]));
   } else {
-    return root.querySelectorAll(selector);
+    return [].slice.call(root.querySelectorAll(selector));
   }
 }
 
@@ -441,12 +441,15 @@ _.prev = function(){
 };
 
 _.siblings = function(){
-  return this.parent().children();
+  var collection = this.parent().children(), el = this[0];
+  return Array.prototype.filter.call(collection,function(i){
+    return i !== el;
+  });
 };
 
 $.each = function(collection,callback){
   for(var i = 0; i < collection.length; i++){
-    callback.call(collection[i]);
+    callback.call(collection[i],collection[i],i,collection);
   }
 };
 
@@ -466,15 +469,6 @@ $.extend = function(obj) {
 
 $.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
-};
-
-$.merge = function(first, second) {
-  var len = +second.length, j = 0, i = first.length;
-  for ( ; j < len; j++ ) {
-    first[ i++ ] = second[ j ];
-  }
-  first.length = i;
-  return first;
 };
 
 $.noop = function(){};
