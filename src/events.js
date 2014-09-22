@@ -1,7 +1,7 @@
 
 _.off = function(){
+  var eventName = arguments[0], callback = arguments[1];
   this.each(function(v){
-    var eventName = arguments[0], callback = arguments[1];
     v.removeEventListener(eventName, callback);
   });
   return this;
