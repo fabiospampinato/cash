@@ -4,7 +4,7 @@ this.cash = this.$ = function(selector, context){
   return obj.init(selector, context);
 };
 
-_ = cash.fn = cash.prototype = {cash: true};
+var _ = cash.fn = cash.prototype = {cash: true};
 
 _.init = function(selector, context){
   var result =[];
