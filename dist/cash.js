@@ -244,20 +244,30 @@ function getComputed(el, prop) {
   return computed[prop];
 }
 
+var _eventCache = {};
+
 _.off = function(){
   var eventName = arguments[0], callback = arguments[1];
   this.each(function(v){
-    v.removeEventListener(eventName, callback);
+    if(callback){
+      v.removeEventListener(eventName, callback);
+    } else {
+      for(var i in _eventCache[$(v).data("cshid")][eventName]) {
+        v.removeEventListener(eventName, _eventCache[$(v).data("cshid")][eventName][i]);
+      }
+    }
   });
   return this;
 };
 
 _.on = function(){
   var eventName, delegate, callback;
+
   if(typeof arguments[1] === "function") {
     eventName = arguments[0];
     callback = arguments[1];
     this.each(function(v){
+      registerEvent($(v),eventName,callback);
       v.addEventListener(eventName, callback);
     });
     return this;
@@ -266,11 +276,13 @@ _.on = function(){
     delegate = arguments[1];
     callback = arguments[2];
     this.each(function(v){
-      v.addEventListener(eventName, function(){
+      var handler = function(){
         if($.matches(event.target,delegate)){
           callback.call(event.target);
         }
-      });
+      };
+      registerEvent($(v), eventName, handler);
+      v.addEventListener(eventName, handler);
     });
     return this;
   }
@@ -288,6 +300,26 @@ _.trigger = function(eventName){
   });
   return this;
 };
+
+function registerEvent(node,eventName,callback){
+  var nid = $(node).data("cshid") || guid();
+  $(node).data("cshid", nid);
+  if(!(nid in _eventCache)) {
+    _eventCache[nid] = {};
+  }
+  if(!(eventName in _eventCache[nid])) {
+      _eventCache[nid][eventName] = [];
+  }
+  _eventCache[nid][eventName].push(callback);
+}
+
+function guid() {
+    function _p8(s) {
+        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+    }
+    return _p8() + _p8(true) + _p8(true) + _p8();
+}
 
 _.serialize = function(){
     var form = this[0];

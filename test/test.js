@@ -197,6 +197,18 @@ QUnit.test( "on(delegate)", function( assert ) {
   assert.equal($('.event-fixture')[0].textContent, 2, "on(delegate) Passed!" );
 });
 
+QUnit.test( "off", function( assert ) {
+  var i = 1;
+  $('.off-fixture').on('click', function(){
+    i++;
+    this.textContent = i;
+  });
+  $('.off-fixture').trigger('click');
+  $('.off-fixture').off('click');
+  $('.off-fixture').trigger('click');
+  assert.equal($('.off-fixture')[0].textContent, 2, "on Passed!" );
+});
+
 QUnit.test( "trigger", function( assert ) {
   var i = 1;
   $('.trigger-fixture').on('click', function(){
