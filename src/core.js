@@ -11,6 +11,9 @@ _.init = function(selector, context){
   if(!selector) {
     return this;
   }
+  if(typeof selector === "function") {
+    return $(document).ready(selector);
+  }
   if(typeof selector === "object") {
     if(selector.cash) {
       return selector;
