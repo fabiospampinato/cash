@@ -189,12 +189,12 @@ QUnit.test( "on", function( assert ) {
 
 QUnit.test( "on(delegate)", function( assert ) {
   var i = 1;
-  $('#qunit-fixture').on('click','.event-fixture', function(){
+  $('#qunit-fixture').on('click','.delegate-fixture', function(){
     i++;
     this.textContent = i;
   });
-  $('.event-fixture').trigger('click');
-  assert.equal($('.event-fixture')[0].textContent, 2, "on(delegate) Passed!" );
+  $('.delegate-fixture').trigger('click');
+  assert.equal($('.delegate-fixture')[0].textContent, 2, "on(delegate) Passed!" );
 });
 
 QUnit.test( "off", function( assert ) {
@@ -235,7 +235,7 @@ QUnit.test( "val", function( assert ) {
 //Traversal
 
 QUnit.test( "children", function( assert ) {
-  assert.equal($('#qunit-fixture').children().length, 11, "children Passed!" );
+  assert.equal($('#qunit-fixture').children().length, 12, "children Passed!" );
   assert.equal($('#qunit-fixture').children('div').length, 5, "children(selector) Passed!" );
 });
 
@@ -268,7 +268,7 @@ QUnit.test( "prev", function( assert ) {
 });
 
 QUnit.test( "siblings", function( assert ) {
-  assert.equal($('#id-fixture').siblings().length, 10, "siblings Passed!" );
+  assert.equal($('#id-fixture').siblings().length, 11, "siblings Passed!" );
 });
 
 //Manipulation

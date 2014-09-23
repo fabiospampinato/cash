@@ -45,7 +45,7 @@ _.removeClass = function(className){ // TODO: tear out into module for IE9
     if(v.classList) {
       v.classList.remove(className);
     } else {
-      v.className = v.className.replace(className,'');
+      v.className = v.className.replace(className,"");
     }
   });
   return this;
