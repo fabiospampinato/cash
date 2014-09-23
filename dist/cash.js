@@ -21,7 +21,7 @@ _.init = function(selector, context){
     }
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-    result.push.apply(result, $.parseHTML(selector));
+    result = $.parseHTML(selector);
   } else {
     if(!context) {
       result = querySelect(selector);
@@ -54,17 +54,17 @@ $.ajax = function(options){
   request.onload = function() {
     if (request.status >= 200 && request.status < 400){
       if(options.success){
-        options.success.call(request.responseText);
+        options.success.call(this, request.responseText);
       }
     } else {
       if(options.error) {
-        options.error.call();
+        options.error.call(this, request.statusText);
       }
     }
   };
   request.onerror = function() {
     if(options.error) {
-      options.error.call();
+      options.error.call(this, request.statusText);
     }
   };
   if(options.type === "POST"){
@@ -479,7 +479,7 @@ $.parseHTML = function(str) {
     return [document.createElement(parsed[1])];
   }
   parsed = buildFragment(str);
-  return parsed.childNodes;
+  return [].slice.call(parsed.childNodes);
 };
 
 function buildFragment(str){

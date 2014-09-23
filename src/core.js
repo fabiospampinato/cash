@@ -21,7 +21,7 @@ _.init = function(selector, context){
     }
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-    result.push.apply(result, $.parseHTML(selector));
+    result = $.parseHTML(selector);
   } else {
     if(!context) {
       result = querySelect(selector);

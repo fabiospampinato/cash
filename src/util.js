@@ -31,7 +31,7 @@ $.parseHTML = function(str) {
     return [document.createElement(parsed[1])];
   }
   parsed = buildFragment(str);
-  return parsed.childNodes;
+  return [].slice.call(parsed.childNodes);
 };
 
 function buildFragment(str){

@@ -5,17 +5,17 @@ $.ajax = function(options){
   request.onload = function() {
     if (request.status >= 200 && request.status < 400){
       if(options.success){
-        options.success.call(request.responseText);
+        options.success.call(this, request.responseText);
       }
     } else {
       if(options.error) {
-        options.error.call();
+        options.error.call(this, request.statusText);
       }
     }
   };
   request.onerror = function() {
     if(options.error) {
-      options.error.call();
+      options.error.call(this, request.statusText);
     }
   };
   if(options.type === "POST"){

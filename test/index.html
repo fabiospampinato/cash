@@ -1,13 +1,22 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>cash</title>
+  <meta charset="utf-8">
+  <title>Cash</title>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.15.0.css">
 </head>
 <body>
-<div class="test-container">
-  <p>This is the cash test container</p>
-  <a href="#" class="test-link">Test Link</a>
-</div>
-
-<script type="text/javascript" src="../dist/cash.js"></script>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <div class="class-fixture"></div>
+    <div id="id-fixture"></div>
+    <div class="qsa-fixture"></div>
+    <div class="qsa-fixture"></div>
+    <div class="attr-fixture has-class" data-index="5" success="get"></div>
+    <input type="checkbox" class="prop-fixture" checked/>
+  </div>
+  <script src="http://code.jquery.com/qunit/qunit-1.15.0.js"></script>
+  <script type="text/javascript" src="../dist/cash.js"></script>
+  <script src="test.js"></script>
 </body>
 </html>
