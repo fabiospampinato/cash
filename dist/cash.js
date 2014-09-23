@@ -268,7 +268,7 @@ _.on = function(){
     this.each(function(v){
       v.addEventListener(eventName, function(){
         if($.matches(event.target,delegate)){
-          callback.call();
+          callback.call(event.target);
         }
       });
     });
@@ -313,7 +313,7 @@ _.serialize = function(){
 };
 
 _.val = function(value){
-    if(!value) {
+    if(value === undefined) {
       return this[0].value;
     } else {
       this.each(function(v){

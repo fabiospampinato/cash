@@ -23,7 +23,7 @@ _.serialize = function(){
 };
 
 _.val = function(value){
-    if(!value) {
+    if(value === undefined) {
       return this[0].value;
     } else {
       this.each(function(v){

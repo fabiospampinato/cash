@@ -23,7 +23,7 @@ _.on = function(){
     this.each(function(v){
       v.addEventListener(eventName, function(){
         if($.matches(event.target,delegate)){
-          callback.call();
+          callback.call(event.target);
         }
       });
     });
