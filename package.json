@@ -13,8 +13,7 @@
     "gulp-uglify": "~1.0.1",
     "gulp-jshint": "~1.8.4",
     "gulp-rename": "~1.2.0",
-    "gulp-wrap": "~0.3.0",
-    "gulp-qunit": "~0.3.3"
+    "gulp-wrap": "~0.3.0"
   },
   "engines": {
     "node": ">=0.10.0"

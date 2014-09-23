@@ -238,7 +238,7 @@ Returns the boolean result of checking if the first element in
 
 
 
-    html()  => Integer
+    height()  => Integer
 
 
 Returns the height of the element
