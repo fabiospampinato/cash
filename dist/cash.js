@@ -75,10 +75,12 @@ $.ajax = function(options){
   }
 };
 
-_.addClass = function(className){
+_.addClass = function(className){ // TODO: tear out into module for IE9
   this.each(function(v){
-    if(!v.classList.contains(className)) {
+    if(v.classList) {
       v.classList.add(className);
+    } else {
+      v.className += " " + className;
     }
   });
   return this;
@@ -95,8 +97,12 @@ _.attr = function(attr,value) {
   }
 };
 
-_.hasClass = function(className){
-  return this[0].classList.contains(className);
+_.hasClass = function(className){ // TODO: tear out into module for IE9
+  if(this[0].classList) {
+    return this[0].classList.contains(className);
+  } else {
+    return this[0].className.indexOf(className) !== -1;
+  }
 };
 
 _.prop = function(prop){
@@ -110,10 +116,12 @@ _.removeAttr = function(attr){
   return this;
 };
 
-_.removeClass = function(className){
+_.removeClass = function(className){ // TODO: tear out into module for IE9
   this.each(function(v){
-    if(v.classList.contains(className)) {
+    if(v.classList) {
       v.classList.remove(className);
+    } else {
+      v.className = v.className.replace(className,'');
     }
   });
   return this;
@@ -184,21 +192,27 @@ _.css = function(){
   }
 };
 
-_.data = function(key,value){
+_.data = function(key,value){ // TODO: tear out into module for IE9
   if(!value){
-    return this[0].dataset[key];
+    return this[0].dataset ? this[0].dataset[key] : $(this[0]).attr('data-'+key);
   } else {
     this.each(function(v){
-      v.dataset[key] = value;
+      if(v.dataset) {
+        v.dataset[key] = value;
+      } else {
+        $(v).attr('data-'+key,value);
+      }
     });
     return this;
   }
 };
 
- _.removeData = function(name){
+ _.removeData = function(name){ // TODO: tear out into module for IE9
   this.each(function(v){
-    if(v.dataset[name]) {
+    if(v.dataset) {
       delete v.dataset[name];
+    } else {
+      $(v).removeAttr('data-'+name);
     }
   });
   return this;
@@ -219,8 +233,8 @@ _.innerHeight = function(){
 _.outerWidth = function(margins){
   if(margins === true){
     return this[0].offsetWidth +
-      (parseInt(getComputed(this,"margin-left"), 10) || 0) +
-      (parseInt(getComputed(this,"margin-right"), 10) || 0);
+      (parseInt(getComputed(this,"margin-left"), 10) || parseInt(getComputed(this,"marginLeft"), 10) || 0) +
+      (parseInt(getComputed(this,"margin-right"), 10) || parseInt(getComputed(this,"marginRight"), 10) || 0);
   }
   return this[0].offsetWidth;
 };
@@ -228,8 +242,8 @@ _.outerWidth = function(margins){
 _.outerHeight = function(margins){
   if(margins === true){
     return this[0].offsetHeight +
-      (parseInt(getComputed(this,"margin-top"), 10) || 0) +
-      (parseInt(getComputed(this,"margin-bottom"), 10) || 0 );
+      (parseInt(getComputed(this,"margin-top"), 10) || parseInt(getComputed(this,"marginTop"), 10) || 0 ) +
+      (parseInt(getComputed(this,"margin-bottom"), 10) || parseInt(getComputed(this,"marginBottom"), 10) || 0 );
   }
   return this[0].offsetHeight;
 };
@@ -276,9 +290,9 @@ _.on = function(){
     delegate = arguments[1];
     callback = arguments[2];
     this.each(function(v){
-      var handler = function(){
-        if($.matches(event.target,delegate)){
-          callback.call(event.target);
+      var handler = function(e){
+        if($.matches(e.target,delegate)){
+          callback.call(e.target);
         }
       };
       registerEvent($(v), eventName, handler);
@@ -293,10 +307,10 @@ _.ready = function(callback){
 };
 
 _.trigger = function(eventName){
-  event = document.createEvent("HTMLEvents");
-  event.initEvent(eventName, true, false);
+  evt = document.createEvent("HTMLEvents");
+  evt.initEvent(eventName, true, false);
   this.each(function(v){
-    v.dispatchEvent(event);
+    v.dispatchEvent(evt);
   });
   return this;
 };
@@ -410,10 +424,10 @@ _.remove = function(){
 
 _.text = function(content){
   if(!content) {
-    return this[0].innerText;
+    return this[0].textContent;
   } else {
     this.each(function(v){
-      v.innerText = content;
+      v.textContent = content;
     });
     return this;
   }
@@ -425,7 +439,9 @@ _.children = function(selector) {
     $.extend(children, _);
     return children;
   } else {
-    return $.sibling($(selector).firstChild);
+    return $(this[0].children).filter(function(v){ 
+      return $.matches(v,selector);
+    });
   }
 };
 
@@ -448,7 +464,7 @@ _.next = function(){
 
 _.not = function(selector) {
   return Array.prototype.filter.call(this, function(el){
-    return $(el).parent().find(selector).length === 0;
+    return !$.matches(el, selector);
   });
 };
 

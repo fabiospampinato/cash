@@ -54,10 +54,10 @@ _.remove = function(){
 
 _.text = function(content){
   if(!content) {
-    return this[0].innerText;
+    return this[0].textContent;
   } else {
     this.each(function(v){
-      v.innerText = content;
+      v.textContent = content;
     });
     return this;
   }

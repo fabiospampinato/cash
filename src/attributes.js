@@ -1,8 +1,10 @@
 
-_.addClass = function(className){
+_.addClass = function(className){ // TODO: tear out into module for IE9
   this.each(function(v){
-    if(!v.classList.contains(className)) {
+    if(v.classList) {
       v.classList.add(className);
+    } else {
+      v.className += " " + className;
     }
   });
   return this;
@@ -19,8 +21,12 @@ _.attr = function(attr,value) {
   }
 };
 
-_.hasClass = function(className){
-  return this[0].classList.contains(className);
+_.hasClass = function(className){ // TODO: tear out into module for IE9
+  if(this[0].classList) {
+    return this[0].classList.contains(className);
+  } else {
+    return this[0].className.indexOf(className) !== -1;
+  }
 };
 
 _.prop = function(prop){
@@ -34,10 +40,12 @@ _.removeAttr = function(attr){
   return this;
 };
 
-_.removeClass = function(className){
+_.removeClass = function(className){ // TODO: tear out into module for IE9
   this.each(function(v){
-    if(v.classList.contains(className)) {
+    if(v.classList) {
       v.classList.remove(className);
+    } else {
+      v.className = v.className.replace(className,'');
     }
   });
   return this;

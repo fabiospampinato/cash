@@ -31,9 +31,9 @@ _.on = function(){
     delegate = arguments[1];
     callback = arguments[2];
     this.each(function(v){
-      var handler = function(){
-        if($.matches(event.target,delegate)){
-          callback.call(event.target);
+      var handler = function(e){
+        if($.matches(e.target,delegate)){
+          callback.call(e.target);
         }
       };
       registerEvent($(v), eventName, handler);
@@ -48,10 +48,10 @@ _.ready = function(callback){
 };
 
 _.trigger = function(eventName){
-  event = document.createEvent("HTMLEvents");
-  event.initEvent(eventName, true, false);
+  evt = document.createEvent("HTMLEvents");
+  evt.initEvent(eventName, true, false);
   this.each(function(v){
-    v.dispatchEvent(event);
+    v.dispatchEvent(evt);
   });
   return this;
 };

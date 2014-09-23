@@ -5,7 +5,9 @@ _.children = function(selector) {
     $.extend(children, _);
     return children;
   } else {
-    return $.sibling($(selector).firstChild);
+    return $(this[0].children).filter(function(v){ 
+      return $.matches(v,selector);
+    });
   }
 };
 
@@ -28,7 +30,7 @@ _.next = function(){
 
 _.not = function(selector) {
   return Array.prototype.filter.call(this, function(el){
-    return $(el).parent().find(selector).length === 0;
+    return !$.matches(el, selector);
   });
 };
 
