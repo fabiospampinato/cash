@@ -23,8 +23,13 @@ _.html = function(content){
   if(!content) {
     return this[0].innerHTML;
   } else {
+    if ( content.charAt(0) !== "<" || content.charAt( content.length - 1 ) !== ">" || content.length <= 3 ) {
+      return this.text(content);
+    }
     this.each(function(v){
-      v.innerHTML = $(content)[0].outerHTML;
+      $(content).each(function(newElem){
+        v.appendChild(newElem);
+      });
     });
     return this;
   }
