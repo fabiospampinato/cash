@@ -32,8 +32,17 @@ _.on = function(){
     callback = arguments[2];
     this.each(function(v){
       var handler = function(e){
-        if($.matches(e.target,delegate)){
-          callback.call(e.target);
+        var t = e.target;
+        if($.matches(t,delegate)){
+          callback.call(t);
+        } else {
+          while (!t.matches(delegate)) {
+            if ( t === v ) {
+              return t = false;
+            }
+            t = t.parentNode;
+          }
+          if (t) { callback.call(t); }
         }
       };
       registerEvent($(v), eventName, handler);
@@ -48,7 +57,7 @@ _.ready = function(callback){
 };
 
 _.trigger = function(eventName){
-  evt = document.createEvent("HTMLEvents");
+  var evt = document.createEvent("HTMLEvents");
   evt.initEvent(eventName, true, false);
   this.each(function(v){
     v.dispatchEvent(evt);
