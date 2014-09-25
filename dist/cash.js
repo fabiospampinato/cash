@@ -1,11 +1,11 @@
 (function(){
+
 this.cash = this.$ = function(selector, context){
-  var obj = Object.create(cash.fn);
-  return obj.init(selector, context);
+  return new cash.prototype.init(selector, context);
 };
 
 var _ = cash.fn = cash.prototype = {cash: true};
-
+ 
 _.init = function(selector, context){
   var result =[];
   if(!selector) {
@@ -15,9 +15,10 @@ _.init = function(selector, context){
     if(selector.cash) {
       return selector;
     } else {
+      this.length = 0;
       result.push(selector);
-      $.extend(result, $.fn);
-      return result;
+      $.merge(this, result);
+      return this;
     }
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
@@ -30,19 +31,22 @@ _.init = function(selector, context){
       result = querySelect(selector,context[0]);
     }
   }
-  $.extend(result, $.fn);
-  return result;
+  this.length = 0;
+  $.merge(this,result);
+  return this;
 };
+
+_.init.prototype = _;
 
 function querySelect(selector, context) {
 
   var idMatch,classMatch, root = context || document;
-  idMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/).exec(selector);
-  classMatch = (/^(?:\s*(<[\w\W]+>)[^>]*|\.([\w-]*))$/).exec(selector);
-  if(idMatch){
-    return [document.getElementById(idMatch[2])];
-  } else if (classMatch) {
-    return [].slice.call(document.getElementsByClassName(classMatch[2]));
+  idMatch = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/;
+  classMatch = /^(?:\s*(<[\w\W]+>)[^>]*|\.([\w-]*))$/;
+  if(idMatch.test(selector)){
+    return [document.getElementById(selector.slice(1))];
+  } else if (classMatch.test(selector)) {
+    return [].slice.call(document.getElementsByClassName(selector.slice(1)));
   } else {
     return [].slice.call(root.querySelectorAll(selector));
   }
@@ -526,6 +530,17 @@ $.extend = function(obj) {
 
 $.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+};
+
+$.merge = function( first, second ) {
+  var len = +second.length,
+    j = 0,
+    i = first.length;
+  for ( ; j < len; j++ ) {
+    first[ i++ ] = second[ j ];
+  }
+  first.length = i;
+  return first;
 };
 
 $.noop = function(){};

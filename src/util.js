@@ -23,6 +23,17 @@ $.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
 };
 
+$.merge = function( first, second ) {
+  var len = +second.length,
+    j = 0,
+    i = first.length;
+  for ( ; j < len; j++ ) {
+    first[ i++ ] = second[ j ];
+  }
+  first.length = i;
+  return first;
+};
+
 $.noop = function(){};
 
 $.parseHTML = function(str) {
