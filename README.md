@@ -351,7 +351,7 @@ Adds event listener to collection elments. Event is delegated if
 
 
     outerHeight()  => Integer
-    outerHeight(true)  => Integer
+    outerHeight(includeMargin)  => Integer
 
 
 Returns the outer height of the element. Includes margins if margin is set to true.
@@ -360,7 +360,7 @@ Returns the outer height of the element. Includes margins if margin is set to tr
 
 
     outerWidth()  => Integer
-    outerWidth(margin)  => Integer
+    outerWidth(includeMargin)  => Integer
 
 
 Returns the outer width of the element. Includes margins if margin is set to true.
