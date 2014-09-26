@@ -1,11 +1,11 @@
 
 _.append = function(content) {
-  return this[0].appendChild($(content)[0]);
+  return $(this[0].appendChild($(content)[0]));
 };
 
 
 _.appendTo = function(content) {
-  return $(content)[0].appendChild(this[0]);
+  return $($(content)[0].appendChild(this[0]));
 };
 
 _.clone = function() {
