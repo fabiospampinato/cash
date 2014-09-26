@@ -63,6 +63,9 @@ QUnit.test( "attr", function( assert ) {
   $('.attr-fixture').attr('success','set');
   testAttr = $('.attr-fixture').attr('success');
   assert.equal(testAttr, 'set', "attr set Passed!" );
+  $('.attr-fixture').attr({'success':'multi'});
+  testAttr = $('.attr-fixture').attr('success');
+  assert.equal(testAttr, 'multi', "attr multi-set Passed!" );
 });
 
 QUnit.test( "hasClass", function( assert ) {
