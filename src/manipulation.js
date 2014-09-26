@@ -1,11 +1,13 @@
 
 _.append = function(content) {
-  return this[0].appendChild($(content)[0]);
+  this[0].appendChild($(content)[0]);
+  return this;
 };
 
 
 _.appendTo = function(content) {
-  return $(content)[0].appendChild(this[0]);
+  $(content)[0].appendChild(this[0]);
+  return this;
 };
 
 _.clone = function() {
@@ -20,30 +22,36 @@ _.empty = function(){
 };
 
 _.html = function(content){
+  var source;
   if(!content) {
     return this[0].innerHTML;
   } else {
+    source = typeof content === "string" ? content : $(content)[0].outerHTML;
     this.each(function(v){
-      v.innerHTML = $(content)[0].outerHTML;
+      v.innerHTML = source; 
     });
     return this;
   }
 };
 
 _.insertAfter = function(selector){
-  return $(selector)[0].insertAdjacentHTML("afterend",this[0].outerHTML);
+  $(selector)[0].insertAdjacentHTML("afterend",this[0].outerHTML);
+  return this;
 };
 
 _.insertBefore = function(selector){
-  return $(selector)[0].insertAdjacentHTML("beforebegin",this[0].outerHTML);
+  $(selector)[0].insertAdjacentHTML("beforebegin",this[0].outerHTML);
+  return this;
 };
 
 _.prepend = function(selector){
-  return $(this)[0].insertAdjacentHTML("afterBegin",$(selector)[0].outerHTML);
+  $(this)[0].insertAdjacentHTML("afterBegin",$(selector)[0].outerHTML);
+  return this;
 };
 
 _.prependTo = function(selector){
-  return $(selector)[0].insertAdjacentHTML("afterBegin",this[0].outerHTML);
+  $(selector)[0].insertAdjacentHTML("afterBegin",this[0].outerHTML);
+  return this;
 };
 
 _.remove = function(){

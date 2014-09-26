@@ -19,7 +19,7 @@ _.css = function(){
       });
       return this;
     } else {
-      computed = this[0].ownerDocument.defaultView.getComputedStyle(this[0],null);
+      computed = window.getComputedStyle(this[0],null);
       return computed[prop];
     }
   }

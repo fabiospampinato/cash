@@ -18,10 +18,6 @@ $.ajax = function(options){
       options.error.call(this, request.statusText);
     }
   };
-  if(options.type === "POST"){
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-    request.send(options.data || "");
-  } else {
-    request.send();
-  }
+  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  request.send(options.data || "");
 };
