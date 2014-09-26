@@ -21,6 +21,7 @@ _.init = function(selector, context){
       return this;
     }
   }
+  selector = selector.trim();
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
     result = $.parseHTML(selector);
   } else {

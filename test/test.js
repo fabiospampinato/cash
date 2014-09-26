@@ -296,6 +296,11 @@ QUnit.test( "html", function( assert ) {
   assert.equal($('.html-test').length, 1, "html Passed!" );
 });
 
+QUnit.test( "html (get/set)", function( assert ) {
+  $('.class-fixture').html($('.delegate-fixture').html());
+  assert.equal($('.class-fixture').html(), $('.delegate-fixture').html());
+});
+
 QUnit.test( "insertAfter", function( assert ) {
   $('<div class="test"></div>').insertAfter('input[type=hidden]');
   assert.equal($('.test').index(), 1, "insertAfter Passed!" );
