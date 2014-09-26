@@ -11,14 +11,21 @@ _.addClass = function(className){ // TODO: tear out into module for IE9
 };
 
 _.attr = function(attr,value) {
-  if(!value){
-    return this[0].getAttribute(attr);
+  var attrs = {};
+  if (value) {
+    attrs[attr] = value;
   } else {
-    this.each(function(v){
-      v.setAttribute(attr,value);
-    });
-    return this;
+    if (typeof attr === "string") {
+      return this[0].getAttribute(attr);
+    }
+    attrs = attr;
   }
+  this.each(function(v){
+    for (var key in attrs) {
+      v.setAttribute(key, attrs[key]);
+    }
+  });
+  return this;
 };
 
 _.hasClass = function(className){ // TODO: tear out into module for IE9
