@@ -159,7 +159,7 @@ Returns data attribute value when key is supplied. Sets data attribute
     each(callback)  => collection
         
 
-Iterates over a collection with callback(value, index, array)
+Iterates over a collection with callback(value, index, array).
 
 ### empty
 
@@ -241,7 +241,7 @@ Returns the boolean result of checking if the first element in
     height()  => Integer
 
 
-Returns the height of the element
+Returns the height of the element.
 
 ### html
 
@@ -271,7 +271,7 @@ Returns the index of the element in its parent if an element or              sel
     innerHeight()  => Integer
 
 
-Returns the height of the element + padding
+Returns the height of the element + padding.
 
 ### innerWidth
 
@@ -280,7 +280,7 @@ Returns the height of the element + padding
     innerWidth()  => Integer
 
 
-Returns the width of the element + padding
+Returns the width of the element + padding.
 
 ### insertAfter
 
@@ -316,7 +316,7 @@ Returns last element in the collection.
     next()  => collection
         
 
-Returns next sibling
+Returns next sibling.
 
 ### not
 
@@ -453,7 +453,7 @@ Removes collection elements from the DOM.
     removeAttr(attrName)  => collection
         
 
-Removes attribute from collection elements
+Removes attribute from collection elements.
 
 ### removeClass
 
@@ -462,7 +462,7 @@ Removes attribute from collection elements
     removeClass(className)  => collection
         
 
-Removes className from collection elements
+Removes className from collection elements.
 
 ### removeData
 
@@ -471,7 +471,7 @@ Removes className from collection elements
     removeData(name)  => collection
         
 
-Removes data attribute from collection elements
+Removes data attribute from collection elements.
 
 ### serialize
 
