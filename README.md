@@ -59,12 +59,6 @@ Extends target object with properties from the source object.
 
 Checks a selector against an element, returning a boolean value for match.
 
-### $.noop
-
-    $.noop()  => noop
-
-Empty utility method.
-
 ### $.parseHTML
 
     $.parseHTML(htmlString)  => collection
