@@ -6,7 +6,7 @@ http://kenwheeler.github.io/cash
 
 ### what is cash?
 
-cash is a small library (5kb) for modern browsers that provides jQuery style syntax to wrap modern Vanilla JS features. 
+cash is a small library for modern browsers that provides jQuery style syntax to wrap modern Vanilla JS features.
 
 It allows developers to use the jQuery syntax they already know, and utilizes modern browser features to minimize the codebase.
 
