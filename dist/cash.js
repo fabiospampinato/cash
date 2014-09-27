@@ -584,7 +584,7 @@
             return Array.prototype.filter.call(collection, function (i) {
                 return i !== el;
             });
-        },
+        }
 
     });
 }.call(window));
