@@ -1,34 +1,39 @@
 
 
-this.cash = this.$ = function(selector, context){
-  return new cash.prototype.init(selector, context);
+cash = $ = function(selector, context){
+  return new cash.fn.init(selector, context);
 };
 
-var _ = cash.fn = cash.prototype = {cash: true};
- 
-_.init = function(selector, context){
-  var result =[];
-  if(!selector) {
+cash.fn = cash.prototype = {cash: true, length: 0};
+
+var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/;
+
+cash.fn.init = function(selector, context){
+  var result =[], matcher, elem;
+  if(!selector)
     return this;
-  }
-  if(typeof selector === "object") {
-    if(selector.cash) {
+  this.length = 1;
+  if(typeof selector !== "string") {
+    if(selector.cash)
       return selector;
-    } else {
-      this.length = 0;
-      result.push(selector);
-      $.merge(this, result);
-      return this;
-    }
+    this[0] = selector;
+    return this;
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
     result = $.parseHTML(selector);
   } else {
-    if(!context) {
-      result = querySelect(selector);
+    matcher = idMatch.test(selector);
+    elem = selector.slice(1);
+    if(!context && matcher) {
+      this[0] = document.getElementById(elem);
+      return this;
     } else {
-      context = querySelect(context);
-      result = querySelect(selector,context[0]);
+      context = ($(context)[0] || document);
+      result = [].slice.call(
+        classMatch.test(selector) ?
+        document.getElementsByClassName(elem) :
+        context.querySelectorAll(selector)
+      );
     }
   }
   this.length = 0;
@@ -36,18 +41,4 @@ _.init = function(selector, context){
   return this;
 };
 
-_.init.prototype = _;
-
-function querySelect(selector, context) {
-
-  var idMatch,classMatch, root = context || document;
-  idMatch = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/;
-  classMatch = /^(?:\s*(<[\w\W]+>)[^>]*|\.([\w-]*))$/;
-  if(idMatch.test(selector)){
-    return [document.getElementById(selector.slice(1))];
-  } else if (classMatch.test(selector)) {
-    return [].slice.call(document.getElementsByClassName(selector.slice(1)));
-  } else {
-    return [].slice.call(root.querySelectorAll(selector));
-  }
-}
+cash.fn.init.prototype = cash.fn;

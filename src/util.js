@@ -1,29 +1,28 @@
 
-$.each = function(collection,callback){
+cash.each = function(collection,callback){
   for(var i = 0; i < collection.length; i++){
     callback.call(collection[i],collection[i],i,collection);
   }
 };
 
-$.extend = function(obj) {
-    if (typeof obj !== "object") { return obj; }
-    var source, prop;
-    for (var i = 1, length = arguments.length; i < length; i++) {
-      source = arguments[i];
-      for (prop in source) {
-        if (hasOwnProperty.call(source, prop)) {
-            obj[prop] = source[prop];
-        }
-      }
+cash.extend = cash.fn.extend = function(target,source) {
+    var prop;
+    if(!source) {
+      source = target;
+      target = this;
     }
-    return obj;
+    for(prop in source) {
+      if(source.hasOwnProperty(prop))
+        target[prop] = source[prop];
+    }
+    return this;
 };
 
-$.matches = function(el, selector) {
+cash.matches = function(el, selector) {
   return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
 };
 
-$.merge = function( first, second ) {
+cash.merge = function( first, second ) {
   var len = +second.length,
     j = 0,
     i = first.length;
@@ -34,9 +33,7 @@ $.merge = function( first, second ) {
   return first;
 };
 
-$.noop = function(){};
-
-$.parseHTML = function(str) {
+cash.parseHTML = function(str) {
   var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
   if(parsed) {
     return [document.createElement(parsed[1])];

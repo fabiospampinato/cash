@@ -1,7 +1,7 @@
 {
   "name": "cash",
   "main": "./dist/cash.min.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {},
   "devDependencies": {
     "gulp": "~3.5.0",
@@ -13,7 +13,8 @@
     "gulp-uglify": "~1.0.1",
     "gulp-jshint": "~1.8.4",
     "gulp-rename": "~1.2.0",
-    "gulp-wrap": "~0.3.0"
+    "gulp-wrap": "~0.3.0",
+    "gulp-beautify": "~1.1.0"
   },
   "engines": {
     "node": ">=0.10.0"

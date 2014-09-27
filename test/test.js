@@ -339,16 +339,12 @@ QUnit.test( "$.each", function( assert ) {
 QUnit.test( "$.extend", function( assert ) {
   var orig = {}, test = {count: 3};
   $.extend(orig,test);
-  assert.equal(test.count, 3, "$.extend Passed!" );
+  assert.equal(orig.count, 3, "$.extend Passed!" );
 });
 
 QUnit.test( "$.matches", function( assert ) {
   var test = $('<div class="test">')[0], selector = ".test";
   assert.equal($.matches(test,selector), true, "$.matches Passed!" );
-});
-
-QUnit.test( "$.noop", function( assert ) {
-  assert.equal($.noop(), undefined, "$.noop Passed!" );
 });
 
 QUnit.test( "$.parseHTML", function( assert ) {

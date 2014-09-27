@@ -1,5 +1,5 @@
 
-$.ajax = function(options){
+cash.ajax = function(options){
   var request = new XMLHttpRequest();
   request.open(options.type, options.url, true);
   request.onload = function() {
