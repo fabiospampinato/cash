@@ -4,6 +4,10 @@ http://kenwheeler.github.io/cash
 
 ## An absurdly small jQuery alternative for modern browsers
 
+Add cash to your project via the jsDelivr CDN:
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/cash/0.0.2/cash.min.js"></script>
+
 ### what is cash?
 
 cash is a small library for modern browsers that provides jQuery style syntax to wrap modern Vanilla JS features.
