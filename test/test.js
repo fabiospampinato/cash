@@ -136,6 +136,12 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 9, "add(collections) Passed!" );
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
+  var addFixture = $('#id-fixture').add( "ducks" );
+  assert.equal(addFixture.length, 1, "add(disallow string) Passed!" );
+  var addFixture = $('#id-fixture').add( 69 );
+  assert.equal(addFixture.length, 1, "add(disallow number) Passed!" );
+  var addFixture = $('#id-fixture').add( document.querySelectorAll("a") );
+  assert.equal(addFixture.length, 1, "add(disallow native) Passed!" );
 });
 
 
