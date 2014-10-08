@@ -232,7 +232,7 @@
                     return Array.prototype.indexOf.call(obj, el) === index;
                 });
             }
-            return $.merge(cash(), ret);
+            return cash.merge(cash(), ret);
         }
 
     });
