@@ -213,6 +213,23 @@
 
         last: function () {
             return $(this[this.length - 1]);
+        },
+
+        add: function () {
+            var ret = $.merge(cash(), this),
+                filter = false;
+            for (var arg in arguments) {
+                if (arguments[arg] instanceof cash) {
+                    ret = cash.merge(ret, arguments[arg]);
+                    filter = true;
+                }
+            }
+            if (filter) {
+                ret = ret.filter(function (el, index, obj) {
+                    return Array.prototype.indexOf.call(obj, el) === index;
+                });
+            }
+            return cash.merge(cash(), ret);
         }
 
     });
