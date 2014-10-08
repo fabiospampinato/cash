@@ -222,6 +222,9 @@
                 if (arguments[arg] instanceof cash) {
                     ret = cash.merge(ret, arguments[arg]);
                     filter = true;
+                } else if (typeof arguments[arg] === "string") {
+                    ret = cash.merge(ret, $(arguments[arg]));
+                    filter = true;
                 }
             }
             if (filter) {
@@ -229,7 +232,7 @@
                     return Array.prototype.indexOf.call(obj, el) === index;
                 });
             }
-            return cash.merge(cash(), ret);
+            return $.merge(cash(), ret);
         }
 
     });
