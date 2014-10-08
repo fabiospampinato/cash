@@ -127,6 +127,18 @@ QUnit.test( "last", function( assert ) {
   assert.equal($(lastFixture).hasClass('has-class'), true, "index Passed!" );
 });
 
+QUnit.test( "add", function( assert ) {
+  var addFixture = $('#id-fixture').add( $('.class-fixture') );
+  assert.equal(addFixture.length, 2, "add(one) Passed!" );
+  addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
+  assert.equal(addFixture.length, 3, "add(two) Passed!" );
+  addFixture = $('#id-fixture').add( $('#qunit-fixture a') , $('#qunit-fixture input') );
+  assert.equal(addFixture.length, 9, "add(collections) Passed!" );
+  addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
+  assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
+});
+
+
 //CSS
 
 QUnit.test( "css", function( assert ) {
