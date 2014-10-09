@@ -176,6 +176,19 @@
 
     cash.fn.extend({
 
+        add: function () {
+            var arr = [],
+                i = 0;
+            arr = [].slice.call(this);
+            for (var l = arguments.length; i < l; i++) {
+                arr = arr.concat([].slice.call(cash(arguments[i])));
+            }
+            arr = arr.filter(function (item, index, self) {
+                return self.indexOf(item) === index;
+            });
+            return cash.merge(cash(), arr);
+        },
+
         each: function (callback) {
             cash.each(this, callback);
         },
@@ -213,26 +226,6 @@
 
         last: function () {
             return $(this[this.length - 1]);
-        },
-
-        add: function () {
-            var ret = $.merge(cash(), this),
-                filter = false;
-            for (var arg in arguments) {
-                if (arguments[arg] instanceof cash) {
-                    ret = cash.merge(ret, arguments[arg]);
-                    filter = true;
-                } else if (typeof arguments[arg] === "string") {
-                    ret = cash.merge(ret, $(arguments[arg]));
-                    filter = true;
-                }
-            }
-            if (filter) {
-                ret = ret.filter(function (el, index, obj) {
-                    return Array.prototype.indexOf.call(obj, el) === index;
-                });
-            }
-            return cash.merge(cash(), ret);
         }
 
     });

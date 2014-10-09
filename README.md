@@ -75,6 +75,18 @@ Returns a collection from an HTML string.
 
 The main prototype. Adding properties and methods will add it to all collections
 
+
+### add
+
+
+
+    add(element)  => collection
+    add(selector)  => collection
+
+
+Returns a new collection with the element added to the end, will accept any amount of arguments and add them all in sequence.
+
+
 ### addClass
 
             
