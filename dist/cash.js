@@ -176,6 +176,19 @@
 
     cash.fn.extend({
 
+        add: function () {
+            var arr = [],
+                i = 0;
+            arr = [].slice.call(this);
+            for (var l = arguments.length; i < l; i++) {
+                arr = arr.concat([].slice.call(cash(arguments[i])));
+            }
+            arr = arr.filter(function (item, index, self) {
+                return self.indexOf(item) === index;
+            });
+            return cash.merge(cash(), arr);
+        },
+
         each: function (callback) {
             cash.each(this, callback);
         },
