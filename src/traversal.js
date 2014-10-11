@@ -54,15 +54,14 @@ cash.fn.extend({
 
   parents: function(selector){
     var last = this[0], result = [], count = 0;
-    while( last !== document.body.parentNode ) {
+    while(last !== document.body.parentNode) {
         last = last.parentElement;
-        if( !selector || ( selector && cash.matches( last , selector ) ) ) {
-          result[ count ] = last;
+        if(!selector || (selector && cash.matches(last, selector))) {
+          result[count] = last;
           count++;
         }
     }
     return cash.merge(cash(), result);
-
   },
 
   prev: function(){
