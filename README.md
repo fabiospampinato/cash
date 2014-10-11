@@ -130,6 +130,17 @@ Without attrValue, returns the attribute value of the first              element
 Without a selector specified, returns a collection of child elements
           . With a selector, returns child elements that match the selector.
 
+
+### closest
+
+            
+          
+    closest()  => collection
+    closest(selector)  => collection
+        
+
+Returns the closest matching selector up the DOM tree.
+
 ### clone
 
             
@@ -388,10 +399,11 @@ Returns parent element.
 
             
           
+    parents()  => collection
     parents(selector)  => collection
         
 
-Returns recursive parent by selector.
+Returns collection of elements who are parents of element. Optionally filtering by selector.
 
 ### prepend
 
