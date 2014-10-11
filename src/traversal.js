@@ -54,7 +54,7 @@ cash.fn.extend({
 
   parents: function(selector){
     var last = this[0], result = [], count = 0;
-    while( last !== document.getElementsByTagName("html")[0] ) {
+    while( last !== document.body.parentNode ) {
         last = last.parentElement;
         if( !selector || ( selector && cash.matches( last , selector ) ) ) {
           result[ count ] = last;
@@ -62,6 +62,7 @@ cash.fn.extend({
         }
     }
     return cash.merge(cash(), result);
+
   },
 
   prev: function(){
