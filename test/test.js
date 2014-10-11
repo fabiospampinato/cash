@@ -280,6 +280,7 @@ QUnit.test( "parent", function( assert ) {
 QUnit.test( "parents", function( assert ) {
   assert.equal($('.form-fixture input').parents().length, 4, "parents Passed!" );
   assert.equal($('.form-fixture input').parents('div, form').length, 2, "parents(selector) Passed!" );
+  assert.equal($('.form-fixture input').parents()[ $('.form-fixture input').parents().length-1 ], document.body.parentNode, "last element in collection is <html>" );
 });
 
 QUnit.test( "prev", function( assert ) {
