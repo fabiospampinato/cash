@@ -291,6 +291,12 @@ QUnit.test( "siblings", function( assert ) {
   assert.equal($('#id-fixture').siblings().length, 11, "siblings Passed!" );
 });
 
+QUnit.test( "closest", function( assert ) {
+  assert.equal($('input.prop-fixture').closest()[0].className, "prop-fixture", "closest Passed!" );
+  assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
+});
+
+
 //Manipulation
 
 QUnit.test( "append", function( assert ) {

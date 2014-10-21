@@ -48,6 +48,14 @@ cash.fn.extend({
     });
   },
 
+  closest: function(selector){
+    if(!selector || cash.matches(this[0], selector)) {
+      return this;
+    } else {
+      return this.parent().closest(selector);
+    }
+  },
+
   parent: function(){
     return cash(this[0].parentElement);
   },
