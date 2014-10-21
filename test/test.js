@@ -86,6 +86,19 @@ QUnit.test( "removeClass", function( assert ) {
 
 //Collection
 
+QUnit.test( "add", function( assert ) {
+  var addFixture = $('#id-fixture').add( $('.class-fixture') );
+  assert.equal(addFixture.length, 2, "add(one) Passed!" );
+  addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
+  assert.equal(addFixture.length, 3, "add(two) Passed!" );
+  addFixture = $('#id-fixture').add( $('#qunit-fixture a') , $('#qunit-fixture input') );
+  assert.equal(addFixture.length, 9, "add(collections) Passed!" );
+  addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
+  assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
+  addFixture = $('#id-fixture').add( "#qunit-fixture a" );
+  assert.equal(addFixture.length, 5, "add(allow selector string) Passed!" );
+});
+
 QUnit.test( "each", function( assert ) {
   var arrayFixture = [];
   $('.qsa-fixture').each(function(v,i,a){
@@ -125,19 +138,6 @@ QUnit.test( "index", function( assert ) {
 QUnit.test( "last", function( assert ) {
   var lastFixture = $('#qunit-fixture div').last();
   assert.equal($(lastFixture).hasClass('has-class'), true, "index Passed!" );
-});
-
-QUnit.test( "add", function( assert ) {
-  var addFixture = $('#id-fixture').add( $('.class-fixture') );
-  assert.equal(addFixture.length, 2, "add(one) Passed!" );
-  addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
-  assert.equal(addFixture.length, 3, "add(two) Passed!" );
-  addFixture = $('#id-fixture').add( $('#qunit-fixture a') , $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 9, "add(collections) Passed!" );
-  addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
-  assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
-  addFixture = $('#id-fixture').add( "#qunit-fixture a" );
-  assert.equal(addFixture.length, 5, "add(allow selector string) Passed!" );
 });
 
 
@@ -253,6 +253,10 @@ QUnit.test( "children", function( assert ) {
   assert.equal($('#qunit-fixture').children('div').length, 5, "children(selector) Passed!" );
 });
 
+QUnit.test( "closest", function( assert ) {
+  assert.equal($('input.prop-fixture').closest('div').length, 1, "closest Passed!" );
+});
+
 QUnit.test( "find", function( assert ) {
   assert.equal($('.form-fixture').find('input[type=hidden]').length, 1, "find Passed!" );
 });
@@ -274,7 +278,9 @@ QUnit.test( "parent", function( assert ) {
 });
 
 QUnit.test( "parents", function( assert ) {
-  assert.equal($('input[type=hidden]').parents('#qunit-fixture').length, 1, "parents Passed!" );
+  assert.equal($('.form-fixture input').parents().length, 4, "parents Passed!" );
+  assert.equal($('.form-fixture input').parents('div, form').length, 2, "parents(selector) Passed!" );
+  assert.equal($('.form-fixture input').parents()[ $('.form-fixture input').parents().length-1 ], document.body.parentNode, "last element in collection is <html>" );
 });
 
 QUnit.test( "prev", function( assert ) {

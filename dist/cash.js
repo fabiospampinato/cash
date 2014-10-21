@@ -548,6 +548,18 @@
             }
         },
 
+        closest: function (selector) {
+            if (!selector) {
+                return this.parent();
+            } else {
+                if (cash.matches(this.parent()[0], selector)) {
+                    return this.parent();
+                } else {
+                    return this.parent().closest(selector);
+                }
+            }
+        },
+
         find: function (selector) {
             var result;
             result = this[0].querySelectorAll(selector);
@@ -576,15 +588,18 @@
         },
 
         parents: function (selector) {
-            if (!selector) {
-                return this.parent();
-            } else {
-                if (cash.matches(this.parent()[0], selector)) {
-                    return this.parent();
-                } else {
-                    return this.parent().parents(selector);
+            var last = this[0],
+                result = [],
+                count = 0;
+            while (last !== document.body.parentNode) {
+                last = last.parentElement;
+                if (!selector || (selector && cash.matches(last, selector))) {
+                    result[count] = last;
+                    count++;
                 }
             }
+            return cash.merge(cash(), result);
+
         },
 
         prev: function () {
