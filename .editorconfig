@@ -10,3 +10,9 @@ insert_final_newline = true
 # Tabs in JS unless otherwise specified
 [**.js]
 indent_style = tab
+
+# The indentation in package.json will always need to be 2 spaces
+# https://github.com/npm/npm/issues/4718
+[package.json]
+indent_style = space
+indent_size = 2
