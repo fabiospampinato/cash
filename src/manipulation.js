@@ -27,7 +27,11 @@ cash.fn.extend({
     if(!content) {
       return this[0].innerHTML;
     } else {
-      source = typeof content === "string" ? content : $(content)[0].outerHTML;
+      source = (function(content) {
+        if(typeof content === "string") return content;
+        if(typeof content === "number") return String(content);
+        return $(content)[0].outerHTML;
+      })(content);
       this.each(function(v){
         v.innerHTML = source;
       });
