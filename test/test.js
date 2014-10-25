@@ -81,7 +81,9 @@ QUnit.test( "removeAttr", function( assert ) {
 
 QUnit.test( "removeClass", function( assert ) {
   $('.attr-fixture').removeClass('has-class');
-  assert.equal($('.attr-fixture').hasClass('has-class'), false, "removeClass Passed!" );
+  assert.equal( $('.attr-fixture')[0].className, "attr-fixture has-class-two has-class-three", "removeClass Passed!" );
+  $('.attr-fixture').removeClass('has-class-three');
+  assert.equal( $('.attr-fixture')[0].className, "attr-fixture has-class-two", "removeClass Passed!" );
 });
 
 //Collection
@@ -254,7 +256,8 @@ QUnit.test( "children", function( assert ) {
 });
 
 QUnit.test( "closest", function( assert ) {
-  assert.equal($('input.prop-fixture').closest('div').length, 1, "closest Passed!" );
+  assert.equal($('input.prop-fixture').closest()[0].className, "prop-fixture", "closest Passed!" );
+  assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
 });
 
 QUnit.test( "find", function( assert ) {
@@ -290,12 +293,6 @@ QUnit.test( "prev", function( assert ) {
 QUnit.test( "siblings", function( assert ) {
   assert.equal($('#id-fixture').siblings().length, 11, "siblings Passed!" );
 });
-
-QUnit.test( "closest", function( assert ) {
-  assert.equal($('input.prop-fixture').closest()[0].className, "prop-fixture", "closest Passed!" );
-  assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
-});
-
 
 //Manipulation
 
