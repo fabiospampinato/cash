@@ -165,7 +165,8 @@
                 if (v.classList) {
                     v.classList.remove(className);
                 } else {
-                    v.className = v.className.replace(className, "");
+                    className = new RegExp("((\\b)" + className + "((?!\\W)|\\s))");
+                    v.className = v.className.replace(className, "").replace(/(^\s+)|(\s+$)/g, "");
                 }
             });
             return this;
@@ -368,7 +369,7 @@
                         if ($.matches(t, delegate)) {
                             callback.call(t);
                         } else {
-                            while (!t.matches(delegate)) {
+                            while (!$.matches(t, delegate)) {
                                 if (t === v) {
                                     return t = false;
                                 }
@@ -549,14 +550,10 @@
         },
 
         closest: function (selector) {
-            if (!selector) {
-                return this.parent();
+            if (!selector || cash.matches(this[0], selector)) {
+                return this;
             } else {
-                if (cash.matches(this.parent()[0], selector)) {
-                    return this.parent();
-                } else {
-                    return this.parent().closest(selector);
-                }
+                return this.parent().closest(selector);
             }
         },
 
@@ -583,14 +580,6 @@
             });
         },
 
-        closest: function (selector) {
-            if (!selector || cash.matches(this[0], selector)) {
-                return this;
-            } else {
-                return this.parent().closest(selector);
-            }
-        },
-
         parent: function () {
             return cash(this[0].parentElement);
         },
@@ -607,7 +596,6 @@
                 }
             }
             return cash.merge(cash(), result);
-
         },
 
         prev: function () {
