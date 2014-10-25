@@ -47,7 +47,8 @@ cash.fn.extend({
       if(v.classList) {
         v.classList.remove(className);
       } else {
-        v.className = v.className.replace(className,"");
+        className = new RegExp("((\\b)"+className+"((?!\\W)|\\s))");
+        v.className = v.className.replace(className,"").replace(/(^\s+)|(\s+$)/g, "");
       }
     });
     return this;
