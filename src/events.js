@@ -38,7 +38,7 @@ cash.fn.extend({
           if($.matches(t,delegate)){
             callback.call(t);
           } else {
-            while (!t.matches(delegate)) {
+            while (!$.matches(t,delegate)) {
               if ( t === v ) {
                 return t = false;
               }
