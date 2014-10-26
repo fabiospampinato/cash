@@ -1,4 +1,6 @@
 
+var notWhiteMatch = /\S+/g;
+
 cash.fn.extend({
 
   addClass: function(className){ // TODO: tear out into module for IE9
@@ -42,12 +44,21 @@ cash.fn.extend({
     return this;
   },
 
-  removeClass: function(className){ // TODO: tear out into module for IE9
+  removeClass: function(className) { // TODO: tear out into module for IE9
+    var classes = className.match( notWhiteMatch ),
+    l, newClassName;
     this.each(function(v){
+      l = classes.length;
       if(v.classList) {
-        v.classList.remove(className);
+        while(l--) {
+          v.classList.remove(classes[l]);
+        }
       } else {
-        v.className = v.className.replace(className,"");
+        newClassName = " "+v.className+" ";
+        while(l--) {
+          newClassName = newClassName.replace(" "+classes[l]+" "," ");
+        }
+        v.className = newClassName.trim();
       }
     });
     return this;

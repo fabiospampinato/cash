@@ -117,6 +117,8 @@
         request.send(options.data || "");
     };
 
+    var notWhiteMatch = /\S+/g;
+
     cash.fn.extend({
 
         addClass: function (className) { // TODO: tear out into module for IE9
@@ -161,11 +163,20 @@
         },
 
         removeClass: function (className) { // TODO: tear out into module for IE9
+            var classes = className.match(notWhiteMatch),
+                l, newClassName;
             this.each(function (v) {
+                l = classes.length;
                 if (v.classList) {
-                    v.classList.remove(className);
+                    while (l--) {
+                        v.classList.remove(classes[l]);
+                    }
                 } else {
-                    v.className = v.className.replace(className, "");
+                    newClassName = " " + v.className + " ";
+                    while (l--) {
+                        newClassName = newClassName.replace(" " + classes[l] + " ", " ");
+                    }
+                    v.className = newClassName.trim();
                 }
             });
             return this;
@@ -368,7 +379,7 @@
                         if ($.matches(t, delegate)) {
                             callback.call(t);
                         } else {
-                            while (!t.matches(delegate)) {
+                            while (!$.matches(t, delegate)) {
                                 if (t === v) {
                                     return t = false;
                                 }
@@ -549,14 +560,10 @@
         },
 
         closest: function (selector) {
-            if (!selector) {
-                return this.parent();
+            if (!selector || cash.matches(this[0], selector)) {
+                return this;
             } else {
-                if (cash.matches(this.parent()[0], selector)) {
-                    return this.parent();
-                } else {
-                    return this.parent().closest(selector);
-                }
+                return this.parent().closest(selector);
             }
         },
 
@@ -583,14 +590,6 @@
             });
         },
 
-        closest: function (selector) {
-            if (!selector || cash.matches(this[0], selector)) {
-                return this;
-            } else {
-                return this.parent().closest(selector);
-            }
-        },
-
         parent: function () {
             return cash(this[0].parentElement);
         },
@@ -607,7 +606,6 @@
                 }
             }
             return cash.merge(cash(), result);
-
         },
 
         prev: function () {

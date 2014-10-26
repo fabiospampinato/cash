@@ -14,14 +14,10 @@ cash.fn.extend({
   },
 
   closest: function(selector){
-    if(!selector){
-      return this.parent();
+    if(!selector || cash.matches(this[0], selector)) {
+      return this;
     } else {
-      if(cash.matches(this.parent()[0],selector)) {
-        return this.parent();
-      } else {
-        return this.parent().closest(selector);
-      }
+      return this.parent().closest(selector);
     }
   },
 
@@ -46,14 +42,6 @@ cash.fn.extend({
     return Array.prototype.filter.call(this, function(el){
       return !cash.matches(el, selector);
     });
-  },
-
-  closest: function(selector){
-    if(!selector || cash.matches(this[0], selector)) {
-      return this;
-    } else {
-      return this.parent().closest(selector);
-    }
   },
 
   parent: function(){
