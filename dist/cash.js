@@ -44,7 +44,9 @@
     cash.fn.init.prototype = cash.fn;
 
     cash.each = function (collection, callback) {
-        for (var i = 0; i < collection.length; i++) {
+        var i = 0,
+            l = collection.length;
+        for (; i < l; i++) {
             callback.call(collection[i], collection[i], i, collection);
         }
     };
@@ -495,12 +497,12 @@
 
         html: function (content) {
             var source;
-            if (!content) {
+            if (content === "undefined") {
                 return this[0].innerHTML;
             } else {
-                source = typeof content === "string" ? content : $(content)[0].outerHTML;
+                source = typeof content === "object" ? $(content)[0].outerHTML : content;
                 this.each(function (v) {
-                    v.innerHTML = source;
+                    v.innerHTML = "" + source;
                 });
                 return this;
             }

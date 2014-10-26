@@ -320,6 +320,16 @@ QUnit.test( "html", function( assert ) {
   assert.equal($('.html-test').length, 1, "html Passed!" );
 });
 
+QUnit.test( "html string", function( assert ) {
+  $('.class-fixture').html('test');
+  assert.equal($('.class-fixture')[0].innerHTML, 'test', "html string Passed!" );
+});
+
+QUnit.test( "html numeric", function( assert ) {
+  $('.class-fixture').html(0);
+  assert.equal($('.class-fixture')[0].innerHTML, '0', "html numeric Passed!" );
+});
+
 QUnit.test( "insertAfter", function( assert ) {
   $('<div class="test"></div>').insertAfter('input[type=hidden]');
   assert.equal($('.test').index(), 1, "insertAfter Passed!" );

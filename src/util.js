@@ -1,6 +1,7 @@
 
 cash.each = function(collection,callback){
-  for(var i = 0; i < collection.length; i++){
+  var i = 0, l = collection.length;
+  for( ; i < l; i++){
     callback.call(collection[i],collection[i],i,collection);
   }
 };

@@ -24,12 +24,12 @@ cash.fn.extend({
 
   html: function(content){
     var source;
-    if(!content) {
+    if(content === "undefined") {
       return this[0].innerHTML;
     } else {
-      source = typeof content === "string" ? content : $(content)[0].outerHTML;
+      source = typeof content === "object" ? $(content)[0].outerHTML : content;
       this.each(function(v){
-        v.innerHTML = source;
+        v.innerHTML = "" + source;
       });
       return this;
     }
