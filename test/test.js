@@ -82,8 +82,9 @@ QUnit.test( "removeAttr", function( assert ) {
 QUnit.test( "removeClass", function( assert ) {
   $('.attr-fixture').removeClass('has-class');
   assert.equal( $('.attr-fixture')[0].className, "attr-fixture has-class-two has-class-three", "removeClass Passed!" );
-  $('.attr-fixture').removeClass('has-class-three');
-  assert.equal( $('.attr-fixture')[0].className, "attr-fixture has-class-two", "removeClass Passed!" );
+  $('.attr-fixture, .attr-fixture2').removeClass('has-class-three has-class-two');
+  assert.equal( $('.attr-fixture')[0].className, "attr-fixture", "removeClass Multiple Passed!" );
+  assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
 });
 
 //Collection
@@ -139,7 +140,7 @@ QUnit.test( "index", function( assert ) {
 
 QUnit.test( "last", function( assert ) {
   var lastFixture = $('#qunit-fixture div').last();
-  assert.equal($(lastFixture).hasClass('has-class'), true, "index Passed!" );
+  assert.equal($(lastFixture).hasClass('attr-fixture2'), true, "last Passed!" );
 });
 
 
@@ -251,8 +252,8 @@ QUnit.test( "val", function( assert ) {
 //Traversal
 
 QUnit.test( "children", function( assert ) {
-  assert.equal($('#qunit-fixture').children().length, 12, "children Passed!" );
-  assert.equal($('#qunit-fixture').children('div').length, 5, "children(selector) Passed!" );
+  assert.equal($('#qunit-fixture').children().length, 13, "children Passed!" );
+  assert.equal($('#qunit-fixture').children('div').length, 6, "children(selector) Passed!" );
 });
 
 QUnit.test( "closest", function( assert ) {
@@ -273,7 +274,7 @@ QUnit.test( "next", function( assert ) {
 });
 
 QUnit.test( "not", function( assert ) {
-  assert.equal($('#qunit-fixture div').not('.qsa-fixture').length, 3, "not Passed!" );
+  assert.equal($('#qunit-fixture div').not('.qsa-fixture').length, 4, "not Passed!" );
 });
 
 QUnit.test( "parent", function( assert ) {
@@ -291,7 +292,7 @@ QUnit.test( "prev", function( assert ) {
 });
 
 QUnit.test( "siblings", function( assert ) {
-  assert.equal($('#id-fixture').siblings().length, 11, "siblings Passed!" );
+  assert.equal($('#id-fixture').siblings().length, 12, "siblings Passed!" );
 });
 
 //Manipulation
