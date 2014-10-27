@@ -484,7 +484,7 @@ Removes attribute from collection elements.
     removeClass(className)  => collection
         
 
-Removes className from collection elements.
+Removes className from collection elements. Accepts space-separated classNames for removing multiple classes.
 
 ### removeData
 
