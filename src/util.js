@@ -13,8 +13,7 @@ cash.extend = cash.fn.extend = function(target,source) {
       target = this;
     }
     for(prop in source) {
-      if(source.hasOwnProperty(prop))
-        target[prop] = source[prop];
+      if(source.hasOwnProperty(prop)) { target[prop] = source[prop]; }
     }
     return this;
 };

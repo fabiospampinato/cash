@@ -6,16 +6,14 @@ cash = $ = function(selector, context){
 
 cash.fn = cash.prototype = {cash: true, length: 0};
 
-var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/;
+var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
 
 cash.fn.init = function(selector, context){
   var result =[], matcher, elem;
-  if(!selector)
-    return this;
+  if(!selector) { return this; }
   this.length = 1;
   if(typeof selector !== "string") {
-    if(selector.cash)
-      return selector;
+    if(selector.cash) { return selector; }
     this[0] = selector;
     return this;
   }
@@ -30,8 +28,9 @@ cash.fn.init = function(selector, context){
     } else {
       context = ($(context)[0] || document);
       result = [].slice.call(
-        classMatch.test(selector) ?
-        document.getElementsByClassName(elem) :
+        singlet.test(elem) ?
+        classMatch.test(selector) ? document.getElementsByClassName(elem) :
+        document.getElementsByTagName(selector) :
         context.querySelectorAll(selector)
       );
     }

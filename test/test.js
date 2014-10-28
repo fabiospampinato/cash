@@ -4,6 +4,10 @@ QUnit.test( "className Query", function( assert ) {
   assert.equal($('.class-fixture').length, 1, "className Passed!" );
 });
 
+QUnit.test( "tagName Query", function( assert ) {
+  assert.equal($('fieldset').length, 1, "tagName Passed!" );
+});
+
 QUnit.test( "id Query", function( assert ) {
   assert.equal($('#id-fixture').length, 1, "id Passed!" );
 });
@@ -135,7 +139,7 @@ QUnit.test( "get", function( assert ) {
 
 QUnit.test( "index", function( assert ) {
   var indexFixture = $('.qsa-fixture').index();
-  assert.equal(indexFixture, 2, "index Passed!" );
+  assert.equal(indexFixture, 3, "index Passed!" );
 });
 
 QUnit.test( "last", function( assert ) {
@@ -252,7 +256,7 @@ QUnit.test( "val", function( assert ) {
 //Traversal
 
 QUnit.test( "children", function( assert ) {
-  assert.equal($('#qunit-fixture').children().length, 13, "children Passed!" );
+  assert.equal($('#qunit-fixture').children().length, 14, "children Passed!" );
   assert.equal($('#qunit-fixture').children('div').length, 6, "children(selector) Passed!" );
 });
 
@@ -292,7 +296,7 @@ QUnit.test( "prev", function( assert ) {
 });
 
 QUnit.test( "siblings", function( assert ) {
-  assert.equal($('#id-fixture').siblings().length, 12, "siblings Passed!" );
+  assert.equal($('#id-fixture').siblings().length, 13, "siblings Passed!" );
 });
 
 //Manipulation
