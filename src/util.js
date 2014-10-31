@@ -42,6 +42,12 @@ cash.parseHTML = function(str) {
   return [].slice.call(parsed.childNodes);
 };
 
+cash.unique = function(collection) {
+  return cash.merge(cash(),[].slice.call(collection).filter(function(item,index,self){
+    return self.indexOf(item) === index;
+  }));
+};
+
 function buildFragment(str){
   var fragment, tmp;
   fragment = fragment || document.createDocumentFragment();
