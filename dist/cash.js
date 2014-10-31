@@ -576,6 +576,10 @@
             }
         },
 
+        is: function (selector) {
+            return !!selector ? cash.matches(this[0], selector) : false;
+        },
+
         find: function (selector) {
             var result;
             result = this[0].querySelectorAll(selector);
