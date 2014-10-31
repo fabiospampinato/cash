@@ -94,6 +94,12 @@
         return [].slice.call(parsed.childNodes);
     };
 
+    cash.unique = function (collection) {
+        return cash.merge(cash(), [].slice.call(collection).filter(function (item, index, self) {
+            return self.indexOf(item) === index;
+        }));
+    };
+
     function buildFragment(str) {
         var fragment, tmp;
         fragment = fragment || document.createDocumentFragment();
@@ -213,10 +219,7 @@
             for (var l = arguments.length; i < l; i++) {
                 arr = arr.concat([].slice.call(cash(arguments[i])));
             }
-            arr = arr.filter(function (item, index, self) {
-                return self.indexOf(item) === index;
-            });
-            return cash.merge(cash(), arr);
+            return cash.unique(arr);
         },
 
         each: function (callback) {
@@ -610,21 +613,27 @@
         },
 
         parent: function () {
-            return cash(this[0].parentElement);
+            var collection = this,
+                result = Array.prototype.map.call(collection, function (item) {
+                    return item.parentNode || document.body.parentNode;
+                });
+            return cash.unique(result);
         },
 
         parents: function (selector) {
-            var last = this[0],
-                result = [],
+            var last, result = [],
                 count = 0;
-            while (last !== document.body.parentNode) {
-                last = last.parentElement;
-                if (!selector || (selector && cash.matches(last, selector))) {
-                    result[count] = last;
-                    count++;
+            this.each(function (item) {
+                last = item;
+                while (last !== document.body.parentNode) {
+                    last = last.parentElement;
+                    if (!selector || (selector && cash.matches(last, selector))) {
+                        result[count] = last;
+                        count++;
+                    }
                 }
-            }
-            return cash.merge(cash(), result);
+            });
+            return cash.unique(result);
         },
 
         prev: function () {

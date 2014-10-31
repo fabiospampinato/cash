@@ -101,6 +101,7 @@ QUnit.test( "removeClass", function( assert ) {
 
 QUnit.test( "add", function( assert ) {
   var addFixture = $('#id-fixture').add( $('.class-fixture') );
+  assert.equal(addFixture.cash, true, "add Passed!" );
   assert.equal(addFixture.length, 2, "add(one) Passed!" );
   addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
@@ -289,6 +290,7 @@ QUnit.test( "not", function( assert ) {
 
 QUnit.test( "parent", function( assert ) {
   assert.equal($('.qsa-fixture').parent()[0].id, 'qunit-fixture', "parent Passed!" );
+  assert.equal($('.qsa-fixture').parent().length, 1, "parent Passed!" );
 });
 
 QUnit.test( "parents", function( assert ) {
@@ -393,4 +395,9 @@ QUnit.test( "$.matches", function( assert ) {
 
 QUnit.test( "$.parseHTML", function( assert ) {
   assert.equal($.parseHTML('<a>')[0].outerHTML, '<a></a>' , "$.parseHTML Passed!" );
+});
+
+QUnit.test( "$.unique", function( assert ) {
+  var test = $.merge( $("#id-fixture"),  $("#id-fixture") );
+  assert.equal($.unique( test ).length, 1, "$.unique Passed!" );
 });
