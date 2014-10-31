@@ -22,7 +22,11 @@ cash.fn.extend({
   },
 
   is: function(selector){
-    return !!selector ? cash.matches(this[0], selector) : false;
+    if (!selector) { return false; }
+    if (selector.cash) {
+      return this[0] === selector[0];
+    }
+    return typeof selector === "string" ? cash.matches(this[0], selector) : false;
   },
 
   find: function(selector){
