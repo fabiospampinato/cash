@@ -45,19 +45,26 @@ cash.fn.extend({
   },
 
   parent: function(){
-    return cash(this[0].parentElement);
+    var collection = this,
+      result = Array.prototype.map.call( collection, function(item) {
+        return item.parentNode || document.body.parentNode;
+      });
+    return cash.unique(result);
   },
 
   parents: function(selector){
-    var last = this[0], result = [], count = 0;
-    while(last !== document.body.parentNode) {
+    var last, result = [], count = 0;
+    this.each(function(item) {
+      last = item;
+      while(last !== document.body.parentNode) {
         last = last.parentElement;
         if(!selector || (selector && cash.matches(last, selector))) {
           result[count] = last;
           count++;
         }
-    }
-    return cash.merge(cash(), result);
+      }
+    });
+    return cash.unique(result);
   },
 
   prev: function(){
