@@ -615,7 +615,7 @@
         parent: function () {
             var collection = this,
                 result = Array.prototype.map.call(collection, function (item) {
-                    return item.parentNode || document.body.parentNode;
+                    return item.parentElement || document.body.parentNode;
                 });
             return cash.unique(result);
         },
