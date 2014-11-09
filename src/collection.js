@@ -7,10 +7,7 @@ cash.fn.extend({
     for(var l=arguments.length; i < l; i++) {
       arr = arr.concat([].slice.call(cash(arguments[i])));
     }
-    arr = arr.filter(function(item,index,self){
-      return self.indexOf(item) === index;
-    });
-    return cash.merge(cash(), arr);
+    return cash.unique(arr);
   },
 
   each: function(callback){
