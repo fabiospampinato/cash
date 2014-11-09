@@ -19,7 +19,6 @@ gulp.task('minify', ['build'], function () {
     .pipe($.size())
     .pipe($.rename("cash.min.js"))
     .pipe(gulp.dest('./dist/'));
-
 });
 
 gulp.task('lint', ['build'], function() {
