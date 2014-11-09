@@ -613,10 +613,9 @@
         },
 
         parent: function () {
-            var collection = this,
-                result = Array.prototype.map.call(collection, function (item) {
-                    return item.parentElement || document.body.parentNode;
-                });
+            var result = Array.prototype.map.call(this, function (item) {
+                return item.parentElement || document.body.parentNode;
+            });
             return cash.unique(result);
         },
 
