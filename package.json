@@ -1,5 +1,5 @@
 {
-  "name": "cash",
+  "name": "cash-dom",
   "main": "./dist/cash.min.js",
   "version": "0.0.3",
   "dependencies": {},
