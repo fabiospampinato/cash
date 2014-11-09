@@ -307,6 +307,14 @@ QUnit.test( "siblings", function( assert ) {
   assert.equal($('#id-fixture').siblings().length, 13, "siblings Passed!" );
 });
 
+QUnit.test( "is", function( assert ) {
+  assert.equal($('#id-fixture').is(), false, "is Passed!" );
+  assert.equal($('#id-fixture').is('div'), true, "is Passed!" );
+  assert.equal($('#id-fixture').is('#id-fixture'), true, "is Passed!" );
+  assert.equal($('#id-fixture').is($('#id-fixture')), true, "is Passed!" );
+  assert.equal($('#id-fixture').is($('#class-fixture')), false, "is Passed!" );
+});
+
 //Manipulation
 
 QUnit.test( "append", function( assert ) {

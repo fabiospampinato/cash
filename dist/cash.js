@@ -589,6 +589,16 @@
             }
         },
 
+        is: function (selector) {
+            if (!selector) {
+                return false;
+            }
+            if (selector.cash) {
+                return this[0] === selector[0];
+            }
+            return typeof selector === "string" ? cash.matches(this[0], selector) : false;
+        },
+
         find: function (selector) {
             var result;
             result = this[0].querySelectorAll(selector);
