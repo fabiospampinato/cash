@@ -131,11 +131,21 @@
     cash.fn.extend({
 
         addClass: function (className) { // TODO: tear out into module for IE9
+            var classes = className.match(notWhiteMatch),
+                spacedName, l;
             this.each(function (v) {
+                l = classes.length;
                 if (v.classList) {
-                    v.classList.add(className);
+                    while (l--) {
+                        v.classList.add(classes[l]);
+                    }
                 } else {
-                    v.className += " " + className;
+                    while (l--) {
+                        spacedName = " " + v.className + " ";
+                        if (spacedName.indexOf(" " + classes[l] + " ") === -1) {
+                            v.className += " " + classes[l];
+                        }
+                    }
                 }
             });
             return this;
