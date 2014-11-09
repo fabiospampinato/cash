@@ -57,8 +57,14 @@ QUnit.test( "Ajax", function( assert ) {
 QUnit.test( "addClass", function( assert ) {
   $('.class-fixture').addClass('add-class');
   assert.equal($('.add-class').length, 1, "addClass Passed!" );
+  $('.class-fixture').addClass('add-class class-two');
+  assert.equal($('.add-class.class-two').length, 1, "addClass multiple classes Passed!" );
+  $('.class-fixture').addClass('add-class add-class class-two add-class');
+  $('.class-fixture').addClass('class-two add-class add-class add-class');
+  var dupes = $('.class-fixture')[0].className.match(/add-class/g);
+  assert.equal(dupes.length, 1, "addClass no duplicates Passed!" );
   $('.qsa-fixture').addClass('add-class-multiple');
-  assert.equal($('.add-class-multiple').length, 2, "addClass multiple Passed!" );
+  assert.equal($('.add-class-multiple').length, 2, "addClass multiple elements Passed!" );
 });
 
 QUnit.test( "attr", function( assert ) {
