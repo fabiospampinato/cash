@@ -321,6 +321,15 @@ Inserts collection after specified element.
 
 Inserts collection before specified element.
 
+### is
+
+
+
+    is(selector)  => boolean
+
+
+Returns whether the provided selector matches the first element in the collection.
+
 ### last
 
 
