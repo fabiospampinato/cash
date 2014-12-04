@@ -19,15 +19,13 @@ fn.extend({
     return cash(this[index]);
   },
 
-  filter: function() {
-    if (typeof arguments[0] === 'string') {
-      var selector = arguments[0];
-
+  filter: function(selector) {
+    if (typeof selector === 'string') {
       return filter.call(this, function(e) {
         return cash.matches(e, selector);
       });
     } else {
-      return filter.call(this, arguments[0]);
+      return filter.call(this, selector);
     }
   },
 

@@ -1,32 +1,21 @@
 fn.extend({
 
-  css: function() {
-    var computed, prop, value, collection;
-
-    if (typeof arguments[0] === 'object') {
-      collection = arguments[0];
-
+  css: function(prop, value) {
+    if (typeof prop === 'object') {
       this.each(function(v) {
-        for (var key in collection) {
-          if (collection.hasOwnProperty(key)) {
-            v.style[key] = collection[key];
+        for (var key in prop) {
+          if (prop.hasOwnProperty(key)) {
+            v.style[key] = prop[key];
           }
         }
       });
+    } else if (value) {
+      this.each(function(v) {
+        v.style[prop] = value;
+      });
+      return this;
     } else {
-      prop = arguments[0];
-      value = arguments[1];
-
-      if (arguments.length > 1) {
-        this.each(function(v) {
-          v.style[prop] = value;
-        });
-
-        return this;
-      } else {
-        computed = win.getComputedStyle(this[0], null);
-        return computed[prop];
-      }
+      return win.getComputedStyle(this[0], null)[prop];
     }
   }
 
