@@ -1,6 +1,8 @@
 var doc = document,
     win = window,
     ArrayProto = Array.prototype,
+    slice      = ArrayProto.slice,
+    filter     = ArrayProto.filter,
     idMatch    = /^#[\w-]*$/,
     classMatch = /^\.[\w-]*$/,
     singlet    = /^[\w-]*$/;
@@ -45,7 +47,7 @@ cash.fn.init = function(selector, context) {
     } else {
       context = (cash(context)[0] || doc);
 
-      result = ArrayProto.slice.call(
+      result = slice.call(
         singlet.test(elem) ?
         classMatch.test(selector) ? doc.getElementsByClassName(elem) :
         doc.getElementsByTagName(selector) :

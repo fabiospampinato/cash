@@ -40,7 +40,7 @@ cash.fn.extend({
   },
 
   has: function(selector) {
-    return ArrayProto.filter.call(this, function(el) {
+    return filter.call(this, function(el) {
       return cash(el).find(selector).length !== 0;
     });
   },
@@ -50,7 +50,7 @@ cash.fn.extend({
   },
 
   not: function(selector) {
-    return ArrayProto.filter.call(this, function(el) {
+    return filter.call(this, function(el) {
       return !cash.matches(el, selector);
     });
   },
@@ -92,7 +92,7 @@ cash.fn.extend({
     var collection = this.parent().children(),
         el = this[0];
 
-    return ArrayProto.filter.call(collection, function(i) {
+    return filter.call(collection, function(i) {
       return i !== el;
     });
   }

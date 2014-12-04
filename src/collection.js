@@ -1,11 +1,11 @@
 cash.fn.extend({
 
   add: function() {
-    var arr = [].slice.call(this),
+    var arr = slice.call(this),
         i = 0, l;
 
     for (l = arguments.length; i < l; i++) {
-      arr = arr.concat(ArrayProto.slice.call(cash(arguments[i])));
+      arr = arr.concat(slice.call(cash(arguments[i])));
     }
 
     return cash.unique(arr);
@@ -23,11 +23,11 @@ cash.fn.extend({
     if (typeof arguments[0] === 'string') {
       var selector = arguments[0];
 
-      return ArrayProto.filter.call(this, function(e) {
+      return filter.call(this, function(e) {
         return cash.matches(e, selector);
       });
     } else {
-      return ArrayProto.filter.call(this, arguments[0]);
+      return filter.call(this, arguments[0]);
     }
   },
 
@@ -41,9 +41,9 @@ cash.fn.extend({
 
   index: function(elem) {
     if (!elem) {
-      return ArrayProto.slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
+      return slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
     } else {
-      return ArrayProto.slice.call(cash(elem).children()).indexOf(this[0]);
+      return slice.call(cash(elem).children()).indexOf(this[0]);
     }
   },
 

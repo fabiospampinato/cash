@@ -56,11 +56,11 @@ cash.parseHTML = function(str) {
   }
 
   parsed = buildFragment(str);
-  return ArrayProto.slice.call(parsed.childNodes);
+  return slice.call(parsed.childNodes);
 };
 
 cash.unique = function(collection) {
-  return cash.merge(cash(), ArrayProto.slice.call(collection).filter(function(item, index, self) {
+  return cash.merge(cash(), slice.call(collection).filter(function(item, index, self) {
     return self.indexOf(item) === index;
   }));
 };
