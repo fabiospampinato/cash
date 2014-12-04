@@ -1,4 +1,4 @@
-cash.fn.extend({
+fn.extend({
 
   data: function(key, value) { // TODO: tear out into module for IE9
     if (!value) {

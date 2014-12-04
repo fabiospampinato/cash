@@ -11,12 +11,12 @@ function cash(selector, context) {
   return new cash.fn.init(selector, context);
 }
 
-cash.fn = cash.prototype = {
+var fn = cash.fn = cash.prototype = {
   cash: true,
   length: 0
 };
 
-cash.fn.init = function(selector, context) {
+fn.init = function(selector, context) {
   var result = [],
       matcher, elem;
 
@@ -61,4 +61,4 @@ cash.fn.init = function(selector, context) {
   return this;
 };
 
-cash.fn.init.prototype = cash.fn;
+fn.init.prototype = fn;

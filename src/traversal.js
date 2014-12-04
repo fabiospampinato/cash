@@ -1,4 +1,4 @@
-cash.fn.extend({
+fn.extend({
 
   children: function(selector) {
     if (!selector) {

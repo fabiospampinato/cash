@@ -25,7 +25,7 @@ function registerEvent(node, eventName, callback) {
   _eventCache[nid][eventName].push(callback);
 }
 
-cash.fn.extend({
+fn.extend({
 
   off: function(eventName, callback) {
     this.each(function(v) {

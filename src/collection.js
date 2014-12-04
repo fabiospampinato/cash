@@ -1,4 +1,4 @@
-cash.fn.extend({
+fn.extend({
 
   add: function() {
     var arr = slice.call(this),

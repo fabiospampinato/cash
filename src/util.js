@@ -7,7 +7,7 @@ cash.each = function(collection, callback) {
   }
 };
 
-cash.extend = cash.fn.extend = function(target, source) {
+cash.extend = fn.extend = function(target, source) {
   var prop;
 
   if (!source) {

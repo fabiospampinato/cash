@@ -1,6 +1,6 @@
 var encode = encodeURIComponent;
 
-cash.fn.extend({
+fn.extend({
 
   serialize: function() {
     var form = this[0],

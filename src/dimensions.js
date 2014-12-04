@@ -2,7 +2,7 @@ function compute(el, prop) {
   return parseInt(win.getComputedStyle(el[0], null)[prop], 10);
 }
 
-cash.fn.extend({
+fn.extend({
 
   height: function() {
     return this[0].getBoundingClientRect().height;

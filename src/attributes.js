@@ -1,6 +1,6 @@
 var notWhiteMatch = /\S+/g;
 
-cash.fn.extend({
+fn.extend({
 
   addClass: function(className) { // TODO: tear out into module for IE9
     var classes = className.match(notWhiteMatch),
@@ -34,7 +34,7 @@ cash.fn.extend({
       this.each(function(v) {
         v.setAttribute(attr, value);
       });
-      
+
       return this;
     }
   },

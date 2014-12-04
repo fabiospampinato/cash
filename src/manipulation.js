@@ -1,4 +1,4 @@
-cash.fn.extend({
+fn.extend({
 
   append: function(content) {
     this[0].appendChild(cash(content)[0]);

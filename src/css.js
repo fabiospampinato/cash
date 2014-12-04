@@ -1,8 +1,8 @@
-cash.fn.extend({
+fn.extend({
 
   css: function() {
     var computed, prop, value, collection;
-    
+
     if (typeof arguments[0] === 'object') {
       collection = arguments[0];
 
