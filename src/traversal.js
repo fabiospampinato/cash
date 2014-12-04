@@ -1,4 +1,3 @@
-
 cash.fn.extend({
 
   children: function(selector) {

@@ -1,6 +1,4 @@
-
-
-cash = $ = function(selector, context){
+var cash = function(selector, context){
   return new cash.fn.init(selector, context);
 };
 
@@ -18,7 +16,7 @@ cash.fn.init = function(selector, context){
     return this;
   }
   if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
-    result = $.parseHTML(selector);
+    result = cash.parseHTML(selector);
   } else {
     matcher = idMatch.test(selector);
     elem = selector.slice(1);
@@ -26,7 +24,7 @@ cash.fn.init = function(selector, context){
       this[0] = document.getElementById(elem);
       return this;
     } else {
-      context = ($(context)[0] || document);
+      context = (cash(context)[0] || document);
       result = [].slice.call(
         singlet.test(elem) ?
         classMatch.test(selector) ? document.getElementsByClassName(elem) :
@@ -36,7 +34,7 @@ cash.fn.init = function(selector, context){
     }
   }
   this.length = 0;
-  $.merge(this,result);
+  cash.merge(this,result);
   return this;
 };
 

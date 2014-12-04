@@ -1,4 +1,3 @@
-
 var _eventCache = {};
 
 cash.fn.extend({
@@ -9,8 +8,8 @@ cash.fn.extend({
       if(callback){
         v.removeEventListener(eventName, callback);
       } else {
-        for(var i in _eventCache[$(v).data("cshid")][eventName]) {
-          v.removeEventListener(eventName, _eventCache[$(v).data("cshid")][eventName][i]);
+        for(var i in _eventCache[cash(v).data("cshid")][eventName]) {
+          v.removeEventListener(eventName, _eventCache[cash(v).data("cshid")][eventName][i]);
         }
       }
     });
@@ -24,7 +23,7 @@ cash.fn.extend({
       eventName = arguments[0];
       callback = arguments[1];
       this.each(function(v){
-        registerEvent($(v),eventName,callback);
+        registerEvent(cash(v),eventName,callback);
         v.addEventListener(eventName, callback);
       });
       return this;
@@ -35,10 +34,10 @@ cash.fn.extend({
       this.each(function(v){
         var handler = function(e){
           var t = e.target;
-          if($.matches(t,delegate)){
+          if(cash.matches(t,delegate)){
             callback.call(t);
           } else {
-            while (!$.matches(t,delegate)) {
+            while (!cash.matches(t,delegate)) {
               if ( t === v ) {
                 return t = false;
               }
@@ -47,7 +46,7 @@ cash.fn.extend({
             if (t) { callback.call(t); }
           }
         };
-        registerEvent($(v), eventName, handler);
+        registerEvent(cash(v), eventName, handler);
         v.addEventListener(eventName, handler);
       });
       return this;
@@ -70,8 +69,8 @@ cash.fn.extend({
 });
 
 function registerEvent(node,eventName,callback){
-  var nid = $(node).data("cshid") || guid();
-  $(node).data("cshid", nid);
+  var nid = cash(node).data("cshid") || guid();
+  cash(node).data("cshid", nid);
   if(!(nid in _eventCache)) {
     _eventCache[nid] = {};
   }

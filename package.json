@@ -5,16 +5,16 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "~3.5.0",
-    "gulp-load-plugins": "~0.3.0",
-    "gulp-util": "~2.2.9",
-    "gulp-size": "~0.1.2",
+    "gulp-beautify": "~1.1.0",
     "gulp-connect": "~1.0.0",
-    "gulp-concat": "~2.1.7",
-    "gulp-uglify": "~1.0.1",
     "gulp-jshint": "~1.8.4",
-    "gulp-rename": "~1.2.0",
-    "gulp-wrap": "~0.3.0",
-    "gulp-beautify": "~1.1.0"
+    "gulp-load-plugins": "~0.3.0",
+    "gulp-preprocess": "^1.1.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-size": "~0.1.2",
+    "gulp-uglify": "~1.0.1",
+    "gulp-util": "~2.2.9",
+    "gulp-wrap": "~0.3.0"
   },
   "engines": {
     "node": ">=0.10.0"

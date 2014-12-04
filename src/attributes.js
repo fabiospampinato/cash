@@ -1,4 +1,3 @@
-
 var notWhiteMatch = /\S+/g;
 
 cash.fn.extend({

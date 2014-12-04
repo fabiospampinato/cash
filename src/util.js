@@ -1,4 +1,3 @@
-
 cash.each = function(collection,callback){
   var i = 0, l = collection.length;
   for( ; i < l; i++){
