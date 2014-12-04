@@ -1,11 +1,13 @@
 cash.fn.extend({
 
   add: function() {
-    var arr = [], i = 0, l;
-    arr = [].slice.call(this);
+    var arr = [].slice.call(this),
+        i = 0, l;
+
     for (l = arguments.length; i < l; i++) {
-      arr = arr.concat([].slice.call(cash(arguments[i])));
+      arr = arr.concat(ArrayProto.slice.call(cash(arguments[i])));
     }
+
     return cash.unique(arr);
   },
 
@@ -20,6 +22,7 @@ cash.fn.extend({
   filter: function() {
     if (typeof arguments[0] === 'string') {
       var selector = arguments[0];
+
       return ArrayProto.filter.call(this, function(e) {
         return cash.matches(e, selector);
       });

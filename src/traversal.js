@@ -24,9 +24,11 @@ cash.fn.extend({
     if (!selector) {
       return false;
     }
+
     if (selector.cash) {
       return this[0] === selector[0];
     }
+
     return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
   },
 
@@ -55,8 +57,9 @@ cash.fn.extend({
 
   parent: function() {
     var result = ArrayProto.map.call(this, function(item) {
-        return item.parentElement || doc.body.parentNode;
-      });
+      return item.parentElement || doc.body.parentNode;
+    });
+
     return cash.unique(result);
   },
 
@@ -64,16 +67,20 @@ cash.fn.extend({
     var last,
         result = [],
         count = 0;
+
     this.each(function(item) {
       last = item;
+
       while (last !== doc.body.parentNode) {
         last = last.parentElement;
+
         if (!selector || (selector && cash.matches(last, selector))) {
           result[count] = last;
           count++;
         }
       }
     });
+
     return cash.unique(result);
   },
 
@@ -82,7 +89,9 @@ cash.fn.extend({
   },
 
   siblings: function() {
-    var collection = this.parent().children(), el = this[0];
+    var collection = this.parent().children(),
+        el = this[0];
+
     return ArrayProto.filter.call(collection, function(i) {
       return i !== el;
     });

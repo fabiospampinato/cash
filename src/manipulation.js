@@ -23,13 +23,16 @@ cash.fn.extend({
 
   html: function(content) {
     var source;
+
     if (content === 'undefined') {
       return this[0].innerHTML;
     } else {
       source = typeof content === 'object' ? cash(content)[0].outerHTML : content;
+
       this.each(function(v) {
         v.innerHTML = '' + source;
       });
+
       return this;
     }
   },

@@ -5,6 +5,7 @@ cash.fn.extend({
   off: function() {
     var eventName = arguments[0],
         callback = arguments[1];
+
     this.each(function(v) {
       if (callback) {
         v.removeEventListener(eventName, callback);
@@ -14,6 +15,7 @@ cash.fn.extend({
         }
       }
     });
+
     return this;
   },
 
@@ -23,6 +25,7 @@ cash.fn.extend({
     if (typeof arguments[1] === 'function') {
       eventName = arguments[0];
       callback = arguments[1];
+
       this.each(function(v) {
         registerEvent(cash(v), eventName, callback);
         v.addEventListener(eventName, callback);
@@ -32,9 +35,11 @@ cash.fn.extend({
       eventName = arguments[0];
       delegate = arguments[1];
       callback = arguments[2];
+
       this.each(function(v) {
         var handler = function(e) {
           var t = e.target;
+
           if (cash.matches(t, delegate)) {
             callback.call(t);
           } else {
@@ -44,12 +49,17 @@ cash.fn.extend({
               }
               t = t.parentNode;
             }
-            if (t) { callback.call(t); }
+
+            if (t) {
+              callback.call(t);
+            }
           }
         };
+
         registerEvent(cash(v), eventName, handler);
         v.addEventListener(eventName, handler);
       });
+
       return this;
     }
   },
@@ -61,9 +71,11 @@ cash.fn.extend({
   trigger: function(eventName) {
     var evt = doc.createEvent('HTMLEvents');
     evt.initEvent(eventName, true, false);
+    
     this.each(function(v) {
       v.dispatchEvent(evt);
     });
+
     return this;
   }
 

@@ -11,6 +11,7 @@ cash.fn.extend({
           cash(v).attr('data-' + key, value);
         }
       });
+
       return this;
     }
   },
@@ -23,6 +24,7 @@ cash.fn.extend({
         cash(v).removeAttr('data-' + name);
       }
     });
+
     return this;
   }
 
