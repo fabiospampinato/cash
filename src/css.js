@@ -19,7 +19,7 @@ cash.fn.extend({
         });
         return this;
       } else {
-        computed = window.getComputedStyle(this[0],null);
+        computed = win.getComputedStyle(this[0],null);
         return computed[prop];
       }
     }

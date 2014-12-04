@@ -1,3 +1,7 @@
+var doc = document;
+var win = window;
+var ArrayProto = Array.prototype;
+
 var cash = function(selector, context){
   return new cash.fn.init(selector, context);
 };
@@ -21,14 +25,14 @@ cash.fn.init = function(selector, context){
     matcher = idMatch.test(selector);
     elem = selector.slice(1);
     if(!context && matcher) {
-      this[0] = document.getElementById(elem);
+      this[0] = doc.getElementById(elem);
       return this;
     } else {
-      context = (cash(context)[0] || document);
+      context = (cash(context)[0] || doc);
       result = [].slice.call(
         singlet.test(elem) ?
-        classMatch.test(selector) ? document.getElementsByClassName(elem) :
-        document.getElementsByTagName(selector) :
+        classMatch.test(selector) ? doc.getElementsByClassName(elem) :
+        doc.getElementsByTagName(selector) :
         context.querySelectorAll(selector)
       );
     }

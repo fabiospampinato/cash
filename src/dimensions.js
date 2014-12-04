@@ -38,6 +38,6 @@ cash.fn.extend({
 
 function getComputed(el, prop) {
   var computed;
-  computed = window.getComputedStyle(el[0],null);
+  computed = win.getComputedStyle(el[0],null);
   return computed[prop];
 }

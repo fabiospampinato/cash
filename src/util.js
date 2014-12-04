@@ -35,22 +35,22 @@ cash.merge = function( first, second ) {
 cash.parseHTML = function(str) {
   var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
   if(parsed) {
-    return [document.createElement(parsed[1])];
+    return [doc.createElement(parsed[1])];
   }
   parsed = buildFragment(str);
-  return [].slice.call(parsed.childNodes);
+  return ArrayProto.slice.call(parsed.childNodes);
 };
 
 cash.unique = function(collection) {
-  return cash.merge(cash(),[].slice.call(collection).filter(function(item,index,self){
+  return cash.merge(cash(),ArrayProto.slice.call(collection).filter(function(item,index,self){
     return self.indexOf(item) === index;
   }));
 };
 
 function buildFragment(str){
   var fragment, tmp;
-  fragment = fragment || document.createDocumentFragment();
-  tmp = tmp || fragment.appendChild(document.createElement("div"));
+  fragment = fragment || doc.createDocumentFragment();
+  tmp = tmp || fragment.appendChild(doc.createElement("div"));
   tmp.innerHTML = str;
   return tmp;
 }

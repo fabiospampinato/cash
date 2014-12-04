@@ -36,7 +36,7 @@ cash.fn.extend({
   },
 
   has: function(selector){
-    return Array.prototype.filter.call(this, function(el){
+    return ArrayProto.filter.call(this, function(el){
       return cash(el).find(selector).length !== 0;
     });
   },
@@ -46,14 +46,14 @@ cash.fn.extend({
   },
 
   not: function(selector) {
-    return Array.prototype.filter.call(this, function(el){
+    return ArrayProto.filter.call(this, function(el){
       return !cash.matches(el, selector);
     });
   },
 
   parent: function(){
-    var result = Array.prototype.map.call( this, function(item) {
-        return item.parentElement || document.body.parentNode;
+    var result = ArrayProto.map.call( this, function(item) {
+        return item.parentElement || doc.body.parentNode;
       });
     return cash.unique(result);
   },
@@ -62,7 +62,7 @@ cash.fn.extend({
     var last, result = [], count = 0;
     this.each(function(item) {
       last = item;
-      while(last !== document.body.parentNode) {
+      while(last !== doc.body.parentNode) {
         last = last.parentElement;
         if(!selector || (selector && cash.matches(last, selector))) {
           result[count] = last;
@@ -79,7 +79,7 @@ cash.fn.extend({
 
   siblings: function(){
     var collection = this.parent().children(), el = this[0];
-    return Array.prototype.filter.call(collection,function(i){
+    return ArrayProto.filter.call(collection,function(i){
       return i !== el;
     });
   }

@@ -20,11 +20,11 @@ cash.fn.extend({
   filter: function(){
     if(typeof arguments[0] === "string") {
       var selector = arguments[0];
-      return Array.prototype.filter.call(this, function(e){
+      return ArrayProto.filter.call(this, function(e){
         return cash.matches(e, selector);
       });
     } else {
-      return Array.prototype.filter.call(this, arguments[0]);
+      return ArrayProto.filter.call(this, arguments[0]);
     }
   },
 
@@ -38,9 +38,9 @@ cash.fn.extend({
 
   index: function(elem){
     if(!elem) {
-      return Array.prototype.slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
+      return ArrayProto.slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
     } else {
-      return Array.prototype.slice.call(cash(elem).children()).indexOf(this[0]);
+      return ArrayProto.slice.call(cash(elem).children()).indexOf(this[0]);
     }
   },
 

@@ -58,7 +58,7 @@ cash.fn.extend({
   },
 
   trigger: function(eventName){
-    var evt = document.createEvent("HTMLEvents");
+    var evt = doc.createEvent("HTMLEvents");
     evt.initEvent(eventName, true, false);
     this.each(function(v){
       v.dispatchEvent(evt);
