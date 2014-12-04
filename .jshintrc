@@ -10,7 +10,7 @@
   "quotmark": "double",
   "undef": true,
   "unused": true,
-  "globals": { 
+  "globals": {
     "document": true,
     "cash": true,
     "$": true,
@@ -18,7 +18,8 @@
     "XMLHttpRequest": true,
     "slice": true,
     "event": true,
-    "window": true 
+    "window": true,
+    "define": true
   },
   "node": true
 }

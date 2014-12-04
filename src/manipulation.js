@@ -1,18 +1,17 @@
-
 cash.fn.extend({
 
   append: function(content) {
-    this[0].appendChild($(content)[0]);
+    this[0].appendChild(cash(content)[0]);
     return this;
   },
 
   appendTo: function(content) {
-    $(content)[0].appendChild(this[0]);
+    cash(content)[0].appendChild(this[0]);
     return this;
   },
 
   clone: function() {
-    return $(this[0].cloneNode(true));
+    return cash(this[0].cloneNode(true));
   },
 
   empty: function(){
@@ -27,7 +26,7 @@ cash.fn.extend({
     if(content === "undefined") {
       return this[0].innerHTML;
     } else {
-      source = typeof content === "object" ? $(content)[0].outerHTML : content;
+      source = typeof content === "object" ? cash(content)[0].outerHTML : content;
       this.each(function(v){
         v.innerHTML = "" + source;
       });
@@ -36,22 +35,22 @@ cash.fn.extend({
   },
 
   insertAfter: function(selector){
-    $(selector)[0].insertAdjacentHTML("afterend",this[0].outerHTML);
+    cash(selector)[0].insertAdjacentHTML("afterend",this[0].outerHTML);
     return this;
   },
 
   insertBefore: function(selector){
-    $(selector)[0].insertAdjacentHTML("beforebegin",this[0].outerHTML);
+    cash(selector)[0].insertAdjacentHTML("beforebegin",this[0].outerHTML);
     return this;
   },
 
   prepend: function(selector){
-    $(this)[0].insertAdjacentHTML("afterBegin",$(selector)[0].outerHTML);
+    cash(this)[0].insertAdjacentHTML("afterBegin",cash(selector)[0].outerHTML);
     return this;
   },
 
   prependTo: function(selector){
-    $(selector)[0].insertAdjacentHTML("afterBegin",this[0].outerHTML);
+    cash(selector)[0].insertAdjacentHTML("afterBegin",this[0].outerHTML);
     return this;
   },
 

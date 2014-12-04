@@ -1,4 +1,3 @@
-
 cash.fn.extend({
   css: function(){
     var computed, prop, value, collection;

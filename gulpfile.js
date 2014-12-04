@@ -5,10 +5,10 @@ var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 
 gulp.task('build', function () {
-  return gulp.src(['./src/core.js','./src/util.js','./src/*.js'])
-    .pipe($.concat("cash.js"))
+  return gulp.src('./src/_wrapper.js')
+    .pipe($.preprocess())
+    .pipe($.rename('cash.js'))
     .pipe($.size())
-    .pipe($.wrap('(function(){<%= contents %>}.call(window));'))
     .pipe($.beautify())
     .pipe(gulp.dest('./dist/'));
 });

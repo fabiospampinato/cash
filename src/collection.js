@@ -1,4 +1,3 @@
-
 cash.fn.extend({
 
   add: function(){
@@ -15,7 +14,7 @@ cash.fn.extend({
   },
 
   eq: function(index){
-    return $(this[index]);
+    return cash(this[index]);
   },
 
   filter: function(){
@@ -30,7 +29,7 @@ cash.fn.extend({
   },
 
   first: function(){
-    return $(this[0]);
+    return cash(this[0]);
   },
 
   get: function( num ) {
@@ -46,7 +45,7 @@ cash.fn.extend({
   },
 
   last: function(){
-    return $(this[this.length -1]);
+    return cash(this[this.length -1]);
   }
 
 });
