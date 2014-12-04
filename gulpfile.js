@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp');
-
 var $ = require('gulp-load-plugins')();
 
 gulp.task('build', function () {
@@ -9,15 +8,14 @@ gulp.task('build', function () {
     .pipe($.preprocess())
     .pipe($.rename('cash.js'))
     .pipe($.size())
-    .pipe($.beautify())
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('minify', ['build'], function () {
+gulp.task('minify', ['build'], function() {
   return gulp.src(['./dist/cash.js'])
     .pipe($.uglify())
     .pipe($.size())
-    .pipe($.rename("cash.min.js"))
+    .pipe($.rename('cash.min.js'))
     .pipe(gulp.dest('./dist/'));
 });
 
@@ -27,8 +25,8 @@ gulp.task('lint', ['build'], function() {
     .pipe($.jshint.reporter('default'));
 });
 
-gulp.task('default', ['build','minify','lint']);
+gulp.task('default', ['build', 'minify', 'lint']);
 
-gulp.task('watch', function () {
-    gulp.watch(['src/*.js','test/src/*.js'], ['build','minify','lint']);
+gulp.task('watch', function() {
+  gulp.watch(['src/*.js', 'test/src/*.js'], ['build', 'minify', 'lint']);
 });
