@@ -1,70 +1,74 @@
 cash.fn.extend({
 
   children: function(selector) {
-    if(!selector){
+    if (!selector) {
       var children = this[0].children;
       cash.fn.extend(children, cash.fn);
       return children;
     } else {
-      return cash(this[0].children).filter(function(v){
-        return cash.matches(v,selector);
+      return cash(this[0].children).filter(function(v) {
+        return cash.matches(v, selector);
       });
     }
   },
 
-  closest: function(selector){
-    if(!selector || cash.matches(this[0], selector)) {
+  closest: function(selector) {
+    if (!selector || cash.matches(this[0], selector)) {
       return this;
     } else {
       return this.parent().closest(selector);
     }
   },
 
-  is: function(selector){
-    if (!selector) { return false; }
+  is: function(selector) {
+    if (!selector) {
+      return false;
+    }
     if (selector.cash) {
       return this[0] === selector[0];
     }
-    return typeof selector === "string" ? cash.matches(this[0], selector) : false;
+    return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
   },
 
-  find: function(selector){
+  find: function(selector) {
     var result;
     result = this[0].querySelectorAll(selector);
     cash.fn.extend(result, cash.fn);
     return result;
   },
 
-  has: function(selector){
-    return ArrayProto.filter.call(this, function(el){
+  has: function(selector) {
+    return ArrayProto.filter.call(this, function(el) {
       return cash(el).find(selector).length !== 0;
     });
   },
 
-  next: function(){
+  next: function() {
     return cash(this[0].nextElementSibling);
   },
 
   not: function(selector) {
-    return ArrayProto.filter.call(this, function(el){
+    return ArrayProto.filter.call(this, function(el) {
       return !cash.matches(el, selector);
     });
   },
 
-  parent: function(){
-    var result = ArrayProto.map.call( this, function(item) {
+  parent: function() {
+    var result = ArrayProto.map.call(this, function(item) {
         return item.parentElement || doc.body.parentNode;
       });
     return cash.unique(result);
   },
 
-  parents: function(selector){
-    var last, result = [], count = 0;
+  parents: function(selector) {
+    var last,
+        result = [],
+        count = 0;
     this.each(function(item) {
       last = item;
-      while(last !== doc.body.parentNode) {
+      while (last !== doc.body.parentNode) {
         last = last.parentElement;
-        if(!selector || (selector && cash.matches(last, selector))) {
+        if (!selector || (selector && cash.matches(last, selector))) {
           result[count] = last;
           count++;
         }
@@ -73,13 +77,13 @@ cash.fn.extend({
     return cash.unique(result);
   },
 
-  prev: function(){
+  prev: function() {
     return cash(this[0].previousElementSibling);
   },
 
-  siblings: function(){
+  siblings: function() {
     var collection = this.parent().children(), el = this[0];
-    return ArrayProto.filter.call(collection,function(i){
+    return ArrayProto.filter.call(collection, function(i) {
       return i !== el;
     });
   }

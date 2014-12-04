@@ -1,26 +1,26 @@
 cash.fn.extend({
 
-  add: function(){
-    var arr = [], i = 0;
+  add: function() {
+    var arr = [], i = 0, l;
     arr = [].slice.call(this);
-    for(var l=arguments.length; i < l; i++) {
+    for (l = arguments.length; i < l; i++) {
       arr = arr.concat([].slice.call(cash(arguments[i])));
     }
     return cash.unique(arr);
   },
 
-  each: function(callback){
+  each: function(callback) {
     cash.each(this, callback);
   },
 
-  eq: function(index){
+  eq: function(index) {
     return cash(this[index]);
   },
 
-  filter: function(){
-    if(typeof arguments[0] === "string") {
+  filter: function() {
+    if (typeof arguments[0] === 'string') {
       var selector = arguments[0];
-      return ArrayProto.filter.call(this, function(e){
+      return ArrayProto.filter.call(this, function(e) {
         return cash.matches(e, selector);
       });
     } else {
@@ -28,24 +28,24 @@ cash.fn.extend({
     }
   },
 
-  first: function(){
+  first: function() {
     return cash(this[0]);
   },
 
-  get: function( num ) {
+  get: function(num) {
     return this[num];
   },
 
-  index: function(elem){
-    if(!elem) {
+  index: function(elem) {
+    if (!elem) {
       return ArrayProto.slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
     } else {
       return ArrayProto.slice.call(cash(elem).children()).indexOf(this[0]);
     }
   },
 
-  last: function(){
-    return cash(this[this.length -1]);
+  last: function() {
+    return cash(this[this.length - 1]);
   }
 
 });

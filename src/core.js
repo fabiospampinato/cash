@@ -1,30 +1,31 @@
-var doc = document;
-var win = window;
-var ArrayProto = Array.prototype;
+var doc = document,
+    win = window,
+    ArrayProto = Array.prototype,
+    idMatch    = /^#[\w-]*$/,
+    classMatch = /^\.[\w-]*$/,
+    singlet    = /^[\w-]*$/;
 
-var cash = function(selector, context){
+function cash(selector, context) {
   return new cash.fn.init(selector, context);
 };
 
 cash.fn = cash.prototype = {cash: true, length: 0};
 
-var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
-
-cash.fn.init = function(selector, context){
-  var result =[], matcher, elem;
-  if(!selector) { return this; }
+cash.fn.init = function(selector, context) {
+  var result = [], matcher, elem;
+  if (!selector) { return this; }
   this.length = 1;
-  if(typeof selector !== "string") {
-    if(selector.cash) { return selector; }
+  if (typeof selector !== 'string') {
+    if (selector.cash) { return selector; }
     this[0] = selector;
     return this;
   }
-  if ( selector.charAt(0) === "<" && selector.charAt( selector.length - 1 ) === ">" && selector.length >= 3 ) {
+  if (selector.charAt(0) === '<' && selector.charAt(selector.length - 1) === '>' && selector.length >= 3) {
     result = cash.parseHTML(selector);
   } else {
     matcher = idMatch.test(selector);
     elem = selector.slice(1);
-    if(!context && matcher) {
+    if (!context && matcher) {
       this[0] = doc.getElementById(elem);
       return this;
     } else {
@@ -38,7 +39,7 @@ cash.fn.init = function(selector, context){
     }
   }
   this.length = 0;
-  cash.merge(this,result);
+  cash.merge(this, result);
   return this;
 };
 
