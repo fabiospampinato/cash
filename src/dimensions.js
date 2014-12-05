@@ -4,19 +4,19 @@ function compute(el, prop) {
 
 fn.extend({
 
-  height: function() {
+  height() {
     return this[0].getBoundingClientRect().height;
   },
 
-  innerWidth: function() {
+  innerWidth() {
     return this[0].clientWidth;
   },
 
-  innerHeight: function() {
+  innerHeight() {
     return this[0].clientHeight;
   },
 
-  outerWidth: function(margins) {
+  outerWidth(margins) {
     if (margins === true) {
       return this[0].offsetWidth +
         (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
@@ -26,7 +26,7 @@ fn.extend({
     return this[0].offsetWidth;
   },
 
-  outerHeight: function(margins) {
+  outerHeight(margins) {
     if (margins === true) {
       return this[0].offsetHeight +
         (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
@@ -36,7 +36,7 @@ fn.extend({
     return this[0].offsetHeight;
   },
 
-  width: function() {
+  width() {
     return this[0].getBoundingClientRect().width;
   }
 

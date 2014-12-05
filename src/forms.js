@@ -2,7 +2,7 @@ var encode = encodeURIComponent;
 
 fn.extend({
 
-  serialize: function() {
+  serialize() {
     var form = this[0],
         query = '',
         field, i, j;
@@ -26,13 +26,11 @@ fn.extend({
     return query.substr(1);
   },
 
-  val: function(value) {
+  val(value) {
     if (value === undefined) {
       return this[0].value;
     } else {
-      this.each(function(v) {
-        v.value = value;
-      });
+      this.each(v => v.value = value);
       return this;
     }
   }

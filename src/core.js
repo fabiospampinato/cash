@@ -1,9 +1,4 @@
-var doc = document,
-    win = window,
-    ArrayProto = Array.prototype,
-    slice      = ArrayProto.slice,
-    filter     = ArrayProto.filter,
-    idMatch    = /^#[\w-]*$/,
+var idMatch    = /^#[\w-]*$/,
     classMatch = /^\.[\w-]*$/,
     singlet    = /^[\w-]*$/;
 
@@ -35,7 +30,9 @@ fn.init = function(selector, context) {
     return this;
   }
 
-  if (selector.charAt(0) === '<' && selector.charAt(selector.length - 1) === '>' && selector.length >= 3) {
+  if (selector.charAt(0) === '<' &&
+      selector.charAt(selector.length - 1) === '>' &&
+      selector.length >= 3) {
     result = cash.parseHTML(selector);
   } else {
     matcher = idMatch.test(selector);

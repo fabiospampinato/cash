@@ -1,10 +1,10 @@
 fn.extend({
 
-  data: function(key, value) { // TODO: tear out into module for IE9
+  data(key, value) { // TODO: tear out into module for IE9
     if (!value) {
       return this[0].dataset ? this[0].dataset[key] : cash(this[0]).attr('data-' + key);
     } else {
-      this.each(function(v) {
+      this.each(v => {
         if (v.dataset) {
           v.dataset[key] = value;
         } else {
@@ -16,8 +16,8 @@ fn.extend({
     }
   },
 
-  removeData: function(name) { // TODO: tear out into module for IE9
-    this.each(function(v) {
+  removeData(name) { // TODO: tear out into module for IE9
+    this.each(v => {
       if (v.dataset) {
         delete v.dataset[name];
       } else {

@@ -7,6 +7,7 @@ gulp.task('build', function () {
   return gulp.src('./src/_wrapper.js')
     .pipe($.preprocess())
     .pipe($.rename('cash.js'))
+    .pipe($['6to5']())
     .pipe($.size())
     .pipe(gulp.dest('./dist/'));
 });
@@ -19,8 +20,8 @@ gulp.task('minify', ['build'], function() {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('lint', ['build'], function() {
-  return gulp.src('./dist/cash.js')
+gulp.task('lint', function() {
+  return gulp.src(['src/*.js', '!src/_*.js'])
     .pipe($.jshint())
     .pipe($.jshint.reporter('default'));
 });

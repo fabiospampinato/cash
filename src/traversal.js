@@ -1,18 +1,18 @@
 fn.extend({
 
-  children: function(selector) {
+  children(selector) {
     if (!selector) {
-      var children = this[0].children;
-      cash.fn.extend(children, cash.fn);
-      return children;
+      var result = this[0].children;
+      cash.fn.extend(result, cash.fn);
+      return result;
     } else {
-      return cash(this[0].children).filter(function(v) {
+      return cash(this[0].children).filter(v => {
         return cash.matches(v, selector);
       });
     }
   },
 
-  closest: function(selector) {
+  closest(selector) {
     if (!selector || cash.matches(this[0], selector)) {
       return this;
     } else {
@@ -20,7 +20,7 @@ fn.extend({
     }
   },
 
-  is: function(selector) {
+  is(selector) {
     if (!selector) {
       return false;
     }
@@ -32,43 +32,42 @@ fn.extend({
     return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
   },
 
-  find: function(selector) {
-    var result;
-    result = this[0].querySelectorAll(selector);
+  find(selector) {
+    var result = this[0].querySelectorAll(selector);
     cash.fn.extend(result, cash.fn);
     return result;
   },
 
-  has: function(selector) {
-    return filter.call(this, function(el) {
+  has(selector) {
+    return filter.call(this, el => {
       return cash(el).find(selector).length !== 0;
     });
   },
 
-  next: function() {
+  next() {
     return cash(this[0].nextElementSibling);
   },
 
-  not: function(selector) {
-    return filter.call(this, function(el) {
+  not(selector) {
+    return filter.call(this, el => {
       return !cash.matches(el, selector);
     });
   },
 
-  parent: function() {
-    var result = ArrayProto.map.call(this, function(item) {
+  parent() {
+    var result = ArrayProto.map.call(this, item => {
       return item.parentElement || doc.body.parentNode;
     });
 
     return cash.unique(result);
   },
 
-  parents: function(selector) {
+  parents(selector) {
     var last,
         result = [],
         count = 0;
 
-    this.each(function(item) {
+    this.each(item => {
       last = item;
 
       while (last !== doc.body.parentNode) {
@@ -84,17 +83,15 @@ fn.extend({
     return cash.unique(result);
   },
 
-  prev: function() {
+  prev() {
     return cash(this[0].previousElementSibling);
   },
 
-  siblings: function() {
+  siblings() {
     var collection = this.parent().children(),
         el = this[0];
 
-    return filter.call(collection, function(i) {
-      return i !== el;
-    });
+    return filter.call(collection, i => i !== el);
   }
 
 });

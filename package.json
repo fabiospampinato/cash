@@ -18,7 +18,9 @@
     "test": "gulp test"
   },
   "devDependencies": {
+    "6to5": "^1.14.11",
     "gulp": "~3.5.0",
+    "gulp-6to5": "^1.0.2",
     "gulp-connect": "~1.0.0",
     "gulp-jshint": "~1.8.4",
     "gulp-load-plugins": "~0.3.0",

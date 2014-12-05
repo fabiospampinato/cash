@@ -9,6 +9,12 @@
 })(this, function() {
   'use strict';
 
+  var doc        = document,
+      win        = window,
+      ArrayProto = Array.prototype,
+      slice      = ArrayProto.slice,
+      filter     = ArrayProto.filter;
+
   // @include ./core.js
   // @include ./util.js
   // @include ./ajax.js

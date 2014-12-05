@@ -1,6 +1,6 @@
 fn.extend({
 
-  add: function() {
+  add() {
     var arr = slice.call(this),
         i = 0, l;
 
@@ -11,33 +11,31 @@ fn.extend({
     return cash.unique(arr);
   },
 
-  each: function(callback) {
+  each(callback) {
     cash.each(this, callback);
   },
 
-  eq: function(index) {
+  eq(index) {
     return cash(this[index]);
   },
 
-  filter: function(selector) {
+  filter(selector) {
     if (typeof selector === 'string') {
-      return filter.call(this, function(e) {
-        return cash.matches(e, selector);
-      });
+      return filter.call(this, e => cash.matches(e, selector));
     } else {
       return filter.call(this, selector);
     }
   },
 
-  first: function() {
+  first() {
     return cash(this[0]);
   },
 
-  get: function(num) {
+  get(num) {
     return this[num];
   },
 
-  index: function(elem) {
+  index(elem) {
     if (!elem) {
       return slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
     } else {
@@ -45,7 +43,7 @@ fn.extend({
     }
   },
 
-  last: function() {
+  last() {
     return cash(this[this.length - 1]);
   }
 

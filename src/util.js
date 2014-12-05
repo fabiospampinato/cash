@@ -1,3 +1,10 @@
+function buildFragment(str) {
+  var fragment = fragment || doc.createDocumentFragment(),
+  tmp = tmp || fragment.appendChild(doc.createElement('div'));
+  tmp.innerHTML = str;
+  return tmp;
+}
+
 cash.each = function(collection, callback) {
   var l = collection.length,
       i = 0;
@@ -37,8 +44,8 @@ cash.matches = function(el, selector) {
 
 cash.merge = function(first, second) {
   var len = +second.length,
-    i = first.length,
-    j = 0;
+      i = first.length,
+      j = 0;
 
   for (; j < len; i++, j++) {
     first[i] = second[j];
@@ -60,15 +67,7 @@ cash.parseHTML = function(str) {
 };
 
 cash.unique = function(collection) {
-  return cash.merge(cash(), slice.call(collection).filter(function(item, index, self) {
+  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
     return self.indexOf(item) === index;
   }));
 };
-
-function buildFragment(str) {
-  var fragment = fragment || doc.createDocumentFragment(),
-      tmp = tmp || fragment.appendChild(doc.createElement('div'));
-
-  tmp.innerHTML = str;
-  return tmp;
-}

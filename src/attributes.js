@@ -2,11 +2,11 @@ var notWhiteMatch = /\S+/g;
 
 fn.extend({
 
-  addClass: function(className) { // TODO: tear out into module for IE9
+  addClass(className) { // TODO: tear out into module for IE9
     var classes = className.match(notWhiteMatch),
         spacedName, l;
 
-    this.each(function(v) {
+    this.each(v => {
       l = classes.length;
 
       if (v.classList) {
@@ -15,9 +15,9 @@ fn.extend({
         }
       } else {
         while (l--) {
-          spacedName = ' ' + v.className + ' ';
+          spacedName = ` ${v.className} `;
 
-          if (spacedName.indexOf(' ' + classes[l] + ' ') === -1) {
+          if (spacedName.indexOf(` ${classes[l]} `) === -1) {
             v.className += ' ' + classes[l];
           }
         }
@@ -27,19 +27,17 @@ fn.extend({
     return this;
   },
 
-  attr: function(attr, value) {
+  attr(name, value) {
     if (!value) {
-      return this[0].getAttribute(attr);
+      return this[0].getAttribute(name);
     } else {
-      this.each(function(v) {
-        v.setAttribute(attr, value);
-      });
+      this.each(v => v.setAttribute(name, value));
 
       return this;
     }
   },
 
-  hasClass: function(className) { // TODO: tear out into module for IE9
+  hasClass(className) { // TODO: tear out into module for IE9
     if (this[0].classList) {
       return this[0].classList.contains(className);
     } else {
@@ -47,23 +45,20 @@ fn.extend({
     }
   },
 
-  prop: function(prop) {
-    return this[0][prop];
+  prop(name) {
+    return this[0][name];
   },
 
-  removeAttr: function(attr) {
-    this.each(function(v) {
-      v.removeAttribute(attr);
-    });
-
+  removeAttr(name) {
+    this.each(v => v.removeAttribute(name));
     return this;
   },
 
-  removeClass: function(className) { // TODO: tear out into module for IE9
+  removeClass(className) { // TODO: tear out into module for IE9
     var classes = className.match(notWhiteMatch),
         l, newClassName;
 
-    this.each(function(v) {
+    this.each(v => {
       l = classes.length;
 
       if (v.classList) {
@@ -71,10 +66,10 @@ fn.extend({
           v.classList.remove(classes[l]);
         }
       } else {
-        newClassName = ' ' + v.className + ' ';
+        newClassName = ` ${v.className} `;
 
         while (l--) {
-          newClassName = newClassName.replace(' ' + classes[l] + ' ', ' ');
+          newClassName = newClassName.replace(` ${classes[l]} `, ' ');
         }
 
         v.className = newClassName.trim();

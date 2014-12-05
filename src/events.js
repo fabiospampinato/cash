@@ -27,8 +27,8 @@ function registerEvent(node, eventName, callback) {
 
 fn.extend({
 
-  off: function(eventName, callback) {
-    this.each(function(v) {
+  off(eventName, callback) {
+    this.each(v => {
       if (callback) {
         v.removeEventListener(eventName, callback);
       } else {
@@ -41,18 +41,18 @@ fn.extend({
     return this;
   },
 
-  on: function(eventName, delegate, callback) {
+  on(eventName, delegate, callback) {
     if (typeof delegate === 'function') {
       callback = delegate;
 
-      this.each(function(v) {
+      this.each(v => {
         registerEvent(cash(v), eventName, callback);
         v.addEventListener(eventName, callback);
       });
       return this;
     } else {
-      this.each(function(v) {
-        var handler = function(e) {
+      this.each(v => {
+        function handler(e) {
           var t = e.target;
 
           if (cash.matches(t, delegate)) {
@@ -60,7 +60,7 @@ fn.extend({
           } else {
             while (!cash.matches(t, delegate)) {
               if (t === v) {
-                return t = false;
+                return (t = false);
               }
               t = t.parentNode;
             }
@@ -69,7 +69,7 @@ fn.extend({
               callback.call(t);
             }
           }
-        };
+        }
 
         registerEvent(cash(v), eventName, handler);
         v.addEventListener(eventName, handler);
@@ -79,18 +79,14 @@ fn.extend({
     }
   },
 
-  ready: function(callback) {
+  ready(callback) {
     this[0].addEventListener('DOMContentLoaded', callback);
   },
 
-  trigger: function(eventName) {
+  trigger(eventName) {
     var evt = doc.createEvent('HTMLEvents');
     evt.initEvent(eventName, true, false);
-
-    this.each(function(v) {
-      v.dispatchEvent(evt);
-    });
-
+    this.each(v => v.dispatchEvent(evt));
     return this;
   }
 

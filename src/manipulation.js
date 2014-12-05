@@ -1,75 +1,65 @@
 fn.extend({
 
-  append: function(content) {
+  append(content) {
     this[0].appendChild(cash(content)[0]);
     return this;
   },
 
-  appendTo: function(content) {
+  appendTo(content) {
     cash(content)[0].appendChild(this[0]);
     return this;
   },
 
-  clone: function() {
+  clone() {
     return cash(this[0].cloneNode(true));
   },
 
-  empty: function() {
-    this.each(function(v) {
-      v.innerHTML = '';
-    });
+  empty() {
+    this.each(v => v.innerHTML = '');
     return this;
   },
 
-  html: function(content) {
+  html(content) {
     var source;
 
     if (content === 'undefined') {
       return this[0].innerHTML;
     } else {
       source = typeof content === 'object' ? cash(content)[0].outerHTML : content;
-
-      this.each(function(v) {
-        v.innerHTML = '' + source;
-      });
-
+      this.each(v => v.innerHTML = `${source}`);
       return this;
     }
   },
 
-  insertAfter: function(selector) {
+  insertAfter(selector) {
     cash(selector)[0].insertAdjacentHTML('afterend', this[0].outerHTML);
     return this;
   },
 
-  insertBefore: function(selector) {
+  insertBefore(selector) {
     cash(selector)[0].insertAdjacentHTML('beforebegin', this[0].outerHTML);
     return this;
   },
 
-  prepend: function(selector) {
+  prepend(selector) {
     cash(this)[0].insertAdjacentHTML('afterBegin', cash(selector)[0].outerHTML);
     return this;
   },
 
-  prependTo: function(selector) {
+  prependTo(selector) {
     cash(selector)[0].insertAdjacentHTML('afterBegin', this[0].outerHTML);
     return this;
   },
 
-  remove: function() {
-    this.each(function(v) {
-      v.parentNode.removeChild(v);
-    });
+  remove() {
+    this.each(v => v.parentNode.removeChild(v));
   },
 
-  text: function(content) {
+  text(content) {
     if (!content) {
       return this[0].textContent;
     } else {
-      this.each(function(v) {
-        v.textContent = content;
-      });
+      this.each(v => v.textContent = content);
       return this;
     }
   }
