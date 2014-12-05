@@ -7,8 +7,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function() {
-  'use strict';
-
+  
   var doc        = document,
       win        = window,
       ArrayProto = Array.prototype,
