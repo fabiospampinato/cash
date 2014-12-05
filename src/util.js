@@ -28,7 +28,7 @@ cash.extend = fn.extend = function(target, source) {
     }
   }
 
-  return this;
+  return target;
 };
 
 cash.matches = function(el, selector) {
