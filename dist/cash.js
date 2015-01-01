@@ -589,6 +589,10 @@
             }
         },
 
+        exists: function () {
+            return cash(this).length !== 0;
+        },
+
         find: function (selector) {
             var result;
             result = this[0].querySelectorAll(selector);

@@ -272,6 +272,11 @@ QUnit.test( "closest", function( assert ) {
   assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
 });
 
+QUnit.test( "exists", function( assert ) {
+  assert.equal($('.form-fixture').exists(), true, "Element exists" );
+  assert.equal($('.unicorn').exists(), false, "Element does not exist" );
+});
+
 QUnit.test( "find", function( assert ) {
   assert.equal($('.form-fixture').find('input[type=hidden]').length, 1, "find Passed!" );
 });

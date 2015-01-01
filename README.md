@@ -200,6 +200,16 @@ Empties an elements interior markup.
 
 Returns a collection with the element at index.
 
+### exists
+
+            
+          
+    exists()  => boolean
+        
+
+Returns true/false depending on whether the given selector exists.  
+_(shorthand for .length !== 0)_
+
 ### filter
 
             
