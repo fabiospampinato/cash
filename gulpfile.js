@@ -1,8 +1,13 @@
 'use strict';
 
+var path = require('path');
 var gulp = require('gulp');
-
+var pkg = require('./package');
 var $ = require('gulp-load-plugins')();
+
+function version(file){
+   return '/* ' + path.basename(file.path) + ' ' + pkg.version + ' */\n';
+}
 
 gulp.task('build', function () {
   return gulp.src('./src/_wrapper.js')
@@ -10,6 +15,7 @@ gulp.task('build', function () {
     .pipe($.rename('cash.js'))
     .pipe($.size())
     .pipe($.beautify())
+    .pipe($.tap(function(file, t) { file.contents = Buffer.concat([new Buffer(version(file)), file.contents]);}))
     .pipe(gulp.dest('./dist/'));
 });
 
@@ -18,6 +24,7 @@ gulp.task('minify', ['build'], function () {
     .pipe($.uglify())
     .pipe($.size())
     .pipe($.rename("cash.min.js"))
+    .pipe($.tap(function(file, t) { file.contents = Buffer.concat([new Buffer(version(file)), file.contents]);}))
     .pipe(gulp.dest('./dist/'));
 });
 
