@@ -7,7 +7,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function() {
-  
+
   var doc        = document,
       win        = window,
       ArrayProto = Array.prototype,
@@ -16,7 +16,6 @@
 
   // @include ./core.js
   // @include ./util.js
-  // @include ./ajax.js
   // @include ./attributes.js
   // @include ./collection.js
   // @include ./css.js

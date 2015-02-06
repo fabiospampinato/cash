@@ -33,23 +33,6 @@ $(DOM elements) // => collection
 $(HTML) // => collection
 ```
 
-### $.ajax
-
-Initiates an AJAX request with the given options and triggers the appropriate
-callback.
-
-```js
-$.ajax(options)
-```
-
-##### Options
-
-* type : String- ie: 'POST', 'GET'
-* url : String- The target url
-* data - Serialized data or object
-* success(response) : Function- Success callback
-* error : Function Error callback
-
 ### $.each
 
 Iterates through a collection and calls the callback method on each.

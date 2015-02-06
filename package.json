@@ -1,18 +1,18 @@
 {
   "name": "cash-dom",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "main": "./dist/cash.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hackbone/cash.git"
+    "url": "https://github.com/kenwheeler/cash.git"
   },
   "author": "Ken Wheeler <ken_wheeler@me.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hackbone/cash/issues"
+    "url": "https://github.com/kenwheeler/cash/issues"
   },
-  "homepage": "https://github.com/hackbone/cash",
+  "homepage": "https://github.com/kenwheeler/cash",
   "scripts": {
     "build": "gulp",
     "test": "gulp test"

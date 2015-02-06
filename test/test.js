@@ -24,34 +24,6 @@ QUnit.test( "HTML Query/Init", function( assert ) {
   assert.equal($('<div class="html-fixture">').length, 1, "HTML Passed!" );
 });
 
-// AJAX
-
-QUnit.test( "Ajax", function( assert ) {
-
-  QUnit.stop();
-
-  $.ajax({
-    type: 'GET',
-    url: 'ajax-fixture.html',
-    success: function(data) {
-      QUnit.ok(true, "Ajax Success Passed");
-      QUnit.start();
-    }
-  });
-
-  QUnit.stop();
-
-  $.ajax({
-    type: 'GET',
-    url: 'missing-fixture.html',
-    error: function(error) {
-      QUnit.ok(true, "Ajax Error Passed = " + error);
-      QUnit.start();
-    }
-  });
-
-});
-
 //Attributes
 
 QUnit.test( "addClass", function( assert ) {
