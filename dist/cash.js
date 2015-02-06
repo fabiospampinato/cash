@@ -9,8 +9,6 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  "use strict";
-
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
 
   var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
