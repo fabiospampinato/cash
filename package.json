@@ -1,11 +1,26 @@
 {
   "name": "cash-dom",
-  "main": "./dist/cash.min.js",
   "version": "0.0.3",
-  "dependencies": {},
+  "description": "An absurdly small jQuery alternative for modern browsers.",
+  "main": "./dist/cash.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hackbone/cash.git"
+  },
+  "author": "Ken Wheeler <ken_wheeler@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hackbone/cash/issues"
+  },
+  "homepage": "https://github.com/hackbone/cash",
+  "scripts": {
+    "build": "gulp",
+    "test": "gulp test"
+  },
   "devDependencies": {
+    "6to5": "^1.14.11",
     "gulp": "~3.5.0",
-    "gulp-beautify": "~1.1.0",
+    "gulp-6to5": "^1.0.2",
     "gulp-connect": "~1.0.0",
     "gulp-jshint": "~1.8.4",
     "gulp-load-plugins": "~0.3.0",
@@ -16,7 +31,5 @@
     "gulp-util": "~2.2.9",
     "gulp-wrap": "~0.3.0"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  }
+  "dependencies": {}
 }

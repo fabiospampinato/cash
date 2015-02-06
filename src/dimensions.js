@@ -1,43 +1,43 @@
-cash.fn.extend({
+function compute(el, prop) {
+  return parseInt(win.getComputedStyle(el[0], null)[prop], 10);
+}
 
-  height: function(){
+fn.extend({
+
+  height() {
     return this[0].getBoundingClientRect().height;
   },
 
-  innerWidth: function(){
+  innerWidth() {
     return this[0].clientWidth;
   },
 
-  innerHeight: function(){
+  innerHeight() {
     return this[0].clientHeight;
   },
 
-  outerWidth: function(margins){
-    if(margins === true){
+  outerWidth(margins) {
+    if (margins === true) {
       return this[0].offsetWidth +
-        (parseInt(getComputed(this,"margin-left"), 10) || parseInt(getComputed(this,"marginLeft"), 10) || 0) +
-        (parseInt(getComputed(this,"margin-right"), 10) || parseInt(getComputed(this,"marginRight"), 10) || 0);
+        (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
+        (compute(this, 'margin-right') || compute(this, 'marginRight') || 0);
     }
+
     return this[0].offsetWidth;
   },
 
-  outerHeight: function(margins){
-    if(margins === true){
+  outerHeight(margins) {
+    if (margins === true) {
       return this[0].offsetHeight +
-        (parseInt(getComputed(this,"margin-top"), 10) || parseInt(getComputed(this,"marginTop"), 10) || 0 ) +
-        (parseInt(getComputed(this,"margin-bottom"), 10) || parseInt(getComputed(this,"marginBottom"), 10) || 0 );
+        (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
+        (compute(this, 'margin-bottom') || compute(this, 'marginBottom') || 0);
     }
+
     return this[0].offsetHeight;
   },
 
-  width: function(){
+  width() {
     return this[0].getBoundingClientRect().width;
   }
 
 });
-
-function getComputed(el, prop) {
-  var computed;
-  computed = window.getComputedStyle(el[0],null);
-  return computed[prop];
-}

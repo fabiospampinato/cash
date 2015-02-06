@@ -1,51 +1,50 @@
-cash.fn.extend({
+fn.extend({
 
-  add: function(){
-    var arr = [], i = 0;
-    arr = [].slice.call(this);
-    for(var l=arguments.length; i < l; i++) {
-      arr = arr.concat([].slice.call(cash(arguments[i])));
+  add() {
+    var arr = slice.call(this),
+        i = 0, l;
+
+    for (l = arguments.length; i < l; i++) {
+      arr = arr.concat(slice.call(cash(arguments[i])));
     }
+
     return cash.unique(arr);
   },
 
-  each: function(callback){
+  each(callback) {
     cash.each(this, callback);
   },
 
-  eq: function(index){
+  eq(index) {
     return cash(this[index]);
   },
 
-  filter: function(){
-    if(typeof arguments[0] === "string") {
-      var selector = arguments[0];
-      return Array.prototype.filter.call(this, function(e){
-        return cash.matches(e, selector);
-      });
+  filter(selector) {
+    if (typeof selector === 'string') {
+      return filter.call(this, e => cash.matches(e, selector));
     } else {
-      return Array.prototype.filter.call(this, arguments[0]);
+      return filter.call(this, selector);
     }
   },
 
-  first: function(){
+  first() {
     return cash(this[0]);
   },
 
-  get: function( num ) {
+  get(num) {
     return this[num];
   },
 
-  index: function(elem){
-    if(!elem) {
-      return Array.prototype.slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
+  index(elem) {
+    if (!elem) {
+      return slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
     } else {
-      return Array.prototype.slice.call(cash(elem).children()).indexOf(this[0]);
+      return slice.call(cash(elem).children()).indexOf(this[0]);
     }
   },
 
-  last: function(){
-    return cash(this[this.length -1]);
+  last() {
+    return cash(this[this.length - 1]);
   }
 
 });

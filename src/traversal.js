@@ -1,87 +1,93 @@
-cash.fn.extend({
+fn.extend({
 
-  children: function(selector) {
-    if(!selector){
-      var children = this[0].children;
-      cash.fn.extend(children, cash.fn);
-      return children;
+  children(selector) {
+    if (!selector) {
+      return cash.fn.extend(this[0].children, cash.fn);
     } else {
-      return cash(this[0].children).filter(function(v){
-        return cash.matches(v,selector);
+      return cash(this[0].children).filter(v => {
+        return cash.matches(v, selector);
       });
     }
   },
 
-  closest: function(selector){
-    if(!selector || cash.matches(this[0], selector)) {
+  closest(selector) {
+    if (!selector || cash.matches(this[0], selector)) {
       return this;
     } else {
       return this.parent().closest(selector);
     }
   },
 
-  is: function(selector){
-    if (!selector) { return false; }
+  is(selector) {
+    if (!selector) {
+      return false;
+    }
+
     if (selector.cash) {
       return this[0] === selector[0];
     }
-    return typeof selector === "string" ? cash.matches(this[0], selector) : false;
+
+    return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
   },
 
-  find: function(selector){
-    var result;
-    result = this[0].querySelectorAll(selector);
-    cash.fn.extend(result, cash.fn);
-    return result;
+  find(selector) {
+    return cash.fn.extend(this[0].querySelectorAll(selector), cash.fn);
   },
 
-  has: function(selector){
-    return Array.prototype.filter.call(this, function(el){
+  has(selector) {
+    return filter.call(this, el => {
       return cash(el).find(selector).length !== 0;
     });
   },
 
-  next: function(){
+  next() {
     return cash(this[0].nextElementSibling);
   },
 
-  not: function(selector) {
-    return Array.prototype.filter.call(this, function(el){
+  not(selector) {
+    return filter.call(this, el => {
       return !cash.matches(el, selector);
     });
   },
 
-  parent: function(){
-    var result = Array.prototype.map.call( this, function(item) {
-        return item.parentElement || document.body.parentNode;
-      });
+  parent() {
+    var result = ArrayProto.map.call(this, item => {
+      return item.parentElement || doc.body.parentNode;
+    });
+
     return cash.unique(result);
   },
 
-  parents: function(selector){
-    var last, result = [], count = 0;
-    this.each(function(item) {
+  parents(selector) {
+    var last,
+        result = [],
+        count = 0;
+
+    this.each(item => {
       last = item;
-      while(last !== document.body.parentNode) {
+
+      while (last !== doc.body.parentNode) {
         last = last.parentElement;
-        if(!selector || (selector && cash.matches(last, selector))) {
+
+        if (!selector || (selector && cash.matches(last, selector))) {
           result[count] = last;
           count++;
         }
       }
     });
+
     return cash.unique(result);
   },
 
-  prev: function(){
+  prev() {
     return cash(this[0].previousElementSibling);
   },
 
-  siblings: function(){
-    var collection = this.parent().children(), el = this[0];
-    return Array.prototype.filter.call(collection,function(i){
-      return i !== el;
-    });
+  siblings() {
+    var collection = this.parent().children(),
+        el = this[0];
+
+    return filter.call(collection, i => i !== el);
   }
 
 });
