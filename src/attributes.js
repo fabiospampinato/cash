@@ -2,7 +2,7 @@ var notWhiteMatch = /\S+/g;
 
 fn.extend({
 
-  addClass(className) { // TODO: tear out into module for IE9
+  addClass(className) {
     var classes = className.match(notWhiteMatch),
         spacedName, l;
 
@@ -37,12 +37,34 @@ fn.extend({
     }
   },
 
-  hasClass(className) { // TODO: tear out into module for IE9
-    if (this[0].classList) {
-      return this[0].classList.contains(className);
-    } else {
-      return this[0].className.indexOf(className) !== -1;
-    }
+  hasClass(className) {
+
+    var classes = className.match(notWhiteMatch),
+    spacedName, l, has = true;
+
+    this.each(v => {
+      l = classes.length;
+
+      if (v.classList) {
+        while (l--) {
+          if( !v.classList.contains(classes[l]) ) {
+            has = false;
+          }
+        }
+      } else {
+        while (l--) {
+          spacedName = ` ${v.className} `;
+
+          if (spacedName.indexOf(` ${classes[l]} `) === -1) {
+            has = false;
+          }
+        }
+      }
+
+    });
+
+    return has;
+
   },
 
   prop(name) {
@@ -80,11 +102,18 @@ fn.extend({
   },
 
   toggleClass(className) {
+
+    var classes = className.match(notWhiteMatch), l;
+
     return this.each(v => {
-      if (cash(v).hasClass(className)) {
-        cash(v).removeClass(className);
-      } else {
-        cash(v).addClass(className);
+      l = classes.length;
+
+      while(l--) {
+        if (cash(v).hasClass(classes[l])) {
+          cash(v).removeClass(classes[l]);
+        } else {
+          cash(v).addClass(classes[l]);
+        }
       }
     });
   }

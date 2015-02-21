@@ -49,7 +49,13 @@ QUnit.test( "attr", function( assert ) {
 
 QUnit.test( "hasClass", function( assert ) {
   var hasClass = $('.attr-fixture').hasClass('has-class');
+  var notHasClass = $('.attr-fixture').hasClass('nothing');
+  var hasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two');
+  var notHasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two nothing');
   assert.equal(hasClass, true, "hasClass Passed!" );
+  assert.equal(notHasClass, false, "hasClass Negative Passed!" );
+  assert.equal(hasMultiClass, true, "hasClass Multi Passed!" );
+  assert.equal(notHasMultiClass, false, "hasClass Multi Negative Passed!" );
 });
 
 QUnit.test( "prop", function( assert ) {
@@ -73,6 +79,9 @@ QUnit.test( "toggleClass", function( assert ) {
   $('.toggle-fixture').toggleClass('toggle');
   $('.toggle-fixture').toggleClass('woggle');
   assert.equal( $('.toggle-fixture')[0].className, "toggle-fixture woggle", "toggleClass Passed!" );
+  
+  $('.toggle-fixture').toggleClass('multi woggle');
+  assert.equal( $('.toggle-fixture')[0].className, "toggle-fixture multi", "toggleClass Multiple Passed!" );
 });
 
 

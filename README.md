@@ -233,8 +233,8 @@ $(element).has(selector) // => boolean
 
 ### $.fn.hasClass
 
-Returns the boolean result of checking if the first element in the collection
-has the className attribute.
+Returns the boolean result of checking if all elements in the collection
+have the className attribute. Accepts space-separated classNames for checking multiple classes.
 
 ```js
 $(element).hasClass(className) // => boolean
@@ -459,7 +459,7 @@ $(element).removeClass(className) // => collection
 
 ### $.fn.toggleClass
 
-Will add/remove the given `className` to the collection depending on whether it already has the given `className`
+Will add/remove the given className to the collection depending on whether it already has the given className. Accepts space-separated classNames for toggling multiple classes.
 
 ```js
 $(element).toggleClass(className) // => collection
