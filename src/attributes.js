@@ -77,6 +77,16 @@ fn.extend({
     });
 
     return this;
+  },
+
+  toggleClass(className) {
+    return this.each(v => {
+      if (cash(v).hasClass(className)) {
+        cash(v).removeClass(className);
+      } else {
+        cash(v).addClass(className);
+      }
+    });
   }
 
 });

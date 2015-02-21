@@ -69,6 +69,13 @@ QUnit.test( "removeClass", function( assert ) {
   assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
 });
 
+QUnit.test( "toggleClass", function( assert ) {
+  $('.toggle-fixture').toggleClass('toggle');
+  $('.toggle-fixture').toggleClass('woggle');
+  assert.equal( $('.toggle-fixture')[0].className, "toggle-fixture woggle", "toggleClass Passed!" );
+});
+
+
 //Collection
 
 QUnit.test( "add", function( assert ) {

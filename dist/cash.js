@@ -209,6 +209,16 @@
       });
 
       return this;
+    },
+
+    toggleClass: function (className) {
+      return this.each(function (v) {
+        if (cash(v).hasClass(className)) {
+          cash(v).removeClass(className);
+        } else {
+          cash(v).addClass(className);
+        }
+      });
     }
 
   });

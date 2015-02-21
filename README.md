@@ -457,6 +457,14 @@ Removes className from collection elements. Accepts space-separated classNames f
 $(element).removeClass(className) // => collection
 ```
 
+### $.fn.toggleClass
+
+Will add/remove the given `className` to the collection depending on whether it already has the given `className`
+
+```js
+$(element).toggleClass(className) // => collection
+```
+
 ### $.fn.removeData
 
 Removes data attribute from collection elements.
