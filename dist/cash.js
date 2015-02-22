@@ -230,7 +230,7 @@
     toggleClass: function (className) {
       var classes = className.match(notWhiteMatch), l;
 
-      return this.each(function (v) {
+      this.each(function (v) {
         l = classes.length;
 
         while (l--) {
@@ -241,6 +241,8 @@
           }
         }
       });
+
+      return this;
     }
 
   });

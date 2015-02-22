@@ -105,7 +105,7 @@ fn.extend({
 
     var classes = className.match(notWhiteMatch), l;
 
-    return this.each(v => {
+    this.each(v => {
       l = classes.length;
 
       while(l--) {
@@ -116,6 +116,9 @@ fn.extend({
         }
       }
     });
+
+    return this;
+    
   }
 
 });
