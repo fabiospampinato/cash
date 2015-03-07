@@ -4,7 +4,7 @@ fn.extend({
 
   addClass(className) {
     var classes = className.match(notWhiteMatch),
-        spacedName, l;
+      spacedName, l;
 
     this.each(v => {
       l = classes.length;
@@ -39,8 +39,12 @@ fn.extend({
 
   hasClass(className) {
 
+    if(!this.length || typeof className !== 'string' || !className) {
+      return false;
+    }
+
     var classes = className.match(notWhiteMatch),
-    spacedName, l, has = true;
+      spacedName, l, has = true;
 
     this.each(v => {
       l = classes.length;
@@ -78,7 +82,7 @@ fn.extend({
 
   removeClass(className) { // TODO: tear out into module for IE9
     var classes = className.match(notWhiteMatch),
-        l, newClassName;
+      l, newClassName;
 
     this.each(v => {
       l = classes.length;

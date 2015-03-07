@@ -48,14 +48,25 @@ QUnit.test( "attr", function( assert ) {
 });
 
 QUnit.test( "hasClass", function( assert ) {
+  
   var hasClass = $('.attr-fixture').hasClass('has-class');
   var notHasClass = $('.attr-fixture').hasClass('nothing');
   var hasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two');
   var notHasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two nothing');
-  assert.equal(hasClass, true, "hasClass Passed!" );
-  assert.equal(notHasClass, false, "hasClass Negative Passed!" );
-  assert.equal(hasMultiClass, true, "hasClass Multi Passed!" );
-  assert.equal(notHasMultiClass, false, "hasClass Multi Negative Passed!" );
+  var emptyHasClass = $('.attr-fixture').hasClass();
+  var arrayHasClass = $('.attr-fixture').hasClass(['meh']);
+  var emptyStringHasClass = $('.attr-fixture').hasClass('');
+  var emptyCollectionHasClass = $('.doesnt-exist').hasClass('has-class');
+
+  assert.equal(hasClass, true, 'hasClass Passed!' );
+  assert.equal(notHasClass, false, 'hasClass Negative Passed!' );
+  assert.equal(hasMultiClass, true, 'hasClass Multi Passed!' );
+  assert.equal(notHasMultiClass, false, 'hasClass Multi Negative Passed!' );
+  assert.equal(emptyHasClass, false, 'hasClass returns `false` when `empty`!' );
+  assert.equal(arrayHasClass, false, 'hasClass returns `false` for `array`!' );
+  assert.equal(emptyStringHasClass, false, 'hasClass returns `false` for empty `string`!' );
+  assert.equal(emptyCollectionHasClass, false, 'hasClass returns `false` when no collection passed!' );
+
 });
 
 QUnit.test( "prop", function( assert ) {

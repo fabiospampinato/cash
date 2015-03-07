@@ -166,6 +166,10 @@
     },
 
     hasClass: function (className) {
+      if (!this.length || typeof className !== "string" || !className) {
+        return false;
+      }
+
       var classes = className.match(notWhiteMatch), spacedName, l, has = true;
 
       this.each(function (v) {
