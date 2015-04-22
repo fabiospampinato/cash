@@ -9,7 +9,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
+  var doc = document, win = window, ArrayProto = Array.prototype, map = ArrayProto.map, slice = ArrayProto.slice, filter = ArrayProto.filter;
 
   var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
 
@@ -260,6 +260,10 @@
 
     last: function () {
       return cash(this[this.length - 1]);
+    },
+
+    map: function (callback) {
+      return map.call(this, callback);
     }
 
   });

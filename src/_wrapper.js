@@ -11,6 +11,7 @@
   var doc        = document,
       win        = window,
       ArrayProto = Array.prototype,
+      map        = ArrayProto.map,
       slice      = ArrayProto.slice,
       filter     = ArrayProto.filter;
 
