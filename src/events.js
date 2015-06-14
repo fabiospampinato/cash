@@ -42,15 +42,9 @@ fn.extend({
   },
 
   on(eventName, delegate, callback) {
-    if (typeof delegate === 'function') {
-      callback = delegate;
+    
+    if (typeof callback === 'function' && typeof delegate === 'string') {
 
-      this.each(v => {
-        registerEvent(cash(v), eventName, callback);
-        v.addEventListener(eventName, callback);
-      });
-      return this;
-    } else {
       this.each(v => {
         function handler(e) {
           var t = e.target;
@@ -76,7 +70,22 @@ fn.extend({
       });
 
       return this;
+
+    } else {
+
+      if(typeof delegate === 'function') {
+        callback = delegate;
+      }
+
+      this.each(v => {
+        registerEvent(cash(v), eventName, callback);
+        v.addEventListener(eventName, callback);
+      });
+
+      return this;
+
     }
+
   },
 
   ready(callback) {

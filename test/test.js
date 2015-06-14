@@ -188,13 +188,16 @@ QUnit.test( "on", function( assert ) {
 });
 
 QUnit.test( "on(delegate)", function( assert ) {
-  var i = 1;
-  $('#qunit-fixture').on('click','.delegate-fixture', function(){
-    i++;
-    this.textContent = i;
-  });
+  var i = 1, idnull, idundefined;
+  $('#qunit-fixture').on('click','.delegate-fixture', function(){ i++; this.textContent = i; });
+
+  $('#qunit-fixture').on('click', null, function(){ idnull = this.id; });
+  $('#qunit-fixture').on('click', undefined, function(){ idundefined = this.id; });
   $('.delegate-trigger').trigger('click');
+
   assert.equal($('.delegate-fixture')[0].textContent, 2, "on(delegate) Passed!" );
+  assert.equal( idnull, "qunit-fixture", "on(delegate(null)) Passed!" );
+  assert.equal( idundefined, "qunit-fixture", "on(delegate(undefined)) Passed!" );
 });
 
 QUnit.test( "off", function( assert ) {
