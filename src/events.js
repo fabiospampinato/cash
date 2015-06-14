@@ -69,8 +69,6 @@ fn.extend({
         v.addEventListener(eventName, handler);
       });
 
-      return this;
-
     } else {
 
       if(typeof delegate === 'function') {
@@ -82,9 +80,9 @@ fn.extend({
         v.addEventListener(eventName, callback);
       });
 
-      return this;
-
     }
+
+    return this;
 
   },
 
