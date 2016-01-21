@@ -9,6 +9,7 @@ fn.extend({
           }
         }
       });
+      return this;
     } else if (value) {
       this.each(v => v.style[prop] = value);
       return this;
