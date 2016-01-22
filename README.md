@@ -8,7 +8,7 @@ An absurdly small jQuery alternative for modern browsers
 Add cash to your project via the jsDelivr CDN:
 
 ```html
-<script type="text/javascript" src="//cdn.jsdelivr.net/cash/0.0.3/cash.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/cash/1.0.0/cash.min.js"></script>
 ```
 
 ### What is Cash?
