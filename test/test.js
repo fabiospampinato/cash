@@ -24,6 +24,17 @@ QUnit.test( "HTML Query/Init", function( assert ) {
   assert.equal($('<div class="html-fixture">').length, 1, "HTML Passed!" );
 });
 
+QUnit.test( "tagName which doesnt exist Query", function( assert ) {
+  assert.equal($('foo').length, 0, "tagName which doenst exist Passed!" );
+});
+
+QUnit.test( "id Query for non-existing element", function( assert ) {
+  assert.equal($('#i-dont-exist').length, 0, "id for non-existing element Passed!" );
+});
+QUnit.test( "className Query for non-existing element", function( assert ) {
+  assert.equal($('.i-dont-exist').length, 0, "className for non-existing element Passed!" );
+});
+
 //Attributes
 
 QUnit.test( "addClass", function( assert ) {

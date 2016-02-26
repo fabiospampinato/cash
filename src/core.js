@@ -40,6 +40,9 @@ fn.init = function(selector, context) {
 
     if (!context && matcher) {
       this[0] = doc.getElementById(elem);
+      if (null === this[0]) {
+        this.length = 0;
+      }
       return this;
     } else {
       context = (cash(context)[0] || doc);
