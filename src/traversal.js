@@ -2,9 +2,9 @@ fn.extend({
 
   children(selector) {
     if (!selector) {
-      return cash.fn.extend(this[0].children, cash.fn);
+      return cash(slice.call(this[0].children));
     } else {
-      return cash(this[0].children).filter(v => {
+      return cash(slice.call(this[0].children)).filter(v => {
         return cash.matches(v, selector);
       });
     }
@@ -31,7 +31,7 @@ fn.extend({
   },
 
   find(selector) {
-    return cash.fn.extend(this[0].querySelectorAll(selector), cash.fn);
+    return cash(this[0].querySelectorAll(selector));
   },
 
   has(selector) {
