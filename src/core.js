@@ -21,6 +21,13 @@ fn.init = function(selector, context) {
 
   this.length = 1;
 
+  if (selector instanceof Array) {
+    result = selector;
+    this.length = 0;
+    cash.merge(this, result);
+    return this;
+  }
+
   if (typeof selector !== 'string') {
     if (selector.cash) {
       return selector;
