@@ -190,44 +190,40 @@ QUnit.test( "outerWidth", function( assert ) {
 
 QUnit.test( "on", function( assert ) {
   var i = 1;
-  $('.event-fixture').on('click', function(){
-    i++;
-    this.textContent = i;
-  });
+  var chain = $('.event-fixture').on('click', function(){ i++; this.textContent = i; });
   $('.event-fixture').trigger('click');
   assert.equal($('.event-fixture')[0].textContent, 2, "on Passed!" );
+  assert.equal(chain instanceof cash, true, "is chainable" );
 });
 
 QUnit.test( "on(delegate)", function( assert ) {
-  var i = 1;
-  $('#qunit-fixture').on('click','.delegate-fixture', function(){
-    i++;
-    this.textContent = i;
-  });
+  var i = 1, idnull, idundefined;
+  $('#qunit-fixture').on('click','.delegate-fixture', function(){ i++; this.textContent = i; });
+  $('#qunit-fixture').on('click', null, function(){ idnull = this.id; });
+  $('#qunit-fixture').on('click', undefined, function(){ idundefined = this.id; });
   $('.delegate-trigger').trigger('click');
+
   assert.equal($('.delegate-fixture')[0].textContent, 2, "on(delegate) Passed!" );
+  assert.equal( idnull, "qunit-fixture", "on(delegate(null)) Passed!" );
+  assert.equal( idundefined, "qunit-fixture", "on(delegate(undefined)) Passed!" );
 });
 
 QUnit.test( "off", function( assert ) {
   var i = 1;
-  $('.off-fixture').on('click', function(){
-    i++;
-    this.textContent = i;
-  });
+  $('.off-fixture').on('click', function(){ i++; this.textContent = i; });
   $('.off-fixture').trigger('click');
-  $('.off-fixture').off('click');
+  var chain = $('.off-fixture').off('click');
   $('.off-fixture').trigger('click');
   assert.equal($('.off-fixture')[0].textContent, 2, "on Passed!" );
+  assert.equal(chain instanceof cash, true, "is chainable" );
 });
 
 QUnit.test( "trigger", function( assert ) {
   var i = 1;
-  $('.trigger-fixture').on('click', function(){
-    i++;
-    this.textContent = i;
-  });
-  $('.trigger-fixture').trigger('click');
+  $('.trigger-fixture').on('click', function(){ i++; this.textContent = i; });
+  var chain = $('.trigger-fixture').trigger('click');
   assert.equal($('.trigger-fixture')[0].textContent, 2, "trigger Passed!" );
+  assert.equal(chain instanceof cash, true, "is chainable" );
 });
 
 //Forms
