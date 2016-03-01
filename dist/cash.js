@@ -9,7 +9,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map;
+  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map, push = ArrayProto.push;
 
   var noop = function () {}, isFunction = function (item) {
     return typeof item === typeof noop;
@@ -145,29 +145,19 @@
   var notWhiteMatch = /\S+/g;
 
   fn.extend({
-    addClass: function (className) {
-      // TODO: tear out into module for IE9
-      var classes = className.match(notWhiteMatch), spacedName, l;
+    addClass: function (c) {
+      var classes = c.match(notWhiteMatch);
 
-      this.each(function (v) {
-        l = classes.length;
-
-        if (v.classList) {
-          while (l--) {
-            v.classList.add(classes[l]);
+      return this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        cash.each(classes, function (c) {
+          if (v.classList) {
+            v.classList.add(c);
+          } else if (spacedName.indexOf(" " + c + " ")) {
+            v.className += " " + c;
           }
-        } else {
-          while (l--) {
-            spacedName = " " + v.className + " ";
-
-            if (spacedName.indexOf(" " + classes[l] + " ") === -1) {
-              v.className += " " + classes[l];
-            }
-          }
-        }
+        });
       });
-
-      return this;
     },
 
     attr: function (name, value) {
@@ -182,13 +172,13 @@
       }
     },
 
-    hasClass: function (className) {
-      // TODO: tear out into module for IE9
-      if (this[0].classList) {
-        return this[0].classList.contains(className);
-      } else {
-        return this[0].className.indexOf(className) !== -1;
-      }
+    hasClass: function (c) {
+      var check = false;
+      this.each(function (v) {
+        check = (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
+        return !check;
+      });
+      return check;
     },
 
     prop: function (name) {
@@ -202,32 +192,19 @@
       return this;
     },
 
-    removeClass: function (className) {
-      // TODO: tear out into module for IE9
-      var classes = className.match(notWhiteMatch), l, newClassName;
+    removeClass: function (c) {
+      var classes = c.match(notWhiteMatch);
 
-      this.each(function (v) {
-        l = classes.length;
-
-        if (v.classList) {
-          while (l--) {
-            v.classList.remove(classes[l]);
+      return this.each(function (v) {
+        cash.each(classes, function (c) {
+          if (v.classList) {
+            v.classList.remove(c);
+          } else {
+            v.className = v.className.replace(c, "");
           }
-        } else {
-          newClassName = " " + v.className + " ";
-
-          while (l--) {
-            newClassName = newClassName.replace(" " + classes[l] + " ", " ");
-          }
-
-          v.className = newClassName.trim();
-        }
+        });
       });
-
-      return this;
-    }
-
-  });
+    } });
 
   fn.extend({
     add: function () {
@@ -245,7 +222,7 @@
     },
 
     eq: function (index) {
-      return cash(this[index]);
+      return cash(this.get(index));
     },
 
     filter: function (selector) {
@@ -259,11 +236,14 @@
     },
 
     first: function () {
-      return cash(this[0]);
+      return this.eq(0);
     },
 
-    get: function (num) {
-      return this[num];
+    get: function (index) {
+      if (index === undefined) {
+        return slice.call(this);
+      }
+      return (index < 0 ? this[index + this.length] : this[index]);
     },
 
     index: function (elem) {
@@ -275,7 +255,7 @@
     },
 
     last: function () {
-      return cash(this[this.length - 1]);
+      return this.eq(-1);
     },
 
     map: function (callback) {
@@ -617,11 +597,9 @@
   fn.extend({
     children: function (selector) {
       var elems = [];
-
       this.each(function (el) {
-        cash.merge(elems, el.children);
+        push.apply(elems, el.children);
       });
-
       elems = cash.unique(elems);
 
       return (!selector ? elems : elems.filter(function (v) {
@@ -632,9 +610,8 @@
     closest: function (selector) {
       if (!selector || cash.matches(this[0], selector)) {
         return this;
-      } else {
-        return this.parent().closest(selector);
       }
+      return this.parent().closest(selector);
     },
 
     is: function (selector) {
@@ -660,9 +637,8 @@
       }
 
       var elems = [];
-
       this.each(function (el) {
-        cash.merge(elems, find(selector, el));
+        push.apply(elems, find(selector, el));
       });
 
       return cash.unique(elems);
@@ -685,7 +661,7 @@
     },
 
     parent: function () {
-      var result = ArrayProto.map.call(this, function (item) {
+      var result = this.map(function (item) {
         return item.parentElement || doc.body.parentNode;
       });
 
@@ -693,7 +669,7 @@
     },
 
     parents: function (selector) {
-      var last, result = [], count = 0;
+      var last, result = [];
 
       this.each(function (item) {
         last = item;
@@ -702,8 +678,7 @@
           last = last.parentElement;
 
           if (!selector || (selector && cash.matches(last, selector))) {
-            result[count] = last;
-            count++;
+            result.push(last);
           }
         }
       });

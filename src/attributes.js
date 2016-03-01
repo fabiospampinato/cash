@@ -2,33 +2,20 @@ var notWhiteMatch = /\S+/g;
 
 fn.extend({
 
-  addClass(className) { // TODO: tear out into module for IE9
-    var classes = className.match(notWhiteMatch),
-        spacedName, l;
+  addClass(c){
+    var classes = c.match(notWhiteMatch);
 
-    this.each(v => {
-      l = classes.length;
-
-      if (v.classList) {
-        while (l--) {
-          v.classList.add(classes[l]);
-        }
-      } else {
-        while (l--) {
-          spacedName = ` ${v.className} `;
-
-          if (spacedName.indexOf(` ${classes[l]} `) === -1) {
-            v.className += ' ' + classes[l];
-          }
-        }
-      }
+		return this.each(v => {
+      var spacedName = ` ${v.className} `;
+			cash.each(classes,c => {
+        if (v.classList) { v.classList.add(c); }
+        else if ( spacedName.indexOf(` ${c} `) ) { v.className += ' ' + c; }
+      });
     });
-
-    return this;
   },
 
   attr(name, value) {
-    if (!value) {
+    if ( !value ) {
       return this[0].getAttribute(name);
     } else {
       this.each(v => v.setAttribute(name, value));
@@ -37,12 +24,16 @@ fn.extend({
     }
   },
 
-  hasClass(className) { // TODO: tear out into module for IE9
-    if (this[0].classList) {
-      return this[0].classList.contains(className);
-    } else {
-      return this[0].className.indexOf(className) !== -1;
-    }
+  hasClass(c) {
+    var check = false;
+    this.each(v => {
+      check = ( v.classList ?
+      	v.classList.contains(c) :
+      	new RegExp('(^| )' + c + '( |$)', 'gi').test(v.className)
+      );
+      return !check;
+    });
+    return check;
   },
 
   prop(name) {
@@ -54,29 +45,15 @@ fn.extend({
     return this;
   },
 
-  removeClass(className) { // TODO: tear out into module for IE9
-    var classes = className.match(notWhiteMatch),
-        l, newClassName;
+  removeClass(c){
+    var classes = c.match(notWhiteMatch);
 
-    this.each(v => {
-      l = classes.length;
-
-      if (v.classList) {
-        while (l--) {
-          v.classList.remove(classes[l]);
-        }
-      } else {
-        newClassName = ` ${v.className} `;
-
-        while (l--) {
-          newClassName = newClassName.replace(` ${classes[l]} `, ' ');
-        }
-
-        v.className = newClassName.trim();
-      }
+    return this.each(v => {
+	    cash.each(classes,c => {
+        if (v.classList) { v.classList.remove(c); }
+        else { v.className = v.className.replace(c,''); }
+      });
     });
-
-    return this;
-  }
+  },
 
 });
