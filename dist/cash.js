@@ -11,63 +11,90 @@
 })(this, function () {
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
 
-  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
+  var noop = function () {}, isFunction = (function (type) {
+    return function (item) {
+      return typeof item === type;
+    };
+  }(typeof noop)), isString = (function (type) {
+    return function (item) {
+      return typeof item === type;
+    };
+  }(typeof "")), idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
 
-  function cash(selector, context) {
-    return new cash.fn.init(selector, context);
+  function find(selector, context) {
+    context = context || doc;
+    var match = singletTagOrClass.exec(selector), elems = (match ? match[1] ? doc.getElementsByClassName(match[2]) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    return slice.call(elems);
   }
 
-  var fn = cash.fn = cash.prototype = {
-    cash: true,
-    length: 0
-  };
+  function parseHTML(str) {
+    var tmp = doc.implementation.createHTMLDocument();
+    tmp.body.innerHTML = str;
+    return slice.call(tmp.body.children);
+  }
 
-  fn.init = function (selector, context) {
-    var result = [], matcher, elem;
+  function onReady(fn) {
+    if (doc.readyState !== "loading") {
+      fn();
+    } else {
+      doc.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+
+  function Init(selector, context) {
+    var elems = selector, i = 0, match, length;
 
     if (!selector) {
       return this;
     }
 
-    this.length = 1;
-
-    if (typeof selector !== "string") {
-      if (selector.cash) {
-        return selector;
+    // If already a cash collection, don't do any further processing
+    if (selector.cash) {
+      return selector;
+    }
+    // If function, use as shortcut for DOM ready
+    else if (isFunction(selector)) {
+      onReady(selector);return this;
+    } else if (isString(selector)) {
+      match = idOrHTML.exec(selector);
+      // If an ID use the faster getElementById check
+      if (match && match[2]) {
+        selector = doc.getElementById(match[2]);
+        if (!selector) {
+          return this;
+        }
       }
+      // If HTML, parse it into real elements, else use querySelectorAll
+      else {
+        elems = (match ? parseHTML(selector) : find(selector, context));
+      }
+    }
 
+    // If a DOM element is passed in or received via ID return the single element
+    if (selector.nodeType || selector === window) {
       this[0] = selector;
-      return this;
-    }
-
-    if (selector.charAt(0) === "<" && selector.charAt(selector.length - 1) === ">" && selector.length >= 3) {
-      result = cash.parseHTML(selector);
+      this.length = 1;
     } else {
-      matcher = idMatch.test(selector);
-      elem = selector.slice(1);
-
-      if (!context && matcher) {
-        this[0] = doc.getElementById(elem);
-        return this;
-      } else {
-        context = (cash(context)[0] || doc);
-
-        result = slice.call(singlet.test(elem) ? classMatch.test(selector) ? doc.getElementsByClassName(elem) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
+      length = this.length = elems.length;
+      for (; i < length; i++) {
+        this[i] = elems[i];
       }
     }
 
-    this.length = 0;
-    cash.merge(this, result);
     return this;
+  }
+
+  function cash(selector, context) {
+    return new Init(selector, context);
+  }
+
+  var fn = cash.fn = cash.prototype = Init.prototype = {
+    cash: true,
+    length: 0,
+    init: Init
   };
 
-  fn.init.prototype = fn;
-
-  function buildFragment(str) {
-    var fragment = fragment || doc.createDocumentFragment(), tmp = tmp || fragment.appendChild(doc.createElement("div"));
-    tmp.innerHTML = str;
-    return tmp;
-  }
+  cash.parseHTML = parseHTML;
 
   cash.each = function (collection, callback) {
     var l = collection.length, i = 0;
@@ -107,17 +134,6 @@
 
     first.length = i;
     return first;
-  };
-
-  cash.parseHTML = function (str) {
-    var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
-
-    if (parsed) {
-      return [doc.createElement(parsed[1])];
-    }
-
-    parsed = buildFragment(str);
-    return slice.call(parsed.childNodes);
   };
 
   cash.unique = function (collection) {
@@ -274,6 +290,7 @@
             }
           }
         });
+        return this;
       } else if (value) {
         this.each(function (v) {
           return v.style[prop] = value;
@@ -516,7 +533,7 @@
     html: function (content) {
       var source;
 
-      if (content === "undefined") {
+      if (typeof content === "undefined") {
         return this[0].innerHTML;
       } else {
         source = typeof content === "object" ? cash(content)[0].outerHTML : content;
@@ -569,9 +586,9 @@
   fn.extend({
     children: function (selector) {
       if (!selector) {
-        return cash.fn.extend(this[0].children, cash.fn);
+        return cash(slice.call(this[0].children));
       } else {
-        return cash(this[0].children).filter(function (v) {
+        return cash(slice.call(this[0].children)).filter(function (v) {
           return cash.matches(v, selector);
         });
       }
@@ -598,7 +615,7 @@
     },
 
     find: function (selector) {
-      return cash.fn.extend(this[0].querySelectorAll(selector), cash.fn);
+      return cash(this[0].querySelectorAll(selector));
     },
 
     has: function (selector) {

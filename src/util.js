@@ -1,10 +1,3 @@
-function buildFragment(str) {
-  var fragment = fragment || doc.createDocumentFragment(),
-  tmp = tmp || fragment.appendChild(doc.createElement('div'));
-  tmp.innerHTML = str;
-  return tmp;
-}
-
 cash.each = function(collection, callback) {
   var l = collection.length,
       i = 0;
@@ -53,17 +46,6 @@ cash.merge = function(first, second) {
 
   first.length = i;
   return first;
-};
-
-cash.parseHTML = function(str) {
-  var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
-
-  if (parsed) {
-    return [doc.createElement(parsed[1])];
-  }
-
-  parsed = buildFragment(str);
-  return slice.call(parsed.childNodes);
 };
 
 cash.unique = function(collection) {
