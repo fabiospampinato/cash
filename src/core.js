@@ -1,5 +1,5 @@
 var noop = function(){},
-    isFunction = function(type){ return typeof item === typeof noop; },
+    isFunction = function(item){ return typeof item === typeof noop; },
     isString = function(item) { return typeof item === typeof ''; },
     idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/,
     singletTagOrClass = /^(\.)?([\w-_]*)$/;

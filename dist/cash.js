@@ -11,7 +11,7 @@
 })(this, function () {
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
 
-  var noop = function () {}, isFunction = function (type) {
+  var noop = function () {}, isFunction = function (item) {
     return typeof item === typeof noop;
   }, isString = function (item) {
     return typeof item === typeof "";
@@ -515,9 +515,9 @@
     } else {
       el.appendChild(child);
     }
-  };
+  }
 
-  function insertContent(parent, child, prepend, sibling) {
+  function insertContent(parent, child, prepend) {
     var str = isString(child);
 
     if (!str && child.length) {
@@ -530,7 +530,7 @@
     parent.each(str ? function () {
       this.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
     } : function (el, i) {
-      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend, sibling);
+      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend);
     });
   }
 
@@ -547,11 +547,9 @@
 
     clone: function () {
       var elems = [];
-
       this.each(function (v) {
         elems.push(v.cloneNode(true));
       });
-
       return cash(elems);
     },
 

@@ -5,9 +5,9 @@ function insertElement(el,child,prepend){
   } else {
     el.appendChild(child);
   }
-};
+}
 
-function insertContent(parent,child,prepend,sibling){
+function insertContent(parent,child,prepend){
 
 	var str = isString(child);
 
@@ -18,7 +18,7 @@ function insertContent(parent,child,prepend,sibling){
 
   parent.each(
 	  str ? function(){ this.insertAdjacentHTML( prepend ? 'afterbegin' : 'beforeend', child); } :
-    function(el,i) { insertElement(el,( i === 0 ? child : child.cloneNode(true) ), prepend, sibling); }
+    function(el,i) { insertElement(el,( i === 0 ? child : child.cloneNode(true) ), prepend); }
   );
 }
 
@@ -36,9 +36,7 @@ fn.extend({
 
   clone() {
 	  var elems = [];
-
     this.each(v => { elems.push(v.cloneNode(true)); });
-
     return cash(elems);
   },
 
