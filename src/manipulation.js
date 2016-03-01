@@ -12,7 +12,7 @@ function insertContent(parent,child,prepend){
 	var str = isString(child);
 
 	if ( !str && child.length ) {
-		cash.each(child, function(){ insertContent(parent,this,prepend); });
+		each(child, function(){ insertContent(parent,this,prepend); });
 		return;
 	}
 

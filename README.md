@@ -75,12 +75,12 @@ $.fn // => cash.prototype
 
 ### $.fn.add
 
-Returns a new collection with the element added to the end, will accept any
-amount of arguments and add them all in sequence.
+Returns a new collection with the element(s) added to the end.
 
 ```js
 $(element).add(element) // => collection
 $(element).add(selector) // => collection
+$(element).add(collection) // => collection
 ```
 
 ### $.fn.addClass

@@ -15,16 +15,18 @@ cash.extend = fn.extend = function(target, source) {
   return target;
 };
 
+function each(collection, callback) {
+  var l = collection.length,
+      i = 0;
+
+  for (; i < l; i++) {
+    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
+  }
+}
+
 cash.extend({
 
-	each(collection, callback) {
-	  var l = collection.length,
-	      i = 0;
-
-	  for (; i < l; i++) {
-	    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
-	  }
-	},
+	each: each,
 
 	matches(el, selector) {
 	  return (

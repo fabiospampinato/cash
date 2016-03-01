@@ -15,7 +15,8 @@
     "push"       : true,
     "isFunction" : true,
     "isString"   : true,
-    "find"       : true
+    "find"       : true,
+    "each"       : true
   },
 
   "bitwise"       : true,

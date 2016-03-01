@@ -7,7 +7,7 @@ fn.extend({
 
 		return this.each(v => {
       var spacedName = ` ${v.className} `;
-			cash.each(classes,c => {
+			each(classes,c => {
         if (v.classList) { v.classList.add(c); }
         else if ( spacedName.indexOf(` ${c} `) ) { v.className += ' ' + c; }
       });
@@ -43,7 +43,7 @@ fn.extend({
     var classes = c.match(notWhiteMatch);
 
     return this.each(v => {
-	    cash.each(classes,c => {
+	    each(classes,c => {
         if (v.classList) { v.classList.remove(c); }
         else { v.className = v.className.replace(c,''); }
       });
