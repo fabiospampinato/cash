@@ -239,7 +239,7 @@ QUnit.test( "trigger", function( assert ) {
 
 QUnit.test( "serialize", function( assert ) {
   var data = $('.form-fixture').serialize();
-  assert.equal(data, "text=text&hidden=5", "serialize Passed!" );
+  assert.equal(data, "hidden=5&text=text", "serialize Passed!" );
 });
 
 QUnit.test( "val", function( assert ) {

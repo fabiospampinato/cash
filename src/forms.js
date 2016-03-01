@@ -1,27 +1,24 @@
-var encode = encodeURIComponent;
+function encode(e) { return encodeURIComponent(e).replace(/%20/g, '+'); }
 
 fn.extend({
 
   serialize() {
-    var form = this[0],
-        query = '',
-        field, i, j;
+    var formEl = this[0].elements,
+        query = '';
 
-    for (i = form.elements.length - 1; i >= 0; i--) {
-      field = form.elements[i];
-
+    cash.each(formEl,field => {
       if (field.name && field.type !== 'file' && field.type !== 'reset') {
-        if (field.type === 'select-multiple') {
-          for (j = form.elements[i].options.length - 1; j >= 0; j--) {
-            if (field.options[j].selected) {
-              query += '&' + field.name + '=' + encode(field.options[j].value).replace(/%20/g, '+');
+        if ( field.type === 'select-multiple') {
+	        cash.each(field.options, o => {
+            if ( o.selected) {
+              query += '&' + field.name + '=' + encode(o.value);
             }
-          }
+          });
         } else if ((field.type !== 'submit' && field.type !== 'button')) {
-          query += '&' + field.name + '=' + encode(field.value).replace(/%20/g, '+');
+          query += '&' + field.name + '=' + encode(field.value);
         }
       }
-    }
+    });
 
     return query.substr(1);
   },
@@ -30,8 +27,7 @@ fn.extend({
     if (value === undefined) {
       return this[0].value;
     } else {
-      this.each(v => v.value = value);
-      return this;
+      return this.each(v => v.value = value);
     }
   }
 
