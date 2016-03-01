@@ -22,7 +22,7 @@ fn.extend({
   html(content) {
     var source;
 
-    if (typeof content === 'undefined') {
+    if ( content === undefined ) {
       return this[0].innerHTML;
     } else {
       source = typeof content === 'object' ? cash(content)[0].outerHTML : content;

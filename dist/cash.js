@@ -100,7 +100,9 @@
     var l = collection.length, i = 0;
 
     for (; i < l; i++) {
-      callback.call(collection[i], collection[i], i, collection);
+      if (callback.call(collection[i], collection[i], i, collection) === false) {
+        break;
+      }
     }
   };
 
@@ -533,7 +535,7 @@
     html: function (content) {
       var source;
 
-      if (typeof content === "undefined") {
+      if (content === undefined) {
         return this[0].innerHTML;
       } else {
         source = typeof content === "object" ? cash(content)[0].outerHTML : content;
@@ -583,15 +585,23 @@
 
   });
 
+  function directCompare(el, selector) {
+    return el === selector;
+  }
+
   fn.extend({
     children: function (selector) {
-      if (!selector) {
-        return cash(slice.call(this[0].children));
-      } else {
-        return cash(slice.call(this[0].children)).filter(function (v) {
-          return cash.matches(v, selector);
-        });
-      }
+      var elems = [];
+
+      this.each(function (el) {
+        cash.merge(elems, el.children);
+      });
+
+      elems = cash.unique(elems);
+
+      return (!selector ? elems : elems.filter(function (v) {
+        return cash.matches(v, selector);
+      }));
     },
 
     closest: function (selector) {
@@ -607,11 +617,16 @@
         return false;
       }
 
-      if (selector.cash) {
-        return this[0] === selector[0];
-      }
+      var match = false, comparator = (isString(selector) ? cash.matches : selector.cash ? function (el) {
+        return selector.is(el);
+      } : directCompare);
 
-      return typeof selector === "string" ? cash.matches(this[0], selector) : false;
+      this.each(function (el, i) {
+        match = comparator(el, selector, i);
+        return !match;
+      });
+
+      return match;
     },
 
     find: function (selector) {
@@ -621,8 +636,8 @@
 
       var elems = [];
 
-      this.each(function () {
-        cash.merge(elems, find(selector, this));
+      this.each(function (el) {
+        cash.merge(elems, find(selector, el));
       });
 
       return cash.unique(elems);

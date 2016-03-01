@@ -1,9 +1,9 @@
 var noop = function(){},
     isFunction = (function(type){
-        return function(item) { return typeof item === type; };
+        return item => { return typeof item === type; };
       }(typeof noop)),
     isString = (function(type){
-        return function(item) { return typeof item === type; };
+        return item => { return typeof item === type; };
       }(typeof '')),
     idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/,
     singletTagOrClass = /^(\.)?([\w-_]*)$/;
@@ -46,7 +46,7 @@ function Init(selector,context){
   else if ( isString(selector) ) {
     match = idOrHTML.exec(selector);
     // If an ID use the faster getElementById check
-    if ( match && match[2]  ) {
+    if ( match && match[2] ) {
 	    selector = doc.getElementById(match[2]);
 			if ( !selector ) { return this; }
 		}
