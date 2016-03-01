@@ -10,7 +10,8 @@
     "doc"        : true,
     "ArrayProto" : true,
     "filter"     : true,
-    "slice"      : true
+    "slice"      : true,
+    "map"        : true
   },
 
   "bitwise"       : true,
