@@ -558,24 +558,19 @@
     },
 
     empty: function () {
-      this.each(function (v) {
-        return v.innerHTML = "";
-      });
+      this.html("");
       return this;
     },
 
     html: function (content) {
       var source;
-
       if (content === undefined) {
         return this[0].innerHTML;
-      } else {
-        source = typeof content === "object" ? cash(content)[0].outerHTML : content;
-        this.each(function (v) {
-          return v.innerHTML = "" + source;
-        });
-        return this;
       }
+      source = (content.nodeType ? content[0].outerHTML : content);
+      return this.each(function (v) {
+        return v.innerHTML = source;
+      });
     },
 
     insertAfter: function (selector) {
@@ -607,12 +602,10 @@
     text: function (content) {
       if (!content) {
         return this[0].textContent;
-      } else {
-        this.each(function (v) {
-          return v.textContent = content;
-        });
-        return this;
       }
+      return this.each(function (v) {
+        return v.textContent = content;
+      });
     }
 
   });

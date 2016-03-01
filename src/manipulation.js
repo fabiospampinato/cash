@@ -41,20 +41,15 @@ fn.extend({
   },
 
   empty() {
-    this.each(v => v.innerHTML = '');
+    this.html('');
     return this;
   },
 
   html(content) {
     var source;
-
-    if ( content === undefined ) {
-      return this[0].innerHTML;
-    } else {
-      source = typeof content === 'object' ? cash(content)[0].outerHTML : content;
-      this.each(v => v.innerHTML = `${source}`);
-      return this;
-    }
+    if ( content === undefined ) { return this[0].innerHTML; }
+    source = ( content.nodeType ? content[0].outerHTML : content );
+    return this.each(v => v.innerHTML = source);
   },
 
   insertAfter(selector) {
@@ -82,12 +77,8 @@ fn.extend({
   },
 
   text(content) {
-    if (!content) {
-      return this[0].textContent;
-    } else {
-      this.each(v => v.textContent = content);
-      return this;
-    }
+    if (!content) { return this[0].textContent; }
+    return this.each(v => v.textContent = content);
   }
 
 });
