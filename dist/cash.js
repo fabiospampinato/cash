@@ -11,15 +11,11 @@
 })(this, function () {
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
 
-  var noop = function () {}, isFunction = (function (type) {
-    return function (item) {
-      return typeof item === type;
-    };
-  }(typeof noop)), isString = (function (type) {
-    return function (item) {
-      return typeof item === type;
-    };
-  }(typeof "")), idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
+  var noop = function () {}, isFunction = function (type) {
+    return typeof item === typeof noop;
+  }, isString = function (item) {
+    return typeof item === typeof "";
+  }, idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
 
   function find(selector, context) {
     context = context || doc;
@@ -96,16 +92,6 @@
 
   cash.parseHTML = parseHTML;
 
-  cash.each = function (collection, callback) {
-    var l = collection.length, i = 0;
-
-    for (; i < l; i++) {
-      if (callback.call(collection[i], collection[i], i, collection) === false) {
-        break;
-      }
-    }
-  };
-
   cash.extend = fn.extend = function (target, source) {
     var prop;
 
@@ -123,26 +109,38 @@
     return target;
   };
 
-  cash.matches = function (el, selector) {
-    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
-  };
+  cash.extend({
+    each: function (collection, callback) {
+      var l = collection.length, i = 0;
 
-  cash.merge = function (first, second) {
-    var len = +second.length, i = first.length, j = 0;
+      for (; i < l; i++) {
+        if (callback.call(collection[i], collection[i], i, collection) === false) {
+          break;
+        }
+      }
+    },
 
-    for (; j < len; i++, j++) {
-      first[i] = second[j];
+    matches: function (el, selector) {
+      return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+    },
+
+    merge: function (first, second) {
+      var len = +second.length, i = first.length, j = 0;
+
+      for (; j < len; i++, j++) {
+        first[i] = second[j];
+      }
+
+      first.length = i;
+      return first;
+    },
+
+    unique: function (collection) {
+      return cash.merge(cash(), slice.call(collection).filter(function (item, index, self) {
+        return self.indexOf(item) === index;
+      }));
     }
-
-    first.length = i;
-    return first;
-  };
-
-  cash.unique = function (collection) {
-    return cash.merge(cash(), slice.call(collection).filter(function (item, index, self) {
-      return self.indexOf(item) === index;
-    }));
-  };
+  });
 
   var notWhiteMatch = /\S+/g;
 

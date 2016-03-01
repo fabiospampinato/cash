@@ -1,12 +1,3 @@
-cash.each = function(collection, callback) {
-  var l = collection.length,
-      i = 0;
-
-  for (; i < l; i++) {
-    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
-  }
-};
-
 cash.extend = fn.extend = function(target, source) {
   var prop;
 
@@ -24,32 +15,44 @@ cash.extend = fn.extend = function(target, source) {
   return target;
 };
 
-cash.matches = function(el, selector) {
-  return (
-    el.matches ||
-    el.matchesSelector ||
-    el.msMatchesSelector ||
-    el.mozMatchesSelector ||
-    el.webkitMatchesSelector ||
-    el.oMatchesSelector
-  ).call(el, selector);
-};
+cash.extend({
 
-cash.merge = function(first, second) {
-  var len = +second.length,
-      i = first.length,
-      j = 0;
+	each: (collection, callback) => {
+	  var l = collection.length,
+	      i = 0;
 
-  for (; j < len; i++, j++) {
-    first[i] = second[j];
-  }
+	  for (; i < l; i++) {
+	    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
+	  }
+	},
 
-  first.length = i;
-  return first;
-};
+	matches: (el, selector) => {
+	  return (
+	    el.matches ||
+	    el.matchesSelector ||
+	    el.msMatchesSelector ||
+	    el.mozMatchesSelector ||
+	    el.webkitMatchesSelector ||
+	    el.oMatchesSelector
+	  ).call(el, selector);
+	},
 
-cash.unique = function(collection) {
-  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
-    return self.indexOf(item) === index;
-  }));
-};
+	merge: (first, second) => {
+	  var len = +second.length,
+	      i = first.length,
+	      j = 0;
+
+	  for (; j < len; i++, j++) {
+	    first[i] = second[j];
+	  }
+
+	  first.length = i;
+	  return first;
+	},
+
+	unique: collection => {
+	  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
+	    return self.indexOf(item) === index;
+	  }));
+	}
+});

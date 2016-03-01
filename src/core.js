@@ -1,10 +1,6 @@
 var noop = function(){},
-    isFunction = (function(type){
-        return item => { return typeof item === type; };
-      }(typeof noop)),
-    isString = (function(type){
-        return item => { return typeof item === type; };
-      }(typeof '')),
+    isFunction = function(type){ return typeof item === typeof noop; },
+    isString = function(item) { return typeof item === typeof ''; },
     idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/,
     singletTagOrClass = /^(\.)?([\w-_]*)$/;
 
