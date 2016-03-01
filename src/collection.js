@@ -16,7 +16,7 @@ fn.extend({
   },
 
   eq(index) {
-    return cash(this[index]);
+    return cash(this.get(index));
   },
 
   filter(selector) {
@@ -28,11 +28,12 @@ fn.extend({
   },
 
   first() {
-    return cash(this[0]);
+    return this.eq(0);
   },
 
-  get(num) {
-    return this[num];
+	get(index) {
+    if ( index === undefined ) { return slice.call(this); }
+    return ( index < 0 ? this[index + this.length] : this[index] );
   },
 
   index(elem) {
@@ -44,7 +45,7 @@ fn.extend({
   },
 
   last() {
-    return cash(this[this.length - 1]);
+    return this.eq(-1);
   },
 
   map(callback) {
