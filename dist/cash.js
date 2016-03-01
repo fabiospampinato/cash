@@ -508,14 +508,40 @@
 
   });
 
+  function insertElement(el, child, prepend) {
+    if (prepend) {
+      var first = el.childNodes[0];
+      el.insertBefore(child, first);
+    } else {
+      el.appendChild(child);
+    }
+  };
+
+  function insertContent(parent, child, prepend, sibling) {
+    var str = isString(child);
+
+    if (!str && child.length) {
+      cash.each(child, function () {
+        insertContent(parent, this, prepend);
+      });
+      return;
+    }
+
+    parent.each(str ? function () {
+      this.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
+    } : function (el, i) {
+      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend, sibling);
+    });
+  }
+
   fn.extend({
     append: function (content) {
-      this[0].appendChild(cash(content)[0]);
+      insertContent(this, content);
       return this;
     },
 
-    appendTo: function (content) {
-      cash(content)[0].appendChild(this[0]);
+    appendTo: function (parent) {
+      insertContent(cash(parent), this);
       return this;
     },
 
@@ -554,13 +580,13 @@
       return this;
     },
 
-    prepend: function (selector) {
-      cash(this)[0].insertAdjacentHTML("afterBegin", cash(selector)[0].outerHTML);
+    prepend: function (content) {
+      insertContent(this, content, true);
       return this;
     },
 
-    prependTo: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("afterBegin", this[0].outerHTML);
+    prependTo: function (parent) {
+      insertContent(cash(parent), this, true);
       return this;
     },
 
@@ -697,6 +723,7 @@
     }
 
   });
+
 
   return cash;
 });
