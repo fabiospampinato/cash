@@ -35,7 +35,11 @@ fn.extend({
 	},
 
   clone() {
-	  return cash(this[0].cloneNode(true));
+	  var elems = [];
+
+    this.each(v => { elems.push(v.cloneNode(true)); });
+
+    return cash(elems);
   },
 
   empty() {
