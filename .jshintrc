@@ -11,6 +11,7 @@
     "ArrayProto" : true,
     "filter"     : true,
     "slice"      : true,
+    "map"        : true,
     "isFunction" : true,
     "isString"   : true,
     "find"       : true

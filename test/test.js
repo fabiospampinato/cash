@@ -137,6 +137,11 @@ QUnit.test( "last", function( assert ) {
   assert.equal($(lastFixture).hasClass('attr-fixture2'), true, "last Passed!" );
 });
 
+QUnit.test( "map", function( assert ) {
+  var result = $('#id-fixture').map(function(e){ return e.id; });
+  assert.deepEqual(result, ['id-fixture'], "map Passed!" );
+});
+
 
 //CSS
 

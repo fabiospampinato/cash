@@ -12,7 +12,8 @@
       win        = window,
       ArrayProto = Array.prototype,
       slice      = ArrayProto.slice,
-      filter     = ArrayProto.filter;
+      filter     = ArrayProto.filter,
+      map        = ArrayProto.map;
 
   // @include ./core.js
   // @include ./util.js

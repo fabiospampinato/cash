@@ -9,7 +9,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
+  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map;
 
   var noop = function () {}, isFunction = function (item) {
     return typeof item === typeof noop;
@@ -276,6 +276,10 @@
 
     last: function () {
       return cash(this[this.length - 1]);
+    },
+
+    map: function (callback) {
+      return map.call(this, callback);
     }
 
   });

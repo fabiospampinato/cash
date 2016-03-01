@@ -45,6 +45,10 @@ fn.extend({
 
   last() {
     return cash(this[this.length - 1]);
+  },
+
+  map(callback) {
+	  return map.call(this,callback);
   }
 
 });
