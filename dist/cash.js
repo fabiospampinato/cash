@@ -615,7 +615,17 @@
     },
 
     find: function (selector) {
-      return cash(this[0].querySelectorAll(selector));
+      if (!selector) {
+        return cash();
+      }
+
+      var elems = [];
+
+      this.each(function () {
+        cash.merge(elems, find(selector, this));
+      });
+
+      return cash.unique(elems);
     },
 
     has: function (selector) {
