@@ -3,7 +3,7 @@ cash.each = function(collection, callback) {
       i = 0;
 
   for (; i < l; i++) {
-    callback.call(collection[i], collection[i], i, collection);
+    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
   }
 };
 
