@@ -139,6 +139,14 @@
       return cash.merge(cash(), slice.call(collection).filter(function (item, index, self) {
         return self.indexOf(item) === index;
       }));
+    },
+
+    noop: noop,
+    isFunction: isFunction,
+    isString: isString,
+    isArray: Array.isArray,
+    isNumeric: function (n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
   });

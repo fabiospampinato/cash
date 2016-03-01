@@ -17,7 +17,7 @@ cash.extend = fn.extend = function(target, source) {
 
 cash.extend({
 
-	each: (collection, callback) => {
+	each(collection, callback) {
 	  var l = collection.length,
 	      i = 0;
 
@@ -26,7 +26,7 @@ cash.extend({
 	  }
 	},
 
-	matches: (el, selector) => {
+	matches(el, selector) {
 	  return (
 	    el.matches ||
 	    el.matchesSelector ||
@@ -37,7 +37,7 @@ cash.extend({
 	  ).call(el, selector);
 	},
 
-	merge: (first, second) => {
+	merge(first, second) {
 	  var len = +second.length,
 	      i = first.length,
 	      j = 0;
@@ -50,10 +50,16 @@ cash.extend({
 	  return first;
 	},
 
-	unique: collection => {
+	unique(collection) {
 	  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
 	    return self.indexOf(item) === index;
 	  }));
-	}
+	},
+
+	noop: noop,
+	isFunction: isFunction,
+	isString: isString,
+	isArray: Array.isArray,
+	isNumeric(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
 
 });
