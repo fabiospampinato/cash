@@ -594,7 +594,7 @@
     },
 
     remove: function () {
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.parentNode.removeChild(v);
       });
     },
