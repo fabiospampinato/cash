@@ -15,13 +15,8 @@ fn.extend({
   },
 
   attr(name, value) {
-    if ( !value ) {
-      return this[0].getAttribute(name);
-    } else {
-      this.each(v => v.setAttribute(name, value));
-
-      return this;
-    }
+    if ( !value ) { return this[0].getAttribute(name); }
+    return this.each(v => v.setAttribute(name, value));
   },
 
   hasClass(c) {
@@ -41,8 +36,7 @@ fn.extend({
   },
 
   removeAttr(name) {
-    this.each(v => v.removeAttribute(name));
-    return this;
+    return this.each(v => v.removeAttribute(name));
   },
 
   removeClass(c){

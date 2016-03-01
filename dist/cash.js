@@ -140,6 +140,7 @@
         return self.indexOf(item) === index;
       }));
     }
+
   });
 
   var notWhiteMatch = /\S+/g;
@@ -163,13 +164,10 @@
     attr: function (name, value) {
       if (!value) {
         return this[0].getAttribute(name);
-      } else {
-        this.each(function (v) {
-          return v.setAttribute(name, value);
-        });
-
-        return this;
       }
+      return this.each(function (v) {
+        return v.setAttribute(name, value);
+      });
     },
 
     hasClass: function (c) {
@@ -186,10 +184,9 @@
     },
 
     removeAttr: function (name) {
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.removeAttribute(name);
       });
-      return this;
     },
 
     removeClass: function (c) {
@@ -219,6 +216,7 @@
 
     each: function (callback) {
       cash.each(this, callback);
+      return this;
     },
 
     eq: function (index) {
@@ -226,13 +224,9 @@
     },
 
     filter: function (selector) {
-      if (typeof selector === "string") {
-        return filter.call(this, function (e) {
-          return cash.matches(e, selector);
-        });
-      } else {
-        return filter.call(this, selector);
-      }
+      return filter.call(this, (isString(selector) ? function (e) {
+        return cash.matches(e, selector);
+      } : selector));
     },
 
     first: function () {
@@ -267,19 +261,17 @@
   fn.extend({
     css: function (prop, value) {
       if (typeof prop === "object") {
-        this.each(function (v) {
+        return this.each(function (v) {
           for (var key in prop) {
             if (prop.hasOwnProperty(key)) {
               v.style[key] = prop[key];
             }
           }
         });
-        return this;
       } else if (value) {
-        this.each(function (v) {
+        return this.each(function (v) {
           return v.style[prop] = value;
         });
-        return this;
       } else {
         return win.getComputedStyle(this[0], null)[prop];
       }
@@ -293,29 +285,25 @@
       if (!value) {
         return this[0].dataset ? this[0].dataset[key] : cash(this[0]).attr("data-" + key);
       } else {
-        this.each(function (v) {
+        return this.each(function (v) {
           if (v.dataset) {
             v.dataset[key] = value;
           } else {
             cash(v).attr("data-" + key, value);
           }
         });
-
-        return this;
       }
     },
 
     removeData: function (name) {
       // TODO: tear out into module for IE9
-      this.each(function (v) {
+      return this.each(function (v) {
         if (v.dataset) {
           delete v.dataset[name];
         } else {
           cash(v).removeAttr("data-" + name);
         }
       });
-
-      return this;
     }
 
   });
@@ -454,27 +442,27 @@
 
   });
 
-  var encode = encodeURIComponent;
+  function encode(e) {
+    return encodeURIComponent(e).replace(/%20/g, "+");
+  }
 
   fn.extend({
     serialize: function () {
-      var form = this[0], query = "", field, i, j;
+      var formEl = this[0].elements, query = "";
 
-      for (i = form.elements.length - 1; i >= 0; i--) {
-        field = form.elements[i];
-
+      cash.each(formEl, function (field) {
         if (field.name && field.type !== "file" && field.type !== "reset") {
           if (field.type === "select-multiple") {
-            for (j = form.elements[i].options.length - 1; j >= 0; j--) {
-              if (field.options[j].selected) {
-                query += "&" + field.name + "=" + encode(field.options[j].value).replace(/%20/g, "+");
+            cash.each(field.options, function (o) {
+              if (o.selected) {
+                query += "&" + field.name + "=" + encode(o.value);
               }
-            }
+            });
           } else if ((field.type !== "submit" && field.type !== "button")) {
-            query += "&" + field.name + "=" + encode(field.value).replace(/%20/g, "+");
+            query += "&" + field.name + "=" + encode(field.value);
           }
         }
-      }
+      });
 
       return query.substr(1);
     },
@@ -483,10 +471,9 @@
       if (value === undefined) {
         return this[0].value;
       } else {
-        this.each(function (v) {
+        return this.each(function (v) {
           return v.value = value;
         });
-        return this;
       }
     }
 

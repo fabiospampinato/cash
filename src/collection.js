@@ -13,6 +13,7 @@ fn.extend({
 
   each(callback) {
     cash.each(this, callback);
+    return this;
   },
 
   eq(index) {
@@ -20,11 +21,7 @@ fn.extend({
   },
 
   filter(selector) {
-    if (typeof selector === 'string') {
-      return filter.call(this, e => cash.matches(e, selector));
-    } else {
-      return filter.call(this, selector);
-    }
+	  return filter.call(this, ( isString(selector) ? e => cash.matches(e, selector) : selector ));
   },
 
   first() {
