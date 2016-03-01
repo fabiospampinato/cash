@@ -93,7 +93,7 @@ $(element).addClass(className) // => collection
 
 ### $.fn.append
 
-Appends the target element to the first element in the collection.
+Appends the target element to the each element in the collection.
 
 ```js
 $(element).append(element) // => collection
@@ -101,7 +101,7 @@ $(element).append(element) // => collection
 
 ### $.fn.appendTo
 
-Adds the first element in a collection to the target element.
+Adds the elements in a collection to the target element(s).
 
 ```js
 $(element).appendTo(element) // => collection
@@ -302,7 +302,7 @@ $(element).insertBefore(element) // => collection
 
 ### $.fn.is
 
-Returns whether the provided selector matches the first element in the collection.
+Returns whether the provided selector, element or collection matches any element in the collection.
 
 ```js
 $(element).is(selector) // => boolean
@@ -334,7 +334,7 @@ $(element).not(selector) // => collection
 
 ### $.fn.off
 
-Removes event listener from collection elments.
+Removes event listener from collection elements.
 
 ```js
 $(element).off(eventName,eventHandler) // => collection
@@ -342,7 +342,7 @@ $(element).off(eventName,eventHandler) // => collection
 
 ### $.fn.on
 
-Adds event listener to collection elments. Event is delegated if delegate is
+Adds event listener to collection elements. Event is delegated if delegate is
 supplied.
 
 ```js
@@ -387,7 +387,7 @@ $(element).parents(selector) // => collection
 
 ### $.fn.prepend
 
-Prepends element to the first element in collection.
+Prepends element to the each element in collection.
 
 ```js
 $(element).prepend(element) // => collection
@@ -395,7 +395,7 @@ $(element).prepend(element) // => collection
 
 ### $.fn.prependTo
 
-Prepends first element in collection to the element.
+Prepends elements in a collection to the target element(s).
 
 ```js
 $(element).prependTo(element) // => collection
@@ -407,14 +407,6 @@ Returns the previous adjacent element.
 
 ```js
 $(element).prev() // => collection
-```
-
-### $.fn.prepend
-
-Prepends element to the first element in collection.
-
-```js
-$(element).prepend(element) // => collection
 ```
 
 ### $.fn.prop
