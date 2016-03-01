@@ -87,6 +87,8 @@
   var fn = cash.fn = cash.prototype = Init.prototype = {
     cash: true,
     length: 0,
+    push: push,
+    splice: ArrayProto.splice,
     init: Init
   };
 
@@ -109,16 +111,18 @@
     return target;
   };
 
-  cash.extend({
-    each: function (collection, callback) {
-      var l = collection.length, i = 0;
+  function each(collection, callback) {
+    var l = collection.length, i = 0;
 
-      for (; i < l; i++) {
-        if (callback.call(collection[i], collection[i], i, collection) === false) {
-          break;
-        }
+    for (; i < l; i++) {
+      if (callback.call(collection[i], collection[i], i, collection) === false) {
+        break;
       }
-    },
+    }
+  }
+
+  cash.extend({
+    each: each,
 
     matches: function (el, selector) {
       return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
@@ -159,7 +163,7 @@
 
       return this.each(function (v) {
         var spacedName = " " + v.className + " ";
-        cash.each(classes, function (c) {
+        each(classes, function (c) {
           if (v.classList) {
             v.classList.add(c);
           } else if (spacedName.indexOf(" " + c + " ")) {
@@ -201,7 +205,7 @@
       var classes = c.match(notWhiteMatch);
 
       return this.each(function (v) {
-        cash.each(classes, function (c) {
+        each(classes, function (c) {
           if (v.classList) {
             v.classList.remove(c);
           } else {
@@ -212,18 +216,12 @@
     } });
 
   fn.extend({
-    add: function () {
-      var arr = slice.call(this), i = 0, l;
-
-      for (l = arguments.length; i < l; i++) {
-        arr = arr.concat(slice.call(cash(arguments[i])));
-      }
-
-      return cash.unique(arr);
+    add: function (selector, context) {
+      return cash.unique(cash.merge(this.get(), cash(selector, context)));
     },
 
     each: function (callback) {
-      cash.each(this, callback);
+      each(this, callback);
       return this;
     },
 
@@ -458,10 +456,10 @@
     serialize: function () {
       var formEl = this[0].elements, query = "";
 
-      cash.each(formEl, function (field) {
+      each(formEl, function (field) {
         if (field.name && field.type !== "file" && field.type !== "reset") {
           if (field.type === "select-multiple") {
-            cash.each(field.options, function (o) {
+            each(field.options, function (o) {
               if (o.selected) {
                 query += "&" + field.name + "=" + encode(o.value);
               }
@@ -500,7 +498,7 @@
     var str = isString(child);
 
     if (!str && child.length) {
-      cash.each(child, function () {
+      each(child, function () {
         insertContent(parent, this, prepend);
       });
       return;

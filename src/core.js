@@ -69,6 +69,8 @@ function cash(selector,context) {
 var fn = cash.fn = cash.prototype = Init.prototype = {
   cash: true,
   length: 0,
+  push: push,
+  splice: ArrayProto.splice,
   init: Init
 };
 

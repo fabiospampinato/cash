@@ -1,18 +1,11 @@
 fn.extend({
 
-  add() {
-    var arr = slice.call(this),
-        i = 0, l;
-
-    for (l = arguments.length; i < l; i++) {
-      arr = arr.concat(slice.call(cash(arguments[i])));
-    }
-
-    return cash.unique(arr);
+  add(selector, context) {
+	  return cash.unique(cash.merge(this.get(), cash(selector, context)));
   },
 
   each(callback) {
-    cash.each(this, callback);
+    each(this, callback);
     return this;
   },
 

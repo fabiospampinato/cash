@@ -86,9 +86,9 @@ QUnit.test( "add", function( assert ) {
   var addFixture = $('#id-fixture').add( $('.class-fixture') );
   assert.equal(addFixture.cash, true, "add Passed!" );
   assert.equal(addFixture.length, 2, "add(one) Passed!" );
-  addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
+  addFixture = $('#id-fixture').add( $('a').eq(0) ).add( $('a').eq(1) );
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
-  addFixture = $('#id-fixture').add( $('#qunit-fixture a') , $('#qunit-fixture input') );
+  addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
   assert.equal(addFixture.length, 9, "add(collections) Passed!" );
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
