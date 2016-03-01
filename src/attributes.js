@@ -2,9 +2,9 @@ var notWhiteMatch = /\S+/g;
 
 fn.extend({
 
-  addClass(className) { // TODO: tear out into module for IE9
+  addClass(className) {
     var classes = className.match(notWhiteMatch),
-        spacedName, l;
+      spacedName, l;
 
     this.each(v => {
       l = classes.length;
@@ -37,12 +37,38 @@ fn.extend({
     }
   },
 
-  hasClass(className) { // TODO: tear out into module for IE9
-    if (this[0].classList) {
-      return this[0].classList.contains(className);
-    } else {
-      return this[0].className.indexOf(className) !== -1;
+  hasClass(className) {
+
+    if(!this.length || typeof className !== 'string' || !className) {
+      return false;
     }
+
+    var classes = className.match(notWhiteMatch),
+      spacedName, l, has = true;
+
+    this.each(v => {
+      l = classes.length;
+
+      if (v.classList) {
+        while (l--) {
+          if( !v.classList.contains(classes[l]) ) {
+            has = false;
+          }
+        }
+      } else {
+        while (l--) {
+          spacedName = ` ${v.className} `;
+
+          if (spacedName.indexOf(` ${classes[l]} `) === -1) {
+            has = false;
+          }
+        }
+      }
+
+    });
+
+    return has;
+
   },
 
   prop(name) {
@@ -56,7 +82,7 @@ fn.extend({
 
   removeClass(className) { // TODO: tear out into module for IE9
     var classes = className.match(notWhiteMatch),
-        l, newClassName;
+      l, newClassName;
 
     this.each(v => {
       l = classes.length;
@@ -77,6 +103,26 @@ fn.extend({
     });
 
     return this;
+  },
+
+  toggleClass(className) {
+
+    var classes = className.match(notWhiteMatch), l;
+
+    this.each(v => {
+      l = classes.length;
+
+      while(l--) {
+        if (cash(v).hasClass(classes[l])) {
+          cash(v).removeClass(classes[l]);
+        } else {
+          cash(v).addClass(classes[l]);
+        }
+      }
+    });
+
+    return this;
+    
   }
 
 });

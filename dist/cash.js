@@ -130,7 +130,6 @@
 
   fn.extend({
     addClass: function (className) {
-      // TODO: tear out into module for IE9
       var classes = className.match(notWhiteMatch), spacedName, l;
 
       this.each(function (v) {
@@ -167,12 +166,33 @@
     },
 
     hasClass: function (className) {
-      // TODO: tear out into module for IE9
-      if (this[0].classList) {
-        return this[0].classList.contains(className);
-      } else {
-        return this[0].className.indexOf(className) !== -1;
+      if (!this.length || typeof className !== "string" || !className) {
+        return false;
       }
+
+      var classes = className.match(notWhiteMatch), spacedName, l, has = true;
+
+      this.each(function (v) {
+        l = classes.length;
+
+        if (v.classList) {
+          while (l--) {
+            if (!v.classList.contains(classes[l])) {
+              has = false;
+            }
+          }
+        } else {
+          while (l--) {
+            spacedName = " " + v.className + " ";
+
+            if (spacedName.indexOf(" " + classes[l] + " ") === -1) {
+              has = false;
+            }
+          }
+        }
+      });
+
+      return has;
     },
 
     prop: function (name) {
@@ -205,6 +225,24 @@
           }
 
           v.className = newClassName.trim();
+        }
+      });
+
+      return this;
+    },
+
+    toggleClass: function (className) {
+      var classes = className.match(notWhiteMatch), l;
+
+      this.each(function (v) {
+        l = classes.length;
+
+        while (l--) {
+          if (cash(v).hasClass(classes[l])) {
+            cash(v).removeClass(classes[l]);
+          } else {
+            cash(v).addClass(classes[l]);
+          }
         }
       });
 

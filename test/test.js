@@ -59,8 +59,25 @@ QUnit.test( "attr", function( assert ) {
 });
 
 QUnit.test( "hasClass", function( assert ) {
+  
   var hasClass = $('.attr-fixture').hasClass('has-class');
-  assert.equal(hasClass, true, "hasClass Passed!" );
+  var notHasClass = $('.attr-fixture').hasClass('nothing');
+  var hasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two');
+  var notHasMultiClass = $('.attr-fixture').hasClass('has-class has-class-two nothing');
+  var emptyHasClass = $('.attr-fixture').hasClass();
+  var arrayHasClass = $('.attr-fixture').hasClass(['meh']);
+  var emptyStringHasClass = $('.attr-fixture').hasClass('');
+  var emptyCollectionHasClass = $('.doesnt-exist').hasClass('has-class');
+
+  assert.equal(hasClass, true, 'hasClass Passed!' );
+  assert.equal(notHasClass, false, 'hasClass Negative Passed!' );
+  assert.equal(hasMultiClass, true, 'hasClass Multi Passed!' );
+  assert.equal(notHasMultiClass, false, 'hasClass Multi Negative Passed!' );
+  assert.equal(emptyHasClass, false, 'hasClass returns `false` when `empty`!' );
+  assert.equal(arrayHasClass, false, 'hasClass returns `false` for `array`!' );
+  assert.equal(emptyStringHasClass, false, 'hasClass returns `false` for empty `string`!' );
+  assert.equal(emptyCollectionHasClass, false, 'hasClass returns `false` when no collection passed!' );
+
 });
 
 QUnit.test( "prop", function( assert ) {
@@ -79,6 +96,16 @@ QUnit.test( "removeClass", function( assert ) {
   assert.equal( $('.attr-fixture')[0].className, "attr-fixture", "removeClass Multiple Passed!" );
   assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
 });
+
+QUnit.test( "toggleClass", function( assert ) {
+  $('.toggle-fixture').toggleClass('toggle');
+  $('.toggle-fixture').toggleClass('woggle');
+  assert.equal( $('.toggle-fixture')[0].className, "toggle-fixture woggle", "toggleClass Passed!" );
+  
+  $('.toggle-fixture').toggleClass('multi woggle');
+  assert.equal( $('.toggle-fixture')[0].className, "toggle-fixture multi", "toggleClass Multiple Passed!" );
+});
+
 
 //Collection
 
