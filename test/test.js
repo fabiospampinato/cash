@@ -63,6 +63,17 @@ QUnit.test( "hasClass", function( assert ) {
   assert.equal(hasClass, true, "hasClass Passed!" );
 });
 
+QUnit.test( "toggleClass", function( assert ) {
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',true).hasClass('toggle-class-force');
+  assert.equal(hasClass, true, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',false).hasClass('toggle-class-force');
+  assert.equal(hasClass, false, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class').hasClass('toggle-class');
+  assert.equal(hasClass, true, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class').hasClass('toggle-class');
+  assert.equal(hasClass, false, "toggleClass Passed!" );
+});
+
 QUnit.test( "prop", function( assert ) {
   assert.equal($('.prop-fixture').prop('checked'), true, "prop Passed!" );
 });

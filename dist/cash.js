@@ -157,6 +157,26 @@
 
   var notWhiteMatch = /\S+/g;
 
+  function hasClass(v, c) {
+    return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
+  }
+
+  function addClass(v, c, spacedName) {
+    if (v.classList) {
+      v.classList.add(c);
+    } else if (spacedName.indexOf(" " + c + " ")) {
+      v.className += " " + c;
+    }
+  }
+
+  function removeClass(v, c) {
+    if (v.classList) {
+      v.classList.remove(c);
+    } else {
+      v.className = v.className.replace(c, "");
+    }
+  }
+
   fn.extend({
     addClass: function (c) {
       var classes = c.match(notWhiteMatch);
@@ -164,11 +184,7 @@
       return this.each(function (v) {
         var spacedName = " " + v.className + " ";
         each(classes, function (c) {
-          if (v.classList) {
-            v.classList.add(c);
-          } else if (spacedName.indexOf(" " + c + " ")) {
-            v.className += " " + c;
-          }
+          addClass(v, c, spacedName);
         });
       });
     },
@@ -185,7 +201,7 @@
     hasClass: function (c) {
       var check = false;
       this.each(function (v) {
-        check = (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
+        check = hasClass(v, c);
         return !check;
       });
       return check;
@@ -206,10 +222,24 @@
 
       return this.each(function (v) {
         each(classes, function (c) {
-          if (v.classList) {
-            v.classList.remove(c);
+          removeClass(v, c);
+        });
+      });
+    },
+
+    toggleClass: function (c, state) {
+      if (state !== undefined) {
+        return this[state ? "addClass" : "removeClass"](c);
+      }
+      var classes = c.match(notWhiteMatch);
+
+      return this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        each(classes, function (c) {
+          if (hasClass(v, c)) {
+            removeClass(v, c);
           } else {
-            v.className = v.className.replace(c, "");
+            addClass(v, c, spacedName);
           }
         });
       });

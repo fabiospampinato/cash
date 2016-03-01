@@ -483,6 +483,17 @@ $(element).text() // => text
 $(element).text(textContent) // => collection
 ```
 
+### $.fn.toggleClass
+
+Adds or removes className from collection elements based on if the element already has the class.
+Accepts space-separated classNames for toggling multiple classes, and an optional `force` boolean
+to ensure classes are added (`true`) or removed (`false`).
+
+```js
+$(element).toggleClass(className) // => collection
+$(element).toggleClass(className,force) // => collection
+```
+
 ### $.fn.trigger
 
 Triggers supplied event on elements in collection.
