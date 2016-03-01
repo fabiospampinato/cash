@@ -1,13 +1,21 @@
+function directCompare(el,selector){ return el === selector; }
+
 fn.extend({
 
   children(selector) {
-    if (!selector) {
-      return cash(slice.call(this[0].children));
-    } else {
-      return cash(slice.call(this[0].children)).filter(v => {
+
+    var elems = [];
+
+    this.each(el => {
+      cash.merge(elems,el.children);
+    });
+
+    elems = cash.unique(elems);
+
+    return ( !selector ? elems : elems.filter(v => {
         return cash.matches(v, selector);
-      });
-    }
+      }) );
+
   },
 
   closest(selector) {
@@ -19,15 +27,21 @@ fn.extend({
   },
 
   is(selector) {
-    if (!selector) {
-      return false;
-    }
+    if ( !selector ) { return false; }
 
-    if (selector.cash) {
-      return this[0] === selector[0];
-    }
+    var match = false,
+        comparator = (
+        	isString(selector) ? cash.matches :
+        	selector.cash ? el => { return selector.is(el); } :
+        	directCompare
+        );
 
-    return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
+    this.each((el,i) => {
+      match = comparator(el,selector,i);
+      return !match;
+    });
+
+    return match;
   },
 
   find(selector) {
@@ -35,8 +49,8 @@ fn.extend({
 
     var elems = [];
 
-    this.each(function(){
-      cash.merge(elems,find(selector,this));
+    this.each(el => {
+      cash.merge(elems,find(selector,el));
     });
 
     return cash.unique(elems);
