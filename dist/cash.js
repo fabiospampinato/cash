@@ -125,7 +125,7 @@
     each: each,
 
     matches: function (el, selector) {
-      return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+      return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
     },
 
     merge: function (first, second) {
@@ -140,7 +140,7 @@
     },
 
     unique: function (collection) {
-      return cash.merge(cash(), slice.call(collection).filter(function (item, index, self) {
+      return cash(slice.call(collection).filter(function (item, index, self) {
         return self.indexOf(item) === index;
       }));
     },

@@ -31,10 +31,9 @@ cash.extend({
 	matches(el, selector) {
 	  return (
 	    el.matches ||
-	    el.matchesSelector ||
-	    el.msMatchesSelector ||
-	    el.mozMatchesSelector ||
 	    el.webkitMatchesSelector ||
+	    el.mozMatchesSelector ||
+	    el.msMatchesSelector ||
 	    el.oMatchesSelector
 	  ).call(el, selector);
 	},
@@ -53,7 +52,7 @@ cash.extend({
 	},
 
 	unique(collection) {
-	  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
+	  return cash(slice.call(collection).filter((item, index, self) => {
 	    return self.indexOf(item) === index;
 	  }));
 	},
