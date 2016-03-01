@@ -55,4 +55,5 @@ cash.extend({
 	    return self.indexOf(item) === index;
 	  }));
 	}
+
 });

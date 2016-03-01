@@ -12,6 +12,7 @@
     "filter"     : true,
     "slice"      : true,
     "map"        : true,
+    "push"       : true,
     "isFunction" : true,
     "isString"   : true,
     "find"       : true

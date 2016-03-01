@@ -13,7 +13,8 @@
       ArrayProto = Array.prototype,
       slice      = ArrayProto.slice,
       filter     = ArrayProto.filter,
-      map        = ArrayProto.map;
+      map        = ArrayProto.map,
+      push       = ArrayProto.push;
 
   // @include ./core.js
   // @include ./util.js
