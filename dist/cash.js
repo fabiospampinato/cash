@@ -94,17 +94,24 @@
 
   cash.parseHTML = parseHTML;
 
-  cash.extend = fn.extend = function (target, source) {
-    var prop;
+  cash.extend = fn.extend = function (target) {
+    target = target || {};
 
-    if (!source) {
-      source = target;
+    var args = slice.call(arguments), length = args.length, i = 1;
+
+    if (args.length === 1) {
       target = this;
+      i = 0;
     }
 
-    for (prop in source) {
-      if (source.hasOwnProperty(prop)) {
-        target[prop] = source[prop];
+    for (; i < length; i++) {
+      if (!args[i]) {
+        continue;
+      }
+      for (var key in args[i]) {
+        if (args[i].hasOwnProperty(key)) {
+          target[key] = args[i][key];
+        }
       }
     }
 

@@ -1,7 +1,7 @@
 fn.extend({
 
   add(selector, context) {
-	  return cash.unique(cash.merge(this.get(), cash(selector, context)));
+    return cash.unique(cash.merge(this.get(), cash(selector, context)));
   },
 
   each(callback) {
@@ -14,14 +14,14 @@ fn.extend({
   },
 
   filter(selector) {
-	  return filter.call(this, ( isString(selector) ? e => cash.matches(e, selector) : selector ));
+    return filter.call(this, ( isString(selector) ? e => cash.matches(e, selector) : selector ));
   },
 
   first() {
     return this.eq(0);
   },
 
-	get(index) {
+  get(index) {
     if ( index === undefined ) { return slice.call(this); }
     return ( index < 0 ? this[index + this.length] : this[index] );
   },
@@ -39,7 +39,7 @@ fn.extend({
   },
 
   map(callback) {
-	  return map.call(this,callback);
+    return map.call(this,callback);
   }
 
 });
