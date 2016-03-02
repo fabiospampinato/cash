@@ -1,7 +1,7 @@
 fn.extend({
 
   add(selector, context) {
-    return cash.unique(cash.merge(this, cash(selector, context)));
+    return unique(cash.merge(this, cash(selector, context)));
   },
 
   each(callback) {
@@ -14,7 +14,7 @@ fn.extend({
   },
 
   filter(selector) {
-    return filter.call(this, ( isString(selector) ? e => cash.matches(e, selector) : selector ));
+    return filter.call(this, ( isString(selector) ? e => matches(e, selector) : selector ));
   },
 
   first() {

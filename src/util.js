@@ -29,19 +29,23 @@ function each(collection, callback) {
   }
 }
 
+function matches(el, selector) {
+  return (
+    el.matches ||
+    el.webkitMatchesSelector ||
+    el.mozMatchesSelector ||
+    el.msMatchesSelector ||
+    el.oMatchesSelector
+  ).call(el, selector);
+}
+
+function unique(collection) {
+  return cash(slice.call(collection).filter((item, index, self) => {
+    return self.indexOf(item) === index;
+  }));
+}
+
 cash.extend({
-
-  each: each,
-
-  matches(el, selector) {
-    return (
-      el.matches ||
-      el.webkitMatchesSelector ||
-      el.mozMatchesSelector ||
-      el.msMatchesSelector ||
-      el.oMatchesSelector
-    ).call(el, selector);
-  },
 
   merge(first, second) {
     var len = +second.length,
@@ -56,12 +60,9 @@ cash.extend({
     return first;
   },
 
-  unique(collection) {
-    return cash(slice.call(collection).filter((item, index, self) => {
-      return self.indexOf(item) === index;
-    }));
-  },
-
+  each: each,
+  matches: matches,
+  unique: unique,
   noop: noop,
   isFunction: isFunction,
   isString: isString,

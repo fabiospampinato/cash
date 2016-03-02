@@ -16,6 +16,8 @@
     "isString"   : true,
     "find"       : true,
     "onReady"    : true,
+    "matches"    : true,
+    "unique"     : true,
     "each"       : true,
     "noop"       : true
   },

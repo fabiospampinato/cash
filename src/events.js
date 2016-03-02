@@ -54,10 +54,10 @@ fn.extend({
       function handler(e) {
         var t = e.target;
 
-        if (cash.matches(t, delegate)) {
+        if (matches(t, delegate)) {
           callback.call(t);
         } else {
-          while (!cash.matches(t, delegate)) {
+          while (!matches(t, delegate)) {
             if (t === v) {
               return (t = false);
             }
