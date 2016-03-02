@@ -43,9 +43,9 @@ function Init(selector,context){
     match = idOrHTML.exec(selector);
     // If an ID use the faster getElementById check
     if ( match && match[2] ) {
-	    selector = doc.getElementById(match[2]);
-			if ( !selector ) { return this; }
-		}
+      selector = doc.getElementById(match[2]);
+      if ( !selector ) { return this; }
+    }
     // If HTML, parse it into real elements, else use querySelectorAll
     else { elems = ( match ? parseHTML(selector) : find(selector,context) ); }
   }

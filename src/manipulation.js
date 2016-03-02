@@ -9,15 +9,15 @@ function insertElement(el,child,prepend){
 
 function insertContent(parent,child,prepend){
 
-	var str = isString(child);
+  var str = isString(child);
 
-	if ( !str && child.length ) {
-		each(child, function(){ insertContent(parent,this,prepend); });
-		return;
-	}
+  if ( !str && child.length ) {
+    each(child, function(){ insertContent(parent,this,prepend); });
+    return;
+  }
 
   parent.each(
-	  str ? function(){ this.insertAdjacentHTML( prepend ? 'afterbegin' : 'beforeend', child); } :
+    str ? function(){ this.insertAdjacentHTML( prepend ? 'afterbegin' : 'beforeend', child); } :
     function(el,i) { insertElement(el,( i === 0 ? child : child.cloneNode(true) ), prepend); }
   );
 }
@@ -25,17 +25,17 @@ function insertContent(parent,child,prepend){
 fn.extend({
 
   append(content) {
-	  insertContent(this,content);
-	  return this;
-	},
+    insertContent(this,content);
+    return this;
+  },
 
   appendTo(parent) {
-	  insertContent(cash(parent),this);
-	  return this;
-	},
+    insertContent(cash(parent),this);
+    return this;
+  },
 
   clone() {
-	  var elems = [];
+    var elems = [];
     this.each(v => { elems.push(v.cloneNode(true)); });
     return cash(elems);
   },
@@ -63,14 +63,14 @@ fn.extend({
   },
 
   prepend(content) {
-	  insertContent(this,content,true);
-	  return this;
-	},
+    insertContent(this,content,true);
+    return this;
+  },
 
   prependTo(parent) {
-	  insertContent(cash(parent),this,true);
-	  return this;
-	},
+    insertContent(cash(parent),this,true);
+    return this;
+  },
 
   remove() {
     return this.each(v => v.parentNode.removeChild(v));

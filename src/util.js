@@ -2,7 +2,7 @@ cash.extend = fn.extend = function(target) {
   target = target || {};
 
   var args = slice.call(arguments),
-  		length = args.length,
+      length = args.length,
       i = 1;
 
   if ( args.length === 1) {
@@ -31,41 +31,41 @@ function each(collection, callback) {
 
 cash.extend({
 
-	each: each,
+  each: each,
 
-	matches(el, selector) {
-	  return (
-	    el.matches ||
-	    el.webkitMatchesSelector ||
-	    el.mozMatchesSelector ||
-	    el.msMatchesSelector ||
-	    el.oMatchesSelector
-	  ).call(el, selector);
-	},
+  matches(el, selector) {
+    return (
+      el.matches ||
+      el.webkitMatchesSelector ||
+      el.mozMatchesSelector ||
+      el.msMatchesSelector ||
+      el.oMatchesSelector
+    ).call(el, selector);
+  },
 
-	merge(first, second) {
-	  var len = +second.length,
-	      i = first.length,
-	      j = 0;
+  merge(first, second) {
+    var len = +second.length,
+        i = first.length,
+        j = 0;
 
-	  for (; j < len; i++, j++) {
-	    first[i] = second[j];
-	  }
+    for (; j < len; i++, j++) {
+      first[i] = second[j];
+    }
 
-	  first.length = i;
-	  return first;
-	},
+    first.length = i;
+    return first;
+  },
 
-	unique(collection) {
-	  return cash(slice.call(collection).filter((item, index, self) => {
-	    return self.indexOf(item) === index;
-	  }));
-	},
+  unique(collection) {
+    return cash(slice.call(collection).filter((item, index, self) => {
+      return self.indexOf(item) === index;
+    }));
+  },
 
-	noop: noop,
-	isFunction: isFunction,
-	isString: isString,
-	isArray: Array.isArray,
-	isNumeric(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
+  noop: noop,
+  isFunction: isFunction,
+  isString: isString,
+  isArray: Array.isArray,
+  isNumeric(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
 
 });

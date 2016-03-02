@@ -9,7 +9,7 @@ fn.extend({
     each(formEl,field => {
       if (field.name && field.type !== 'file' && field.type !== 'reset') {
         if ( field.type === 'select-multiple') {
-	        each(field.options, o => {
+          each(field.options, o => {
             if ( o.selected) {
               query += '&' + field.name + '=' + encode(o.value);
             }
