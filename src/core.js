@@ -71,6 +71,7 @@ var fn = cash.fn = cash.prototype = Init.prototype = {
   length: 0,
   push: push,
   splice: ArrayProto.splice,
+  map: ArrayProto.map,
   init: Init
 };
 

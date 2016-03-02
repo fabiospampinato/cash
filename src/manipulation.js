@@ -35,9 +35,7 @@ fn.extend({
   },
 
   clone() {
-    var elems = [];
-    this.each(v => { elems.push(v.cloneNode(true)); });
-    return cash(elems);
+    return cash(this.map(v => { return v.cloneNode(true); }));
   },
 
   empty() {

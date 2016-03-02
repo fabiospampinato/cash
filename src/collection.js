@@ -1,7 +1,7 @@
 fn.extend({
 
   add(selector, context) {
-    return cash.unique(cash.merge(this.get(), cash(selector, context)));
+    return cash.unique(cash.merge(this, cash(selector, context)));
   },
 
   each(callback) {
@@ -33,10 +33,6 @@ fn.extend({
 
   last() {
     return this.eq(-1);
-  },
-
-  map(callback) {
-    return map.call(this,callback);
   }
 
 });
