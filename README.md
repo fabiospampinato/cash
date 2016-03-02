@@ -1,6 +1,4 @@
 #Cash
-====
-
 *An absurdly small jQuery alternative for modern browsers*
 
 Cash is a small library for modern browsers that provides jQuery style syntax
