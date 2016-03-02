@@ -1,34 +1,55 @@
+function insertElement(el,child,prepend){
+  if ( prepend ) {
+    var first = el.childNodes[0];
+    el.insertBefore(child,first);
+  } else {
+    el.appendChild(child);
+  }
+}
+
+function insertContent(parent,child,prepend){
+
+	var str = isString(child);
+
+	if ( !str && child.length ) {
+		each(child, function(){ insertContent(parent,this,prepend); });
+		return;
+	}
+
+  parent.each(
+	  str ? function(){ this.insertAdjacentHTML( prepend ? 'afterbegin' : 'beforeend', child); } :
+    function(el,i) { insertElement(el,( i === 0 ? child : child.cloneNode(true) ), prepend); }
+  );
+}
+
 fn.extend({
 
   append(content) {
-    this[0].appendChild(cash(content)[0]);
-    return this;
-  },
+	  insertContent(this,content);
+	  return this;
+	},
 
-  appendTo(content) {
-    cash(content)[0].appendChild(this[0]);
-    return this;
-  },
+  appendTo(parent) {
+	  insertContent(cash(parent),this);
+	  return this;
+	},
 
   clone() {
-    return cash(this[0].cloneNode(true));
+	  var elems = [];
+    this.each(v => { elems.push(v.cloneNode(true)); });
+    return cash(elems);
   },
 
   empty() {
-    this.each(v => v.innerHTML = '');
+    this.html('');
     return this;
   },
 
   html(content) {
     var source;
-
-    if (typeof content === 'undefined') {
-      return this[0].innerHTML;
-    } else {
-      source = typeof content === 'object' ? cash(content)[0].outerHTML : content;
-      this.each(v => v.innerHTML = `${source}`);
-      return this;
-    }
+    if ( content === undefined ) { return this[0].innerHTML; }
+    source = ( content.nodeType ? content[0].outerHTML : content );
+    return this.each(v => v.innerHTML = source);
   },
 
   insertAfter(selector) {
@@ -41,27 +62,23 @@ fn.extend({
     return this;
   },
 
-  prepend(selector) {
-    cash(this)[0].insertAdjacentHTML('afterBegin', cash(selector)[0].outerHTML);
-    return this;
-  },
+  prepend(content) {
+	  insertContent(this,content,true);
+	  return this;
+	},
 
-  prependTo(selector) {
-    cash(selector)[0].insertAdjacentHTML('afterBegin', this[0].outerHTML);
-    return this;
-  },
+  prependTo(parent) {
+	  insertContent(cash(parent),this,true);
+	  return this;
+	},
 
   remove() {
-    this.each(v => v.parentNode.removeChild(v));
+    return this.each(v => v.parentNode.removeChild(v));
   },
 
   text(content) {
-    if (!content) {
-      return this[0].textContent;
-    } else {
-      this.each(v => v.textContent = content);
-      return this;
-    }
+    if (!content) { return this[0].textContent; }
+    return this.each(v => v.textContent = content);
   }
 
 });

@@ -12,7 +12,9 @@
       win        = window,
       ArrayProto = Array.prototype,
       slice      = ArrayProto.slice,
-      filter     = ArrayProto.filter;
+      filter     = ArrayProto.filter,
+      map        = ArrayProto.map,
+      push       = ArrayProto.push;
 
   // @include ./core.js
   // @include ./util.js
@@ -25,5 +27,6 @@
   // @include ./forms.js
   // @include ./manipulation.js
   // @include ./traversal.js
+
   return cash;
 });

@@ -63,6 +63,17 @@ QUnit.test( "hasClass", function( assert ) {
   assert.equal(hasClass, true, "hasClass Passed!" );
 });
 
+QUnit.test( "toggleClass", function( assert ) {
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',true).hasClass('toggle-class-force');
+  assert.equal(hasClass, true, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',false).hasClass('toggle-class-force');
+  assert.equal(hasClass, false, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class').hasClass('toggle-class');
+  assert.equal(hasClass, true, "toggleClass Passed!" );
+  var hasClass = $('.attr-fixture').toggleClass('toggle-class').hasClass('toggle-class');
+  assert.equal(hasClass, false, "toggleClass Passed!" );
+});
+
 QUnit.test( "prop", function( assert ) {
   assert.equal($('.prop-fixture').prop('checked'), true, "prop Passed!" );
 });
@@ -86,9 +97,9 @@ QUnit.test( "add", function( assert ) {
   var addFixture = $('#id-fixture').add( $('.class-fixture') );
   assert.equal(addFixture.cash, true, "add Passed!" );
   assert.equal(addFixture.length, 2, "add(one) Passed!" );
-  addFixture = $('#id-fixture').add( $('a').eq(0) , $('a').eq(1) );
+  addFixture = $('#id-fixture').add( $('a').eq(0) ).add( $('a').eq(1) );
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
-  addFixture = $('#id-fixture').add( $('#qunit-fixture a') , $('#qunit-fixture input') );
+  addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
   assert.equal(addFixture.length, 9, "add(collections) Passed!" );
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
@@ -135,6 +146,11 @@ QUnit.test( "index", function( assert ) {
 QUnit.test( "last", function( assert ) {
   var lastFixture = $('#qunit-fixture div').last();
   assert.equal($(lastFixture).hasClass('attr-fixture2'), true, "last Passed!" );
+});
+
+QUnit.test( "map", function( assert ) {
+  var result = $('#id-fixture').map(function(e){ return e.id; });
+  assert.deepEqual(result, ['id-fixture'], "map Passed!" );
 });
 
 
@@ -234,7 +250,7 @@ QUnit.test( "trigger", function( assert ) {
 
 QUnit.test( "serialize", function( assert ) {
   var data = $('.form-fixture').serialize();
-  assert.equal(data, "text=text&hidden=5", "serialize Passed!" );
+  assert.equal(data, "hidden=5&text=text", "serialize Passed!" );
 });
 
 QUnit.test( "val", function( assert ) {
@@ -295,6 +311,7 @@ QUnit.test( "is", function( assert ) {
   assert.equal($('#id-fixture').is('div'), true, "is Passed!" );
   assert.equal($('#id-fixture').is('#id-fixture'), true, "is Passed!" );
   assert.equal($('#id-fixture').is($('#id-fixture')), true, "is Passed!" );
+  assert.equal($('#id-fixture').is($('div')), true, "is Passed!" );
   assert.equal($('#id-fixture').is($('#class-fixture')), false, "is Passed!" );
 });
 

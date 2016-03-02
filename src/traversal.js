@@ -1,37 +1,47 @@
+function directCompare(el,selector){ return el === selector; }
+
 fn.extend({
 
   children(selector) {
-    if (!selector) {
-      return cash(slice.call(this[0].children));
-    } else {
-      return cash(slice.call(this[0].children)).filter(v => {
+    var elems = [];
+    this.each(el => { push.apply(elems,el.children); });
+    elems = cash.unique(elems);
+
+    return ( !selector ? elems : elems.filter(v => {
         return cash.matches(v, selector);
-      });
-    }
+      }) );
   },
 
   closest(selector) {
-    if (!selector || cash.matches(this[0], selector)) {
-      return this;
-    } else {
-      return this.parent().closest(selector);
-    }
+    if (!selector || cash.matches(this[0], selector)) { return this; }
+	  return this.parent().closest(selector);
   },
 
   is(selector) {
-    if (!selector) {
-      return false;
-    }
+    if ( !selector ) { return false; }
 
-    if (selector.cash) {
-      return this[0] === selector[0];
-    }
+    var match = false,
+        comparator = (
+        	isString(selector) ? cash.matches :
+        	selector.cash ? el => { return selector.is(el); } :
+        	directCompare
+        );
 
-    return typeof selector === 'string' ? cash.matches(this[0], selector) : false;
+    this.each((el,i) => {
+      match = comparator(el,selector,i);
+      return !match;
+    });
+
+    return match;
   },
 
   find(selector) {
-    return cash(this[0].querySelectorAll(selector));
+    if ( !selector ) { return cash(); }
+
+    var elems = [];
+    this.each(el => { push.apply(elems,find(selector,el)); });
+
+    return cash.unique(elems);
   },
 
   has(selector) {
@@ -51,7 +61,7 @@ fn.extend({
   },
 
   parent() {
-    var result = ArrayProto.map.call(this, item => {
+    var result = this.map(item => {
       return item.parentElement || doc.body.parentNode;
     });
 
@@ -60,8 +70,7 @@ fn.extend({
 
   parents(selector) {
     var last,
-        result = [],
-        count = 0;
+        result = [];
 
     this.each(item => {
       last = item;
@@ -70,8 +79,7 @@ fn.extend({
         last = last.parentElement;
 
         if (!selector || (selector && cash.matches(last, selector))) {
-          result[count] = last;
-          count++;
+          result.push(last);
         }
       }
     });

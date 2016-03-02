@@ -9,170 +9,209 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter;
+  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map, push = ArrayProto.push;
 
-  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, singlet = /^[\w-]*$/;
+  var noop = function () {}, isFunction = function (item) {
+    return typeof item === typeof noop;
+  }, isString = function (item) {
+    return typeof item === typeof "";
+  }, idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
 
-  function cash(selector, context) {
-    return new cash.fn.init(selector, context);
+  function find(selector, context) {
+    context = context || doc;
+    var match = singletTagOrClass.exec(selector), elems = (match ? match[1] ? doc.getElementsByClassName(match[2]) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    return slice.call(elems);
   }
 
-  var fn = cash.fn = cash.prototype = {
-    cash: true,
-    length: 0
-  };
+  function parseHTML(str) {
+    var tmp = doc.implementation.createHTMLDocument();
+    tmp.body.innerHTML = str;
+    return slice.call(tmp.body.children);
+  }
 
-  fn.init = function (selector, context) {
-    var result = [], matcher, elem;
+  function onReady(fn) {
+    if (doc.readyState !== "loading") {
+      fn();
+    } else {
+      doc.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+
+  function Init(selector, context) {
+    var elems = selector, i = 0, match, length;
 
     if (!selector) {
       return this;
     }
 
-    this.length = 1;
-
-    if (typeof selector !== "string") {
-      if (selector.cash) {
-        return selector;
+    // If already a cash collection, don't do any further processing
+    if (selector.cash) {
+      return selector;
+    }
+    // If function, use as shortcut for DOM ready
+    else if (isFunction(selector)) {
+      onReady(selector);return this;
+    } else if (isString(selector)) {
+      match = idOrHTML.exec(selector);
+      // If an ID use the faster getElementById check
+      if (match && match[2]) {
+        selector = doc.getElementById(match[2]);
+        if (!selector) {
+          return this;
+        }
       }
+      // If HTML, parse it into real elements, else use querySelectorAll
+      else {
+        elems = (match ? parseHTML(selector) : find(selector, context));
+      }
+    }
 
+    // If a DOM element is passed in or received via ID return the single element
+    if (selector.nodeType || selector === window) {
       this[0] = selector;
-      return this;
-    }
-
-    if (selector.charAt(0) === "<" && selector.charAt(selector.length - 1) === ">" && selector.length >= 3) {
-      result = cash.parseHTML(selector);
+      this.length = 1;
     } else {
-      matcher = idMatch.test(selector);
-      elem = selector.slice(1);
-
-      if (!context && matcher) {
-        this[0] = doc.getElementById(elem);
-        return this;
-      } else {
-        context = (cash(context)[0] || doc);
-
-        result = slice.call(singlet.test(elem) ? classMatch.test(selector) ? doc.getElementsByClassName(elem) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
+      length = this.length = elems.length;
+      for (; i < length; i++) {
+        this[i] = elems[i];
       }
     }
 
-    this.length = 0;
-    cash.merge(this, result);
     return this;
-  };
-
-  fn.init.prototype = fn;
-
-  function buildFragment(str) {
-    var fragment = fragment || doc.createDocumentFragment(), tmp = tmp || fragment.appendChild(doc.createElement("div"));
-    tmp.innerHTML = str;
-    return tmp;
   }
 
-  cash.each = function (collection, callback) {
-    var l = collection.length, i = 0;
+  function cash(selector, context) {
+    return new Init(selector, context);
+  }
 
-    for (; i < l; i++) {
-      callback.call(collection[i], collection[i], i, collection);
-    }
+  var fn = cash.fn = cash.prototype = Init.prototype = {
+    cash: true,
+    length: 0,
+    push: push,
+    splice: ArrayProto.splice,
+    init: Init
   };
 
-  cash.extend = fn.extend = function (target, source) {
-    var prop;
+  cash.parseHTML = parseHTML;
 
-    if (!source) {
-      source = target;
+  cash.extend = fn.extend = function (target) {
+    target = target || {};
+
+    var args = slice.call(arguments), length = args.length, i = 1;
+
+    if (args.length === 1) {
       target = this;
+      i = 0;
     }
 
-    for (prop in source) {
-      if (source.hasOwnProperty(prop)) {
-        target[prop] = source[prop];
+    for (; i < length; i++) {
+      if (!args[i]) {
+        continue;
+      }
+      for (var key in args[i]) {
+        if (args[i].hasOwnProperty(key)) {
+          target[key] = args[i][key];
+        }
       }
     }
 
     return target;
   };
 
-  cash.matches = function (el, selector) {
-    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
-  };
+  function each(collection, callback) {
+    var l = collection.length, i = 0;
 
-  cash.merge = function (first, second) {
-    var len = +second.length, i = first.length, j = 0;
+    for (; i < l; i++) {
+      if (callback.call(collection[i], collection[i], i, collection) === false) {
+        break;
+      }
+    }
+  }
 
-    for (; j < len; i++, j++) {
-      first[i] = second[j];
+  cash.extend({
+    each: each,
+
+    matches: function (el, selector) {
+      return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
+    },
+
+    merge: function (first, second) {
+      var len = +second.length, i = first.length, j = 0;
+
+      for (; j < len; i++, j++) {
+        first[i] = second[j];
+      }
+
+      first.length = i;
+      return first;
+    },
+
+    unique: function (collection) {
+      return cash(slice.call(collection).filter(function (item, index, self) {
+        return self.indexOf(item) === index;
+      }));
+    },
+
+    noop: noop,
+    isFunction: isFunction,
+    isString: isString,
+    isArray: Array.isArray,
+    isNumeric: function (n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    first.length = i;
-    return first;
-  };
-
-  cash.parseHTML = function (str) {
-    var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
-
-    if (parsed) {
-      return [doc.createElement(parsed[1])];
-    }
-
-    parsed = buildFragment(str);
-    return slice.call(parsed.childNodes);
-  };
-
-  cash.unique = function (collection) {
-    return cash.merge(cash(), slice.call(collection).filter(function (item, index, self) {
-      return self.indexOf(item) === index;
-    }));
-  };
+  });
 
   var notWhiteMatch = /\S+/g;
 
+  function hasClass(v, c) {
+    return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
+  }
+
+  function addClass(v, c, spacedName) {
+    if (v.classList) {
+      v.classList.add(c);
+    } else if (spacedName.indexOf(" " + c + " ")) {
+      v.className += " " + c;
+    }
+  }
+
+  function removeClass(v, c) {
+    if (v.classList) {
+      v.classList.remove(c);
+    } else {
+      v.className = v.className.replace(c, "");
+    }
+  }
+
   fn.extend({
-    addClass: function (className) {
-      // TODO: tear out into module for IE9
-      var classes = className.match(notWhiteMatch), spacedName, l;
+    addClass: function (c) {
+      var classes = c.match(notWhiteMatch);
 
-      this.each(function (v) {
-        l = classes.length;
-
-        if (v.classList) {
-          while (l--) {
-            v.classList.add(classes[l]);
-          }
-        } else {
-          while (l--) {
-            spacedName = " " + v.className + " ";
-
-            if (spacedName.indexOf(" " + classes[l] + " ") === -1) {
-              v.className += " " + classes[l];
-            }
-          }
-        }
+      return this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        each(classes, function (c) {
+          addClass(v, c, spacedName);
+        });
       });
-
-      return this;
     },
 
     attr: function (name, value) {
       if (!value) {
         return this[0].getAttribute(name);
-      } else {
-        this.each(function (v) {
-          return v.setAttribute(name, value);
-        });
-
-        return this;
       }
+      return this.each(function (v) {
+        return v.setAttribute(name, value);
+      });
     },
 
-    hasClass: function (className) {
-      // TODO: tear out into module for IE9
-      if (this[0].classList) {
-        return this[0].classList.contains(className);
-      } else {
-        return this[0].className.indexOf(className) !== -1;
-      }
+    hasClass: function (c) {
+      var check = false;
+      this.each(function (v) {
+        check = hasClass(v, c);
+        return !check;
+      });
+      return check;
     },
 
     prop: function (name) {
@@ -180,74 +219,68 @@
     },
 
     removeAttr: function (name) {
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.removeAttribute(name);
       });
-      return this;
     },
 
-    removeClass: function (className) {
-      // TODO: tear out into module for IE9
-      var classes = className.match(notWhiteMatch), l, newClassName;
+    removeClass: function (c) {
+      var classes = c.match(notWhiteMatch);
 
-      this.each(function (v) {
-        l = classes.length;
-
-        if (v.classList) {
-          while (l--) {
-            v.classList.remove(classes[l]);
-          }
-        } else {
-          newClassName = " " + v.className + " ";
-
-          while (l--) {
-            newClassName = newClassName.replace(" " + classes[l] + " ", " ");
-          }
-
-          v.className = newClassName.trim();
-        }
+      return this.each(function (v) {
+        each(classes, function (c) {
+          removeClass(v, c);
+        });
       });
+    },
 
-      return this;
-    }
+    toggleClass: function (c, state) {
+      if (state !== undefined) {
+        return this[state ? "addClass" : "removeClass"](c);
+      }
+      var classes = c.match(notWhiteMatch);
 
-  });
+      return this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        each(classes, function (c) {
+          if (hasClass(v, c)) {
+            removeClass(v, c);
+          } else {
+            addClass(v, c, spacedName);
+          }
+        });
+      });
+    } });
 
   fn.extend({
-    add: function () {
-      var arr = slice.call(this), i = 0, l;
-
-      for (l = arguments.length; i < l; i++) {
-        arr = arr.concat(slice.call(cash(arguments[i])));
-      }
-
-      return cash.unique(arr);
+    add: function (selector, context) {
+      return cash.unique(cash.merge(this.get(), cash(selector, context)));
     },
 
     each: function (callback) {
-      cash.each(this, callback);
+      each(this, callback);
+      return this;
     },
 
     eq: function (index) {
-      return cash(this[index]);
+      return cash(this.get(index));
     },
 
     filter: function (selector) {
-      if (typeof selector === "string") {
-        return filter.call(this, function (e) {
-          return cash.matches(e, selector);
-        });
-      } else {
-        return filter.call(this, selector);
-      }
+      return filter.call(this, (isString(selector) ? function (e) {
+        return cash.matches(e, selector);
+      } : selector));
     },
 
     first: function () {
-      return cash(this[0]);
+      return this.eq(0);
     },
 
-    get: function (num) {
-      return this[num];
+    get: function (index) {
+      if (index === undefined) {
+        return slice.call(this);
+      }
+      return (index < 0 ? this[index + this.length] : this[index]);
     },
 
     index: function (elem) {
@@ -259,7 +292,11 @@
     },
 
     last: function () {
-      return cash(this[this.length - 1]);
+      return this.eq(-1);
+    },
+
+    map: function (callback) {
+      return map.call(this, callback);
     }
 
   });
@@ -267,7 +304,7 @@
   fn.extend({
     css: function (prop, value) {
       if (typeof prop === "object") {
-        this.each(function (v) {
+        return this.each(function (v) {
           for (var key in prop) {
             if (prop.hasOwnProperty(key)) {
               v.style[key] = prop[key];
@@ -275,10 +312,9 @@
           }
         });
       } else if (value) {
-        this.each(function (v) {
+        return this.each(function (v) {
           return v.style[prop] = value;
         });
-        return this;
       } else {
         return win.getComputedStyle(this[0], null)[prop];
       }
@@ -292,29 +328,25 @@
       if (!value) {
         return this[0].dataset ? this[0].dataset[key] : cash(this[0]).attr("data-" + key);
       } else {
-        this.each(function (v) {
+        return this.each(function (v) {
           if (v.dataset) {
             v.dataset[key] = value;
           } else {
             cash(v).attr("data-" + key, value);
           }
         });
-
-        return this;
       }
     },
 
     removeData: function (name) {
       // TODO: tear out into module for IE9
-      this.each(function (v) {
+      return this.each(function (v) {
         if (v.dataset) {
           delete v.dataset[name];
         } else {
           cash(v).removeAttr("data-" + name);
         }
       });
-
-      return this;
     }
 
   });
@@ -453,27 +485,27 @@
 
   });
 
-  var encode = encodeURIComponent;
+  function encode(e) {
+    return encodeURIComponent(e).replace(/%20/g, "+");
+  }
 
   fn.extend({
     serialize: function () {
-      var form = this[0], query = "", field, i, j;
+      var formEl = this[0].elements, query = "";
 
-      for (i = form.elements.length - 1; i >= 0; i--) {
-        field = form.elements[i];
-
+      each(formEl, function (field) {
         if (field.name && field.type !== "file" && field.type !== "reset") {
           if (field.type === "select-multiple") {
-            for (j = form.elements[i].options.length - 1; j >= 0; j--) {
-              if (field.options[j].selected) {
-                query += "&" + field.name + "=" + encode(field.options[j].value).replace(/%20/g, "+");
+            each(field.options, function (o) {
+              if (o.selected) {
+                query += "&" + field.name + "=" + encode(o.value);
               }
-            }
+            });
           } else if ((field.type !== "submit" && field.type !== "button")) {
-            query += "&" + field.name + "=" + encode(field.value).replace(/%20/g, "+");
+            query += "&" + field.name + "=" + encode(field.value);
           }
         }
-      }
+      });
 
       return query.substr(1);
     },
@@ -482,49 +514,73 @@
       if (value === undefined) {
         return this[0].value;
       } else {
-        this.each(function (v) {
+        return this.each(function (v) {
           return v.value = value;
         });
-        return this;
       }
     }
 
   });
 
+  function insertElement(el, child, prepend) {
+    if (prepend) {
+      var first = el.childNodes[0];
+      el.insertBefore(child, first);
+    } else {
+      el.appendChild(child);
+    }
+  }
+
+  function insertContent(parent, child, prepend) {
+    var str = isString(child);
+
+    if (!str && child.length) {
+      each(child, function () {
+        insertContent(parent, this, prepend);
+      });
+      return;
+    }
+
+    parent.each(str ? function () {
+      this.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
+    } : function (el, i) {
+      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend);
+    });
+  }
+
   fn.extend({
     append: function (content) {
-      this[0].appendChild(cash(content)[0]);
+      insertContent(this, content);
       return this;
     },
 
-    appendTo: function (content) {
-      cash(content)[0].appendChild(this[0]);
+    appendTo: function (parent) {
+      insertContent(cash(parent), this);
       return this;
     },
 
     clone: function () {
-      return cash(this[0].cloneNode(true));
+      var elems = [];
+      this.each(function (v) {
+        elems.push(v.cloneNode(true));
+      });
+      return cash(elems);
     },
 
     empty: function () {
-      this.each(function (v) {
-        return v.innerHTML = "";
-      });
+      this.html("");
       return this;
     },
 
     html: function (content) {
       var source;
-
-      if (content === "undefined") {
+      if (content === undefined) {
         return this[0].innerHTML;
-      } else {
-        source = typeof content === "object" ? cash(content)[0].outerHTML : content;
-        this.each(function (v) {
-          return v.innerHTML = "" + source;
-        });
-        return this;
       }
+      source = (content.nodeType ? content[0].outerHTML : content);
+      return this.each(function (v) {
+        return v.innerHTML = source;
+      });
     },
 
     insertAfter: function (selector) {
@@ -537,18 +593,18 @@
       return this;
     },
 
-    prepend: function (selector) {
-      cash(this)[0].insertAdjacentHTML("afterBegin", cash(selector)[0].outerHTML);
+    prepend: function (content) {
+      insertContent(this, content, true);
       return this;
     },
 
-    prependTo: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("afterBegin", this[0].outerHTML);
+    prependTo: function (parent) {
+      insertContent(cash(parent), this, true);
       return this;
     },
 
     remove: function () {
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.parentNode.removeChild(v);
       });
     },
@@ -556,33 +612,36 @@
     text: function (content) {
       if (!content) {
         return this[0].textContent;
-      } else {
-        this.each(function (v) {
-          return v.textContent = content;
-        });
-        return this;
       }
+      return this.each(function (v) {
+        return v.textContent = content;
+      });
     }
 
   });
 
+  function directCompare(el, selector) {
+    return el === selector;
+  }
+
   fn.extend({
     children: function (selector) {
-      if (!selector) {
-        return cash.fn.extend(this[0].children, cash.fn);
-      } else {
-        return cash(this[0].children).filter(function (v) {
-          return cash.matches(v, selector);
-        });
-      }
+      var elems = [];
+      this.each(function (el) {
+        push.apply(elems, el.children);
+      });
+      elems = cash.unique(elems);
+
+      return (!selector ? elems : elems.filter(function (v) {
+        return cash.matches(v, selector);
+      }));
     },
 
     closest: function (selector) {
       if (!selector || cash.matches(this[0], selector)) {
         return this;
-      } else {
-        return this.parent().closest(selector);
       }
+      return this.parent().closest(selector);
     },
 
     is: function (selector) {
@@ -590,15 +649,29 @@
         return false;
       }
 
-      if (selector.cash) {
-        return this[0] === selector[0];
-      }
+      var match = false, comparator = (isString(selector) ? cash.matches : selector.cash ? function (el) {
+        return selector.is(el);
+      } : directCompare);
 
-      return typeof selector === "string" ? cash.matches(this[0], selector) : false;
+      this.each(function (el, i) {
+        match = comparator(el, selector, i);
+        return !match;
+      });
+
+      return match;
     },
 
     find: function (selector) {
-      return cash.fn.extend(this[0].querySelectorAll(selector), cash.fn);
+      if (!selector) {
+        return cash();
+      }
+
+      var elems = [];
+      this.each(function (el) {
+        push.apply(elems, find(selector, el));
+      });
+
+      return cash.unique(elems);
     },
 
     has: function (selector) {
@@ -618,7 +691,7 @@
     },
 
     parent: function () {
-      var result = ArrayProto.map.call(this, function (item) {
+      var result = this.map(function (item) {
         return item.parentElement || doc.body.parentNode;
       });
 
@@ -626,7 +699,7 @@
     },
 
     parents: function (selector) {
-      var last, result = [], count = 0;
+      var last, result = [];
 
       this.each(function (item) {
         last = item;
@@ -635,8 +708,7 @@
           last = last.parentElement;
 
           if (!selector || (selector && cash.matches(last, selector))) {
-            result[count] = last;
-            count++;
+            result.push(last);
           }
         }
       });
@@ -657,6 +729,7 @@
     }
 
   });
+
 
   return cash;
 });

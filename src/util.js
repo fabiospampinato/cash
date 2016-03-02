@@ -1,73 +1,71 @@
-function buildFragment(str) {
-  var fragment = fragment || doc.createDocumentFragment(),
-  tmp = tmp || fragment.appendChild(doc.createElement('div'));
-  tmp.innerHTML = str;
-  return tmp;
-}
+cash.extend = fn.extend = function(target) {
+  target = target || {};
 
-cash.each = function(collection, callback) {
-  var l = collection.length,
-      i = 0;
+  var args = slice.call(arguments),
+  		length = args.length,
+      i = 1;
 
-  for (; i < l; i++) {
-    callback.call(collection[i], collection[i], i, collection);
-  }
-};
-
-cash.extend = fn.extend = function(target, source) {
-  var prop;
-
-  if (!source) {
-    source = target;
+  if ( args.length === 1) {
     target = this;
+    i = 0;
   }
 
-  for (prop in source) {
-    if (source.hasOwnProperty(prop)) {
-      target[prop] = source[prop];
+  for (; i < length; i++) {
+    if (!args[i]) { continue; }
+    for (var key in args[i]) {
+      if ( args[i].hasOwnProperty(key) ) { target[key] = args[i][key]; }
     }
   }
 
   return target;
 };
 
-cash.matches = function(el, selector) {
-  return (
-    el.matches ||
-    el.matchesSelector ||
-    el.msMatchesSelector ||
-    el.mozMatchesSelector ||
-    el.webkitMatchesSelector ||
-    el.oMatchesSelector
-  ).call(el, selector);
-};
+function each(collection, callback) {
+  var l = collection.length,
+      i = 0;
 
-cash.merge = function(first, second) {
-  var len = +second.length,
-      i = first.length,
-      j = 0;
-
-  for (; j < len; i++, j++) {
-    first[i] = second[j];
+  for (; i < l; i++) {
+    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
   }
+}
 
-  first.length = i;
-  return first;
-};
+cash.extend({
 
-cash.parseHTML = function(str) {
-  var parsed = (/^<(\w+)\s*\/?>(?:<\/\1>|)$/).exec(str);
+	each: each,
 
-  if (parsed) {
-    return [doc.createElement(parsed[1])];
-  }
+	matches(el, selector) {
+	  return (
+	    el.matches ||
+	    el.webkitMatchesSelector ||
+	    el.mozMatchesSelector ||
+	    el.msMatchesSelector ||
+	    el.oMatchesSelector
+	  ).call(el, selector);
+	},
 
-  parsed = buildFragment(str);
-  return slice.call(parsed.childNodes);
-};
+	merge(first, second) {
+	  var len = +second.length,
+	      i = first.length,
+	      j = 0;
 
-cash.unique = function(collection) {
-  return cash.merge(cash(), slice.call(collection).filter((item, index, self) => {
-    return self.indexOf(item) === index;
-  }));
-};
+	  for (; j < len; i++, j++) {
+	    first[i] = second[j];
+	  }
+
+	  first.length = i;
+	  return first;
+	},
+
+	unique(collection) {
+	  return cash(slice.call(collection).filter((item, index, self) => {
+	    return self.indexOf(item) === index;
+	  }));
+	},
+
+	noop: noop,
+	isFunction: isFunction,
+	isString: isString,
+	isArray: Array.isArray,
+	isNumeric(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
+
+});

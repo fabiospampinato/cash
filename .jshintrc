@@ -10,7 +10,13 @@
     "doc"        : true,
     "ArrayProto" : true,
     "filter"     : true,
-    "slice"      : true
+    "slice"      : true,
+    "map"        : true,
+    "push"       : true,
+    "isFunction" : true,
+    "isString"   : true,
+    "find"       : true,
+    "each"       : true
   },
 
   "bitwise"       : true,
@@ -35,7 +41,7 @@
   "maxparams"     : 3,
   "maxdepth"      : 5,
   "maxstatements" : 21,
-  "maxcomplexity" : 9,
+  "maxcomplexity" : 12,
   "maxlen"        : 100,
 
   "asi"           : false,
