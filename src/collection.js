@@ -27,11 +27,8 @@ fn.extend({
   },
 
   index(elem) {
-    if (!elem) {
-      return slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
-    } else {
-      return slice.call(cash(elem).children()).indexOf(this[0]);
-    }
+    var f = this[0];
+    return slice.call( elem ? cash(elem) : cash(f).parent().children() ).indexOf(f);
   },
 
   last() {
