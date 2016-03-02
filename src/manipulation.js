@@ -1,4 +1,4 @@
-function insertElement(el, child, prepend, sibling){
+function insertElement(el, child, prepend){
   if ( prepend ) {
     var first = el.childNodes[0];
     el.insertBefore(child,first);
@@ -7,7 +7,7 @@ function insertElement(el, child, prepend, sibling){
   }
 }
 
-function insertContent(parent, child, prepend, sibling){
+function insertContent(parent, child, prepend){
   var str = isString(child);
 
   if ( !str && child.length ) {
@@ -17,7 +17,7 @@ function insertContent(parent, child, prepend, sibling){
 
   each(parent,
     str ? v => v.insertAdjacentHTML( prepend ? 'afterbegin' : 'beforeend', child) :
-    (v,i) => insertElement(v,( i === 0 ? child : child.cloneNode(true) ), prepend, sibling)
+    (v,i) => insertElement(v,( i === 0 ? child : child.cloneNode(true) ), prepend)
   );
 }
 
@@ -44,7 +44,7 @@ fn.extend({
   },
 
   clone() {
-    return cash(this.map(v => { return v.cloneNode(true) }));
+    return cash(this.map(v => { return v.cloneNode(true); }));
   },
 
   empty() {

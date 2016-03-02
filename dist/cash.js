@@ -129,13 +129,17 @@
     }
   }
 
+  function matches(el, selector) {
+    return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
+  }
+
+  function unique(collection) {
+    return cash(slice.call(collection).filter(function (item, index, self) {
+      return self.indexOf(item) === index;
+    }));
+  }
+
   cash.extend({
-    each: each,
-
-    matches: function (el, selector) {
-      return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
-    },
-
     merge: function (first, second) {
       var len = +second.length, i = first.length, j = 0;
 
@@ -147,12 +151,9 @@
       return first;
     },
 
-    unique: function (collection) {
-      return cash(slice.call(collection).filter(function (item, index, self) {
-        return self.indexOf(item) === index;
-      }));
-    },
-
+    each: each,
+    matches: matches,
+    unique: unique,
     noop: noop,
     isFunction: isFunction,
     isString: isString,
@@ -255,7 +256,7 @@
 
   fn.extend({
     add: function (selector, context) {
-      return cash.unique(cash.merge(this, cash(selector, context)));
+      return unique(cash.merge(this, cash(selector, context)));
     },
 
     each: function (callback) {
@@ -269,7 +270,7 @@
 
     filter: function (selector) {
       return filter.call(this, (isString(selector) ? function (e) {
-        return cash.matches(e, selector);
+        return matches(e, selector);
       } : selector));
     },
 
@@ -430,10 +431,10 @@
         function handler(e) {
           var t = e.target;
 
-          if (cash.matches(t, delegate)) {
+          if (matches(t, delegate)) {
             callback.call(t);
           } else {
-            while (!cash.matches(t, delegate)) {
+            while (!matches(t, delegate)) {
               if (t === v) {
                 return (t = false);
               }
@@ -479,7 +480,7 @@
       var formEl = this[0].elements, query = "";
 
       each(formEl, function (field) {
-        if (field.name && formExcludes.indexOf(field.type) == -1) {
+        if (field.name && formExcludes.indexOf(field.type) < 0) {
           if (field.type === "select-multiple") {
             each(field.options, function (o) {
               if (o.selected) {
@@ -507,7 +508,7 @@
 
   });
 
-  function insertElement(el, child, prepend, sibling) {
+  function insertElement(el, child, prepend) {
     if (prepend) {
       var first = el.childNodes[0];
       el.insertBefore(child, first);
@@ -516,7 +517,7 @@
     }
   }
 
-  function insertContent(parent, child, prepend, sibling) {
+  function insertContent(parent, child, prepend) {
     var str = isString(child);
 
     if (!str && child.length) {
@@ -529,7 +530,7 @@
     each(parent, str ? function (v) {
       return v.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
     } : function (v, i) {
-      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend, sibling);
+      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend);
     });
   }
 
@@ -637,15 +638,15 @@
       this.each(function (el) {
         push.apply(elems, el.children);
       });
-      elems = cash.unique(elems);
+      elems = unique(elems);
 
       return (!selector ? elems : elems.filter(function (v) {
-        return cash.matches(v, selector);
+        return matches(v, selector);
       }));
     },
 
     closest: function (selector) {
-      if (!selector || cash.matches(this[0], selector)) {
+      if (!selector || matches(this[0], selector)) {
         return this;
       }
       return this.parent().closest(selector);
@@ -656,7 +657,7 @@
         return false;
       }
 
-      var match = false, comparator = (isString(selector) ? cash.matches : selector.cash ? function (el) {
+      var match = false, comparator = (isString(selector) ? matches : selector.cash ? function (el) {
         return selector.is(el);
       } : directCompare);
 
@@ -678,7 +679,7 @@
         push.apply(elems, find(selector, el));
       });
 
-      return cash.unique(elems);
+      return unique(elems);
     },
 
     has: function (selector) {
@@ -693,7 +694,7 @@
 
     not: function (selector) {
       return filter.call(this, function (el) {
-        return !cash.matches(el, selector);
+        return !matches(el, selector);
       });
     },
 
@@ -702,7 +703,7 @@
         return item.parentElement || doc.body.parentNode;
       });
 
-      return cash.unique(result);
+      return unique(result);
     },
 
     parents: function (selector) {
@@ -714,13 +715,13 @@
         while (last !== doc.body.parentNode) {
           last = last.parentElement;
 
-          if (!selector || (selector && cash.matches(last, selector))) {
+          if (!selector || (selector && matches(last, selector))) {
             result.push(last);
           }
         }
       });
 
-      return cash.unique(result);
+      return unique(result);
     },
 
     prev: function () {
