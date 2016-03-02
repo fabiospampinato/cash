@@ -11,12 +11,13 @@
     "ArrayProto" : true,
     "filter"     : true,
     "slice"      : true,
-    "map"        : true,
     "push"       : true,
     "isFunction" : true,
     "isString"   : true,
     "find"       : true,
-    "each"       : true
+    "onReady"    : true,
+    "each"       : true,
+    "noop"       : true
   },
 
   "bitwise"       : true,

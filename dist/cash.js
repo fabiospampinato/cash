@@ -9,7 +9,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map, push = ArrayProto.push;
+  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
 
   var noop = function () {}, isFunction = function (item) {
     return typeof item === typeof noop;
@@ -89,6 +89,7 @@
     length: 0,
     push: push,
     splice: ArrayProto.splice,
+    map: ArrayProto.map,
     init: Init
   };
 
@@ -254,7 +255,7 @@
 
   fn.extend({
     add: function (selector, context) {
-      return cash.unique(cash.merge(this.get(), cash(selector, context)));
+      return cash.unique(cash.merge(this, cash(selector, context)));
     },
 
     each: function (callback) {
@@ -284,19 +285,12 @@
     },
 
     index: function (elem) {
-      if (!elem) {
-        return slice.call(cash(this[0]).parent().children()).indexOf(this[0]);
-      } else {
-        return slice.call(cash(elem).children()).indexOf(this[0]);
-      }
+      var f = this[0];
+      return slice.call(elem ? cash(elem) : cash(f).parent().children()).indexOf(f);
     },
 
     last: function () {
       return this.eq(-1);
-    },
-
-    map: function (callback) {
-      return map.call(this, callback);
     }
 
   });
@@ -369,19 +363,11 @@
     },
 
     outerWidth: function (margins) {
-      if (margins === true) {
-        return this[0].offsetWidth + (compute(this, "margin-left") || compute(this, "marginLeft") || 0) + (compute(this, "margin-right") || compute(this, "marginRight") || 0);
-      }
-
-      return this[0].offsetWidth;
+      return this[0].offsetWidth + (margins !== true ? 0 : (compute(this, "margin-left") || compute(this, "marginLeft") || 0) + (compute(this, "margin-right") || compute(this, "marginRight") || 0));
     },
 
     outerHeight: function (margins) {
-      if (margins === true) {
-        return this[0].offsetHeight + (compute(this, "margin-top") || compute(this, "marginTop") || 0) + (compute(this, "margin-bottom") || compute(this, "marginBottom") || 0);
-      }
-
-      return this[0].offsetHeight;
+      return this[0].offsetHeight + (margins !== true ? 0 : (compute(this, "margin-top") || compute(this, "marginTop") || 0) + (compute(this, "margin-bottom") || compute(this, "marginBottom") || 0));
     },
 
     width: function () {
@@ -390,7 +376,7 @@
 
   });
 
-  var _eventCache = {};
+  var _eventCache = {}, _eventId = "cshid";
 
   function guid() {
     function _p8(s) {
@@ -402,9 +388,9 @@
   }
 
   function registerEvent(node, eventName, callback) {
-    var nid = cash(node).data("cshid") || guid();
+    var nid = cash(node).data(_eventId) || guid();
 
-    cash(node).data("cshid", nid);
+    cash(node).data(_eventId, nid);
 
     if (!(nid in _eventCache)) {
       _eventCache[nid] = {};
@@ -419,90 +405,89 @@
 
   fn.extend({
     off: function (eventName, callback) {
-      this.each(function (v) {
+      return this.each(function (v) {
         if (callback) {
           v.removeEventListener(eventName, callback);
         } else {
-          for (var i in _eventCache[cash(v).data("cshid")][eventName]) {
-            v.removeEventListener(eventName, _eventCache[cash(v).data("cshid")][eventName][i]);
+          for (var i in _eventCache[cash(v).data(_eventId)][eventName]) {
+            v.removeEventListener(eventName, _eventCache[cash(v).data(_eventId)][eventName][i]);
           }
         }
       });
-
-      return this;
     },
 
     on: function (eventName, delegate, callback) {
-      if (typeof delegate === "function") {
+      if (isFunction(delegate)) {
         callback = delegate;
 
-        this.each(function (v) {
+        return this.each(function (v) {
           registerEvent(cash(v), eventName, callback);
           v.addEventListener(eventName, callback);
         });
-        return this;
-      } else {
-        this.each(function (v) {
-          function handler(e) {
-            var t = e.target;
+      }
 
-            if (cash.matches(t, delegate)) {
+      return this.each(function (v) {
+        function handler(e) {
+          var t = e.target;
+
+          if (cash.matches(t, delegate)) {
+            callback.call(t);
+          } else {
+            while (!cash.matches(t, delegate)) {
+              if (t === v) {
+                return (t = false);
+              }
+              t = t.parentNode;
+            }
+
+            if (t) {
               callback.call(t);
-            } else {
-              while (!cash.matches(t, delegate)) {
-                if (t === v) {
-                  return (t = false);
-                }
-                t = t.parentNode;
-              }
-
-              if (t) {
-                callback.call(t);
-              }
             }
           }
+        }
 
-          registerEvent(cash(v), eventName, handler);
-          v.addEventListener(eventName, handler);
-        });
-
-        return this;
-      }
+        registerEvent(cash(v), eventName, handler);
+        v.addEventListener(eventName, handler);
+      });
     },
 
     ready: function (callback) {
-      this[0].addEventListener("DOMContentLoaded", callback);
+      onReady(callback);
     },
 
     trigger: function (eventName) {
       var evt = doc.createEvent("HTMLEvents");
       evt.initEvent(eventName, true, false);
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.dispatchEvent(evt);
       });
-      return this;
     }
 
   });
 
-  function encode(e) {
-    return encodeURIComponent(e).replace(/%20/g, "+");
+  function encode(name, value) {
+    return "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(/%20/g, "+");
   }
+  function isCheckable(field) {
+    return field.type === "radio" || field.type === "checkbox";
+  }
+
+  var formExcludes = ["file", "reset", "submit", "button"];
 
   fn.extend({
     serialize: function () {
       var formEl = this[0].elements, query = "";
 
       each(formEl, function (field) {
-        if (field.name && field.type !== "file" && field.type !== "reset") {
+        if (field.name && formExcludes.indexOf(field.type) == -1) {
           if (field.type === "select-multiple") {
             each(field.options, function (o) {
               if (o.selected) {
-                query += "&" + field.name + "=" + encode(o.value);
+                query += encode(field.name, o.value);
               }
             });
-          } else if ((field.type !== "submit" && field.type !== "button")) {
-            query += "&" + field.name + "=" + encode(field.value);
+          } else if (!isCheckable(field) || (isCheckable(field) && field.checked)) {
+            query += encode(field.name, field.value);
           }
         }
       });
@@ -560,11 +545,9 @@
     },
 
     clone: function () {
-      var elems = [];
-      this.each(function (v) {
-        elems.push(v.cloneNode(true));
-      });
-      return cash(elems);
+      return cash(this.map(function (v) {
+        return v.cloneNode(true);
+      }));
     },
 
     empty: function () {

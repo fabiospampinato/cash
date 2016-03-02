@@ -1,4 +1,11 @@
-function encode(e) { return encodeURIComponent(e).replace(/%20/g, '+'); }
+function encode(name,value) {
+  return '&' + encodeURIComponent(name) + '=' + encodeURIComponent(value).replace(/%20/g, '+');
+}
+function isCheckable(field){
+  return field.type === 'radio' || field.type === 'checkbox';
+}
+
+var formExcludes = ['file','reset','submit','button'];
 
 fn.extend({
 
@@ -7,15 +14,15 @@ fn.extend({
         query = '';
 
     each(formEl,field => {
-      if (field.name && field.type !== 'file' && field.type !== 'reset') {
+      if (field.name && formExcludes.indexOf(field.type) == -1) {
         if ( field.type === 'select-multiple') {
-	        each(field.options, o => {
+          each(field.options, o => {
             if ( o.selected) {
-              query += '&' + field.name + '=' + encode(o.value);
+              query += encode(field.name,o.value);
             }
           });
-        } else if ((field.type !== 'submit' && field.type !== 'button')) {
-          query += '&' + field.name + '=' + encode(field.value);
+        } else if ( !isCheckable(field) || (isCheckable(field) && field.checked) )  {
+          query += encode(field.name,field.value);
         }
       }
     });

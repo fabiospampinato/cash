@@ -17,23 +17,15 @@ fn.extend({
   },
 
   outerWidth(margins) {
-    if (margins === true) {
-      return this[0].offsetWidth +
+    return this[0].offsetWidth + (margins !== true ? 0 :
         (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
-        (compute(this, 'margin-right') || compute(this, 'marginRight') || 0);
-    }
-
-    return this[0].offsetWidth;
+        (compute(this, 'margin-right') || compute(this, 'marginRight') || 0) );
   },
 
   outerHeight(margins) {
-    if (margins === true) {
-      return this[0].offsetHeight +
+    return this[0].offsetHeight + (margins !== true ? 0 :
         (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
-        (compute(this, 'margin-bottom') || compute(this, 'marginBottom') || 0);
-    }
-
-    return this[0].offsetHeight;
+        (compute(this, 'margin-bottom') || compute(this, 'marginBottom') || 0) );
   },
 
   width() {

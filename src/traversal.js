@@ -14,7 +14,7 @@ fn.extend({
 
   closest(selector) {
     if (!selector || cash.matches(this[0], selector)) { return this; }
-	  return this.parent().closest(selector);
+    return this.parent().closest(selector);
   },
 
   is(selector) {
@@ -22,9 +22,9 @@ fn.extend({
 
     var match = false,
         comparator = (
-        	isString(selector) ? cash.matches :
-        	selector.cash ? el => { return selector.is(el); } :
-        	directCompare
+          isString(selector) ? cash.matches :
+          selector.cash ? el => { return selector.is(el); } :
+          directCompare
         );
 
     this.each((el,i) => {
