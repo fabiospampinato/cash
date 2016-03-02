@@ -507,7 +507,7 @@
 
   });
 
-  function insertElement(el, child, prepend) {
+  function insertElement(el, child, prepend, sibling) {
     if (prepend) {
       var first = el.childNodes[0];
       el.insertBefore(child, first);
@@ -516,24 +516,29 @@
     }
   }
 
-  function insertContent(parent, child, prepend) {
+  function insertContent(parent, child, prepend, sibling) {
     var str = isString(child);
 
     if (!str && child.length) {
-      each(child, function () {
-        insertContent(parent, this, prepend);
+      each(child, function (v) {
+        return insertContent(parent, v, prepend);
       });
       return;
     }
 
-    parent.each(str ? function () {
-      this.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
-    } : function (el, i) {
-      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend);
+    each(parent, str ? function (v) {
+      return v.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
+    } : function (v, i) {
+      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend, sibling);
     });
   }
 
   fn.extend({
+    after: function (selector) {
+      cash(selector).insertAfter(this);
+      return this;
+    },
+
     append: function (content) {
       insertContent(this, content);
       return this;
@@ -541,6 +546,11 @@
 
     appendTo: function (parent) {
       insertContent(cash(parent), this);
+      return this;
+    },
+
+    before: function (selector) {
+      cash(selector).insertBefore(this);
       return this;
     },
 
@@ -556,23 +566,37 @@
     },
 
     html: function (content) {
-      var source;
       if (content === undefined) {
         return this[0].innerHTML;
       }
-      source = (content.nodeType ? content[0].outerHTML : content);
+      var source = (content.nodeType ? content[0].outerHTML : content);
       return this.each(function (v) {
         return v.innerHTML = source;
       });
     },
 
     insertAfter: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("afterend", this[0].outerHTML);
+      var _this = this;
+
+
+      cash(selector).each(function (el, i) {
+        var parent = el.parentNode, sibling = el.nextSibling;
+        _this.each(function (v) {
+          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), sibling);
+        });
+      });
+
       return this;
     },
 
     insertBefore: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("beforebegin", this[0].outerHTML);
+      var _this2 = this;
+      cash(selector).each(function (el, i) {
+        var parent = el.parentNode;
+        _this2.each(function (v) {
+          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), el);
+        });
+      });
       return this;
     },
 
