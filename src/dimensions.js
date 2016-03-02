@@ -17,12 +17,14 @@ fn.extend({
   },
 
   outerWidth(margins) {
-    return this[0].offsetWidth + (margins !== true ? 0 : (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
+    return this[0].offsetWidth + (margins !== true ? 0 :
+        (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
         (compute(this, 'margin-right') || compute(this, 'marginRight') || 0) );
   },
 
   outerHeight(margins) {
-    return this[0].offsetHeight + (margins !== true ? 0 : (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
+    return this[0].offsetHeight + (margins !== true ? 0 :
+        (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
         (compute(this, 'margin-bottom') || compute(this, 'marginBottom') || 0) );
   },
 
