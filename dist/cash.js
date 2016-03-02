@@ -9,7 +9,7 @@
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, map = ArrayProto.map, push = ArrayProto.push;
+  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
 
   var noop = function () {}, isFunction = function (item) {
     return typeof item === typeof noop;
@@ -89,6 +89,7 @@
     length: 0,
     push: push,
     splice: ArrayProto.splice,
+    map: ArrayProto.map,
     init: Init
   };
 
@@ -254,7 +255,7 @@
 
   fn.extend({
     add: function (selector, context) {
-      return cash.unique(cash.merge(this.get(), cash(selector, context)));
+      return cash.unique(cash.merge(this, cash(selector, context)));
     },
 
     each: function (callback) {
@@ -290,10 +291,6 @@
 
     last: function () {
       return this.eq(-1);
-    },
-
-    map: function (callback) {
-      return map.call(this, callback);
     }
 
   });
@@ -366,19 +363,11 @@
     },
 
     outerWidth: function (margins) {
-      if (margins === true) {
-        return this[0].offsetWidth + (compute(this, "margin-left") || compute(this, "marginLeft") || 0) + (compute(this, "margin-right") || compute(this, "marginRight") || 0);
-      }
-
-      return this[0].offsetWidth;
+      return this[0].offsetWidth + (margins !== true ? 0 : (compute(this, "margin-left") || compute(this, "marginLeft") || 0) + (compute(this, "margin-right") || compute(this, "marginRight") || 0));
     },
 
     outerHeight: function (margins) {
-      if (margins === true) {
-        return this[0].offsetHeight + (compute(this, "margin-top") || compute(this, "marginTop") || 0) + (compute(this, "margin-bottom") || compute(this, "marginBottom") || 0);
-      }
-
-      return this[0].offsetHeight;
+      return this[0].offsetHeight + (margins !== true ? 0 : (compute(this, "margin-top") || compute(this, "marginTop") || 0) + (compute(this, "margin-bottom") || compute(this, "marginBottom") || 0));
     },
 
     width: function () {
@@ -557,11 +546,9 @@
     },
 
     clone: function () {
-      var elems = [];
-      this.each(function (v) {
-        elems.push(v.cloneNode(true));
-      });
-      return cash(elems);
+      return cash(this.map(function (v) {
+        return v.cloneNode(true);
+      }));
     },
 
     empty: function () {
