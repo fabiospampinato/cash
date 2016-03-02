@@ -376,7 +376,7 @@
 
   });
 
-  var _eventCache = {};
+  var _eventCache = {}, _eventId = "cshid";
 
   function guid() {
     function _p8(s) {
@@ -388,9 +388,9 @@
   }
 
   function registerEvent(node, eventName, callback) {
-    var nid = cash(node).data("cshid") || guid();
+    var nid = cash(node).data(_eventId) || guid();
 
-    cash(node).data("cshid", nid);
+    cash(node).data(_eventId, nid);
 
     if (!(nid in _eventCache)) {
       _eventCache[nid] = {};
@@ -405,68 +405,62 @@
 
   fn.extend({
     off: function (eventName, callback) {
-      this.each(function (v) {
+      return this.each(function (v) {
         if (callback) {
           v.removeEventListener(eventName, callback);
         } else {
-          for (var i in _eventCache[cash(v).data("cshid")][eventName]) {
-            v.removeEventListener(eventName, _eventCache[cash(v).data("cshid")][eventName][i]);
+          for (var i in _eventCache[cash(v).data(_eventId)][eventName]) {
+            v.removeEventListener(eventName, _eventCache[cash(v).data(_eventId)][eventName][i]);
           }
         }
       });
-
-      return this;
     },
 
     on: function (eventName, delegate, callback) {
-      if (typeof delegate === "function") {
+      if (isFunction(delegate)) {
         callback = delegate;
 
-        this.each(function (v) {
+        return this.each(function (v) {
           registerEvent(cash(v), eventName, callback);
           v.addEventListener(eventName, callback);
         });
-        return this;
-      } else {
-        this.each(function (v) {
-          function handler(e) {
-            var t = e.target;
+      }
 
-            if (cash.matches(t, delegate)) {
+      return this.each(function (v) {
+        function handler(e) {
+          var t = e.target;
+
+          if (cash.matches(t, delegate)) {
+            callback.call(t);
+          } else {
+            while (!cash.matches(t, delegate)) {
+              if (t === v) {
+                return (t = false);
+              }
+              t = t.parentNode;
+            }
+
+            if (t) {
               callback.call(t);
-            } else {
-              while (!cash.matches(t, delegate)) {
-                if (t === v) {
-                  return (t = false);
-                }
-                t = t.parentNode;
-              }
-
-              if (t) {
-                callback.call(t);
-              }
             }
           }
+        }
 
-          registerEvent(cash(v), eventName, handler);
-          v.addEventListener(eventName, handler);
-        });
-
-        return this;
-      }
+        registerEvent(cash(v), eventName, handler);
+        v.addEventListener(eventName, handler);
+      });
     },
 
     ready: function (callback) {
-      this[0].addEventListener("DOMContentLoaded", callback);
+      onReady(callback);
     },
 
     trigger: function (eventName) {
       var evt = doc.createEvent("HTMLEvents");
       evt.initEvent(eventName, true, false);
-      this.each(function (v) {
+      return this.each(function (v) {
         return v.dispatchEvent(evt);
       });
-      return this;
     }
 
   });
