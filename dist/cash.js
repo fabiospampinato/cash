@@ -440,7 +440,6 @@
 
     _eventCache[nid] = _eventCache[nid] || {};
     _eventCache[nid][eventName] = _eventCache[nid][eventName] || [];
-
     _eventCache[nid][eventName].push(callback);
   }
 
@@ -450,9 +449,11 @@
         if (callback) {
           v.removeEventListener(eventName, callback);
         } else {
-          for (var i in _eventCache[cash(v).data(_eventId)][eventName]) {
-            v.removeEventListener(eventName, _eventCache[cash(v).data(_eventId)][eventName][i]);
-          }
+          var nid = cash(v).data(_eventId);
+          each(_eventCache[nid][eventName], function (event) {
+            v.removeEventListener(eventName, event);
+          });
+          _eventCache[nid][eventName] = [];
         }
       });
     },
