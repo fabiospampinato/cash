@@ -15,18 +15,22 @@
     return typeof item === typeof noop;
   }, isString = function (item) {
     return typeof item === typeof "";
-  }, idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
+  };
+
+  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
 
   function find(selector, context) {
     context = context || doc;
-    var match = singletTagOrClass.exec(selector), elems = (match ? match[1] ? doc.getElementsByClassName(match[2]) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
-    return slice.call(elems);
+    var elems = (classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    return elems;
   }
 
+  var frag, tmp;
   function parseHTML(str) {
-    var tmp = doc.implementation.createHTMLDocument();
-    tmp.body.innerHTML = str;
-    return slice.call(tmp.body.children);
+    frag = frag || doc.createDocumentFragment();
+    tmp = tmp || frag.appendChild(doc.createElement("div"));
+    tmp.innerHTML = str;
+    return tmp.childNodes;
   }
 
   function onReady(fn) {
@@ -38,39 +42,41 @@
   }
 
   function Init(selector, context) {
-    var elems = selector, i = 0, match, length;
-
     if (!selector) {
       return this;
     }
 
     // If already a cash collection, don't do any further processing
-    if (selector.cash) {
+    if (selector.cash && selector !== win) {
       return selector;
     }
-    // If function, use as shortcut for DOM ready
-    else if (isFunction(selector)) {
-      onReady(selector);return this;
-    } else if (isString(selector)) {
-      match = idOrHTML.exec(selector);
+
+    var elems = selector, i = 0, length;
+
+    if (isString(selector)) {
+      elems = (idMatch.test(selector) ?
       // If an ID use the faster getElementById check
-      if (match && match[2]) {
-        selector = doc.getElementById(match[2]);
-        if (!selector) {
-          return this;
-        }
-      }
-      // If HTML, parse it into real elements, else use querySelectorAll
-      else {
-        elems = (match ? parseHTML(selector) : find(selector, context));
-      }
+      doc.getElementById(selector.slice(1)) : htmlMatch.test(selector) ?
+      // If HTML, parse it into real elements
+      parseHTML(selector) :
+      // else use `find`
+      find(selector, context));
+
+      // If function, use as shortcut for DOM ready
+    } else if (isFunction(selector)) {
+      onReady(selector);return this;
     }
 
-    // If a DOM element is passed in or received via ID return the single element
-    if (selector.nodeType || selector === window) {
-      this[0] = selector;
+    if (!elems) {
+      return this;
+    }
+
+    // If a single DOM element is passed in or received via ID, return the single element
+    if (elems.nodeType || elems === win) {
+      this[0] = elems;
       this.length = 1;
     } else {
+      // Treat like an array and loop through each item.
       length = this.length = elems.length;
       for (; i < length; i++) {
         this[i] = elems[i];
@@ -85,6 +91,7 @@
   }
 
   var fn = cash.fn = cash.prototype = Init.prototype = {
+    constructor: cash,
     cash: true,
     length: 0,
     push: push,
@@ -94,6 +101,9 @@
   };
 
   cash.parseHTML = parseHTML;
+  cash.noop = noop;
+  cash.isFunction = isFunction;
+  cash.isString = isString;
 
   cash.extend = fn.extend = function (target) {
     target = target || {};
@@ -154,12 +164,58 @@
     each: each,
     matches: matches,
     unique: unique,
-    noop: noop,
-    isFunction: isFunction,
-    isString: isString,
     isArray: Array.isArray,
     isNumeric: function (n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+  });
+
+  var uid = cash.uid = "_cash" + Date.now();
+
+  function getDataCache(node) {
+    return (node[uid] = node[uid] || {});
+  }
+
+  function setData(node, key, value) {
+    return (getDataCache(node)[key] = value);
+  }
+
+  function getData(node, key) {
+    var c = getDataCache(node);
+    if (c[key] === undefined) {
+      c[key] = node.dataset ? node.dataset[key] : cash(node).attr("data-" + key);
+    }
+    return c[key];
+  }
+
+  function removeData(node, key) {
+    var c = getDataCache(node);
+    if (c) {
+      delete c[key];
+    } else if (node.dataset) {
+      delete node.dataset[key];
+    } else {
+      cash(node).removeAttr("data-" + name);
+    }
+  }
+
+  fn.extend({
+    data: function (key, value) {
+      // TODO: tear out into module for IE9
+      if (!value) {
+        return getData(this[0], key);
+      }
+      return this.each(function (v) {
+        return setData(v, key, value);
+      });
+    },
+
+    removeData: function (key) {
+      // TODO: tear out into module for IE9
+      return this.each(function (v) {
+        return removeData(v, key);
+      });
     }
 
   });
@@ -200,10 +256,14 @@
 
     attr: function (name, value) {
       if (!value) {
-        return this[0].getAttribute(name);
+        return (this[0].getAttribute ? this[0].getAttribute(name) : this[0][name]);
       }
       return this.each(function (v) {
-        return v.setAttribute(name, value);
+        if (v.setAttribute) {
+          v.setAttribute(name, value);
+        } else {
+          v[name] = value;
+        }
       });
     },
 
@@ -216,13 +276,22 @@
       return check;
     },
 
-    prop: function (name) {
-      return this[0][name];
+    prop: function (name, value) {
+      if (!value) {
+        return this[0][name];
+      }
+      return this.each(function (v) {
+        v[name] = value;
+      });
     },
 
     removeAttr: function (name) {
       return this.each(function (v) {
-        return v.removeAttribute(name);
+        if (v.removeAttribute) {
+          v.removeAttribute(name);
+        } else {
+          delete v[name];
+        }
       });
     },
 
@@ -233,6 +302,12 @@
         each(classes, function (c) {
           removeClass(v, c);
         });
+      });
+    },
+
+    removeProp: function (name) {
+      return this.each(function (v) {
+        delete v[name];
       });
     },
 
@@ -296,52 +371,48 @@
 
   });
 
-  fn.extend({
-    css: function (prop, value) {
-      if (typeof prop === "object") {
-        return this.each(function (v) {
-          for (var key in prop) {
-            if (prop.hasOwnProperty(key)) {
-              v.style[key] = prop[key];
-            }
-          }
-        });
-      } else if (value) {
-        return this.each(function (v) {
-          return v.style[prop] = value;
-        });
-      } else {
-        return win.getComputedStyle(this[0], null)[prop];
-      }
+  var getPrefixedProp = (function () {
+    var cache = {}, div = doc.createElement("div"), style = div.style, camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /\s+/g;
+
+    function camelCase(str) {
+      return str.replace(camelRegex, function (letter, index) {
+        return letter[index === 0 ? "toLowerCase" : "toUpperCase"]();
+      }).replace(whiteSpace, "");
     }
 
-  });
-
-  fn.extend({
-    data: function (key, value) {
-      // TODO: tear out into module for IE9
-      if (!value) {
-        return this[0].dataset ? this[0].dataset[key] : cash(this[0]).attr("data-" + key);
-      } else {
-        return this.each(function (v) {
-          if (v.dataset) {
-            v.dataset[key] = value;
-          } else {
-            cash(v).attr("data-" + key, value);
-          }
-        });
+    return function (prop) {
+      prop = camelCase(prop);
+      if (cache[prop]) {
+        return cache[prop];
       }
-    },
 
-    removeData: function (name) {
-      // TODO: tear out into module for IE9
-      return this.each(function (v) {
-        if (v.dataset) {
-          delete v.dataset[name];
-        } else {
-          cash(v).removeAttr("data-" + name);
+      var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1), prefixes = ["webkit", "moz", "ms", "o"], props = (prop + " " + (prefixes).join(ucProp + " ") + ucProp).split(" ");
+
+      each(props, function (p) {
+        if (p in style) {
+          cache[p] = prop = cache[prop] = p;
+          return false;
         }
       });
+
+      return cache[prop];
+    };
+  }());
+
+  fn.extend({
+    css: function (prop, value) {
+      if (isString(prop)) {
+        prop = getPrefixedProp(prop);
+        return (value ? this.each(function (v) {
+          return v.style[prop] = value;
+        }) : win.getComputedStyle(this[0])[prop]);
+      }
+
+      for (var key in prop) {
+        this.css(key, prop[key]);
+      }
+
+      return this;
     }
 
   });
@@ -350,111 +421,106 @@
     return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
   }
 
-  fn.extend({
-    height: function () {
-      return this[0].getBoundingClientRect().height;
-    },
+  each(["Width", "Height"], function (v) {
+    var lower = v.toLowerCase();
 
-    innerWidth: function () {
-      return this[0].clientWidth;
-    },
+    fn[lower] = function () {
+      return this[0].getBoundingClientRect()[lower];
+    };
 
-    innerHeight: function () {
-      return this[0].clientHeight;
-    },
+    fn["inner" + v] = function () {
+      return this[0]["client" + v];
+    };
 
-    outerWidth: function (margins) {
-      return this[0].offsetWidth + (margins !== true ? 0 : compute(this, "marginLeft") + compute(this, "marginRight"));
-    },
-
-    outerHeight: function (margins) {
-      return this[0].offsetHeight + (margins !== true ? 0 : compute(this, "marginTop") + compute(this, "marginBottom"));
-    },
-
-    width: function () {
-      return this[0].getBoundingClientRect().width;
-    }
-
+    fn["outer" + v] = function (margins) {
+      return this[0]["offset" + v] + (margins ? compute(this, "margin" + (v === "Width" ? "Left" : "Top")) + compute(this, "margin" + (v === "Width" ? "Right" : "Bottom")) : 0);
+    };
   });
 
-  var _eventCache = {}, _eventId = "cshid";
-
-  function guid() {
-    function _p8(s) {
-      var p = (Math.random().toString(16) + "000000000").substr(2, 8);
-      return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
-    }
-
-    return _p8() + _p8(true) + _p8(true) + _p8();
+  function registerEvent(node, eventName, callback) {
+    var eventCache = getData(node, "_cashEvents") || setData(node, "_cashEvents", {});
+    eventCache[eventName] = eventCache[eventName] || [];
+    eventCache[eventName].push(callback);
+    node.addEventListener(eventName, callback);
   }
 
-  function registerEvent(node, eventName, callback) {
-    var nid = cash(node).data(_eventId) || guid();
-
-    cash(node).data(_eventId, nid);
-
-    if (!(nid in _eventCache)) {
-      _eventCache[nid] = {};
+  function removeEvent(node, eventName, callback) {
+    var eventCache = getData(node, "_cashEvents")[eventName];
+    if (callback) {
+      node.removeEventListener(eventName, callback);
+    } else {
+      each(eventCache, function (event) {
+        node.removeEventListener(eventName, event);
+      });
+      eventCache = [];
     }
-
-    if (!(eventName in _eventCache[nid])) {
-      _eventCache[nid][eventName] = [];
-    }
-
-    _eventCache[nid][eventName].push(callback);
   }
 
   fn.extend({
     off: function (eventName, callback) {
       return this.each(function (v) {
-        if (callback) {
-          v.removeEventListener(eventName, callback);
-        } else {
-          for (var i in _eventCache[cash(v).data(_eventId)][eventName]) {
-            v.removeEventListener(eventName, _eventCache[cash(v).data(_eventId)][eventName][i]);
-          }
-        }
+        return removeEvent(v, eventName, callback);
       });
     },
 
-    on: function (eventName, delegate, callback) {
-      if (isFunction(delegate)) {
-        callback = delegate;
+    on: function (eventName, delegate, callback, runOnce) {
+      var originalCallback;
 
-        return this.each(function (v) {
-          registerEvent(cash(v), eventName, callback);
-          v.addEventListener(eventName, callback);
-        });
+      if (!isString(eventName)) {
+        for (var key in eventName) {
+          this.on(key, delegate, eventName[key]);
+        }
+        return this;
       }
 
-      return this.each(function (v) {
-        function handler(e) {
+      if (isFunction(delegate)) {
+        callback = delegate;
+        delegate = null;
+      }
+
+      if (eventName === "ready") {
+        onReady(callback);return this;
+      }
+
+      if (delegate) {
+        originalCallback = callback;
+        callback = function (e) {
           var t = e.target;
 
           if (matches(t, delegate)) {
-            callback.call(t);
+            originalCallback.call(t);
           } else {
             while (!matches(t, delegate)) {
-              if (t === v) {
+              if (t === this) {
                 return (t = false);
               }
               t = t.parentNode;
             }
 
             if (t) {
-              callback.call(t);
+              originalCallback.call(t);
             }
           }
-        }
+        };
+      }
 
-        registerEvent(cash(v), eventName, handler);
-        v.addEventListener(eventName, handler);
+      return this.each(function (v) {
+        var finalCallback = callback;
+        if (runOnce) {
+          finalCallback = function () {
+            callback.apply(this, arguments);
+            removeEvent(v, eventName, finalCallback);
+          };
+        }
+        registerEvent(v, eventName, finalCallback);
       });
     },
 
-    ready: function (callback) {
-      onReady(callback);
+    one: function (eventName, delegate, callback) {
+      return this.on(eventName, delegate, callback, true);
     },
+
+    ready: onReady,
 
     trigger: function (eventName) {
       var evt = doc.createEvent("HTMLEvents");
@@ -624,6 +690,31 @@
       return this.each(function (v) {
         return v.textContent = content;
       });
+    }
+
+  });
+
+  var docEl = doc.documentElement;
+
+  fn.extend({
+    position: function () {
+      var el = this[0];
+      return {
+        left: el.offsetLeft,
+        top: el.offsetTop
+      };
+    },
+
+    offset: function () {
+      var rect = this[0].getBoundingClientRect();
+      return {
+        top: rect.top + win.pageYOffset - docEl.clientTop,
+        left: rect.left + win.pageXOffset - docEl.clientLeft
+      };
+    },
+
+    offsetParent: function () {
+      return cash(this[0].offsetParent);
     }
 
   });

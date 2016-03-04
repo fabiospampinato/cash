@@ -33,87 +33,15 @@ $(function(){
 #### $()
 
 This is the main selector method for cash. It returns an actionable collection
-of nodes.
+of nodes. If a function is provided, the function will be run once the DOM is ready.
 
 ```js
 $(selector,[context]) // => collection
-$(domElements) // => collection
+$(node) // => collection
+$(nodeList) // => collection
 $(htmlString) // => collection
 $(collection) // => self
 $(function) // => document ready callback
-```
-
-### Utilities
-
-#### $.each()
-
-Iterates through a collection and calls the callback method on each.
-
-```js
-$.each(collection, callback) // => collection
-```
-
-#### $.extend()
-
-Extends target object with properties from the source object. If no target is provided,
-cash itself will be extended.
-
-```js
-$.extend(target,source) // => object
-```
-
-#### $.matches()
-
-Checks a selector against an element, returning a boolean value for match.
-
-```js
-$.matches(element, selector) // => boolean
-```
-
-#### $.parseHTML()
-
-Returns a collection from an HTML string.
-
-```js
-$.parseHTML(htmlString) // => Collection
-```
-
----
-
-### Type Checking
-
-#### $.isFunction()
-
-Check if the argument is a function.
-
-```js
-var func = function(){};
-$.isFunction(func) // => true
-```
-
-#### $.isString()
-
-Check if the argument is a string.
-
-```js
-$.isString('hello') // => true
-```
-
-#### $.isArray()
-
-Check if the argument is an array.
-
-```js
-$.isString([1,2,3]) // => true
-```
-
-
-#### $.isNumeric(n)
-
-Check if the argument is numeric.
-
-```js
-$.isNumeric(57) // => true
 ```
 
 ----
@@ -222,7 +150,7 @@ $(element).clone() // => collection
 
 Returns a CSS property value when just property is supplied. Sets a CSS property
 when property and value are supplied, and set multiple properties when an object
-is supplied.
+is supplied. Properties will be autoprefixed if needed for the user's browser.
 
 ```js
 $(element).css(property) // => value
@@ -232,8 +160,8 @@ $(element).css(object) // => collection
 
 #### $.fn.data()
 
-Returns data attribute value when key is supplied. Sets data attribute value
-when both key and value are supplied.
+Link some data (string, object, array, etc.) to an element when both key and value are supplied.
+If only a key is supplied, returns the linked data and falls back to data attribute value if no data is already linked.
 
 ```js
 $(element).data(key) // => value
@@ -432,6 +360,16 @@ $(element).on(eventName, eventHandler) // => collection
 $(element).on(eventName, delegate, eventHandler) // => collection
 ```
 
+#### $.fn.one()
+
+Adds event listener to collection elements that only triggers once for each element.
+Event is delegated if delegate is supplied.
+
+```js
+$(element).one(eventName, eventHandler) // => collection
+$(element).one(eventName, delegate, eventHandler) // => collection
+```
+
 #### $.fn.outerHeight()
 
 Returns the outer height of the element. Includes margins if margin is set to true.
@@ -525,7 +463,8 @@ $(element).removeAttr(attrName) // => collection
 
 #### $.fn.removeClass()
 
-Removes className from collection elements. Accepts space-separated classNames for removing multiple classes.
+Removes className from collection elements. Accepts space-separated classNames
+for removing multiple classes.
 
 ```js
 $(element).removeClass(className) // => collection
@@ -533,7 +472,7 @@ $(element).removeClass(className) // => collection
 
 #### $.fn.removeData()
 
-Removes data attribute from collection elements.
+Removes linked data and data-attributes from collection elements.
 
 ```js
 $(element).removeData(name) // => collection
@@ -600,4 +539,79 @@ Returns the width of the element.
 
 ```js
 $(element).width() // => number
+```
+
+---
+
+### Utilities
+
+#### $.each()
+
+Iterates through a collection and calls the callback method on each.
+
+```js
+$.each(collection, callback) // => collection
+```
+
+#### $.extend()
+
+Extends target object with properties from the source object. If no target is provided,
+cash itself will be extended.
+
+```js
+$.extend(target,source) // => object
+```
+
+#### $.matches()
+
+Checks a selector against an element, returning a boolean value for match.
+
+```js
+$.matches(element, selector) // => boolean
+```
+
+#### $.parseHTML()
+
+Returns a collection from an HTML string.
+
+```js
+$.parseHTML(htmlString) // => Collection
+```
+
+---
+
+### Type Checking
+
+#### $.isFunction()
+
+Check if the argument is a function.
+
+```js
+var func = function(){};
+$.isFunction(func) // => true
+```
+
+#### $.isString()
+
+Check if the argument is a string.
+
+```js
+$.isString('hello') // => true
+```
+
+#### $.isArray()
+
+Check if the argument is an array.
+
+```js
+$.isString([1,2,3]) // => true
+```
+
+
+#### $.isNumeric(n)
+
+Check if the argument is numeric.
+
+```js
+$.isNumeric(57) // => true
 ```
