@@ -21,7 +21,7 @@ fn.extend({
     return this.each(v => removeEvent(v, eventName, callback) );
   },
 
-  on(eventName, delegate, callback) {
+  on(eventName, delegate, callback, runOnce) {
 
     var originalCallback;
 
@@ -62,8 +62,19 @@ fn.extend({
     }
 
     return this.each(v => {
-      registerEvent(v, eventName, callback);
+      var finalCallback = callback;
+      if ( runOnce ) {
+        finalCallback = function(){
+          callback.apply(this,arguments);
+          removeEvent(v, eventName, finalCallback);
+        };
+      }
+      registerEvent(v, eventName, finalCallback);
     });
+  },
+
+  one(eventName, delegate, callback) {
+    return this.on(eventName, delegate, callback, true);
   },
 
   ready: onReady,

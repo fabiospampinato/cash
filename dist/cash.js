@@ -463,7 +463,7 @@
       });
     },
 
-    on: function (eventName, delegate, callback) {
+    on: function (eventName, delegate, callback, runOnce) {
       var originalCallback;
 
       if (!isString(eventName)) {
@@ -505,8 +505,19 @@
       }
 
       return this.each(function (v) {
-        registerEvent(v, eventName, callback);
+        var finalCallback = callback;
+        if (runOnce) {
+          finalCallback = function () {
+            callback.apply(this, arguments);
+            removeEvent(v, eventName, finalCallback);
+          };
+        }
+        registerEvent(v, eventName, finalCallback);
       });
+    },
+
+    one: function (eventName, delegate, callback) {
+      return this.on(eventName, delegate, callback, true);
     },
 
     ready: onReady,
