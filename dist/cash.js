@@ -15,18 +15,22 @@
     return typeof item === typeof noop;
   }, isString = function (item) {
     return typeof item === typeof "";
-  }, idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
+  };
+
+  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
 
   function find(selector, context) {
     context = context || doc;
-    var match = singletTagOrClass.exec(selector), elems = (match ? match[1] ? doc.getElementsByClassName(match[2]) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
-    return slice.call(elems);
+    var elems = (classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    return elems;
   }
 
+  var frag, tmp;
   function parseHTML(str) {
-    var tmp = doc.implementation.createHTMLDocument();
-    tmp.body.innerHTML = str;
-    return slice.call(tmp.body.children);
+    frag = frag || doc.createDocumentFragment();
+    tmp = tmp || frag.appendChild(doc.createElement("div"));
+    tmp.innerHTML = str;
+    return tmp.childNodes;
   }
 
   function onReady(fn) {
@@ -38,8 +42,6 @@
   }
 
   function Init(selector, context) {
-    var elems = selector, i = 0, match, length;
-
     if (!selector) {
       return this;
     }
@@ -48,29 +50,33 @@
     if (selector.cash) {
       return selector;
     }
-    // If function, use as shortcut for DOM ready
-    else if (isFunction(selector)) {
-      onReady(selector);return this;
-    } else if (isString(selector)) {
-      match = idOrHTML.exec(selector);
+
+    var elems = selector, i = 0, length;
+
+    if (isString(selector)) {
+      elems = (idMatch.test(selector) ?
       // If an ID use the faster getElementById check
-      if (match && match[2]) {
-        selector = doc.getElementById(match[2]);
-        if (!selector) {
-          return this;
-        }
-      }
-      // If HTML, parse it into real elements, else use querySelectorAll
-      else {
-        elems = (match ? parseHTML(selector) : find(selector, context));
-      }
+      doc.getElementById(selector.slice(1)) : htmlMatch.test(selector) ?
+      // If HTML, parse it into real elements
+      parseHTML(selector) :
+      // else use `find`
+      find(selector, context));
+
+      // If function, use as shortcut for DOM ready
+    } else if (isFunction(selector)) {
+      onReady(selector);return this;
     }
 
-    // If a DOM element is passed in or received via ID return the single element
-    if (selector.nodeType || selector === window) {
-      this[0] = selector;
+    if (!elems) {
+      return this;
+    }
+
+    // If a single DOM element is passed in or received via ID, return the single element
+    if (elems.nodeType || elems === win) {
+      this[0] = elems;
       this.length = 1;
     } else {
+      // Treat like an array and loop through each item.
       length = this.length = elems.length;
       for (; i < length; i++) {
         this[i] = elems[i];
@@ -85,6 +91,7 @@
   }
 
   var fn = cash.fn = cash.prototype = Init.prototype = {
+    constructor: cash,
     cash: true,
     length: 0,
     push: push,
@@ -94,6 +101,9 @@
   };
 
   cash.parseHTML = parseHTML;
+  cash.noop = noop;
+  cash.isFunction = isFunction;
+  cash.isString = isString;
 
   cash.extend = fn.extend = function (target) {
     target = target || {};
@@ -154,9 +164,6 @@
     each: each,
     matches: matches,
     unique: unique,
-    noop: noop,
-    isFunction: isFunction,
-    isString: isString,
     isArray: Array.isArray,
     isNumeric: function (n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
