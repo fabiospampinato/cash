@@ -1,43 +1,24 @@
-var _eventCache = {},
-    _eventId = 'cshid';
-
-function guid() {
-  function _p8(s) {
-    var p = (Math.random().toString(16) + '000000000').substr(2, 8);
-    return s ? '-' + p.substr(0, 4) + '-' + p.substr(4, 4) : p ;
-  }
-
-  return _p8() + _p8(true) + _p8(true) + _p8();
+function registerEvent(node, eventName, callback) {
+  var eventCache = getData(node,'_cashEvents') || setData(node, '_cashEvents', {});
+  eventCache[eventName] = eventCache[eventName] || [];
+  eventCache[eventName].push(callback);
+  node.addEventListener(eventName, callback);
 }
 
-function registerEvent(node, eventName, callback) {
-  var cNode = cash(node),
-      nid = cNode.data(_eventId);
-
-  if ( !nid ) {
-    nid = guid();
-    cNode.data(_eventId, nid);
+function removeEvent(node, eventName, callback){
+  var eventCache = getData(node,'_cashEvents')[eventName];
+  if (callback) {
+    node.removeEventListener(eventName, callback);
+  } else {
+    each(eventCache, event => { node.removeEventListener(eventName, event); });
+    eventCache = [];
   }
-
-  _eventCache[nid] = _eventCache[nid] || {};
-  _eventCache[nid][eventName] = _eventCache[nid][eventName] || [];
-  _eventCache[nid][eventName].push(callback);
 }
 
 fn.extend({
 
   off(eventName, callback) {
-    return this.each(v => {
-      if (callback) {
-        v.removeEventListener(eventName, callback);
-      } else {
-        var nid = cash(v).data(_eventId);
-        each(_eventCache[nid][eventName], event => {
-          v.removeEventListener(eventName, event);
-        });
-        _eventCache[nid][eventName] = [];
-      }
-    });
+    return this.each(v => removeEvent(v, eventName, callback) );
   },
 
   on(eventName, delegate, callback) {
@@ -60,7 +41,6 @@ fn.extend({
 
     if ( delegate ) {
       originalCallback = callback;
-
       callback = function(e) {
         var t = e.target;
 
@@ -78,12 +58,11 @@ fn.extend({
             originalCallback.call(t);
           }
         }
-      }
+      };
     }
 
     return this.each(v => {
       registerEvent(v, eventName, callback);
-      v.addEventListener(eventName, callback);
     });
   },
 

@@ -368,30 +368,50 @@
 
   });
 
+  var uid = "_cash" + Date.now();
+
+  function getDataCache(node) {
+    return (node[uid] = node[uid] || {});
+  }
+
+  function setData(node, key, value) {
+    return (getDataCache(node)[key] = value);
+  }
+
+  function getData(node, key) {
+    var c = getDataCache(node);
+    if (c[key] === undefined) {
+      c[key] = node.dataset ? node.dataset[key] : cash(node).attr("data-" + key);
+    }
+    return c[key];
+  }
+
+  function removeData(node, key) {
+    var c = getDataCache(node);
+    if (c) {
+      delete c[key];
+    } else if (node.dataset) {
+      delete node.dataset[key];
+    } else {
+      cash(node).removeAttr("data-" + name);
+    }
+  }
+
   fn.extend({
     data: function (key, value) {
       // TODO: tear out into module for IE9
       if (!value) {
-        return this[0].dataset ? this[0].dataset[key] : cash(this[0]).attr("data-" + key);
-      } else {
-        return this.each(function (v) {
-          if (v.dataset) {
-            v.dataset[key] = value;
-          } else {
-            cash(v).attr("data-" + key, value);
-          }
-        });
+        return getData(this[0], key);
       }
+      return this.each(function (v) {
+        return setData(v, key, value);
+      });
     },
 
-    removeData: function (name) {
+    removeData: function (key) {
       // TODO: tear out into module for IE9
       return this.each(function (v) {
-        if (v.dataset) {
-          delete v.dataset[name];
-        } else {
-          cash(v).removeAttr("data-" + name);
-        }
+        return removeData(v, key);
       });
     }
 
@@ -401,7 +421,7 @@
     return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
   }
 
-  each(["Width", "Height"], function (v, i) {
+  each(["Width", "Height"], function (v) {
     var lower = v.toLowerCase();
 
     fn[lower] = function () {
@@ -417,42 +437,29 @@
     };
   });
 
-  var _eventCache = {}, _eventId = "cshid";
-
-  function guid() {
-    function _p8(s) {
-      var p = (Math.random().toString(16) + "000000000").substr(2, 8);
-      return s ? "-" + p.substr(0, 4) + "-" + p.substr(4, 4) : p;
-    }
-
-    return _p8() + _p8(true) + _p8(true) + _p8();
+  function registerEvent(node, eventName, callback) {
+    var eventCache = getData(node, "_cashEvents") || setData(node, "_cashEvents", {});
+    eventCache[eventName] = eventCache[eventName] || [];
+    eventCache[eventName].push(callback);
+    node.addEventListener(eventName, callback);
   }
 
-  function registerEvent(node, eventName, callback) {
-    var cNode = cash(node), nid = cNode.data(_eventId);
-
-    if (!nid) {
-      nid = guid();
-      cNode.data(_eventId, nid);
+  function removeEvent(node, eventName, callback) {
+    var eventCache = getData(node, "_cashEvents")[eventName];
+    if (callback) {
+      node.removeEventListener(eventName, callback);
+    } else {
+      each(eventCache, function (event) {
+        node.removeEventListener(eventName, event);
+      });
+      eventCache = [];
     }
-
-    _eventCache[nid] = _eventCache[nid] || {};
-    _eventCache[nid][eventName] = _eventCache[nid][eventName] || [];
-    _eventCache[nid][eventName].push(callback);
   }
 
   fn.extend({
     off: function (eventName, callback) {
       return this.each(function (v) {
-        if (callback) {
-          v.removeEventListener(eventName, callback);
-        } else {
-          var nid = cash(v).data(_eventId);
-          each(_eventCache[nid][eventName], function (event) {
-            v.removeEventListener(eventName, event);
-          });
-          _eventCache[nid][eventName] = [];
-        }
+        return removeEvent(v, eventName, callback);
       });
     },
 
@@ -477,7 +484,6 @@
 
       if (delegate) {
         originalCallback = callback;
-
         callback = function (e) {
           var t = e.target;
 
@@ -500,7 +506,6 @@
 
       return this.each(function (v) {
         registerEvent(v, eventName, callback);
-        v.addEventListener(eventName, callback);
       });
     },
 
