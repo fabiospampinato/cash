@@ -37,7 +37,7 @@ function Init(selector,context){
   if ( !selector ) { return this; }
 
   // If already a cash collection, don't do any further processing
-  if ( selector.cash ) { return selector; }
+  if ( selector.cash && selector !== win ) { return selector; }
 
   var elems = selector,
       i = 0,

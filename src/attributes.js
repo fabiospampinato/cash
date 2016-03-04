@@ -29,8 +29,11 @@ fn.extend({
   },
 
   attr(name, value) {
-    if ( !value ) { return this[0].getAttribute(name); }
-    return this.each(v => v.setAttribute(name, value));
+    if ( !value ) { return ( this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] ); }
+    return this.each(v => {
+      if ( v.setAttribute ) { v.setAttribute(name, value); }
+      else { v[name] = value; }
+    });
   },
 
   hasClass(c) {
@@ -42,12 +45,16 @@ fn.extend({
     return check;
   },
 
-  prop(name) {
-    return this[0][name];
+  prop(name,value) {
+    if ( !value ) { return this[0][name]; }
+    return this.each(v => { v[name] = value; });
   },
 
   removeAttr(name) {
-    return this.each(v => v.removeAttribute(name));
+    return this.each(v => {
+      if ( v.removeAttribute ) { v.removeAttribute(name); }
+      else { delete v[name]; }
+    });
   },
 
   removeClass(c){
@@ -56,6 +63,10 @@ fn.extend({
     return this.each(v => {
       each(classes,c => { removeClass(v,c); });
     });
+  },
+
+  removeProp(name){
+    return this.each(v => { delete v[name]; });
   },
 
   toggleClass(c, state){

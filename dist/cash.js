@@ -47,7 +47,7 @@
     }
 
     // If already a cash collection, don't do any further processing
-    if (selector.cash) {
+    if (selector.cash && selector !== win) {
       return selector;
     }
 
@@ -207,10 +207,14 @@
 
     attr: function (name, value) {
       if (!value) {
-        return this[0].getAttribute(name);
+        return (this[0].getAttribute ? this[0].getAttribute(name) : this[0][name]);
       }
       return this.each(function (v) {
-        return v.setAttribute(name, value);
+        if (v.setAttribute) {
+          v.setAttribute(name, value);
+        } else {
+          v[name] = value;
+        }
       });
     },
 
@@ -223,13 +227,22 @@
       return check;
     },
 
-    prop: function (name) {
-      return this[0][name];
+    prop: function (name, value) {
+      if (!value) {
+        return this[0][name];
+      }
+      return this.each(function (v) {
+        v[name] = value;
+      });
     },
 
     removeAttr: function (name) {
       return this.each(function (v) {
-        return v.removeAttribute(name);
+        if (v.removeAttribute) {
+          v.removeAttribute(name);
+        } else {
+          delete v[name];
+        }
       });
     },
 
@@ -240,6 +253,12 @@
         each(classes, function (c) {
           removeClass(v, c);
         });
+      });
+    },
+
+    removeProp: function (name) {
+      return this.each(function (v) {
+        delete v[name];
       });
     },
 
