@@ -42,9 +42,7 @@ fn.extend({
     }
 
     for (var key in prop) {
-      if (prop.hasOwnProperty(key)) {
-        this.css(key,prop[key]);
-      }
+      this.css(key,prop[key]);
     }
 
     return this;

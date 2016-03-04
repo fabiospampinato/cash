@@ -46,9 +46,7 @@ fn.extend({
 
     if ( !isString(eventName) ) {
       for (var key in eventName) {
-        if (eventName.hasOwnProperty(key)) {
-          this.on(key,delegate,eventName[key]);
-        }
+        this.on(key,delegate,eventName[key]);
       }
       return this;
     }

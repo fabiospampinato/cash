@@ -360,9 +360,7 @@
       }
 
       for (var key in prop) {
-        if (prop.hasOwnProperty(key)) {
-          this.css(key, prop[key]);
-        }
+        this.css(key, prop[key]);
       }
 
       return this;
@@ -463,9 +461,7 @@
 
       if (!isString(eventName)) {
         for (var key in eventName) {
-          if (eventName.hasOwnProperty(key)) {
-            this.on(key, delegate, eventName[key]);
-          }
+          this.on(key, delegate, eventName[key]);
         }
         return this;
       }
