@@ -2,32 +2,19 @@ function compute(el, prop) {
   return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
 }
 
-fn.extend({
+each(['Width','Height'],(v,i) => {
 
-  height() {
-    return this[0].getBoundingClientRect().height;
-  },
+  var lower = v.toLowerCase();
 
-  innerWidth() {
-    return this[0].clientWidth;
-  },
+  fn[lower] = function(){ return this[0].getBoundingClientRect()[lower]; };
 
-  innerHeight() {
-    return this[0].clientHeight;
-  },
+  fn['inner'+v] = function(){ return this[0]['client'+v]; };
 
-  outerWidth(margins) {
-    return this[0].offsetWidth + (margins !== true ? 0 :
-        compute(this, 'marginLeft') + compute(this, 'marginRight') );
-  },
-
-  outerHeight(margins) {
-    return this[0].offsetHeight + (margins !== true ? 0 :
-        compute(this, 'marginTop') + compute(this, 'marginBottom') );
-  },
-
-  width() {
-    return this[0].getBoundingClientRect().width;
-  }
+  fn['outer'+v] = function(margins) {
+    return this[0]['offset'+v] + ( margins ?
+        compute(this, 'margin'+( v === 'Width' ? 'Left' : 'Top' )) +
+        compute(this, 'margin'+( v === 'Width' ? 'Right' : 'Bottom' )) :
+        0 );
+  };
 
 });

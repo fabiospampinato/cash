@@ -384,31 +384,20 @@
     return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
   }
 
-  fn.extend({
-    height: function () {
-      return this[0].getBoundingClientRect().height;
-    },
+  each(["Width", "Height"], function (v, i) {
+    var lower = v.toLowerCase();
 
-    innerWidth: function () {
-      return this[0].clientWidth;
-    },
+    fn[lower] = function () {
+      return this[0].getBoundingClientRect()[lower];
+    };
 
-    innerHeight: function () {
-      return this[0].clientHeight;
-    },
+    fn["inner" + v] = function () {
+      return this[0]["client" + v];
+    };
 
-    outerWidth: function (margins) {
-      return this[0].offsetWidth + (margins !== true ? 0 : compute(this, "marginLeft") + compute(this, "marginRight"));
-    },
-
-    outerHeight: function (margins) {
-      return this[0].offsetHeight + (margins !== true ? 0 : compute(this, "marginTop") + compute(this, "marginBottom"));
-    },
-
-    width: function () {
-      return this[0].getBoundingClientRect().width;
-    }
-
+    fn["outer" + v] = function (margins) {
+      return this[0]["offset" + v] + (margins ? compute(this, "margin" + (v === "Width" ? "Left" : "Top")) + compute(this, "margin" + (v === "Width" ? "Right" : "Bottom")) : 0);
+    };
   });
 
   var _eventCache = {}, _eventId = "cshid";
@@ -771,7 +760,6 @@
     }
 
   });
-
 
   return cash;
 });
