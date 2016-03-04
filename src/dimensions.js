@@ -2,7 +2,7 @@ function compute(el, prop) {
   return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
 }
 
-each(['Width','Height'],(v,i) => {
+each(['Width','Height'],v => {
 
   var lower = v.toLowerCase();
 
