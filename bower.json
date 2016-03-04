@@ -1,12 +1,12 @@
 {
     "name": "cash",
     "main": ["dist/cash.min.js", "dist/cash.js"],
-    "version": "1.0.0",
+    "version": "1.1.0",
     "homepage": "https://github.com/kenwheeler/cash",
     "authors": [
         "Ken Wheeler <ken_wheeler@me.com>"
     ],
-    "description": "Supermodel-weight jQuery replacement for modern browsers",
+    "description": "An absurdly small jQuery alternative for modern browsers.",
     "keywords": [
         "jquery",
         "vanilla js"
