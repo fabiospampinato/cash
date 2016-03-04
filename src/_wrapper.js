@@ -17,10 +17,10 @@
 
   // @include ./core.js
   // @include ./util.js
+  // @include ./data.js
   // @include ./attributes.js
   // @include ./collection.js
   // @include ./css.js
-  // @include ./data.js
   // @include ./dimensions.js
   // @include ./events.js
   // @include ./forms.js

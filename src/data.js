@@ -1,4 +1,4 @@
-var uid = '_cash'+Date.now();
+var uid = cash.uid = '_cash'+Date.now();
 
 function getDataCache(node) {
   return (node[uid] = node[uid] || {});
