@@ -25,6 +25,7 @@
   // @include ./events.js
   // @include ./forms.js
   // @include ./manipulation.js
+  // @include ./offset.js
   // @include ./traversal.js
 
   return cash;

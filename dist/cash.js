@@ -694,6 +694,31 @@
 
   });
 
+  var docEl = doc.documentElement;
+
+  fn.extend({
+    position: function () {
+      var el = this[0];
+      return {
+        left: el.offsetLeft,
+        top: el.offsetTop
+      };
+    },
+
+    offset: function () {
+      var rect = this[0].getBoundingClientRect();
+      return {
+        top: rect.top + win.pageYOffset - docEl.clientTop,
+        left: rect.left + win.pageXOffset - docEl.clientLeft
+      };
+    },
+
+    offsetParent: function () {
+      return cash(this[0].offsetParent);
+    }
+
+  });
+
   function directCompare(el, selector) {
     return el === selector;
   }
