@@ -412,17 +412,15 @@
   }
 
   function registerEvent(node, eventName, callback) {
-    var nid = cash(node).data(_eventId) || guid();
+    var cNode = cash(node), nid = cNode.data(_eventId);
 
-    cash(node).data(_eventId, nid);
-
-    if (!(nid in _eventCache)) {
-      _eventCache[nid] = {};
+    if (!nid) {
+      nid = guid();
+      cNode.data(_eventId, nid);
     }
 
-    if (!(eventName in _eventCache[nid])) {
-      _eventCache[nid][eventName] = [];
-    }
+    _eventCache[nid] = _eventCache[nid] || {};
+    _eventCache[nid][eventName] = _eventCache[nid][eventName] || [];
 
     _eventCache[nid][eventName].push(callback);
   }
@@ -441,43 +439,56 @@
     },
 
     on: function (eventName, delegate, callback) {
-      if (isFunction(delegate)) {
-        callback = delegate;
+      var originalCallback;
 
-        return this.each(function (v) {
-          registerEvent(cash(v), eventName, callback);
-          v.addEventListener(eventName, callback);
-        });
+      if (!isString(eventName)) {
+        for (var key in eventName) {
+          if (eventName.hasOwnProperty(key)) {
+            this.on(key, delegate, eventName[key]);
+          }
+        }
+        return this;
       }
 
-      return this.each(function (v) {
-        function handler(e) {
+      if (isFunction(delegate)) {
+        callback = delegate;
+        delegate = null;
+      }
+
+      if (eventName === "ready") {
+        onReady(callback);return this;
+      }
+
+      if (delegate) {
+        originalCallback = callback;
+
+        callback = function (e) {
           var t = e.target;
 
           if (matches(t, delegate)) {
-            callback.call(t);
+            originalCallback.call(t);
           } else {
             while (!matches(t, delegate)) {
-              if (t === v) {
+              if (t === this) {
                 return (t = false);
               }
               t = t.parentNode;
             }
 
             if (t) {
-              callback.call(t);
+              originalCallback.call(t);
             }
           }
-        }
+        };
+      }
 
-        registerEvent(cash(v), eventName, handler);
-        v.addEventListener(eventName, handler);
+      return this.each(function (v) {
+        registerEvent(v, eventName, callback);
+        v.addEventListener(eventName, callback);
       });
     },
 
-    ready: function (callback) {
-      onReady(callback);
-    },
+    ready: onReady,
 
     trigger: function (eventName) {
       var evt = doc.createEvent("HTMLEvents");
