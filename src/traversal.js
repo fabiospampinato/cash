@@ -5,15 +5,15 @@ fn.extend({
   children(selector) {
     var elems = [];
     this.each(el => { push.apply(elems,el.children); });
-    elems = cash.unique(elems);
+    elems = unique(elems);
 
     return ( !selector ? elems : elems.filter(v => {
-        return cash.matches(v, selector);
+        return matches(v, selector);
       }) );
   },
 
   closest(selector) {
-    if (!selector || cash.matches(this[0], selector)) { return this; }
+    if (!selector || matches(this[0], selector)) { return this; }
     return this.parent().closest(selector);
   },
 
@@ -22,7 +22,7 @@ fn.extend({
 
     var match = false,
         comparator = (
-          isString(selector) ? cash.matches :
+          isString(selector) ? matches :
           selector.cash ? el => { return selector.is(el); } :
           directCompare
         );
@@ -41,7 +41,7 @@ fn.extend({
     var elems = [];
     this.each(el => { push.apply(elems,find(selector,el)); });
 
-    return cash.unique(elems);
+    return unique(elems);
   },
 
   has(selector) {
@@ -56,7 +56,7 @@ fn.extend({
 
   not(selector) {
     return filter.call(this, el => {
-      return !cash.matches(el, selector);
+      return !matches(el, selector);
     });
   },
 
@@ -65,7 +65,7 @@ fn.extend({
       return item.parentElement || doc.body.parentNode;
     });
 
-    return cash.unique(result);
+    return unique(result);
   },
 
   parents(selector) {
@@ -78,13 +78,13 @@ fn.extend({
       while (last !== doc.body.parentNode) {
         last = last.parentElement;
 
-        if (!selector || (selector && cash.matches(last, selector))) {
+        if (!selector || (selector && matches(last, selector))) {
           result.push(last);
         }
       }
     });
 
-    return cash.unique(result);
+    return unique(result);
   },
 
   prev() {

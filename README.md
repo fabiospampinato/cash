@@ -1,17 +1,5 @@
-Cash
-====
-
-An absurdly small jQuery alternative for modern browsers
-
-## Usage
-
-Add cash to your project via the jsDelivr CDN:
-
-```html
-<script type="text/javascript" src="//cdn.jsdelivr.net/cash/1.0.0/cash.min.js"></script>
-```
-
-### What is Cash?
+#Cash
+*An absurdly small jQuery alternative for modern browsers*
 
 Cash is a small library for modern browsers that provides jQuery style syntax
 to wrap modern Vanilla JS features. It allows developers to use the jQuery
@@ -19,21 +7,45 @@ syntax they already know, and utilizes modern browser features to minimize the
 codebase. 100% feature parity with jQuery isn't a goal, but cash comes helpfully
 close, covering most day to day use cases.
 
+---
+
+## Usage
+
+Add cash to your project via the jsDelivr CDN, and use cash to manipulate the DOM!
+
+```html
+<script src="https://cdn.jsdelivr.net/cash/1.0.0/cash.min.js"></script>
+<script>
+$(function(){
+
+  $('html').addClass('dom-loaded');
+
+  $('<footer>Appended with cash</footer>').appendTo(document.body);
+
+});
+</script>
+```
+
+---
+
 ## Documentation
 
-### $()
+#### $()
 
 This is the main selector method for cash. It returns an actionable collection
 of nodes.
 
 ```js
 $(selector,[context]) // => collection
+$(domElements) // => collection
+$(htmlString) // => collection
 $(collection) // => self
-$(DOM elements) // => collection
-$(HTML) // => collection
+$(function) // => document ready callback
 ```
 
-### $.each
+### Utilities
+
+#### $.each()
 
 Iterates through a collection and calls the callback method on each.
 
@@ -41,15 +53,16 @@ Iterates through a collection and calls the callback method on each.
 $.each(collection, callback) // => collection
 ```
 
-### $.extend
+#### $.extend()
 
-Extends target object with properties from the source object.
+Extends target object with properties from the source object. If no target is provided,
+cash itself will be extended.
 
 ```js
 $.extend(target,source) // => object
 ```
 
-### $.matches
+#### $.matches()
 
 Checks a selector against an element, returning a boolean value for match.
 
@@ -57,7 +70,7 @@ Checks a selector against an element, returning a boolean value for match.
 $.matches(element, selector) // => boolean
 ```
 
-### $.parseHTML
+#### $.parseHTML()
 
 Returns a collection from an HTML string.
 
@@ -65,15 +78,57 @@ Returns a collection from an HTML string.
 $.parseHTML(htmlString) // => Collection
 ```
 
-### $.fn
+---
 
-The main prototype. Adding properties and methods will add it to all collections
+### Type Checking
+
+#### $.isFunction()
+
+Check if the argument is a function.
+
+```js
+var func = function(){};
+$.isFunction(func) // => true
+```
+
+#### $.isString()
+
+Check if the argument is a string.
+
+```js
+$.isString('hello') // => true
+```
+
+#### $.isArray()
+
+Check if the argument is an array.
+
+```js
+$.isString([1,2,3]) // => true
+```
+
+
+#### $.isNumeric(n)
+
+Check if the argument is numeric.
+
+```js
+$.isNumeric(57) // => true
+```
+
+----
+
+## Collection Methods
+
+#### $.fn
+
+The main prototype. Adding properties and methods will add it to all collections.
 
 ```js
 $.fn // => cash.prototype
 ```
 
-### $.fn.add
+#### $.fn.add()
 
 Returns a new collection with the element(s) added to the end.
 
@@ -83,7 +138,7 @@ $(element).add(selector) // => collection
 $(element).add(collection) // => collection
 ```
 
-### $.fn.addClass
+#### $.fn.addClass()
 
 Adds the className argument to collection elements.
 
@@ -91,7 +146,16 @@ Adds the className argument to collection elements.
 $(element).addClass(className) // => collection
 ```
 
-### $.fn.append
+#### $.fn.after()
+
+Inserts content or elements after the collection.
+
+```js
+$(element).after(element) // => collection
+$(element).after(htmlString) // => collection
+```
+
+#### $.fn.append()
 
 Appends the target element to the each element in the collection.
 
@@ -99,7 +163,7 @@ Appends the target element to the each element in the collection.
 $(element).append(element) // => collection
 ```
 
-### $.fn.appendTo
+#### $.fn.appendTo()
 
 Adds the elements in a collection to the target element(s).
 
@@ -107,7 +171,7 @@ Adds the elements in a collection to the target element(s).
 $(element).appendTo(element) // => collection
 ```
 
-### $.fn.attr
+#### $.fn.attr()
 
 Without attrValue, returns the attribute value of the first element in the
 collection. With attrValue, sets the attribute value of each element of the
@@ -118,7 +182,16 @@ $(element).attr(attrName) // => AttributeValue
 $(element).attr(attrName, attrValue) // => collection
 ```
 
-### $.fn.children
+#### $.fn.before()
+
+Inserts content or elements before the collection.
+
+```js
+$(element).before(element) // => collection
+$(element).before(htmlString) // => collection
+```
+
+#### $.fn.children()
 
 Without a selector specified, returns a collection of child elements. With a
 selector, returns child elements that match the selector.
@@ -128,7 +201,7 @@ $(element).children() // => collection
 $(element).children(selector) // => collection
 ```
 
-### $.fn.closest
+#### $.fn.closest()
 
 Returns the closest matching selector up the DOM tree.
 
@@ -137,7 +210,7 @@ $(element).closest() // => collection
 $(element).closest(selector) // => collection
 ```
 
-### $.fn.clone
+#### $.fn.clone()
 
 Returns a clone of the collection.
 
@@ -145,7 +218,7 @@ Returns a clone of the collection.
 $(element).clone() // => collection
 ```
 
-### $.fn.css
+#### $.fn.css()
 
 Returns a CSS property value when just property is supplied. Sets a CSS property
 when property and value are supplied, and set multiple properties when an object
@@ -157,7 +230,7 @@ $(element).css(property, value) // => collection
 $(element).css(object) // => collection
 ```
 
-### $.fn.data
+#### $.fn.data()
 
 Returns data attribute value when key is supplied. Sets data attribute value
 when both key and value are supplied.
@@ -167,7 +240,7 @@ $(element).data(key) // => value
 $(element).data(key, value) // => collection
 ```
 
-### $.fn.each
+#### $.fn.each()
 
 Iterates over a collection with callback(value, index, array).
 
@@ -175,7 +248,7 @@ Iterates over a collection with callback(value, index, array).
 $(element).each(callback) // => collection
 ```
 
-### $.fn.empty
+#### $.fn.empty()
 
 Empties an elements interior markup.
 
@@ -183,7 +256,7 @@ Empties an elements interior markup.
 $(element).empty() // => collection
 ```
 
-### $.fn.eq
+#### $.fn.eq()
 
 Returns a collection with the element at index.
 
@@ -191,7 +264,15 @@ Returns a collection with the element at index.
 $(element).eq(index) // => collection
 ```
 
-### $.fn.filter
+#### $.fn.extend()
+
+Adds properties to the cash collection prototype.
+
+```js
+$.fn.extend(source) // => object
+```
+
+#### $.fn.filter()
 
 Returns the collection that results from applying the filter method.
 
@@ -199,7 +280,7 @@ Returns the collection that results from applying the filter method.
 $(element).filter(function) // => collection
 ```
 
-### $.fn.find
+#### $.fn.find()
 
 Returns selector match descendants from the first element in the collection.
 
@@ -207,7 +288,7 @@ Returns selector match descendants from the first element in the collection.
 $(element).find(selector) // => collection
 ```
 
-### $.fn.first
+#### $.fn.first()
 
 Returns the first element in the collection.
 
@@ -215,7 +296,7 @@ Returns the first element in the collection.
 $(element).first() // => collection
 ```
 
-### $.fn.get
+#### $.fn.get()
 
 Returns the element at the index.
 
@@ -223,7 +304,7 @@ Returns the element at the index.
 $(element).get(index) // => domNode
 ```
 
-### $.fn.has
+#### $.fn.has()
 
 Returns boolean result of the selector argument against the collection.
 
@@ -231,7 +312,7 @@ Returns boolean result of the selector argument against the collection.
 $(element).has(selector) // => boolean
 ```
 
-### $.fn.hasClass
+#### $.fn.hasClass()
 
 Returns the boolean result of checking if the first element in the collection
 has the className attribute.
@@ -240,7 +321,7 @@ has the className attribute.
 $(element).hasClass(className) // => boolean
 ```
 
-### $.fn.height
+#### $.fn.height()
 
 Returns the height of the element.
 
@@ -248,7 +329,7 @@ Returns the height of the element.
 $(element).height() // => Integer
 ```
 
-### $.fn.html
+#### $.fn.html()
 
 Returns the HTML text of the first element in the collection, sets the HTML if
 provided.
@@ -258,7 +339,7 @@ $(element).html() // => HTML Text
 $(element).html(HTML) // => HTML Text
 ```
 
-### $.fn.index
+#### $.fn.index()
 
 Returns the index of the element in its parent if an element or selector isn't
 provided. Returns index within element or selector if it is.
@@ -268,7 +349,7 @@ $(element).index() // => Integer
 $(element).index(element) // => Integer
 ```
 
-### $.fn.innerHeight
+#### $.fn.innerHeight()
 
 Returns the height of the element + padding.
 
@@ -276,7 +357,7 @@ Returns the height of the element + padding.
 $(element).innerHeight() // => Integer
 ```
 
-### $.fn.innerWidth
+#### $.fn.innerWidth()
 
 Returns the width of the element + padding.
 
@@ -284,15 +365,16 @@ Returns the width of the element + padding.
 $(element).innerWidth() // => Integer
 ```
 
-### $.fn.insertAfter
+#### $.fn.insertAfter()
 
 Inserts collection after specified element.
+
 
 ```js
 $(element).insertAfter(element) // => collection
 ```
 
-### $.fn.insertBefore
+#### $.fn.insertBefore()
 
 Inserts collection before specified element.
 
@@ -300,7 +382,7 @@ Inserts collection before specified element.
 $(element).insertBefore(element) // => collection
 ```
 
-### $.fn.is
+#### $.fn.is()
 
 Returns whether the provided selector, element or collection matches any element in the collection.
 
@@ -308,7 +390,7 @@ Returns whether the provided selector, element or collection matches any element
 $(element).is(selector) // => boolean
 ```
 
-### $.fn.last
+#### $.fn.last()
 
 Returns last element in the collection.
 
@@ -316,7 +398,7 @@ Returns last element in the collection.
 $(element).last() // => collection
 ```
 
-### $.fn.next
+#### $.fn.next()
 
 Returns next sibling.
 
@@ -324,7 +406,7 @@ Returns next sibling.
 $(element).next() // => collection
 ```
 
-### $.fn.not
+#### $.fn.not()
 
 Filters collection by false match on selector.
 
@@ -332,7 +414,7 @@ Filters collection by false match on selector.
 $(element).not(selector) // => collection
 ```
 
-### $.fn.off
+#### $.fn.off()
 
 Removes event listener from collection elements.
 
@@ -340,7 +422,7 @@ Removes event listener from collection elements.
 $(element).off(eventName,eventHandler) // => collection
 ```
 
-### $.fn.on
+#### $.fn.on()
 
 Adds event listener to collection elements. Event is delegated if delegate is
 supplied.
@@ -350,7 +432,7 @@ $(element).on(eventName, eventHandler) // => collection
 $(element).on(eventName, delegate, eventHandler) // => collection
 ```
 
-### $.fn.outerHeight
+#### $.fn.outerHeight()
 
 Returns the outer height of the element. Includes margins if margin is set to true.
 
@@ -359,7 +441,7 @@ $(element).outerHeight() // => Integer
 $(element).outerHeight(includeMargin) // => Integer
 ```
 
-### $.fn.outerWidth
+#### $.fn.outerWidth()
 
 Returns the outer width of the element. Includes margins if margin is set to true.
 
@@ -368,7 +450,7 @@ $(element).outerWidth() // => Integer
 $(element).outerWidth(includeMargin) // => Integer
 ```
 
-### $.fn.parent
+#### $.fn.parent()
 
 Returns parent element.
 
@@ -376,7 +458,7 @@ Returns parent element.
 $(element).parent() // => collection
 ```
 
-### $.fn.parents
+#### $.fn.parents()
 
 Returns collection of elements who are parents of element. Optionally filtering by selector.
 
@@ -385,7 +467,7 @@ $(element).parents() // => collection
 $(element).parents(selector) // => collection
 ```
 
-### $.fn.prepend
+#### $.fn.prepend()
 
 Prepends element to the each element in collection.
 
@@ -393,7 +475,7 @@ Prepends element to the each element in collection.
 $(element).prepend(element) // => collection
 ```
 
-### $.fn.prependTo
+#### $.fn.prependTo()
 
 Prepends elements in a collection to the target element(s).
 
@@ -401,7 +483,7 @@ Prepends elements in a collection to the target element(s).
 $(element).prependTo(element) // => collection
 ```
 
-### $.fn.prev
+#### $.fn.prev()
 
 Returns the previous adjacent element.
 
@@ -409,7 +491,7 @@ Returns the previous adjacent element.
 $(element).prev() // => collection
 ```
 
-### $.fn.prop
+#### $.fn.prop()
 
 Returns property value.
 
@@ -417,7 +499,7 @@ Returns property value.
 $(element).prop(property) // => Property value
 ```
 
-### $.fn.ready
+#### $.fn.ready()
 
 Calls callback method on DOMContentLoaded.
 
@@ -425,7 +507,7 @@ Calls callback method on DOMContentLoaded.
 $(document).ready(callback) // => collection/span
 ```
 
-### $.fn.remove
+#### $.fn.remove()
 
 Removes collection elements from the DOM.
 
@@ -433,7 +515,7 @@ Removes collection elements from the DOM.
 $(element).remove() // => collection
 ```
 
-### $.fn.removeAttr
+#### $.fn.removeAttr()
 
 Removes attribute from collection elements.
 
@@ -441,7 +523,7 @@ Removes attribute from collection elements.
 $(element).removeAttr(attrName) // => collection
 ```
 
-### $.fn.removeClass
+#### $.fn.removeClass()
 
 Removes className from collection elements. Accepts space-separated classNames for removing multiple classes.
 
@@ -449,7 +531,7 @@ Removes className from collection elements. Accepts space-separated classNames f
 $(element).removeClass(className) // => collection
 ```
 
-### $.fn.removeData
+#### $.fn.removeData()
 
 Removes data attribute from collection elements.
 
@@ -457,7 +539,7 @@ Removes data attribute from collection elements.
 $(element).removeData(name) // => collection
 ```
 
-### $.fn.serialize
+#### $.fn.serialize
 
 When called on a form, serializes and returns form data.
 
@@ -465,7 +547,7 @@ When called on a form, serializes and returns form data.
 $(form).serialize() // => String
 ```
 
-### $.fn.siblings
+#### $.fn.siblings
 
 Returns a collection of sibling elements.
 
@@ -473,7 +555,7 @@ Returns a collection of sibling elements.
 $(element).siblings() // => collection
 ```
 
-### $.fn.text
+#### $.fn.text
 
 Returns the inner text of the first element in the collection, sets the text if
 textContent is provided.
@@ -483,7 +565,7 @@ $(element).text() // => text
 $(element).text(textContent) // => collection
 ```
 
-### $.fn.toggleClass
+#### $.fn.toggleClass
 
 Adds or removes className from collection elements based on if the element already has the class.
 Accepts space-separated classNames for toggling multiple classes, and an optional `force` boolean
@@ -494,7 +576,7 @@ $(element).toggleClass(className) // => collection
 $(element).toggleClass(className,force) // => collection
 ```
 
-### $.fn.trigger
+#### $.fn.trigger
 
 Triggers supplied event on elements in collection.
 
@@ -502,7 +584,7 @@ Triggers supplied event on elements in collection.
 $(element).trigger(eventName) // => collection
 ```
 
-### $.fn.val
+#### $.fn.val
 
 Returns an inputs value. If value is supplied, sets all inputs in collection's
 value to the value argument.
@@ -512,7 +594,7 @@ $(input).val() // => value
 $(input).val(value) // => collection
 ```
 
-### $.fn.width
+#### $.fn.width
 
 Returns the width of the element.
 

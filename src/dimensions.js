@@ -1,5 +1,5 @@
 function compute(el, prop) {
-  return parseInt(win.getComputedStyle(el[0], null)[prop], 10);
+  return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
 }
 
 fn.extend({
@@ -18,14 +18,12 @@ fn.extend({
 
   outerWidth(margins) {
     return this[0].offsetWidth + (margins !== true ? 0 :
-        (compute(this, 'margin-left')  || compute(this, 'marginLeft')  || 0) +
-        (compute(this, 'margin-right') || compute(this, 'marginRight') || 0) );
+        compute(this, 'marginLeft') + compute(this, 'marginRight') );
   },
 
   outerHeight(margins) {
     return this[0].offsetHeight + (margins !== true ? 0 :
-        (compute(this, 'margin-top') || compute(this, 'marginTop') || 0) +
-        (compute(this, 'margin-bottom') || compute(this, 'marginBottom') || 0) );
+        compute(this, 'marginTop') + compute(this, 'marginBottom') );
   },
 
   width() {

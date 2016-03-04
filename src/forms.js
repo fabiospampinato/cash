@@ -14,7 +14,7 @@ fn.extend({
         query = '';
 
     each(formEl,field => {
-      if (field.name && formExcludes.indexOf(field.type) == -1) {
+      if (field.name && formExcludes.indexOf(field.type) < 0) {
         if ( field.type === 'select-multiple') {
           each(field.options, o => {
             if ( o.selected) {

@@ -15,18 +15,22 @@
     return typeof item === typeof noop;
   }, isString = function (item) {
     return typeof item === typeof "";
-  }, idOrHTML = /^\s*?(#([-\w]*)|<[\w\W]*>)\s*?$/, singletTagOrClass = /^(\.)?([\w-_]*)$/;
+  };
+
+  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
 
   function find(selector, context) {
     context = context || doc;
-    var match = singletTagOrClass.exec(selector), elems = (match ? match[1] ? doc.getElementsByClassName(match[2]) : doc.getElementsByTagName(selector) : context.querySelectorAll(selector));
-    return slice.call(elems);
+    var elems = (classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    return elems;
   }
 
+  var frag, tmp;
   function parseHTML(str) {
-    var tmp = doc.implementation.createHTMLDocument();
-    tmp.body.innerHTML = str;
-    return slice.call(tmp.body.children);
+    frag = frag || doc.createDocumentFragment();
+    tmp = tmp || frag.appendChild(doc.createElement("div"));
+    tmp.innerHTML = str;
+    return tmp.childNodes;
   }
 
   function onReady(fn) {
@@ -38,8 +42,6 @@
   }
 
   function Init(selector, context) {
-    var elems = selector, i = 0, match, length;
-
     if (!selector) {
       return this;
     }
@@ -48,29 +50,33 @@
     if (selector.cash) {
       return selector;
     }
-    // If function, use as shortcut for DOM ready
-    else if (isFunction(selector)) {
-      onReady(selector);return this;
-    } else if (isString(selector)) {
-      match = idOrHTML.exec(selector);
+
+    var elems = selector, i = 0, length;
+
+    if (isString(selector)) {
+      elems = (idMatch.test(selector) ?
       // If an ID use the faster getElementById check
-      if (match && match[2]) {
-        selector = doc.getElementById(match[2]);
-        if (!selector) {
-          return this;
-        }
-      }
-      // If HTML, parse it into real elements, else use querySelectorAll
-      else {
-        elems = (match ? parseHTML(selector) : find(selector, context));
-      }
+      doc.getElementById(selector.slice(1)) : htmlMatch.test(selector) ?
+      // If HTML, parse it into real elements
+      parseHTML(selector) :
+      // else use `find`
+      find(selector, context));
+
+      // If function, use as shortcut for DOM ready
+    } else if (isFunction(selector)) {
+      onReady(selector);return this;
     }
 
-    // If a DOM element is passed in or received via ID return the single element
-    if (selector.nodeType || selector === window) {
-      this[0] = selector;
+    if (!elems) {
+      return this;
+    }
+
+    // If a single DOM element is passed in or received via ID, return the single element
+    if (elems.nodeType || elems === win) {
+      this[0] = elems;
       this.length = 1;
     } else {
+      // Treat like an array and loop through each item.
       length = this.length = elems.length;
       for (; i < length; i++) {
         this[i] = elems[i];
@@ -85,6 +91,7 @@
   }
 
   var fn = cash.fn = cash.prototype = Init.prototype = {
+    constructor: cash,
     cash: true,
     length: 0,
     push: push,
@@ -94,6 +101,9 @@
   };
 
   cash.parseHTML = parseHTML;
+  cash.noop = noop;
+  cash.isFunction = isFunction;
+  cash.isString = isString;
 
   cash.extend = fn.extend = function (target) {
     target = target || {};
@@ -129,13 +139,17 @@
     }
   }
 
+  function matches(el, selector) {
+    return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
+  }
+
+  function unique(collection) {
+    return cash(slice.call(collection).filter(function (item, index, self) {
+      return self.indexOf(item) === index;
+    }));
+  }
+
   cash.extend({
-    each: each,
-
-    matches: function (el, selector) {
-      return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
-    },
-
     merge: function (first, second) {
       var len = +second.length, i = first.length, j = 0;
 
@@ -147,15 +161,9 @@
       return first;
     },
 
-    unique: function (collection) {
-      return cash(slice.call(collection).filter(function (item, index, self) {
-        return self.indexOf(item) === index;
-      }));
-    },
-
-    noop: noop,
-    isFunction: isFunction,
-    isString: isString,
+    each: each,
+    matches: matches,
+    unique: unique,
     isArray: Array.isArray,
     isNumeric: function (n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
@@ -255,7 +263,7 @@
 
   fn.extend({
     add: function (selector, context) {
-      return cash.unique(cash.merge(this, cash(selector, context)));
+      return unique(cash.merge(this, cash(selector, context)));
     },
 
     each: function (callback) {
@@ -269,7 +277,7 @@
 
     filter: function (selector) {
       return filter.call(this, (isString(selector) ? function (e) {
-        return cash.matches(e, selector);
+        return matches(e, selector);
       } : selector));
     },
 
@@ -346,7 +354,7 @@
   });
 
   function compute(el, prop) {
-    return parseInt(win.getComputedStyle(el[0], null)[prop], 10);
+    return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
   }
 
   fn.extend({
@@ -363,11 +371,11 @@
     },
 
     outerWidth: function (margins) {
-      return this[0].offsetWidth + (margins !== true ? 0 : (compute(this, "margin-left") || compute(this, "marginLeft") || 0) + (compute(this, "margin-right") || compute(this, "marginRight") || 0));
+      return this[0].offsetWidth + (margins !== true ? 0 : compute(this, "marginLeft") + compute(this, "marginRight"));
     },
 
     outerHeight: function (margins) {
-      return this[0].offsetHeight + (margins !== true ? 0 : (compute(this, "margin-top") || compute(this, "marginTop") || 0) + (compute(this, "margin-bottom") || compute(this, "marginBottom") || 0));
+      return this[0].offsetHeight + (margins !== true ? 0 : compute(this, "marginTop") + compute(this, "marginBottom"));
     },
 
     width: function () {
@@ -430,10 +438,10 @@
         function handler(e) {
           var t = e.target;
 
-          if (cash.matches(t, delegate)) {
+          if (matches(t, delegate)) {
             callback.call(t);
           } else {
-            while (!cash.matches(t, delegate)) {
+            while (!matches(t, delegate)) {
               if (t === v) {
                 return (t = false);
               }
@@ -479,7 +487,7 @@
       var formEl = this[0].elements, query = "";
 
       each(formEl, function (field) {
-        if (field.name && formExcludes.indexOf(field.type) == -1) {
+        if (field.name && formExcludes.indexOf(field.type) < 0) {
           if (field.type === "select-multiple") {
             each(field.options, function (o) {
               if (o.selected) {
@@ -520,20 +528,25 @@
     var str = isString(child);
 
     if (!str && child.length) {
-      each(child, function () {
-        insertContent(parent, this, prepend);
+      each(child, function (v) {
+        return insertContent(parent, v, prepend);
       });
       return;
     }
 
-    parent.each(str ? function () {
-      this.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
-    } : function (el, i) {
-      insertElement(el, (i === 0 ? child : child.cloneNode(true)), prepend);
+    each(parent, str ? function (v) {
+      return v.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
+    } : function (v, i) {
+      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend);
     });
   }
 
   fn.extend({
+    after: function (selector) {
+      cash(selector).insertAfter(this);
+      return this;
+    },
+
     append: function (content) {
       insertContent(this, content);
       return this;
@@ -541,6 +554,11 @@
 
     appendTo: function (parent) {
       insertContent(cash(parent), this);
+      return this;
+    },
+
+    before: function (selector) {
+      cash(selector).insertBefore(this);
       return this;
     },
 
@@ -556,23 +574,37 @@
     },
 
     html: function (content) {
-      var source;
       if (content === undefined) {
         return this[0].innerHTML;
       }
-      source = (content.nodeType ? content[0].outerHTML : content);
+      var source = (content.nodeType ? content[0].outerHTML : content);
       return this.each(function (v) {
         return v.innerHTML = source;
       });
     },
 
     insertAfter: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("afterend", this[0].outerHTML);
+      var _this = this;
+
+
+      cash(selector).each(function (el, i) {
+        var parent = el.parentNode, sibling = el.nextSibling;
+        _this.each(function (v) {
+          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), sibling);
+        });
+      });
+
       return this;
     },
 
     insertBefore: function (selector) {
-      cash(selector)[0].insertAdjacentHTML("beforebegin", this[0].outerHTML);
+      var _this2 = this;
+      cash(selector).each(function (el, i) {
+        var parent = el.parentNode;
+        _this2.each(function (v) {
+          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), el);
+        });
+      });
       return this;
     },
 
@@ -613,15 +645,15 @@
       this.each(function (el) {
         push.apply(elems, el.children);
       });
-      elems = cash.unique(elems);
+      elems = unique(elems);
 
       return (!selector ? elems : elems.filter(function (v) {
-        return cash.matches(v, selector);
+        return matches(v, selector);
       }));
     },
 
     closest: function (selector) {
-      if (!selector || cash.matches(this[0], selector)) {
+      if (!selector || matches(this[0], selector)) {
         return this;
       }
       return this.parent().closest(selector);
@@ -632,7 +664,7 @@
         return false;
       }
 
-      var match = false, comparator = (isString(selector) ? cash.matches : selector.cash ? function (el) {
+      var match = false, comparator = (isString(selector) ? matches : selector.cash ? function (el) {
         return selector.is(el);
       } : directCompare);
 
@@ -654,7 +686,7 @@
         push.apply(elems, find(selector, el));
       });
 
-      return cash.unique(elems);
+      return unique(elems);
     },
 
     has: function (selector) {
@@ -669,7 +701,7 @@
 
     not: function (selector) {
       return filter.call(this, function (el) {
-        return !cash.matches(el, selector);
+        return !matches(el, selector);
       });
     },
 
@@ -678,7 +710,7 @@
         return item.parentElement || doc.body.parentNode;
       });
 
-      return cash.unique(result);
+      return unique(result);
     },
 
     parents: function (selector) {
@@ -690,13 +722,13 @@
         while (last !== doc.body.parentNode) {
           last = last.parentElement;
 
-          if (!selector || (selector && cash.matches(last, selector))) {
+          if (!selector || (selector && matches(last, selector))) {
             result.push(last);
           }
         }
       });
 
-      return cash.unique(result);
+      return unique(result);
     },
 
     prev: function () {
