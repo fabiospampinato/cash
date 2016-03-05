@@ -19,7 +19,10 @@
     "matches"    : true,
     "unique"     : true,
     "each"       : true,
-    "noop"       : true
+    "noop"       : true,
+    "getData"    : true,
+    "setData"    : true,
+    "removeData" : true
   },
 
   "bitwise"       : true,
