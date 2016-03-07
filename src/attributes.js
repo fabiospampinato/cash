@@ -29,7 +29,7 @@ fn.extend({
   },
 
   attr(name, value) {
-    if ( !value ) { return ( this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] ); }
+    if ( !value && !isBoolean(value) && !isNumeric(value)  ) { return ( this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] ); }
     return this.each(v => {
       if ( v.setAttribute ) { v.setAttribute(name, value); }
       else { v[name] = value; }

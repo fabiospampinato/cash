@@ -1,6 +1,8 @@
 var noop = function(){},
     isFunction = function(item){ return typeof item === typeof noop; },
-    isString = function(item) { return typeof item === typeof ''; };
+    isString = function(item) { return typeof item === typeof ''; },
+    isBoolean = function(item) { return typeof item === typeof true; },
+    isNumeric = function(item) { return !isNaN(parseFloat(item)) && isFinite(item); };
 
 var idMatch    = /^#[\w-]*$/,
     classMatch = /^\.[\w-]*$/,
@@ -91,3 +93,5 @@ cash.parseHTML = parseHTML;
 cash.noop = noop;
 cash.isFunction = isFunction;
 cash.isString = isString;
+cash.isBoolean = isBoolean;
+cash.isNumeric = isNumeric;
