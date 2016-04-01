@@ -1,3 +1,5 @@
+![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master)
+
 #Cash
 *An absurdly small jQuery alternative for modern browsers*
 
