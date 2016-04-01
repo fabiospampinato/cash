@@ -1,6 +1,6 @@
 {
   "name": "cash-dom",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "main": "./dist/cash.js",
   "repository": {
@@ -24,6 +24,7 @@
     "gulp-jshint": "~1.8.4",
     "gulp-load-plugins": "~0.3.0",
     "gulp-preprocess": "^1.1.1",
+    "gulp-qunit": "^1.4.0",
     "gulp-rename": "^1.2.0",
     "gulp-size": "~0.1.2",
     "gulp-uglify": "~1.0.1",

@@ -26,6 +26,11 @@ gulp.task('lint', function() {
     .pipe($.jshint.reporter('default'));
 });
 
+gulp.task('test', function() {
+  return gulp.src('./test/index.html')
+    .pipe($.qunit());
+});
+
 gulp.task('default', ['build', 'minify', 'lint']);
 
 gulp.task('watch', function() {
