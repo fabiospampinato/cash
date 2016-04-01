@@ -604,7 +604,7 @@ $.isString('hello') // => true
 Check if the argument is an array.
 
 ```js
-$.isString([1,2,3]) // => true
+$.isArray([1,2,3]) // => true
 ```
 
 
