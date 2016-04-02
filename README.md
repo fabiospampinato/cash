@@ -3,6 +3,21 @@
 #Cash
 *An absurdly small jQuery alternative for modern browsers*
 
+## This is how it compares (10 times smaller)
+
+-rw-r--r-- 1 santoshsahoo  20K Apr  2 09:59 cash.js  
+-rw-r--r-- 1 santoshsahoo 4.9K Apr  2 09:59 cash.js.gz  
+-rw-r--r-- 1 santoshsahoo 9.1K Apr  2 10:00 cash.min.js  
+-rw-r--r-- 1 santoshsahoo **3.3K** Apr  2 10:00 cash.min.js.gz  
+-rw-r--r-- 1 santoshsahoo 287K Mar 17 10:45 jquery-1.12.2.js  
+-rw-r--r-- 1 santoshsahoo  86K Mar 17 10:45 jquery-1.12.2.js.gz  
+-rw-r--r-- 1 santoshsahoo  95K Mar 17 10:45 jquery-1.12.2.min.js  
+-rw-r--r-- 1 santoshsahoo  **34K** Mar 17 10:45 jquery-1.12.2.min.js.gz  
+-rw-r--r-- 1 santoshsahoo 253K Mar 17 10:52 jquery-2.2.2.js  
+-rw-r--r-- 1 santoshsahoo  76K Mar 17 10:52 jquery-2.2.2.js.gz  
+-rw-r--r-- 1 santoshsahoo  84K Mar 17 10:52 jquery-2.2.2.min.js  
+-rw-r--r-- 1 santoshsahoo  **30K** Mar 17 10:52 jquery-2.2.2.min.js.gz  
+
 Cash is a small library for modern browsers that provides jQuery style syntax
 to wrap modern Vanilla JS features. It allows developers to use the jQuery
 syntax they already know, and utilizes modern browser features to minimize the
