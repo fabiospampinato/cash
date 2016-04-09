@@ -104,13 +104,13 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
 
   addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 13, "add(collections) Passed!" );
+  assert.equal(addFixture.length, 14, "add(collections) Passed!" );
 
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
-  assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
+  assert.equal(addFixture.length, 5, "add(no duplicates) Passed!" );
 
   addFixture = $('#id-fixture').add( "#qunit-fixture a" );
-  assert.equal(addFixture.length, 5, "add(allow selector string) Passed!" );
+  assert.equal(addFixture.length, 6, "add(allow selector string) Passed!" );
 });
 
 QUnit.test( "each", function( assert ) {
@@ -278,7 +278,7 @@ QUnit.test( "val", function( assert ) {
 //Traversal
 
 QUnit.test( "children", function( assert ) {
-  assert.equal($('#qunit-fixture').children().length, 14, "children Passed!" );
+  assert.equal($('#qunit-fixture').children().length, 15, "children Passed!" );
   assert.equal($('#qunit-fixture').children('div').length, 6, "children(selector) Passed!" );
 });
 
@@ -319,7 +319,7 @@ QUnit.test( "prev", function( assert ) {
 });
 
 QUnit.test( "siblings", function( assert ) {
-  assert.equal($('#id-fixture').siblings().length, 13, "siblings Passed!" );
+  assert.equal($('#id-fixture').siblings().length, 14, "siblings Passed!" );
 });
 
 QUnit.test( "is", function( assert ) {
