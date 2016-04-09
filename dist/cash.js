@@ -522,8 +522,11 @@
 
     ready: onReady,
 
-    trigger: function (eventName) {
+    trigger: function (eventName, data) {
       var evt = doc.createEvent("HTMLEvents");
+      for (var prop in data) {
+        evt[prop] = data[prop];
+      }
       evt.initEvent(eventName, true, false);
       return this.each(function (v) {
         return v.dispatchEvent(evt);

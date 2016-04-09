@@ -252,6 +252,16 @@ QUnit.test( "trigger", function( assert ) {
   assert.equal($('.trigger-fixture')[0].textContent, 2, "trigger Passed!" );
 });
 
+QUnit.test( "trigger(data)", function( assert ) {
+  var i = 1;
+  $('.trigger-data-fixture').on('custom', function(e){
+      i += e.custom;
+      this.textContent = i;
+  });
+  $('.trigger-data-fixture').trigger('custom', {custom: 1});
+  assert.equal($('.trigger-data-fixture')[0].textContent, 2, "trigger(data) Passed!" );
+});
+
 //Forms
 
 QUnit.test( "serialize", function( assert ) {
