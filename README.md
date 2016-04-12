@@ -94,16 +94,16 @@ $(function(){
 * [$.fn.width()](#fnwidth)
 
 #### Utilities
-* [$.fn.each()](#fneach)
-* [$.fn.extend()](#fnextend)
-* [$.fn.matches()](#fnmatches)
-* [$.fn.parseHTML()](#fnparsehtml)
+* [$.each()](#each)
+* [$.extend()](#extend)
+* [$.matches()](#matches)
+* [$.parseHTML()](#parsehtml)
 
 #### Type Checking
-* [$.fn.isFunction()](#fnisfunction)
-* [$.fn.isString()](#fnisstring)
-* [$.fn.isArray()](#fnisarray)
-* [$.fn.isNumeric()](#fnisnumeric)
+* [$.isFunction()](#isfunction)
+* [$.isString()](#isstring)
+* [$.isArray()](#isarray)
+* [$.isNumeric()](#isnumeric)
 
 ---
 
