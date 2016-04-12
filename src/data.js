@@ -26,7 +26,7 @@ function removeData(node, key) {
 fn.extend({
 
   data(key, value) { // TODO: tear out into module for IE9
-    if (!value) { return getData(this[0],key); }
+    if ( !value && !isBoolean(value) && !isNumeric(value) ) { return getData(this[0],key); }
     return this.each(v => setData(v,key,value) );
   },
 

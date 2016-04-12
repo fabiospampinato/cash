@@ -63,7 +63,5 @@ cash.extend({
   each: each,
   matches: matches,
   unique: unique,
-  isArray: Array.isArray,
-  isNumeric(n) { return !isNaN(parseFloat(n)) && isFinite(n); }
-
+  isArray: Array.isArray
 });

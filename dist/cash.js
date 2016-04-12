@@ -15,6 +15,10 @@
     return typeof item === typeof noop;
   }, isString = function (item) {
     return typeof item === typeof "";
+  }, isBoolean = function (item) {
+    return typeof item === typeof true;
+  }, isNumeric = function (item) {
+    return !isNaN(parseFloat(item)) && isFinite(item);
   };
 
   var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
@@ -104,6 +108,8 @@
   cash.noop = noop;
   cash.isFunction = isFunction;
   cash.isString = isString;
+  cash.isBoolean = isBoolean;
+  cash.isNumeric = isNumeric;
 
   cash.extend = fn.extend = function (target) {
     target = target || {};
@@ -164,11 +170,7 @@
     each: each,
     matches: matches,
     unique: unique,
-    isArray: Array.isArray,
-    isNumeric: function (n) {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-
+    isArray: Array.isArray
   });
 
   var uid = cash.uid = "_cash" + Date.now();
@@ -203,7 +205,7 @@
   fn.extend({
     data: function (key, value) {
       // TODO: tear out into module for IE9
-      if (!value) {
+      if (!value && !isBoolean(value) && !isNumeric(value)) {
         return getData(this[0], key);
       }
       return this.each(function (v) {
@@ -255,7 +257,7 @@
     },
 
     attr: function (name, value) {
-      if (!value) {
+      if (!value && !isBoolean(value) && !isNumeric(value)) {
         return (this[0].getAttribute ? this[0].getAttribute(name) : this[0][name]);
       }
       return this.each(function (v) {
