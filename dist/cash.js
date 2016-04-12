@@ -256,16 +256,21 @@
     },
 
     attr: function (name, value) {
-      if (!value) {
-        return (this[0].getAttribute ? this[0].getAttribute(name) : this[0][name]);
+      if (isString(name)) {
+        return (value === undefined ? this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] : this.each(function (v) {
+          if (v.setAttribute) {
+            v.setAttribute(name, value);
+          } else {
+            v[name] = value;
+          }
+        }));
       }
-      return this.each(function (v) {
-        if (v.setAttribute) {
-          v.setAttribute(name, value);
-        } else {
-          v[name] = value;
-        }
-      });
+
+      for (var key in name) {
+        this.attr(key, name[key]);
+      }
+
+      return this;
     },
 
     hasClass: function (c) {
@@ -278,12 +283,17 @@
     },
 
     prop: function (name, value) {
-      if (!value) {
-        return this[0][name];
+      if (isString(name)) {
+        return (value === undefined ? this[0][name] : this.each(function (v) {
+          v[name] = value;
+        }));
       }
-      return this.each(function (v) {
-        v[name] = value;
-      });
+
+      for (var key in name) {
+        this.prop(key, name[key]);
+      }
+
+      return this;
     },
 
     removeAttr: function (name) {
