@@ -3,10 +3,10 @@
 
 ![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
 
-Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet 
-Explorer 9+) that provides jQuery style syntax to wrap modern Vanilla JS features. 
-It allows developers to use the jQuery syntax they already know, and utilizes modern 
-browser features to minimize the codebase. 100% feature parity with jQuery isn't a goal, 
+Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
+Explorer 9+) that provides jQuery style syntax to wrap modern Vanilla JS features.
+It allows developers to use the jQuery syntax they already know, and utilizes modern
+browser features to minimize the codebase. 100% feature parity with jQuery isn't a goal,
 but cash comes helpfully close, covering most day to day use cases.
 
 #### Size Comparison
@@ -35,6 +35,75 @@ $(function(){
 });
 </script>
 ```
+---
+
+#### Methods
+* [$.fn()](#fn)
+* [$.fn.add()](#fnadd)
+* [$.fn.addClass()](#fnaddclass)
+* [$.fn.after()](#fnafter)
+* [$.fn.append()](#fnappend)
+* [$.fn.appendTo()](#fnappendto)
+* [$.fn.attr()](#fnattr)
+* [$.fn.before()](#fnbefore)
+* [$.fn.children()](#fnchildren)
+* [$.fn.closest()](#fnclosest)
+* [$.fn.clone()](#fnclone)
+* [$.fn.css()](#fncss)
+* [$.fn.data()](#fndata)
+* [$.fn.each()](#fneach)
+* [$.fn.empty()](#fnempty)
+* [$.fn.eq()](#fneq)
+* [$.fn.extend()](#fnextend)
+* [$.fn.filter()](#fnfilter)
+* [$.fn.find()](#fnfind)
+* [$.fn.first()](#fnfirst)
+* [$.fn.get()](#fnget)
+* [$.fn.has()](#fnhas)
+* [$.fn.hasClass()](#fnhasclass)
+* [$.fn.height()](#fnheight)
+* [$.fn.html()](#fnhtml)
+* [$.fn.index()](#fnindex)
+* [$.fn.innerHeight()](#fninnerheight)
+* [$.fn.innerWidth()](#fninnerwidth)
+* [$.fn.insertAfter()](#fninsertafter)
+* [$.fn.insertBefore()](#fninsertbefore)
+* [$.fn.is()](#fnis)
+* [$.fn.last()](#fnlast)
+* [$.fn.next()](#fnnext)
+* [$.fn.not()](#fnnot)
+* [$.fn.off()](#fnoff)
+* [$.fn.on()](#fnon)
+* [$.fn.one()](#fnone)
+* [$.fn.outerHeight()](#fnouterheight)
+* [$.fn.parent()](#fnparent)
+* [$.fn.parents()](#fnparents)
+* [$.fn.prepend()](#fnprepend)
+* [$.fn.prependTo()](#fnprependto)
+* [$.fn.prev()](#fnprev)
+* [$.fn.prop()](#fnprop)
+* [$.fn.ready()](#fnready)
+* [$.fn.remove()](#fnremove)
+* [$.fn.removeAttr()](#fnremoveattr)
+* [$.fn.removeData()](#fnremovedata)
+* [$.fn.serialize()](#fnserialize)
+* [$.fn.siblings()](#fnsiblings)
+* [$.fn.toggleClass()](#fntoggleclass)
+* [$.fn.trigger()](#fntrigger)
+* [$.fn.val()](#fnval)
+* [$.fn.width()](#fnwidth)
+
+#### Utilities
+* [$.fn.each()](#fneach)
+* [$.fn.extend()](#fnextend)
+* [$.fn.matches()](#fnmatches)
+* [$.fn.parseHTML()](#fnparsehtml)
+
+#### Type Checking
+* [$.fn.isFunction()](#fnisfunction)
+* [$.fn.isString()](#fnisstring)
+* [$.fn.isArray()](#fnisarray)
+* [$.fn.isNumeric()](#fnisnumeric)
 
 ---
 
