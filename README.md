@@ -3,7 +3,7 @@
 #Cash
 *An absurdly small jQuery alternative for modern browsers*
 
-Cash is a small library for modern browsers that provides jQuery style syntax
+Cash is a small library (approximately 7.6KB minified) for modern browsers that provides jQuery style syntax
 to wrap modern Vanilla JS features. It allows developers to use the jQuery
 syntax they already know, and utilizes modern browser features to minimize the
 codebase. 100% feature parity with jQuery isn't a goal, but cash comes helpfully
