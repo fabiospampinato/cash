@@ -1,9 +1,10 @@
 ![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master)
 
 #Cash
-*An absurdly small jQuery alternative for modern browsers*
+*An absurdly small jQuery alternative for modern browsers (IE9+)*
 
-Cash is a small library (approximately 7.6KB minified) for modern browsers that provides jQuery style syntax
+Cash is a small library (approximately 7.6KB minified) for modern browsers 
+(Chrome, Firefox, Safari and Internet Explorer 9+) that provides jQuery style syntax
 to wrap modern Vanilla JS features. It allows developers to use the jQuery
 syntax they already know, and utilizes modern browser features to minimize the
 codebase. 100% feature parity with jQuery isn't a goal, but cash comes helpfully
