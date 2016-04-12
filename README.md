@@ -24,7 +24,7 @@ Minified                  | 95K           | 76K           | 9.1K
 Add cash to your project via the jsDelivr CDN, and use cash to manipulate the DOM!
 
 ```html
-<script src="https://cdn.jsdelivr.net/cash/1.0.0/cash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/cash/1.1.0/cash.min.js"></script>
 <script>
 $(function(){
 
