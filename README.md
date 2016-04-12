@@ -1,14 +1,21 @@
-![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master)
-
 #Cash
 *An absurdly small jQuery alternative for modern browsers (IE9+)*
 
-Cash is a small library (approximately 7.6KB minified) for modern browsers 
-(Chrome, Firefox, Safari and Internet Explorer 9+) that provides jQuery style syntax
-to wrap modern Vanilla JS features. It allows developers to use the jQuery
-syntax they already know, and utilizes modern browser features to minimize the
-codebase. 100% feature parity with jQuery isn't a goal, but cash comes helpfully
-close, covering most day to day use cases.
+![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
+
+Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet 
+Explorer 9+) that provides jQuery style syntax to wrap modern Vanilla JS features. 
+It allows developers to use the jQuery syntax they already know, and utilizes modern 
+browser features to minimize the codebase. 100% feature parity with jQuery isn't a goal, 
+but cash comes helpfully close, covering most day to day use cases.
+
+#### Size Comparison
+
+Library                   | jQuery 1.12.2 | jQuery 2.2.2  | Cash
+------------------------- | ------------- | ------------- | --------
+Uncompressed              | 287K          | 253K          | 20K
+Minified                  | 95K           | 76K           | 9.1K
+**Minified & Gzipped**    | **34K**       | **30K**       | **3.3K**
 
 ---
 
