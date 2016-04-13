@@ -202,18 +202,21 @@
   }
 
   fn.extend({
-    data: function (key, value) {
-      // TODO: tear out into module for IE9
-      if (!value) {
-        return getData(this[0], key);
+    data: function (name, value) {
+      if (isString(name)) {
+        return (value === undefined ? getData(this[0], name) : this.each(function (v) {
+          return setData(v, name, value);
+        }));
       }
-      return this.each(function (v) {
-        return setData(v, key, value);
-      });
+
+      for (var key in name) {
+        this.data(key, name[key]);
+      }
+
+      return this;
     },
 
     removeData: function (key) {
-      // TODO: tear out into module for IE9
       return this.each(function (v) {
         return removeData(v, key);
       });
