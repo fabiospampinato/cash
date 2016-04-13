@@ -129,10 +129,13 @@ $(function) // => document ready callback
 
 #### $.fn
 
-The main prototype. Adding properties and methods will add it to all collections.
+The main prototype for collections, allowing you to extend cash with plugins
+by adding methods to all collections.
 
 ```js
 $.fn // => cash.prototype
+$.fn.myMethod = function(){ }; // Custom method added to all collections
+$.fn.extend(object); // Add multiple methods to the prototype.
 ```
 
 #### $.fn.add()
