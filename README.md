@@ -658,6 +658,43 @@ $(element).width() // => number
 
 ---
 
+### Type Checking
+
+#### $.isArray()
+
+Check if the argument is an array.
+
+```js
+$.isArray([1,2,3]) // => true
+```
+
+#### $.isFunction()
+
+Check if the argument is a function.
+
+```js
+var func = function(){};
+$.isFunction(func) // => true
+```
+
+#### $.isNumeric()
+
+Check if the argument is numeric.
+
+```js
+$.isNumeric(57) // => true
+```
+
+#### $.isString()
+
+Check if the argument is a string.
+
+```js
+$.isString('hello') // => true
+```
+
+---
+
 ### Utilities
 
 #### $.each()
@@ -693,40 +730,3 @@ Returns a collection from an HTML string.
 $.parseHTML(htmlString) // => Collection
 ```
 
----
-
-### Type Checking
-
-#### $.isFunction()
-
-Check if the argument is a function.
-
-```js
-var func = function(){};
-$.isFunction(func) // => true
-```
-
-#### $.isString()
-
-Check if the argument is a string.
-
-```js
-$.isString('hello') // => true
-```
-
-#### $.isArray()
-
-Check if the argument is an array.
-
-```js
-$.isArray([1,2,3]) // => true
-```
-
-
-#### $.isNumeric(n)
-
-Check if the argument is numeric.
-
-```js
-$.isNumeric(57) // => true
-```
