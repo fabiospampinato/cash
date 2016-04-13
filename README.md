@@ -581,6 +581,14 @@ Removes linked data and data-attributes from collection elements.
 $(element).removeData(name) // => collection
 ```
 
+#### $.fn.removeProp()
+
+Removes property from collection elements.
+
+```js
+$(element).removeProp(propName) // => collection
+```
+
 #### $.fn.serialize
 
 When called on a form, serializes and returns form data.
