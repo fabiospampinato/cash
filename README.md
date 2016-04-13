@@ -534,10 +534,14 @@ $(element).prev() // => collection
 
 #### $.fn.prop()
 
-Returns property value.
+Returns a property value when just property is supplied. Sets a property
+when property and value are supplied, and sets multiple properties when an object
+is supplied.
 
 ```js
-$(element).prop(property) // => Property value
+$(element).prop(property) // => property value
+$(element).prop(property, value) // => collection
+$(element).prop(object) // => collection
 ```
 
 #### $.fn.ready()
