@@ -37,79 +37,10 @@ $(function(){
 ```
 ---
 
-#### Methods
-* [$.fn()](#fn)
-* [$.fn.add()](#fnadd)
-* [$.fn.addClass()](#fnaddclass)
-* [$.fn.after()](#fnafter)
-* [$.fn.append()](#fnappend)
-* [$.fn.appendTo()](#fnappendto)
-* [$.fn.attr()](#fnattr)
-* [$.fn.before()](#fnbefore)
-* [$.fn.children()](#fnchildren)
-* [$.fn.closest()](#fnclosest)
-* [$.fn.clone()](#fnclone)
-* [$.fn.css()](#fncss)
-* [$.fn.data()](#fndata)
-* [$.fn.each()](#fneach)
-* [$.fn.empty()](#fnempty)
-* [$.fn.eq()](#fneq)
-* [$.fn.extend()](#fnextend)
-* [$.fn.filter()](#fnfilter)
-* [$.fn.find()](#fnfind)
-* [$.fn.first()](#fnfirst)
-* [$.fn.get()](#fnget)
-* [$.fn.has()](#fnhas)
-* [$.fn.hasClass()](#fnhasclass)
-* [$.fn.height()](#fnheight)
-* [$.fn.html()](#fnhtml)
-* [$.fn.index()](#fnindex)
-* [$.fn.innerHeight()](#fninnerheight)
-* [$.fn.innerWidth()](#fninnerwidth)
-* [$.fn.insertAfter()](#fninsertafter)
-* [$.fn.insertBefore()](#fninsertbefore)
-* [$.fn.is()](#fnis)
-* [$.fn.last()](#fnlast)
-* [$.fn.next()](#fnnext)
-* [$.fn.not()](#fnnot)
-* [$.fn.off()](#fnoff)
-* [$.fn.on()](#fnon)
-* [$.fn.one()](#fnone)
-* [$.fn.outerHeight()](#fnouterheight)
-* [$.fn.parent()](#fnparent)
-* [$.fn.parents()](#fnparents)
-* [$.fn.prepend()](#fnprepend)
-* [$.fn.prependTo()](#fnprependto)
-* [$.fn.prev()](#fnprev)
-* [$.fn.prop()](#fnprop)
-* [$.fn.ready()](#fnready)
-* [$.fn.remove()](#fnremove)
-* [$.fn.removeAttr()](#fnremoveattr)
-* [$.fn.removeData()](#fnremovedata)
-* [$.fn.serialize()](#fnserialize)
-* [$.fn.siblings()](#fnsiblings)
-* [$.fn.toggleClass()](#fntoggleclass)
-* [$.fn.trigger()](#fntrigger)
-* [$.fn.val()](#fnval)
-* [$.fn.width()](#fnwidth)
-
-#### Utilities
-* [$.each()](#each)
-* [$.extend()](#extend)
-* [$.matches()](#matches)
-* [$.parseHTML()](#parsehtml)
-
-#### Type Checking
-* [$.isFunction()](#isfunction)
-* [$.isString()](#isstring)
-* [$.isArray()](#isarray)
-* [$.isNumeric()](#isnumeric)
-
----
-
 ## Documentation
 
-#### $()
+
+### $()
 
 This is the main selector method for cash. It returns an actionable collection
 of nodes. If a function is provided, the function will be run once the DOM is ready.
@@ -123,9 +54,53 @@ $(collection) // => self
 $(function) // => document ready callback
 ```
 
-----
+### Collection Methods
 
-## Collection Methods
+These methods from the collection prototype ( [$.fn](#fn) ) are available once
+you create a collection with `$()` and are called like so:
+
+```js
+$(element).addClass(className) // => collection
+```
+
+| Attributes | Collection | CSS | Data | Dimensions | Events |
+| ---------- | ---------- | --- | ---- | ---------- | ------ |
+| [$.fn.addClass()](#fnaddclass) | [$.fn](#fn) | [$.fn.css()](#fncss) | [$.fn.data()](#fndata) | [$.fn.height()](#fnheight) | [$.fn.off()](#fnoff) |
+| [$.fn.attr()](#fnattr) | [$.fn.add()](#fnadd) |     | [$.fn.removeData()](#fnremovedata) | [$.fn.innerHeight()](#fninnerheight) | [$.fn.on()](#fnon) |
+| [$.fn.hasClass()](#fnhasclass) | [$.fn.each()](#fneach) |     |      | [$.fn.innerWidth()](#fninnerwidth) | [$.fn.one()](#fnone) |
+| [$.fn.prop()](#fnprop) | [$.fn.eq()](#fneq) |     |      | [$.fn.outerHeight()](#fnouterheight) | [$.fn.ready()](#fnready) |
+| [$.fn.removeAttr()](#fnremoveattr) | [$.fn.filter()](#fnfilter) |     |      | [$.fn.outerWidth()](#fnouterwidth) | [$.fn.trigger()](#fntrigger) |
+| [$.fn.removeClass()](#fnremoveclass) | [$.fn.first()](#fnfirst) |     |      | [$.fn.width()](#fnwidth) |        |
+| [$.fn.removeProp()](#fnremoveprop) | [$.fn.get()](#fnget) |     |      |            |        |
+| [$.fn.toggleClass()](#fntoggleclass) | [$.fn.index()](#fnindex) |     |      |            |        |
+|            | [$.fn.last()](#fnlast) |     |      |            |        |
+
+| Forms | Manipulation | Offset | Traversal |
+| ----- | ------------ | ------ | --------- |
+| [$.fn.serialize()](#fnserialize) | [$.fn.after()](#fnafter) | [$.fn.offset()](#fnoffset) | [$.fn.children()](#fnchildren) |
+| [$.fn.val()](#fnval) | [$.fn.append()](#fnappend) | [$.fn.offsetParent()](#fnoffsetparent) | [$.fn.closest()](#fnclosest) |
+|       | [$.fn.appendTo()](#fnappendto) | [$.fn.position()](#fnposition) | [$.fn.find()](#fnfind) |
+|       | [$.fn.before()](#fnbefore) |        | [$.fn.has()](#fnhas) |
+|       | [$.fn.clone()](#fnclone) |        | [$.fn.is()](#fnis) |
+|       | [$.fn.empty()](#fnempty) |        | [$.fn.next()](#fnnext) |
+|       | [$.fn.html()](#fnhtml) |        | [$.fn.not()](#fnnot) |
+|       | [$.fn.insertAfter()](#fninsertafter) |        | [$.fn.parent()](#fnparent) |
+|       | [$.fn.insertBefore()](#fninsertbefore) |        | [$.fn.parents()](#fnparents) |
+|       | [$.fn.prepend()](#fnprepend) |        | [$.fn.prev()](#fnprev) |
+|       | [$.fn.prependTo()](#fnprependto) |        | [$.fn.siblings()](#fnsiblings) |
+|       | [$.fn.remove()](#fnremove) |        |           |
+|       | [$.fn.text()](#fntext) |        |           |
+
+### Utilities
+
+| Type Checking | Utilities |
+| ------------- | --------- |
+| [$.isArray()](#isarray) | [$.each()](#each) |
+| [$.isFunction()](#isfunction) | [$.extend()](#extend) |
+| [$.isNumeric()](#isnumeric) | [$.matches()](#matches) |
+| [$.isString()](#isstring) | [$.parseHTML()](#parsehtml) |
+
+----
 
 #### $.fn
 
