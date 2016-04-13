@@ -429,6 +429,22 @@ Removes event listener from collection elements.
 $(element).off(eventName,eventHandler) // => collection
 ```
 
+#### $.fn.offset()
+
+Get the coordinates of the first element in a collection relative to the document.
+
+```js
+$(element).offset() // => Object
+```
+
+#### $.fn.offsetParent()
+
+Get the first element's ancestor that's positioned.
+
+```js
+$(element).offsetParent() // => collection
+```
+
 #### $.fn.on()
 
 Adds event listener to collection elements. Event is delegated if delegate is
@@ -482,6 +498,14 @@ Returns collection of elements who are parents of element. Optionally filtering 
 ```js
 $(element).parents() // => collection
 $(element).parents(selector) // => collection
+```
+
+#### $.fn.position()
+
+Get the coordinates of the first element in a collection relative to its `offsetParent`.
+
+```js
+$(element).position() // => object
 ```
 
 #### $.fn.prepend()
