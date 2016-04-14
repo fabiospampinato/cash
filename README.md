@@ -1,13 +1,21 @@
-![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master)
-
 #Cash
-*An absurdly small jQuery alternative for modern browsers*
+*An absurdly small jQuery alternative for modern browsers (IE9+)*
 
-Cash is a small library for modern browsers that provides jQuery style syntax
-to wrap modern Vanilla JS features. It allows developers to use the jQuery
-syntax they already know, and utilizes modern browser features to minimize the
-codebase. 100% feature parity with jQuery isn't a goal, but cash comes helpfully
-close, covering most day to day use cases.
+![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
+
+Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
+Explorer 9+) that provides jQuery style syntax to wrap modern Vanilla JS features.
+It allows developers to use the jQuery syntax they already know, and utilizes modern
+browser features to minimize the codebase. 100% feature parity with jQuery isn't a goal,
+but cash comes helpfully close, covering most day to day use cases.
+
+#### Size Comparison
+
+| Library                   | jQuery 1.12.2 | jQuery 2.2.2  | Cash     |
+| ------------------------- | -------------:| -------------:| --------:|
+| Uncompressed              | 287K          | 253K          | 20K      |
+| Minified                  | 95K           | 76K           | 9.5K     |
+| **Minified & Gzipped**    | **34K**       | **30K**       | **3.4K** |
 
 ---
 
@@ -16,7 +24,7 @@ close, covering most day to day use cases.
 Add cash to your project via the jsDelivr CDN, and use cash to manipulate the DOM!
 
 ```html
-<script src="https://cdn.jsdelivr.net/cash/1.0.0/cash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/cash/1.1.0/cash.min.js"></script>
 <script>
 $(function(){
 
@@ -27,12 +35,12 @@ $(function(){
 });
 </script>
 ```
-
 ---
 
 ## Documentation
 
-#### $()
+
+### $()
 
 This is the main selector method for cash. It returns an actionable collection
 of nodes. If a function is provided, the function will be run once the DOM is ready.
@@ -46,16 +54,63 @@ $(collection) // => self
 $(function) // => document ready callback
 ```
 
-----
+### Collection Methods
 
-## Collection Methods
+These methods from the collection prototype ( [$.fn](#fn) ) are available once
+you create a collection with `$()` and are called like so:
+
+```js
+$(element).addClass(className) // => collection
+```
+
+| Attributes | Collection | CSS | Data | Dimensions | Events |
+| ---------- | ---------- | --- | ---- | ---------- | ------ |
+| [$.fn.addClass()](#fnaddclass) | [$.fn](#fn) | [$.fn.css()](#fncss) | [$.fn.data()](#fndata) | [$.fn.height()](#fnheight) | [$.fn.off()](#fnoff) |
+| [$.fn.attr()](#fnattr) | [$.fn.add()](#fnadd) |     | [$.fn.removeData()](#fnremovedata) | [$.fn.innerHeight()](#fninnerheight) | [$.fn.on()](#fnon) |
+| [$.fn.hasClass()](#fnhasclass) | [$.fn.each()](#fneach) |     |      | [$.fn.innerWidth()](#fninnerwidth) | [$.fn.one()](#fnone) |
+| [$.fn.prop()](#fnprop) | [$.fn.eq()](#fneq) |     |      | [$.fn.outerHeight()](#fnouterheight) | [$.fn.ready()](#fnready) |
+| [$.fn.removeAttr()](#fnremoveattr) | [$.fn.filter()](#fnfilter) |     |      | [$.fn.outerWidth()](#fnouterwidth) | [$.fn.trigger()](#fntrigger) |
+| [$.fn.removeClass()](#fnremoveclass) | [$.fn.first()](#fnfirst) |     |      | [$.fn.width()](#fnwidth) |        |
+| [$.fn.removeProp()](#fnremoveprop) | [$.fn.get()](#fnget) |     |      |            |        |
+| [$.fn.toggleClass()](#fntoggleclass) | [$.fn.index()](#fnindex) |     |      |            |        |
+|            | [$.fn.last()](#fnlast) |     |      |            |        |
+
+| Forms | Manipulation | Offset | Traversal |
+| ----- | ------------ | ------ | --------- |
+| [$.fn.serialize()](#fnserialize) | [$.fn.after()](#fnafter) | [$.fn.offset()](#fnoffset) | [$.fn.children()](#fnchildren) |
+| [$.fn.val()](#fnval) | [$.fn.append()](#fnappend) | [$.fn.offsetParent()](#fnoffsetparent) | [$.fn.closest()](#fnclosest) |
+|       | [$.fn.appendTo()](#fnappendto) | [$.fn.position()](#fnposition) | [$.fn.find()](#fnfind) |
+|       | [$.fn.before()](#fnbefore) |        | [$.fn.has()](#fnhas) |
+|       | [$.fn.clone()](#fnclone) |        | [$.fn.is()](#fnis) |
+|       | [$.fn.empty()](#fnempty) |        | [$.fn.next()](#fnnext) |
+|       | [$.fn.html()](#fnhtml) |        | [$.fn.not()](#fnnot) |
+|       | [$.fn.insertAfter()](#fninsertafter) |        | [$.fn.parent()](#fnparent) |
+|       | [$.fn.insertBefore()](#fninsertbefore) |        | [$.fn.parents()](#fnparents) |
+|       | [$.fn.prepend()](#fnprepend) |        | [$.fn.prev()](#fnprev) |
+|       | [$.fn.prependTo()](#fnprependto) |        | [$.fn.siblings()](#fnsiblings) |
+|       | [$.fn.remove()](#fnremove) |        |           |
+|       | [$.fn.text()](#fntext) |        |           |
+
+### Utilities
+
+| Type Checking | Utilities |
+| ------------- | --------- |
+| [$.isArray()](#isarray) | [$.each()](#each) |
+| [$.isFunction()](#isfunction) | [$.extend()](#extend) |
+| [$.isNumeric()](#isnumeric) | [$.matches()](#matches) |
+| [$.isString()](#isstring) | [$.parseHTML()](#parsehtml) |
+
+----
 
 #### $.fn
 
-The main prototype. Adding properties and methods will add it to all collections.
+The main prototype for collections, allowing you to extend cash with plugins
+by adding methods to all collections.
 
 ```js
 $.fn // => cash.prototype
+$.fn.myMethod = function(){ }; // Custom method added to all collections
+$.fn.extend(object); // Add multiple methods to the prototype.
 ```
 
 #### $.fn.add()
@@ -352,6 +407,22 @@ Removes event listener from collection elements.
 $(element).off(eventName,eventHandler) // => collection
 ```
 
+#### $.fn.offset()
+
+Get the coordinates of the first element in a collection relative to the document.
+
+```js
+$(element).offset() // => Object
+```
+
+#### $.fn.offsetParent()
+
+Get the first element's ancestor that's positioned.
+
+```js
+$(element).offsetParent() // => collection
+```
+
 #### $.fn.on()
 
 Adds event listener to collection elements. Event is delegated if delegate is
@@ -407,6 +478,14 @@ $(element).parents() // => collection
 $(element).parents(selector) // => collection
 ```
 
+#### $.fn.position()
+
+Get the coordinates of the first element in a collection relative to its `offsetParent`.
+
+```js
+$(element).position() // => object
+```
+
 #### $.fn.prepend()
 
 Prepends element to the each element in collection.
@@ -433,10 +512,14 @@ $(element).prev() // => collection
 
 #### $.fn.prop()
 
-Returns property value.
+Returns a property value when just property is supplied. Sets a property
+when property and value are supplied, and sets multiple properties when an object
+is supplied.
 
 ```js
-$(element).prop(property) // => Property value
+$(element).prop(property) // => property value
+$(element).prop(property, value) // => collection
+$(element).prop(object) // => collection
 ```
 
 #### $.fn.ready()
@@ -478,6 +561,14 @@ Removes linked data and data-attributes from collection elements.
 
 ```js
 $(element).removeData(name) // => collection
+```
+
+#### $.fn.removeProp()
+
+Removes property from collection elements.
+
+```js
+$(element).removeProp(propName) // => collection
 ```
 
 #### $.fn.serialize
@@ -545,6 +636,43 @@ $(element).width() // => number
 
 ---
 
+### Type Checking
+
+#### $.isArray()
+
+Check if the argument is an array.
+
+```js
+$.isArray([1,2,3]) // => true
+```
+
+#### $.isFunction()
+
+Check if the argument is a function.
+
+```js
+var func = function(){};
+$.isFunction(func) // => true
+```
+
+#### $.isNumeric()
+
+Check if the argument is numeric.
+
+```js
+$.isNumeric(57) // => true
+```
+
+#### $.isString()
+
+Check if the argument is a string.
+
+```js
+$.isString('hello') // => true
+```
+
+---
+
 ### Utilities
 
 #### $.each()
@@ -580,40 +708,3 @@ Returns a collection from an HTML string.
 $.parseHTML(htmlString) // => Collection
 ```
 
----
-
-### Type Checking
-
-#### $.isFunction()
-
-Check if the argument is a function.
-
-```js
-var func = function(){};
-$.isFunction(func) // => true
-```
-
-#### $.isString()
-
-Check if the argument is a string.
-
-```js
-$.isString('hello') // => true
-```
-
-#### $.isArray()
-
-Check if the argument is an array.
-
-```js
-$.isArray([1,2,3]) // => true
-```
-
-
-#### $.isNumeric(n)
-
-Check if the argument is numeric.
-
-```js
-$.isNumeric(57) // => true
-```

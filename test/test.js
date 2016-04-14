@@ -31,6 +31,7 @@ QUnit.test( "tagName which doesnt exist Query", function( assert ) {
 QUnit.test( "id Query for non-existing element", function( assert ) {
   assert.equal($('#i-dont-exist').length, 0, "id for non-existing element Passed!" );
 });
+
 QUnit.test( "className Query for non-existing element", function( assert ) {
   assert.equal($('.i-dont-exist').length, 0, "className for non-existing element Passed!" );
 });
@@ -53,22 +54,28 @@ QUnit.test( "addClass", function( assert ) {
 QUnit.test( "attr", function( assert ) {
   var testAttr = $('.attr-fixture').attr('success');
   assert.equal(testAttr, 'get', "attr get Passed!" );
+
   $('.attr-fixture').attr('success','set');
   testAttr = $('.attr-fixture').attr('success');
   assert.equal(testAttr, 'set', "attr set Passed!" );
+
+  $('.attr-fixture').attr({ 'success': 'set', 'multi-success': 'set' });
+  testAttr = [$('.attr-fixture').attr('success'),$('.attr-fixture').attr('multi-success')].join(' ');
+  assert.equal(testAttr, 'set set', "attr set multiple Passed!" );
 });
 
 QUnit.test( "hasClass", function( assert ) {
   var hasClass = $('.attr-fixture').hasClass('has-class');
   assert.equal(hasClass, true, "hasClass (true) Passed!" );
-  var hasClass = $('.attr-fixture').hasClass('not-a-real-class');
+
+  hasClass = $('.attr-fixture').hasClass('not-a-real-class');
   assert.equal(hasClass, false, "hasClass (false) Passed!" );
 });
 
 QUnit.test( "toggleClass", function( assert ) {
   var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',true).hasClass('toggle-class-force');
   assert.equal(hasClass, true, "toggleClass (force add) Passed!" );
-  var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',false).hasClass('toggle-class-force');
+  hasClass = $('.attr-fixture').toggleClass('toggle-class-force',false).hasClass('toggle-class-force');
   assert.equal(hasClass, false, "toggleClass (force remove) Passed!" );
   var hasClass = $('.attr-fixture').toggleClass('toggle-class').hasClass('toggle-class');
   assert.equal(hasClass, true, "toggleClass (add) Passed!" );
@@ -77,7 +84,17 @@ QUnit.test( "toggleClass", function( assert ) {
 });
 
 QUnit.test( "prop", function( assert ) {
-  assert.equal($('.prop-fixture').prop('checked'), true, "prop Passed!" );
+  assert.equal($('.prop-fixture').prop('checked'), true, "prop get Passed!" );
+
+  $('.prop-fixture').prop('checked',false);
+  assert.equal($('.prop-fixture').prop('checked'), false, "prop set Passed!" );
+
+  $('.prop-fixture').prop({
+    'checked': true,
+    'disabled': true
+  });
+  var testProps = [$('.prop-fixture').prop('checked'),$('.prop-fixture').prop('disabled')].join(' ');
+  assert.equal(testProps, 'true true', "prop set multiple Passed!" );
 });
 
 QUnit.test( "removeAttr", function( assert ) {

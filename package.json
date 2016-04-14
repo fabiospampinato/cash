@@ -27,7 +27,7 @@
     "gulp-qunit": "^1.4.0",
     "gulp-rename": "^1.2.0",
     "gulp-size": "~0.1.2",
-    "gulp-uglify": "~1.0.1",
+    "gulp-uglify": "^1.5.3",
     "gulp-util": "~2.2.9"
   },
   "dependencies": {}

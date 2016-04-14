@@ -1,11 +1,16 @@
 'use strict';
 
 var gulp = require('gulp');
+var pkg = require('./package.json');
 var $ = require('gulp-load-plugins')();
 
 gulp.task('build', function () {
   return gulp.src('./src/_wrapper.js')
-    .pipe($.preprocess())
+    .pipe($.preprocess({
+      context: {
+        header: '/*! ' + pkg.name + ' '+pkg.version +', '+pkg.homepage +' @license '+ pkg.license +' */'
+      }
+    }))
     .pipe($.rename('cash.js'))
     .pipe($['6to5']())
     .pipe($.size())
@@ -14,7 +19,9 @@ gulp.task('build', function () {
 
 gulp.task('minify', ['build'], function() {
   return gulp.src(['./dist/cash.js'])
-    .pipe($.uglify())
+    .pipe($.uglify({
+      preserveComments: 'license'
+    }))
     .pipe($.size())
     .pipe($.rename('cash.min.js'))
     .pipe(gulp.dest('./dist/'));
