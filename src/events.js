@@ -81,9 +81,7 @@ fn.extend({
 
   trigger(eventName, data) {
     var evt = doc.createEvent('HTMLEvents');
-    for(var prop in data){
-        evt[prop] = data[prop];
-    }
+    evt.data = data;
     evt.initEvent(eventName, true, false);
     return this.each(v => v.dispatchEvent(evt));
   }

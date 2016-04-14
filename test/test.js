@@ -255,10 +255,10 @@ QUnit.test( "trigger", function( assert ) {
 QUnit.test( "trigger(data)", function( assert ) {
   var i = 1;
   $('.trigger-data-fixture').on('custom', function(e){
-      i += e.custom;
+      i += e.data;
       this.textContent = i;
   });
-  $('.trigger-data-fixture').trigger('custom', {custom: 1});
+  $('.trigger-data-fixture').trigger('custom', 1);
   assert.equal($('.trigger-data-fixture')[0].textContent, 2, "trigger(data) Passed!" );
 });
 
