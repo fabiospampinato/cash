@@ -1,6 +1,6 @@
 {
   "name": "cash-dom",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "main": "./dist/cash.js",
   "repository": {

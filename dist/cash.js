@@ -355,9 +355,9 @@
     },
 
     filter: function (selector) {
-      return filter.call(this, (isString(selector) ? function (e) {
+      return cash(filter.call(this, (isString(selector) ? function (e) {
         return matches(e, selector);
-      } : selector));
+      } : selector)));
     },
 
     first: function () {

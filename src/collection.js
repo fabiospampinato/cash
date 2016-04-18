@@ -14,7 +14,7 @@ fn.extend({
   },
 
   filter(selector) {
-    return filter.call(this, ( isString(selector) ? e => matches(e, selector) : selector ));
+    return cash(filter.call(this, ( isString(selector) ? e => matches(e, selector) : selector )));
   },
 
   first() {
