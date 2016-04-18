@@ -21,10 +21,10 @@ but cash comes helpfully close, covering most day to day use cases.
 
 ## Usage
 
-Add cash to your project via the jsDelivr CDN, and use cash to manipulate the DOM!
+Add cash to your project on your own server or via the jsDelivr CDN, and use cash to manipulate the DOM!
 
 ```html
-<script src="https://cdn.jsdelivr.net/cash/1.1.0/cash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js"></script>
 <script>
 $(function(){
 
@@ -35,6 +35,17 @@ $(function(){
 });
 </script>
 ```
+
+Cash is also available through [NPM](http://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
+```
+npm install cash-dom --save-dev
+```
+
+And through [Bower](http://bower.io/) as `cash`:
+```
+bower install cash
+```
+
 ---
 
 ## Documentation

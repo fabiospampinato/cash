@@ -1,6 +1,6 @@
 {
     "name": "cash",
-    "main": ["dist/cash.min.js", "dist/cash.js"],
+    "main": "dist/cash.js",
     "version": "1.2.0",
     "homepage": "https://github.com/kenwheeler/cash",
     "authors": [
