@@ -35,6 +35,13 @@ $(function(){
 });
 </script>
 ```
+
+You can also use cash as a node module by installing the `cash-dom` package through [NPM](http://npmjs.com).
+
+```
+npm install cash-dom --save-dev
+```
+
 ---
 
 ## Documentation
