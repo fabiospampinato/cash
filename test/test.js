@@ -274,6 +274,9 @@ QUnit.test( "trigger", function( assert ) {
 QUnit.test( "serialize", function( assert ) {
   var data = $('.form-fixture').serialize();
   assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
+
+  data = $( "input, textarea, select" ).serialize();
+  assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
 });
 
 QUnit.test( "val", function( assert ) {

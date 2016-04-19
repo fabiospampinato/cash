@@ -546,6 +546,7 @@
   function encode(name, value) {
     return "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(/%20/g, "+");
   }
+
   function isCheckable(field) {
     return field.type === "radio" || field.type === "checkbox";
   }
@@ -554,7 +555,7 @@
 
   fn.extend({
     serialize: function () {
-      var formEl = this[0].elements, query = "";
+      var formEl = this[0].elements || this, query = "";
 
       each(formEl, function (field) {
         if (field.name && formExcludes.indexOf(field.type) < 0) {
@@ -564,7 +565,7 @@
                 query += encode(field.name, o.value);
               }
             });
-          } else if (!isCheckable(field) || (isCheckable(field) && field.checked)) {
+          } else if (!isCheckable(field) || field.checked) {
             query += encode(field.name, field.value);
           }
         }
