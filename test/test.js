@@ -490,3 +490,15 @@ QUnit.test( "$.unique", function( assert ) {
   var test = $.merge( $("#id-fixture"),  $("#id-fixture") );
   assert.equal($.unique( test ).length, 1, "$.unique Passed!" );
 });
+
+QUnit.test( "$.isFunction", function( assert ) {
+  assert.equal($.isFunction( function () { } ), true , "$.isFunction Passed!" );
+});
+
+QUnit.test( "$.isString", function( assert ) {
+  assert.equal($.isString( "hello" ), true , "$.isString Passed!" );
+});
+
+QUnit.test( "$.type", function( assert ) {
+  assert.equal($.type( 99 ), "number" , "$.type Passed!" );
+});

@@ -110,6 +110,7 @@ $(element).addClass(className) // => collection
 | [$.isFunction()](#isfunction) | [$.extend()](#extend) |
 | [$.isNumeric()](#isnumeric) | [$.matches()](#matches) |
 | [$.isString()](#isstring) | [$.parseHTML()](#parsehtml) |
+| [$.type()](#type) |       |
 
 ----
 
@@ -685,6 +686,16 @@ Check if the argument is a string.
 
 ```js
 $.isString('hello') // => true
+```
+
+#### $.type()
+
+Get the argument data-type.
+
+```js
+$.type(99) // => number
+$.type('hello') // => string
+$.type(/^[Hh]ello$/) // => regexp
 ```
 
 ---
