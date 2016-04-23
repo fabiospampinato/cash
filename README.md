@@ -21,7 +21,7 @@ but cash comes helpfully close, covering most day to day use cases.
 
 ## Usage
 
-Add cash to your project on your own server or via the jsDelivr CDN, and use cash to manipulate the DOM!
+Add cash to your project on your server or using the [jsDelivr](https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js) or [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/1.2.0/cash.min.js) CDNs, and use cash to manipulate the DOM!
 
 ```html
 <script src="https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js"></script>
