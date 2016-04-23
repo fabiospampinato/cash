@@ -19,12 +19,18 @@ function find(selector,context) {
   return elems;
 }
 
-var frag, tmp;
+var frag;
 function parseHTML(str) {
-  frag = frag || doc.createDocumentFragment();
-  tmp = tmp || frag.appendChild(doc.createElement('div'));
-  tmp.innerHTML = str;
-  return tmp.childNodes;
+  if (!frag) {
+    frag = doc.implementation.createHTMLDocument();
+    var base = frag.createElement('base');
+    base.href = doc.location.href;
+    frag.head.appendChild(base);
+  }
+
+  frag.body.innerHTML = str;
+
+  return frag.body.childNodes;
 }
 
 function onReady(fn) {
