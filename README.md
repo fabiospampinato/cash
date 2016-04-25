@@ -4,10 +4,10 @@
 ![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
 
 Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
-Explorer 9+) that provides jQuery style syntax to wrap modern Vanilla JS features.
-It allows developers to use the jQuery syntax they already know, and utilizes modern
-browser features to minimize the codebase. 100% feature parity with jQuery isn't a goal,
-but cash comes helpfully close, covering most day to day use cases.
+Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing 
+modern browser features to minimize the codebase, developers can use the familiar 
+chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a 
+goal, but cash comes helpfully close, covering most day to day use cases.
 
 #### Size Comparison
 
@@ -21,7 +21,7 @@ but cash comes helpfully close, covering most day to day use cases.
 
 ## Usage
 
-Add cash to your project on your own server or via the jsDelivr CDN, and use cash to manipulate the DOM!
+Add cash to your project on your server or using the [jsDelivr](https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js) or [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/1.2.0/cash.min.js) CDNs, and use cash to manipulate the DOM!
 
 ```html
 <script src="https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js"></script>
