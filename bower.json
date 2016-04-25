@@ -1,7 +1,7 @@
 {
     "name": "cash",
     "main": "dist/cash.js",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "homepage": "https://github.com/kenwheeler/cash",
     "authors": [
         "Ken Wheeler <ken_wheeler@me.com>"
