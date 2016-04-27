@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.2.1, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.2.2, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -91,7 +91,7 @@
     return new Init(selector, context);
   }
 
-  var fn = cash.fn = cash.prototype = Init.prototype = {
+  var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
     constructor: cash,
     cash: true,
     length: 0,
@@ -141,7 +141,8 @@
   }
 
   function matches(el, selector) {
-    return (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector).call(el, selector);
+    var m = el && (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector);
+    return !!m && m.call(el, selector);
   }
 
   function unique(collection) {
@@ -475,6 +476,8 @@
     },
 
     on: function (eventName, delegate, callback, runOnce) {
+      // jshint ignore:line
+
       var originalCallback;
 
       if (!isString(eventName)) {
@@ -499,7 +502,7 @@
           var t = e.target;
 
           if (matches(t, delegate)) {
-            originalCallback.call(t);
+            originalCallback.call(t, e);
           } else {
             while (!matches(t, delegate)) {
               if (t === this) {
@@ -509,7 +512,7 @@
             }
 
             if (t) {
-              originalCallback.call(t);
+              originalCallback.call(t, e);
             }
           }
         };
