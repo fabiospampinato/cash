@@ -20,12 +20,14 @@ function removeClass(v,c){
 fn.extend({
 
   addClass(c){
-    var classes = c.match(notWhiteMatch);
-
-    return this.each(v => {
-      var spacedName = ` ${v.className} `;
-      each(classes,c => { addClass(v,c,spacedName); });
-    });
+    if ( c && typeof c === 'string' ) {
+      var classes = c.match(notWhiteMatch);
+      this.each(v => {
+        var spacedName = ` ${v.className} `;
+        each(classes,c => { addClass(v,c,spacedName); });
+      });
+    }
+    return this;
   },
 
   attr(name, value) {
@@ -48,10 +50,12 @@ fn.extend({
 
   hasClass(c) {
     var check = false;
-    this.each(v => {
-      check = hasClass(v,c);
-      return !check;
-    });
+    if ( c && typeof c === 'string' ) {
+      this.each(v => {
+        check = hasClass(v,c);
+        return !check;
+      });
+    }
     return check;
   },
 
@@ -79,11 +83,13 @@ fn.extend({
   },
 
   removeClass(c){
-    var classes = c.match(notWhiteMatch);
-
-    return this.each(v => {
-      each(classes,c => { removeClass(v,c); });
-    });
+    if ( c && typeof c === 'string' ) {
+      var classes = c.match(notWhiteMatch);
+      this.each(v => {
+        each(classes,c => { removeClass(v,c); });
+      });
+    }
+    return this;
   },
 
   removeProp(name){
@@ -91,15 +97,19 @@ fn.extend({
   },
 
   toggleClass(c, state){
-    if ( state !== undefined ) { return this[state ? 'addClass' : 'removeClass' ](c); }
-    var classes = c.match(notWhiteMatch);
-
-    return this.each(v => {
-      var spacedName = ` ${v.className} `;
-      each(classes,c => {
-        if ( hasClass(v,c) ) { removeClass(v,c); } else { addClass(v,c,spacedName); }
+    if ( state !== undefined ) {
+      return this[ state ? 'addClass' : 'removeClass' ](c);
+    }
+    if ( c && typeof c === 'string' ) {
+      var classes = c.match(notWhiteMatch);
+      this.each(v => {
+        var spacedName = ` ${v.className} `;
+        each(classes,c => {
+          if ( hasClass(v,c) ) { removeClass(v,c); } else { addClass(v,c,spacedName); }
+        });
       });
-    });
+    }
+    return this;
   },
 
 });
