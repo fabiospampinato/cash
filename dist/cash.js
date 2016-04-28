@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.2.1, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.2.2, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -245,14 +245,16 @@
 
   fn.extend({
     addClass: function (c) {
-      var classes = c.match(notWhiteMatch);
-
-      return this.each(function (v) {
-        var spacedName = " " + v.className + " ";
-        each(classes, function (c) {
-          addClass(v, c, spacedName);
+      if (c && typeof c === "string") {
+        var classes = c.match(notWhiteMatch);
+        this.each(function (v) {
+          var spacedName = " " + v.className + " ";
+          each(classes, function (c) {
+            addClass(v, c, spacedName);
+          });
         });
-      });
+      }
+      return this;
     },
 
     attr: function (name, value) {
@@ -275,10 +277,12 @@
 
     hasClass: function (c) {
       var check = false;
-      this.each(function (v) {
-        check = hasClass(v, c);
-        return !check;
-      });
+      if (c && typeof c === "string") {
+        this.each(function (v) {
+          check = hasClass(v, c);
+          return !check;
+        });
+      }
       return check;
     },
 
@@ -307,13 +311,15 @@
     },
 
     removeClass: function (c) {
-      var classes = c.match(notWhiteMatch);
-
-      return this.each(function (v) {
-        each(classes, function (c) {
-          removeClass(v, c);
+      if (c && typeof c === "string") {
+        var classes = c.match(notWhiteMatch);
+        this.each(function (v) {
+          each(classes, function (c) {
+            removeClass(v, c);
+          });
         });
-      });
+      }
+      return this;
     },
 
     removeProp: function (name) {
@@ -326,18 +332,20 @@
       if (state !== undefined) {
         return this[state ? "addClass" : "removeClass"](c);
       }
-      var classes = c.match(notWhiteMatch);
-
-      return this.each(function (v) {
-        var spacedName = " " + v.className + " ";
-        each(classes, function (c) {
-          if (hasClass(v, c)) {
-            removeClass(v, c);
-          } else {
-            addClass(v, c, spacedName);
-          }
+      if (c && typeof c === "string") {
+        var classes = c.match(notWhiteMatch);
+        this.each(function (v) {
+          var spacedName = " " + v.className + " ";
+          each(classes, function (c) {
+            if (hasClass(v, c)) {
+              removeClass(v, c);
+            } else {
+              addClass(v, c, spacedName);
+            }
+          });
         });
-      });
+      }
+      return this;
     } });
 
   fn.extend({
