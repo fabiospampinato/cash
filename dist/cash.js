@@ -224,7 +224,7 @@
   var notWhiteMatch = /\S+/g;
 
   function getClasses(c) {
-    return isString(c) && c.length && c.match(notWhiteMatch);
+    return isString(c) && c.match(notWhiteMatch);
   }
 
   function hasClass(v, c) {
