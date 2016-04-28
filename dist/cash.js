@@ -223,6 +223,10 @@
 
   var notWhiteMatch = /\S+/g;
 
+  function getClasses(c) {
+    return isString(c) && c.length && c.match(notWhiteMatch);
+  }
+
   function hasClass(v, c) {
     return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
   }
@@ -245,16 +249,14 @@
 
   fn.extend({
     addClass: function (c) {
-      if (c && typeof c === "string") {
-        var classes = c.match(notWhiteMatch);
-        this.each(function (v) {
-          var spacedName = " " + v.className + " ";
-          each(classes, function (c) {
-            addClass(v, c, spacedName);
-          });
+      var classes = getClasses(c);
+
+      return (classes ? this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        each(classes, function (c) {
+          addClass(v, c, spacedName);
         });
-      }
-      return this;
+      }) : this);
     },
 
     attr: function (name, value) {
@@ -276,10 +278,10 @@
     },
 
     hasClass: function (c) {
-      var check = false;
-      if (c && typeof c === "string") {
+      var check = false, classes = getClasses(c);
+      if (classes && classes.length) {
         this.each(function (v) {
-          check = hasClass(v, c);
+          check = hasClass(v, classes[0]);
           return !check;
         });
       }
@@ -311,15 +313,12 @@
     },
 
     removeClass: function (c) {
-      if (c && typeof c === "string") {
-        var classes = c.match(notWhiteMatch);
-        this.each(function (v) {
-          each(classes, function (c) {
-            removeClass(v, c);
-          });
+      var classes = getClasses(c);
+      return (classes ? this.each(function (v) {
+        each(classes, function (c) {
+          removeClass(v, c);
         });
-      }
-      return this;
+      }) : this);
     },
 
     removeProp: function (name) {
@@ -332,20 +331,17 @@
       if (state !== undefined) {
         return this[state ? "addClass" : "removeClass"](c);
       }
-      if (c && typeof c === "string") {
-        var classes = c.match(notWhiteMatch);
-        this.each(function (v) {
-          var spacedName = " " + v.className + " ";
-          each(classes, function (c) {
-            if (hasClass(v, c)) {
-              removeClass(v, c);
-            } else {
-              addClass(v, c, spacedName);
-            }
-          });
+      var classes = getClasses(c);
+      return (classes ? this.each(function (v) {
+        var spacedName = " " + v.className + " ";
+        each(classes, function (c) {
+          if (hasClass(v, c)) {
+            removeClass(v, c);
+          } else {
+            addClass(v, c, spacedName);
+          }
         });
-      }
-      return this;
+      }) : this);
     } });
 
   fn.extend({

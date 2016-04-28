@@ -75,6 +75,7 @@ QUnit.test( "attr", function( assert ) {
 QUnit.test( "hasClass", function( assert ) {
 
   $('.class-fixture').hasClass( '' );
+  $('.class-fixture').hasClass( ' ' );
   $('.class-fixture').hasClass( undefined );
   $('.class-fixture').hasClass( null );
   assert.equal( true, true, 'hasClass doesn\'t die on falsey' );
@@ -91,6 +92,7 @@ QUnit.test( "hasClass", function( assert ) {
 QUnit.test( "toggleClass", function( assert ) {
 
   $('.class-fixture').toggleClass( '' );
+  $('.class-fixture').toggleClass( ' ' );
   $('.class-fixture').toggleClass( undefined );
   $('.class-fixture').toggleClass( null );
   assert.equal( true, true, 'toggleClass doesn\'t die on falsey' );
@@ -129,6 +131,7 @@ QUnit.test( "removeAttr", function( assert ) {
 QUnit.test( "removeClass", function( assert ) {
 
   $('.class-fixture').removeClass( '' );
+  $('.class-fixture').removeClass( ' ' );
   $('.class-fixture').removeClass( undefined );
   $('.class-fixture').removeClass( null );
   assert.equal( true, true, 'removeClass doesn\'t die on falsey' );
