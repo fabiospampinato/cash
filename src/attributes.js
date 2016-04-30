@@ -29,7 +29,9 @@ fn.extend({
   },
 
   attr(name, value) {
+    var ret;
     if ( isString(name) && name !== '' ) {
+      ret = this;
       return (
         value === undefined ?
           this[0].getAttribute ?
@@ -43,9 +45,10 @@ fn.extend({
       );
     }
     for (var key in name) {
+      ret = this;
       this.attr(key,name[key]);
     }
-    return undefined;
+    return ret;
   },
 
   hasClass(c) {

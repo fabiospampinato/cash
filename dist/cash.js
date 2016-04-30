@@ -256,7 +256,9 @@
     },
 
     attr: function (name, value) {
+      var ret;
       if (isString(name) && name !== "") {
+        ret = this;
         return (value === undefined ? this[0].getAttribute ? this[0].getAttribute(name) ? this[0].getAttribute(name) : undefined : this[0][name] : this.each(function (v) {
           if (v.setAttribute) {
             v.setAttribute(name, value);
@@ -266,9 +268,10 @@
         }));
       }
       for (var key in name) {
+        ret = this;
         this.attr(key, name[key]);
       }
-      return undefined;
+      return ret;
     },
 
     hasClass: function (c) {
