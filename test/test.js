@@ -130,12 +130,13 @@ QUnit.test( "removeAttr", function( assert ) {
 
 QUnit.test( "removeClass", function( assert ) {
 
-  $('.class-fixture').removeClass( '' );
-  $('.class-fixture').removeClass( ' ' );
-  $('.class-fixture').removeClass( undefined );
-  $('.class-fixture').removeClass( null );
+  var $cf = $('.class-fixture');
+  $cf.removeClass( '' );
+  $cf.removeClass( ' ' );
+  $cf.removeClass( undefined );
+  $cf.removeClass( null );
   assert.equal( true, true, 'removeClass doesn\'t die on falsey' );
-  $('.class-fixture').removeClass( 4 );
+  $cf.removeClass( 4 );
   assert.equal( true, true, 'removeClass doesn\'t die on integer' );
 
   $('.attr-fixture').removeClass('has-class');
@@ -143,6 +144,10 @@ QUnit.test( "removeClass", function( assert ) {
   $('.attr-fixture, .attr-fixture2').removeClass('has-class-three has-class-two');
   assert.equal( $('.attr-fixture')[0].className, "attr-fixture", "removeClass Multiple Passed!" );
   assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
+
+  $cf.removeClass();
+  assert.equal( $cf.className, undefined, 'removing all classes passed!' );
+  $cf.addClass('class-fixture');
 });
 
 //Collection
