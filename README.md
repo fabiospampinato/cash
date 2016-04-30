@@ -560,7 +560,7 @@ $(element).removeAttr(attrName) // => collection
 #### $.fn.removeClass()
 
 Removes className from collection elements. Accepts space-separated classNames
-for removing multiple classes.
+for removing multiple classes. Providing no arguments will remove all classes.
 
 ```js
 $(element).removeClass(className) // => collection

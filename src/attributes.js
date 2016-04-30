@@ -89,6 +89,9 @@ fn.extend({
   },
 
   removeClass(c){
+    if(!arguments.length){
+      return this.attr('class','');
+    }
     var classes = getClasses(c);
     return ( classes ?
       this.each(v => {

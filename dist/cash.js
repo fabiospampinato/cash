@@ -313,6 +313,9 @@
     },
 
     removeClass: function (c) {
+      if (!arguments.length) {
+        return this.attr("class", "");
+      }
       var classes = getClasses(c);
       return (classes ? this.each(function (v) {
         each(classes, function (c) {
