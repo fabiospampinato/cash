@@ -62,6 +62,13 @@ QUnit.test( "attr", function( assert ) {
   $('.attr-fixture').attr({ 'success': 'set', 'multi-success': 'set' });
   testAttr = [$('.attr-fixture').attr('success'),$('.attr-fixture').attr('multi-success')].join(' ');
   assert.equal(testAttr, 'set set', "attr set multiple Passed!" );
+
+  testAttr = $('.attr-fixture').attr('nothing');
+  assert.equal( testAttr, undefined, "non-existing attribute returns undefined");
+
+  testAttr = $('.attr-fixture').attr();
+  assert.equal( testAttr, undefined, "no argument passed returns undefined");
+
 });
 
 QUnit.test( "hasClass", function( assert ) {
