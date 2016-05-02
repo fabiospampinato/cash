@@ -29,25 +29,25 @@ fn.extend({
   },
 
   attr(name, value) {
-    if ( !name ) {
-      return undefined;
-    }
+    if ( !name ) { return undefined; }
+
     if ( isString(name) ) {
-      return (
-        value === undefined ?
-          this[0].getAttribute ?
-            this[0].getAttribute(name) ?
-              this[0].getAttribute(name) : undefined
-          : this[0][name]
-        : this.each(v => {
-          if ( v.setAttribute ) { v.setAttribute(name, value); }
-          else { v[name] = value; }
-        })
-      );
+      if ( value === undefined ) {
+        return this[0] ?
+          this[0].getAttribute ? this[0].getAttribute(name) : this[0][name]
+          : undefined;
+      }
+
+      return this.each(v => {
+        if ( v.setAttribute ) { v.setAttribute(name, value); }
+        else { v[name] = value; }
+      });
     }
+
     for (var key in name) {
       this.attr(key,name[key]);
     }
+
     return this;
   },
 
