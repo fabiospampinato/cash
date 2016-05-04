@@ -25,12 +25,23 @@ function removeData(node, key) {
 
 fn.extend({
 
-  data(key, value) { // TODO: tear out into module for IE9
-    if (!value) { return getData(this[0],key); }
-    return this.each(v => setData(v,key,value) );
+  data(name, value) {
+
+    if ( isString(name) ) {
+      return ( value === undefined ?
+          getData(this[0],name) :
+          this.each(v => setData(v,name,value) )
+        );
+    }
+
+    for (var key in name) {
+      this.data(key,name[key]);
+    }
+
+    return this;
   },
 
-  removeData(key) { // TODO: tear out into module for IE9
+  removeData(key) {
     return this.each(v => removeData(v,key) );
   }
 
