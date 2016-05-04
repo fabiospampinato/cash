@@ -6,8 +6,8 @@
 Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
 Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing
 modern browser features to minimize the codebase, developers can use the familiar
-chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a
-goal, but cash comes helpfully close, covering most day to day use cases.
+chainable methods at a fraction of the file size. 100% feature parity with jQuery
+isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
 #### Size Comparison
 
@@ -228,12 +228,15 @@ $(element).css(object) // => collection
 
 #### $.fn.data()
 
-Link some data (string, object, array, etc.) to an element when both key and value are supplied.
-If only a key is supplied, returns the linked data and falls back to data attribute value if no data is already linked.
+Link some data (string, object, array, etc.) to an element when both key and value
+are supplied. If only a key is supplied, returns the linked data and falls back to
+data attribute value if no data is already linked. Multiple data can be set when
+an object is supplied.
 
 ```js
 $(element).data(key) // => value
 $(element).data(key, value) // => collection
+$(element).data(object) // => collection
 ```
 
 #### $.fn.each()
@@ -563,6 +566,7 @@ Removes className from collection elements. Accepts space-separated classNames
 for removing multiple classes. Providing no arguments will remove all classes.
 
 ```js
+$(element).removeClass() // => collection
 $(element).removeClass(className) // => collection
 ```
 
