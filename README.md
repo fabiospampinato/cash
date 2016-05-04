@@ -582,7 +582,7 @@ Removes property from collection elements.
 $(element).removeProp(propName) // => collection
 ```
 
-#### $.fn.serialize
+#### $.fn.serialize()
 
 When called on a form, serializes and returns form data.
 
@@ -619,15 +619,16 @@ $(element).toggleClass(className) // => collection
 $(element).toggleClass(className,force) // => collection
 ```
 
-#### $.fn.trigger
+#### $.fn.trigger()
 
-Triggers supplied event on elements in collection.
+Triggers supplied event on elements in collection. Data can be passed along as the second parameter.
 
 ```js
 $(element).trigger(eventName) // => collection
+$(element).trigger(eventName,data) // => collection
 ```
 
-#### $.fn.val
+#### $.fn.val()
 
 Returns an inputs value. If value is supplied, sets all inputs in collection's
 value to the value argument.
@@ -637,7 +638,7 @@ $(input).val() // => value
 $(input).val(value) // => collection
 ```
 
-#### $.fn.width
+#### $.fn.width()
 
 Returns the width of the element.
 

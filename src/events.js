@@ -37,26 +37,25 @@ fn.extend({
       delegate = null;
     }
 
-    if ( eventName === 'ready' ) { onReady(callback); return this; }
+    if ( eventName === 'ready' ) {
+      onReady(callback);
+      return this;
+    }
 
     if ( delegate ) {
       originalCallback = callback;
       callback = function(e) {
         var t = e.target;
 
-        if (matches(t, delegate)) {
-          originalCallback.call(t, e);
-        } else {
-          while (!matches(t, delegate)) {
-            if (t === this) {
-              return (t = false);
-            }
-            t = t.parentNode;
+        while (!matches(t, delegate)) {
+          if (t === this) {
+            return (t = false);
           }
+          t = t.parentNode;
+        }
 
-          if (t) {
-            originalCallback.call(t, e);
-          }
+        if (t) {
+          originalCallback.call(t, e);
         }
       };
     }
