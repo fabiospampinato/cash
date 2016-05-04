@@ -79,8 +79,9 @@ fn.extend({
 
   ready: onReady,
 
-  trigger(eventName) {
+  trigger(eventName, data) {
     var evt = doc.createEvent('HTMLEvents');
+    evt.data = data;
     evt.initEvent(eventName, true, false);
     return this.each(v => v.dispatchEvent(evt));
   }
