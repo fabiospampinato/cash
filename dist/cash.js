@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.2.2, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.0, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -203,18 +203,21 @@
   }
 
   fn.extend({
-    data: function (key, value) {
-      // TODO: tear out into module for IE9
-      if (!value) {
-        return getData(this[0], key);
+    data: function (name, value) {
+      if (isString(name)) {
+        return (value === undefined ? getData(this[0], name) : this.each(function (v) {
+          return setData(v, name, value);
+        }));
       }
-      return this.each(function (v) {
-        return setData(v, key, value);
-      });
+
+      for (var key in name) {
+        this.data(key, name[key]);
+      }
+
+      return this;
     },
 
     removeData: function (key) {
-      // TODO: tear out into module for IE9
       return this.each(function (v) {
         return removeData(v, key);
       });
@@ -223,6 +226,10 @@
   });
 
   var notWhiteMatch = /\S+/g;
+
+  function getClasses(c) {
+    return isString(c) && c.match(notWhiteMatch);
+  }
 
   function hasClass(v, c) {
     return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
@@ -246,25 +253,33 @@
 
   fn.extend({
     addClass: function (c) {
-      var classes = c.match(notWhiteMatch);
+      var classes = getClasses(c);
 
-      return this.each(function (v) {
+      return (classes ? this.each(function (v) {
         var spacedName = " " + v.className + " ";
         each(classes, function (c) {
           addClass(v, c, spacedName);
         });
-      });
+      }) : this);
     },
 
     attr: function (name, value) {
+      if (!name) {
+        return undefined;
+      }
+
       if (isString(name)) {
-        return (value === undefined ? this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] : this.each(function (v) {
+        if (value === undefined) {
+          return this[0] ? this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] : undefined;
+        }
+
+        return this.each(function (v) {
           if (v.setAttribute) {
             v.setAttribute(name, value);
           } else {
             v[name] = value;
           }
-        }));
+        });
       }
 
       for (var key in name) {
@@ -275,11 +290,13 @@
     },
 
     hasClass: function (c) {
-      var check = false;
-      this.each(function (v) {
-        check = hasClass(v, c);
-        return !check;
-      });
+      var check = false, classes = getClasses(c);
+      if (classes && classes.length) {
+        this.each(function (v) {
+          check = hasClass(v, classes[0]);
+          return !check;
+        });
+      }
       return check;
     },
 
@@ -308,13 +325,15 @@
     },
 
     removeClass: function (c) {
-      var classes = c.match(notWhiteMatch);
-
-      return this.each(function (v) {
+      if (!arguments.length) {
+        return this.attr("class", "");
+      }
+      var classes = getClasses(c);
+      return (classes ? this.each(function (v) {
         each(classes, function (c) {
           removeClass(v, c);
         });
-      });
+      }) : this);
     },
 
     removeProp: function (name) {
@@ -327,9 +346,8 @@
       if (state !== undefined) {
         return this[state ? "addClass" : "removeClass"](c);
       }
-      var classes = c.match(notWhiteMatch);
-
-      return this.each(function (v) {
+      var classes = getClasses(c);
+      return (classes ? this.each(function (v) {
         var spacedName = " " + v.className + " ";
         each(classes, function (c) {
           if (hasClass(v, c)) {
@@ -338,7 +356,7 @@
             addClass(v, c, spacedName);
           }
         });
-      });
+      }) : this);
     } });
 
   fn.extend({
@@ -536,8 +554,9 @@
 
     ready: onReady,
 
-    trigger: function (eventName) {
+    trigger: function (eventName, data) {
       var evt = doc.createEvent("HTMLEvents");
+      evt.data = data;
       evt.initEvent(eventName, true, false);
       return this.each(function (v) {
         return v.dispatchEvent(evt);
