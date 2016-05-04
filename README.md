@@ -4,9 +4,9 @@
 ![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
 
 Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
-Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing 
-modern browser features to minimize the codebase, developers can use the familiar 
-chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a 
+Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing
+modern browser features to minimize the codebase, developers can use the familiar
+chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a
 goal, but cash comes helpfully close, covering most day to day use cases.
 
 #### Size Comparison
@@ -21,10 +21,10 @@ goal, but cash comes helpfully close, covering most day to day use cases.
 
 ## Usage
 
-Add cash to your project on your server or using the [jsDelivr](https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js) or [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/1.2.0/cash.min.js) CDNs, and use cash to manipulate the DOM!
+Add cash to your project on your server or using the [jsDelivr](https://cdn.jsdelivr.net/cash/1.2.2/cash.min.js) or [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/1.2.2/cash.min.js) CDNs, and use cash to manipulate the DOM!
 
 ```html
-<script src="https://cdn.jsdelivr.net/cash/1.2.0/cash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/cash/1.2.2/cash.min.js"></script>
 <script>
 $(function(){
 
@@ -560,7 +560,7 @@ $(element).removeAttr(attrName) // => collection
 #### $.fn.removeClass()
 
 Removes className from collection elements. Accepts space-separated classNames
-for removing multiple classes.
+for removing multiple classes. Providing no arguments will remove all classes.
 
 ```js
 $(element).removeClass(className) // => collection
