@@ -20,13 +20,23 @@ cash.extend = fn.extend = function(target) {
   return target;
 };
 
-function each(collection, callback) {
-  var l = collection.length,
+function each(collection,callback) {
+
+  var length = collection.length,
+      likeArray = ( length === 0 || ( length > 0 && (length - 1) in collection ) ),
       i = 0;
 
-  for (; i < l; i++) {
-    if ( callback.call(collection[i], collection[i], i, collection) === false ) { break; }
+  if ( likeArray ) {
+    for ( ; i < length; i++ ) {
+      if ( callback.call( collection[i], collection[ i ], i, collection ) === false ) { break; }
+    }
+  } else {
+    for (i in collection) {
+      if ( callback.call( collection[i], collection[ i ], i, collection ) === false ) { break; }
+    }
   }
+
+  return collection;
 }
 
 function matches(el, selector) {
