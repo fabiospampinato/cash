@@ -21,7 +21,7 @@ fn.extend({
     return this.each(v => removeEvent(v, eventName, callback) );
   },
 
-  on(eventName, delegate, callback, runOnce) {
+  on(eventName, delegate, callback, runOnce) { // jshint ignore:line
 
     var originalCallback;
 
@@ -37,26 +37,25 @@ fn.extend({
       delegate = null;
     }
 
-    if ( eventName === 'ready' ) { onReady(callback); return this; }
+    if ( eventName === 'ready' ) {
+      onReady(callback);
+      return this;
+    }
 
     if ( delegate ) {
       originalCallback = callback;
       callback = function(e) {
         var t = e.target;
 
-        if (matches(t, delegate)) {
-          originalCallback.call(t);
-        } else {
-          while (!matches(t, delegate)) {
-            if (t === this) {
-              return (t = false);
-            }
-            t = t.parentNode;
+        while (!matches(t, delegate)) {
+          if (t === this) {
+            return (t = false);
           }
+          t = t.parentNode;
+        }
 
-          if (t) {
-            originalCallback.call(t);
-          }
+        if (t) {
+          originalCallback.call(t, e);
         }
       };
     }
@@ -79,8 +78,9 @@ fn.extend({
 
   ready: onReady,
 
-  trigger(eventName) {
+  trigger(eventName, data) {
     var evt = doc.createEvent('HTMLEvents');
+    evt.data = data;
     evt.initEvent(eventName, true, false);
     return this.each(v => v.dispatchEvent(evt));
   }
