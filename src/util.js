@@ -30,13 +30,14 @@ function each(collection, callback) {
 }
 
 function matches(el, selector) {
-  return (
+  var m = el && (
     el.matches ||
     el.webkitMatchesSelector ||
     el.mozMatchesSelector ||
     el.msMatchesSelector ||
     el.oMatchesSelector
-  ).call(el, selector);
+  );
+  return !!m && m.call(el, selector);
 }
 
 function unique(collection) {

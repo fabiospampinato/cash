@@ -21,7 +21,7 @@ fn.extend({
     return this.each(v => removeEvent(v, eventName, callback) );
   },
 
-  on(eventName, delegate, callback, runOnce) {
+  on(eventName, delegate, callback, runOnce) { // jshint ignore:line
 
     var originalCallback;
 
@@ -45,7 +45,7 @@ fn.extend({
         var t = e.target;
 
         if (matches(t, delegate)) {
-          originalCallback.call(t);
+          originalCallback.call(t, e);
         } else {
           while (!matches(t, delegate)) {
             if (t === this) {
@@ -55,7 +55,7 @@ fn.extend({
           }
 
           if (t) {
-            originalCallback.call(t);
+            originalCallback.call(t, e);
           }
         }
       };

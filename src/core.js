@@ -77,7 +77,7 @@ function cash(selector,context) {
   return new Init(selector,context);
 }
 
-var fn = cash.fn = cash.prototype = Init.prototype = {
+var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
   constructor: cash,
   cash: true,
   length: 0,
