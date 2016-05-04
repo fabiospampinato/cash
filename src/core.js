@@ -1,6 +1,6 @@
 var noop = function(){},
-    isFunction = function(item){ return typeof item === typeof noop; },
-    isString = function(item) { return typeof item === typeof ''; };
+    isFunction = function(item){ return type(item) === 'function'; },
+    isString = function(item) { return type(item) === 'string'; };
 
 var idMatch    = /^#[\w-]*$/,
     classMatch = /^\.[\w-]*$/,
@@ -30,6 +30,12 @@ function parseHTML(str) {
 function onReady(fn) {
   if ( doc.readyState !== 'loading' ) { fn(); }
   else { doc.addEventListener('DOMContentLoaded', fn); }
+}
+
+function type(value) {
+  var reTypeOf = /(?:^\[object\s(.*?)\]$)/;
+  var tag = Object.prototype.toString.call(value).replace(reTypeOf, '$1').toLowerCase();
+  return (tag === 'number' && isNaN(value)) ? 'nan' : tag;
 }
 
 function Init(selector,context){
@@ -91,3 +97,4 @@ cash.parseHTML = parseHTML;
 cash.noop = noop;
 cash.isFunction = isFunction;
 cash.isString = isString;
+cash.type = type;

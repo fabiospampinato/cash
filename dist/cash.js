@@ -13,9 +13,9 @@
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
 
   var noop = function () {}, isFunction = function (item) {
-    return typeof item === typeof noop;
+    return type(item) === "function";
   }, isString = function (item) {
-    return typeof item === typeof "";
+    return type(item) === "string";
   };
 
   var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
@@ -40,6 +40,12 @@
     } else {
       doc.addEventListener("DOMContentLoaded", fn);
     }
+  }
+
+  function type(value) {
+    var reTypeOf = /(?:^\[object\s(.*?)\]$)/;
+    var tag = Object.prototype.toString.call(value).replace(reTypeOf, "$1").toLowerCase();
+    return (tag === "number" && isNaN(value)) ? "nan" : tag;
   }
 
   function Init(selector, context) {
@@ -105,6 +111,7 @@
   cash.noop = noop;
   cash.isFunction = isFunction;
   cash.isString = isString;
+  cash.type = type;
 
   cash.extend = fn.extend = function (target) {
     target = target || {};
