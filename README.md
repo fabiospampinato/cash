@@ -4,18 +4,18 @@
 ![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
 
 Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
-Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing 
-modern browser features to minimize the codebase, developers can use the familiar 
-chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a 
-goal, but cash comes helpfully close, covering most day to day use cases.
+Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing
+modern browser features to minimize the codebase, developers can use the familiar
+chainable methods at a fraction of the file size. 100% feature parity with jQuery
+isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
 #### Size Comparison
 
-| Library                   | jQuery 1.12.2 | jQuery 2.2.2  | Cash     |
-| ------------------------- | -------------:| -------------:| --------:|
-| Uncompressed              | 287K          | 253K          | 20K      |
-| Minified                  | 95K           | 76K           | 9.5K     |
-| **Minified & Gzipped**    | **34K**       | **30K**       | **3.4K** |
+| Library                   | jQuery 1.12.2 | jQuery 2.2.2  | Cash       |
+| ------------------------- | -------------:| -------------:| ----------:|
+| Uncompressed              | 287K          | 253K          | 20.6K      |
+| Minified                  | 95K           | 76K           | 9.7K       |
+| **Minified & Gzipped**    | **34K**       | **30K**       | **3.5K**   |
 
 ---
 
@@ -228,12 +228,15 @@ $(element).css(object) // => collection
 
 #### $.fn.data()
 
-Link some data (string, object, array, etc.) to an element when both key and value are supplied.
-If only a key is supplied, returns the linked data and falls back to data attribute value if no data is already linked.
+Link some data (string, object, array, etc.) to an element when both key and value
+are supplied. If only a key is supplied, returns the linked data and falls back to
+data attribute value if no data is already linked. Multiple data can be set when
+an object is supplied.
 
 ```js
 $(element).data(key) // => value
 $(element).data(key, value) // => collection
+$(element).data(object) // => collection
 ```
 
 #### $.fn.each()
@@ -560,9 +563,10 @@ $(element).removeAttr(attrName) // => collection
 #### $.fn.removeClass()
 
 Removes className from collection elements. Accepts space-separated classNames
-for removing multiple classes.
+for removing multiple classes. Providing no arguments will remove all classes.
 
 ```js
+$(element).removeClass() // => collection
 $(element).removeClass(className) // => collection
 ```
 
@@ -582,7 +586,7 @@ Removes property from collection elements.
 $(element).removeProp(propName) // => collection
 ```
 
-#### $.fn.serialize
+#### $.fn.serialize()
 
 When called on a form, serializes and returns form data.
 
@@ -619,15 +623,16 @@ $(element).toggleClass(className) // => collection
 $(element).toggleClass(className,force) // => collection
 ```
 
-#### $.fn.trigger
+#### $.fn.trigger()
 
-Triggers supplied event on elements in collection.
+Triggers supplied event on elements in collection. Data can be passed along as the second parameter.
 
 ```js
 $(element).trigger(eventName) // => collection
+$(element).trigger(eventName,data) // => collection
 ```
 
-#### $.fn.val
+#### $.fn.val()
 
 Returns an inputs value. If value is supplied, sets all inputs in collection's
 value to the value argument.
@@ -637,7 +642,7 @@ $(input).val() // => value
 $(input).val(value) // => collection
 ```
 
-#### $.fn.width
+#### $.fn.width()
 
 Returns the width of the element.
 
