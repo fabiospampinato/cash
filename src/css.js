@@ -3,7 +3,7 @@ var getPrefixedProp = (function() {
       div = doc.createElement('div'),
       style = div.style,
       camelRegex = /(?:^\w|[A-Z]|\b\w)/g,
-      whiteSpace = /\s+/g;
+      whiteSpace = /[\s-]+/g;
 
   function camelCase(str) {
     return str.replace(camelRegex, function(letter, index) {

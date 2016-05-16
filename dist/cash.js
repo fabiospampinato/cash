@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.3.0, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.1, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -402,7 +402,7 @@
   });
 
   var getPrefixedProp = (function () {
-    var cache = {}, div = doc.createElement("div"), style = div.style, camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /\s+/g;
+    var cache = {}, div = doc.createElement("div"), style = div.style, camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /[\s-]+/g;
 
     function camelCase(str) {
       return str.replace(camelRegex, function (letter, index) {
