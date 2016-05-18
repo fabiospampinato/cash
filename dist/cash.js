@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.3.1, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.2, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -391,8 +391,8 @@
     },
 
     index: function (elem) {
-      var f = this[0];
-      return slice.call(elem ? cash(elem) : cash(f).parent().children()).indexOf(f);
+      var child = elem ? cash(elem)[0] : this[0], collection = elem ? this : cash(child).parent().children();
+      return slice.call(collection).indexOf(child);
     },
 
     last: function () {

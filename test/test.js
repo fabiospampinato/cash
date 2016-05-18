@@ -212,6 +212,8 @@ QUnit.test( "get", function( assert ) {
 QUnit.test( "index", function( assert ) {
   var indexFixture = $('.qsa-fixture').index();
   assert.equal(indexFixture, 3, "index Passed!" );
+  var indexFixture = $('#qunit-fixture').children().index('.qsa-fixture');
+  assert.equal(indexFixture, 3, "index Passed!" );
 });
 
 QUnit.test( "last", function( assert ) {
