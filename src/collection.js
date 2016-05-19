@@ -14,7 +14,11 @@ fn.extend({
   },
 
   filter(selector) {
-    return cash(filter.call(this, ( isString(selector) ? e => matches(e, selector) : selector )));
+    var fn = isFunction(selector) && selector;
+    if ( !fn ) {
+      fn = ( isString(selector) ? e => matches(e, selector) : e => e === selector );
+    }
+    return cash(filter.call(this, fn));
   },
 
   first() {

@@ -374,9 +374,15 @@
     },
 
     filter: function (selector) {
-      return cash(filter.call(this, (isString(selector) ? function (e) {
-        return matches(e, selector);
-      } : selector)));
+      var fn = isFunction(selector) && selector;
+      if (!fn) {
+        fn = (isString(selector) ? function (e) {
+          return matches(e, selector);
+        } : function (e) {
+          return e === selector;
+        });
+      }
+      return cash(filter.call(this, fn));
     },
 
     first: function () {
