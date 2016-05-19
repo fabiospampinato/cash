@@ -38,7 +38,15 @@ QUnit.test( "className Query for non-existing element", function( assert ) {
 
 //Attributes
 
-QUnit.test( "addClass", function( assert ) {
+QUnit.test( 'addClass', function( assert ) {
+
+  $('.class-fixture').addClass( '' );
+  $('.class-fixture').addClass( undefined );
+  $('.class-fixture').addClass( null );
+  assert.equal( true, true, 'addClass doesn\'t die on falsey' );
+  $('.class-fixture').addClass( 4 );
+  assert.equal( true, true, 'addClass doesn\'t die on integer' );
+
   $('.class-fixture').addClass('add-class');
   assert.equal($('.add-class').length, 1, "addClass Passed!" );
   $('.class-fixture').addClass('add-class class-two');
@@ -59,12 +67,29 @@ QUnit.test( "attr", function( assert ) {
   testAttr = $('.attr-fixture').attr('success');
   assert.equal(testAttr, 'set', "attr set Passed!" );
 
-  $('.attr-fixture').attr({ 'success': 'set', 'multi-success': 'set' });
+  var testReturn = $('.attr-fixture').attr({ 'success': 'set', 'multi-success': 'set' });
   testAttr = [$('.attr-fixture').attr('success'),$('.attr-fixture').attr('multi-success')].join(' ');
+  assert.equal(testReturn instanceof cash, true, "attr set returns collection!" );
   assert.equal(testAttr, 'set set', "attr set multiple Passed!" );
+
+  testAttr = $('.attr-fixture, .attr-fixture2').attr("nothing");
+  assert.equal( testAttr, undefined, "non-existing attribute returns undefined");
+
+  testAttr = $('.attr-fixture').attr();
+  assert.equal( testAttr, undefined, "no argument passed returns undefined");
+
 });
 
 QUnit.test( "hasClass", function( assert ) {
+
+  $('.class-fixture').hasClass( '' );
+  $('.class-fixture').hasClass( ' ' );
+  $('.class-fixture').hasClass( undefined );
+  $('.class-fixture').hasClass( null );
+  assert.equal( true, true, 'hasClass doesn\'t die on falsey' );
+  $('.class-fixture').hasClass( 4 );
+  assert.equal( true, true, 'hasClass doesn\'t die on integer' );
+
   var hasClass = $('.attr-fixture').hasClass('has-class');
   assert.equal(hasClass, true, "hasClass (true) Passed!" );
 
@@ -73,6 +98,15 @@ QUnit.test( "hasClass", function( assert ) {
 });
 
 QUnit.test( "toggleClass", function( assert ) {
+
+  $('.class-fixture').toggleClass( '' );
+  $('.class-fixture').toggleClass( ' ' );
+  $('.class-fixture').toggleClass( undefined );
+  $('.class-fixture').toggleClass( null );
+  assert.equal( true, true, 'toggleClass doesn\'t die on falsey' );
+  $('.class-fixture').toggleClass( 4 );
+  assert.equal( true, true, 'toggleClass doesn\'t die on integer' );
+
   var hasClass = $('.attr-fixture').toggleClass('toggle-class-force',true).hasClass('toggle-class-force');
   assert.equal(hasClass, true, "toggleClass (force add) Passed!" );
   hasClass = $('.attr-fixture').toggleClass('toggle-class-force',false).hasClass('toggle-class-force');
@@ -103,11 +137,25 @@ QUnit.test( "removeAttr", function( assert ) {
 });
 
 QUnit.test( "removeClass", function( assert ) {
+
+  var $cf = $('.class-fixture');
+  $cf.removeClass( '' );
+  $cf.removeClass( ' ' );
+  $cf.removeClass( undefined );
+  $cf.removeClass( null );
+  assert.equal( true, true, 'removeClass doesn\'t die on falsey' );
+  $cf.removeClass( 4 );
+  assert.equal( true, true, 'removeClass doesn\'t die on integer' );
+
   $('.attr-fixture').removeClass('has-class');
   assert.equal( $('.attr-fixture')[0].className, "attr-fixture has-class-two has-class-three", "removeClass Passed!" );
   $('.attr-fixture, .attr-fixture2').removeClass('has-class-three has-class-two');
   assert.equal( $('.attr-fixture')[0].className, "attr-fixture", "removeClass Multiple Passed!" );
   assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
+
+  $cf.removeClass();
+  assert.equal( $cf.className, undefined, 'removing all classes passed!' );
+  $cf.addClass('class-fixture');
 });
 
 //Collection
@@ -121,13 +169,13 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
 
   addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 13, "add(collections) Passed!" );
+  assert.equal(addFixture.length, 14, "add(collections) Passed!" );
 
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
-  assert.equal(addFixture.length, 4, "add(no duplicates) Passed!" );
+  assert.equal(addFixture.length, 5, "add(no duplicates) Passed!" );
 
   addFixture = $('#id-fixture').add( "#qunit-fixture a" );
-  assert.equal(addFixture.length, 5, "add(allow selector string) Passed!" );
+  assert.equal(addFixture.length, 6, "add(allow selector string) Passed!" );
 });
 
 QUnit.test( "each", function( assert ) {
@@ -163,6 +211,8 @@ QUnit.test( "get", function( assert ) {
 
 QUnit.test( "index", function( assert ) {
   var indexFixture = $('.qsa-fixture').index();
+  assert.equal(indexFixture, 3, "index Passed!" );
+  var indexFixture = $('#qunit-fixture').children().index('.qsa-fixture');
   assert.equal(indexFixture, 3, "index Passed!" );
 });
 
@@ -269,6 +319,16 @@ QUnit.test( "trigger", function( assert ) {
   assert.equal($('.trigger-fixture')[0].textContent, 2, "trigger Passed!" );
 });
 
+QUnit.test( "trigger(data)", function( assert ) {
+  var i = 1;
+  $('.trigger-data-fixture').on('custom', function(e){
+      i += e.data;
+      this.textContent = i;
+  });
+  $('.trigger-data-fixture').trigger('custom', 1);
+  assert.equal($('.trigger-data-fixture')[0].textContent, 2, "trigger(data) Passed!" );
+});
+
 //Forms
 
 QUnit.test( "serialize", function( assert ) {
@@ -285,7 +345,7 @@ QUnit.test( "val", function( assert ) {
 //Traversal
 
 QUnit.test( "children", function( assert ) {
-  assert.equal($('#qunit-fixture').children().length, 14, "children Passed!" );
+  assert.equal($('#qunit-fixture').children().length, 15, "children Passed!" );
   assert.equal($('#qunit-fixture').children('div').length, 6, "children(selector) Passed!" );
 });
 
@@ -326,7 +386,7 @@ QUnit.test( "prev", function( assert ) {
 });
 
 QUnit.test( "siblings", function( assert ) {
-  assert.equal($('#id-fixture').siblings().length, 13, "siblings Passed!" );
+  assert.equal($('#id-fixture').siblings().length, 14, "siblings Passed!" );
 });
 
 QUnit.test( "is", function( assert ) {

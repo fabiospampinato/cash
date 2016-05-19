@@ -27,8 +27,9 @@ fn.extend({
   },
 
   index(elem) {
-    var f = this[0];
-    return slice.call( elem ? cash(elem) : cash(f).parent().children() ).indexOf(f);
+    var child = elem ? cash(elem)[0] : this[0],
+        collection = elem ? this : cash(child).parent().children();
+    return slice.call( collection ).indexOf(child);
   },
 
   last() {

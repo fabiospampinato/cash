@@ -14,6 +14,7 @@ gulp.task('build', function () {
     .pipe($.rename('cash.js'))
     .pipe($['6to5']())
     .pipe($.size())
+    .pipe($.size({ gzip: true }))
     .pipe(gulp.dest('./dist/'));
 });
 
@@ -23,6 +24,7 @@ gulp.task('minify', ['build'], function() {
       preserveComments: 'license'
     }))
     .pipe($.size())
+    .pipe($.size({ gzip: true }))
     .pipe($.rename('cash.min.js'))
     .pipe(gulp.dest('./dist/'));
 });
