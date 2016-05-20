@@ -1,15 +1,18 @@
-var getPrefixedProp = (function() {
-  var cache = {},
-      div = doc.createElement('div'),
-      style = div.style,
-      camelRegex = /(?:^\w|[A-Z]|\b\w)/g,
-      whiteSpace = /[\s-]+/g;
-
-  function camelCase(str) {
+var camelCase = (function(){
+  var camelRegex = /(?:^\w|[A-Z]|\b\w)/g,
+      whiteSpace = /[\s-_]+/g;
+  return function(str) {
     return str.replace(camelRegex, function(letter, index) {
       return letter[ index === 0 ? 'toLowerCase' : 'toUpperCase' ]();
     }).replace(whiteSpace, '');
-  }
+  };
+}());
+
+var getPrefixedProp = (function() {
+  var cache = {},
+      doc = document,
+      div = doc.createElement('div'),
+      style = div.style;
 
   return function(prop) {
     prop = camelCase(prop);
@@ -19,7 +22,7 @@ var getPrefixedProp = (function() {
         prefixes = ['webkit', 'moz', 'ms', 'o'],
         props = (prop + ' ' + (prefixes).join(ucProp + ' ') + ucProp).split(' ');
 
-    each(props,p => {
+    each(props, p => {
       if ( p in style ) {
         cache[p] = prop = cache[prop] = p;
         return false;
@@ -30,12 +33,15 @@ var getPrefixedProp = (function() {
   };
 }());
 
+cash.prefixedProp = getPrefixedProp;
+cash.camelCase = camelCase;
+
 fn.extend({
 
   css(prop,value){
     if ( isString(prop) ) {
       prop = getPrefixedProp(prop);
-      return ( value ?
+      return ( arguments.length > 1 ?
         this.each(v => v.style[prop] = value ) :
         win.getComputedStyle(this[0])[prop]
       );

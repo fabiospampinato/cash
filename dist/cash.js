@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.3.2, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.3, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -401,14 +401,17 @@
 
   });
 
-  var getPrefixedProp = (function () {
-    var cache = {}, div = doc.createElement("div"), style = div.style, camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /[\s-]+/g;
-
-    function camelCase(str) {
+  var camelCase = (function () {
+    var camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /[\s-_]+/g;
+    return function (str) {
       return str.replace(camelRegex, function (letter, index) {
         return letter[index === 0 ? "toLowerCase" : "toUpperCase"]();
       }).replace(whiteSpace, "");
-    }
+    };
+  }());
+
+  var getPrefixedProp = (function () {
+    var cache = {}, doc = document, div = doc.createElement("div"), style = div.style;
 
     return function (prop) {
       prop = camelCase(prop);
@@ -429,11 +432,14 @@
     };
   }());
 
+  cash.prefixedProp = getPrefixedProp;
+  cash.camelCase = camelCase;
+
   fn.extend({
     css: function (prop, value) {
       if (isString(prop)) {
         prop = getPrefixedProp(prop);
-        return (value ? this.each(function (v) {
+        return (arguments.length > 1 ? this.each(function (v) {
           return v.style[prop] = value;
         }) : win.getComputedStyle(this[0])[prop]);
       }
