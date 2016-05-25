@@ -1,5 +1,8 @@
 var noop = function(){},
-    isFunction = function(item){ return typeof item === typeof noop; },
+    isFunction = function(item) {
+        // @see https://crbug.com/568448
+        return typeof item === typeof noop && item.call;
+    },
     isString = function(item) { return typeof item === typeof ''; };
 
 var idMatch    = /^#[\w-]*$/,

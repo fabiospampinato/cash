@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.3.3, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.4-rc1, https://github.com/kenwheeler/cash @license MIT */
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
@@ -13,7 +13,8 @@
   var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
 
   var noop = function () {}, isFunction = function (item) {
-    return typeof item === typeof noop;
+    // @see https://crbug.com/568448
+    return typeof item === typeof noop && item.call;
   }, isString = function (item) {
     return typeof item === typeof "";
   };
