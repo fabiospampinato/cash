@@ -461,6 +461,8 @@ QUnit.test( "remove", function( assert ) {
 QUnit.test( "text", function( assert ) {
   $('.class-fixture').text('Text Content');
   assert.equal($('.class-fixture')[0].textContent, "Text Content", "text Passed!" );
+  $('.class-fixture').text(0);
+  assert.equal($('.class-fixture')[0].textContent, 0, "text Passed!" );
 });
 
 //Utils

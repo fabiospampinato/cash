@@ -92,7 +92,7 @@ fn.extend({
   },
 
   text(content) {
-    if (!content) { return this[0].textContent; }
+    if ( content === undefined ) { return this[0].textContent; }
     return this.each(v => v.textContent = content);
   }
 
