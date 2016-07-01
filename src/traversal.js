@@ -104,7 +104,7 @@ fn.extend({
     var collection = this.parent().children(),
         el = this[0];
 
-    return filter.call(collection, i => i !== el);
+    return collection.filter(i => i !== el);
   }
 
 });
