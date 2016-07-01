@@ -50,9 +50,13 @@ fn.extend({
   },
 
   has(selector) {
-    return filter.call(this, el => {
-      return cash(el).find(selector).length !== 0;
-    });
+
+    var comparator = (
+      isString(selector) ? el => { return find(selector,el).length !== 0; } :
+      el => { return el.contains(selector); }
+    );
+
+    return this.filter(comparator);
   },
 
   next() {
