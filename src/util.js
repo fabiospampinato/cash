@@ -40,6 +40,17 @@ function matches(el, selector) {
   return !!m && m.call(el, selector);
 }
 
+function getCompareFunction(selector){
+  return (
+    /* Use browser's `matches` function if string */
+    isString(selector) ? matches :
+    /* Match a cash element */
+    selector.cash ? el => { return selector.is(el); } :
+    /* Direct comparison */
+    function(el,selector){ return el === selector; }
+  );
+}
+
 function unique(collection) {
   return cash(slice.call(collection).filter((item, index, self) => {
     return self.indexOf(item) === index;

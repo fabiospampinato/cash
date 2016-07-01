@@ -1,14 +1,3 @@
-function getCompareFunction(selector){
-  return (
-    /* Use browser's `matches` function if string */
-    isString(selector) ? matches :
-    /* Match a cash element */
-    selector.cash ? el => { return selector.is(el); } :
-    /* Direct comparison */
-    function(el,selector){ return el === selector; }
-  );
-}
-
 fn.extend({
 
   children(selector) {
@@ -25,7 +14,8 @@ fn.extend({
   },
 
   closest(selector) {
-    if (!selector || matches(this[0], selector)) { return this; }
+    if ( !selector ) { return cash(); }
+    if ( this.is(selector) ) { return this.filter(selector); }
     return this.parent().closest(selector);
   },
 
