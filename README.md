@@ -11,11 +11,11 @@ isn't a goal, but cash comes helpfully close, covering most day to day use cases
 
 #### Size Comparison
 
-| Library                   | jQuery 1.12.2 | jQuery 2.2.2  | Cash       |
-| ------------------------- | -------------:| -------------:| ----------:|
-| Uncompressed              | 287K          | 253K          | 20.6K      |
-| Minified                  | 95K           | 76K           | 9.7K       |
-| **Minified & Gzipped**    | **34K**       | **30K**       | **3.5K**   |
+| Library                   | **Cash**       | jQuery 3.0  | jQuery 2.2  |
+| ------------------------- | --------------:| -----------:| -----------:|
+| Uncompressed              | **20K**        | 263K        | 253K        |
+| Minified                  | **9.8K**       | 86K         | 76K         |
+| **Minified & Gzipped**    | **3.5K**       | 34K         | 30K         |
 
 ---
 
