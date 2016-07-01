@@ -16,9 +16,12 @@ fn.extend({
     this.each(el => { push.apply(elems,el.children); });
     elems = unique(elems);
 
-    return ( !selector ? elems : elems.filter(v => {
+    return (
+      !selector ? elems :
+      elems.filter(v => {
         return matches(v, selector);
-      }) );
+      })
+    );
   },
 
   closest(selector) {
@@ -46,7 +49,7 @@ fn.extend({
     }
 
     var elems = [];
-    this.each(el => { push.apply(elems,find(selector,el)); });
+    this.each(el => { push.apply(elems, find(selector,el) ); });
 
     return unique(elems);
   },
