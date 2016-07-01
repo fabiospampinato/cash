@@ -145,6 +145,20 @@
     return !!m && m.call(el, selector);
   }
 
+  function getCompareFunction(selector) {
+    return (
+    /* Use browser's `matches` function if string */
+    isString(selector) ? matches :
+    /* Match a cash element */
+    selector.cash ? function (el) {
+      return selector.is(el);
+    } :
+    /* Direct comparison */
+    function (el, selector) {
+      return el === selector;
+    });
+  }
+
   function unique(collection) {
     return cash(slice.call(collection).filter(function (item, index, self) {
       return self.indexOf(item) === index;
@@ -374,9 +388,15 @@
     },
 
     filter: function (selector) {
-      return cash(filter.call(this, (isString(selector) ? function (e) {
-        return matches(e, selector);
-      } : selector)));
+      if (!selector) {
+        return this;
+      }
+
+      var comparator = (isFunction(selector) ? selector : getCompareFunction(selector));
+
+      return cash(filter.call(this, function (e) {
+        return comparator(e, selector);
+      }));
     },
 
     first: function () {
@@ -755,10 +775,6 @@
 
   });
 
-  function directCompare(el, selector) {
-    return el === selector;
-  }
-
   fn.extend({
     children: function (selector) {
       var elems = [];
@@ -773,8 +789,11 @@
     },
 
     closest: function (selector) {
-      if (!selector || matches(this[0], selector)) {
-        return this;
+      if (!selector) {
+        return cash();
+      }
+      if (this.is(selector)) {
+        return this.filter(selector);
       }
       return this.parent().closest(selector);
     },
@@ -784,12 +803,10 @@
         return false;
       }
 
-      var match = false, comparator = (isString(selector) ? matches : selector.cash ? function (el) {
-        return selector.is(el);
-      } : directCompare);
+      var match = false, comparator = getCompareFunction(selector);
 
-      this.each(function (el, i) {
-        match = comparator(el, selector, i);
+      this.each(function (el) {
+        match = comparator(el, selector);
         return !match;
       });
 
@@ -797,8 +814,8 @@
     },
 
     find: function (selector) {
-      if (!selector) {
-        return cash();
+      if (!selector || selector.nodeType) {
+        return cash(selector && this.has(selector).length ? selector : null);
       }
 
       var elems = [];
@@ -810,9 +827,13 @@
     },
 
     has: function (selector) {
-      return filter.call(this, function (el) {
-        return cash(el).find(selector).length !== 0;
+      var comparator = (isString(selector) ? function (el) {
+        return find(selector, el).length !== 0;
+      } : function (el) {
+        return el.contains(selector);
       });
+
+      return this.filter(comparator);
     },
 
     next: function () {
@@ -820,8 +841,14 @@
     },
 
     not: function (selector) {
-      return filter.call(this, function (el) {
-        return !matches(el, selector);
+      if (!selector) {
+        return this;
+      }
+
+      var comparator = getCompareFunction(selector);
+
+      return this.filter(function (el) {
+        return !comparator(el, selector);
       });
     },
 
@@ -858,7 +885,7 @@
     siblings: function () {
       var collection = this.parent().children(), el = this[0];
 
-      return filter.call(collection, function (i) {
+      return collection.filter(function (i) {
         return i !== el;
       });
     }

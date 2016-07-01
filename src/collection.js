@@ -16,7 +16,7 @@ fn.extend({
   filter(selector) {
     if ( !selector ) { return this; }
 
-    var comparator = ( isFunction(selector) ? selector : getCompareFunction(selector ))
+    var comparator = ( isFunction(selector) ? selector : getCompareFunction(selector ));
 
     return cash( filter.call(this, e => comparator(e, selector) ) );
   },
