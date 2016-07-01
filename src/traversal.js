@@ -1,4 +1,13 @@
-function directCompare(el,selector){ return el === selector; }
+function getCompareFunction(selector){
+  return (
+    /* Use browser's `matches` function if string */
+    isString(selector) ? matches :
+    /* Match a cash element */
+    selector.cash ? el => { return selector.is(el); } :
+    /* Direct comparison */
+    function(el,selector){ return el === selector; }
+  );
+}
 
 fn.extend({
 
@@ -21,14 +30,10 @@ fn.extend({
     if ( !selector ) { return false; }
 
     var match = false,
-        comparator = (
-          isString(selector) ? matches :
-          selector.cash ? el => { return selector.is(el); } :
-          directCompare
-        );
+        comparator = getCompareFunction(selector);
 
-    this.each((el,i) => {
-      match = comparator(el,selector,i);
+    this.each(el => {
+      match = comparator(el,selector);
       return !match;
     });
 
@@ -55,8 +60,12 @@ fn.extend({
   },
 
   not(selector) {
-    return filter.call(this, el => {
-      return !matches(el, selector);
+    if ( !selector ) { return this; }
+
+    var comparator = getCompareFunction(selector);
+
+    return this.filter(el => {
+      return !comparator(el, selector);
     });
   },
 
