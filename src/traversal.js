@@ -41,7 +41,9 @@ fn.extend({
   },
 
   find(selector) {
-    if ( !selector ) { return cash(); }
+    if ( !selector || selector.nodeType ) {
+      return cash( selector && this.has(selector).length ? selector : null );
+    }
 
     var elems = [];
     this.each(el => { push.apply(elems,find(selector,el)); });
