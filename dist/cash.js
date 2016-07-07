@@ -789,7 +789,7 @@
     },
 
     closest: function (selector) {
-      if (!selector) {
+      if (!selector || this.length < 1) {
         return cash();
       }
       if (this.is(selector)) {
@@ -853,8 +853,12 @@
     },
 
     parent: function () {
-      var result = this.map(function (item) {
-        return item.parentElement || doc.body.parentNode;
+      var result = [];
+
+      this.each(function (item) {
+        if (item && item.parentNode) {
+          result.push(item.parentNode);
+        }
       });
 
       return unique(result);
@@ -866,8 +870,8 @@
       this.each(function (item) {
         last = item;
 
-        while (last !== doc.body.parentNode) {
-          last = last.parentElement;
+        while (last && last.parentNode && last !== doc.body.parentNode) {
+          last = last.parentNode;
 
           if (!selector || (selector && matches(last, selector))) {
             result.push(last);

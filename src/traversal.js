@@ -14,7 +14,7 @@ fn.extend({
   },
 
   closest(selector) {
-    if ( !selector ) { return cash(); }
+    if ( !selector || this.length < 1 ) { return cash(); }
     if ( this.is(selector) ) { return this.filter(selector); }
     return this.parent().closest(selector);
   },
@@ -69,8 +69,10 @@ fn.extend({
   },
 
   parent() {
-    var result = this.map(item => {
-      return item.parentElement || doc.body.parentNode;
+    var result = [];
+
+    this.each(item => {
+      if (item && item.parentNode) { result.push(item.parentNode); }
     });
 
     return unique(result);
@@ -83,8 +85,8 @@ fn.extend({
     this.each(item => {
       last = item;
 
-      while (last !== doc.body.parentNode) {
-        last = last.parentElement;
+      while ( last && last.parentNode && last !== doc.body.parentNode ) {
+        last = last.parentNode;
 
         if (!selector || (selector && matches(last, selector))) {
           result.push(last);
