@@ -169,7 +169,7 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
 
   addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 14, "add(collections) Passed!" );
+  assert.equal(addFixture.length, 15, "add(collections) Passed!" );
 
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 5, "add(no duplicates) Passed!" );

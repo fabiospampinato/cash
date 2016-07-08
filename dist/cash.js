@@ -577,7 +577,7 @@
       var formEl = this[0].elements || this, query = "";
 
       each(formEl, function (field) {
-        if (field.name && formExcludes.indexOf(field.type) < 0) {
+        if (field.name && !field.disabled && formExcludes.indexOf(field.type) < 0) {
           if (field.type === "select-multiple") {
             each(field.options, function (o) {
               if (o.selected) {
@@ -594,13 +594,9 @@
     },
 
     val: function (value) {
-      if (value === undefined) {
-        return this[0].value;
-      } else {
-        return this.each(function (v) {
-          return v.value = value;
-        });
-      }
+      return (value === undefined ? this[0].value : this.each(function (v) {
+        return v.value = value;
+      }));
     }
 
   });
