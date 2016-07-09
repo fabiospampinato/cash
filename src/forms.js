@@ -1,11 +1,42 @@
 function encode(name,value) {
-  return '&' + encodeURIComponent(name) + '=' + encodeURIComponent(value).replace(/%20/g, '+');
-}
-function isCheckable(field){
-  return field.type === 'radio' || field.type === 'checkbox';
+  return '&' + encodeURIComponent(name) + '=' +
+    encodeURIComponent(value).replace(/%20/g, '+');
 }
 
-var formExcludes = ['file','reset','submit','button'];
+function getSelectMultiple_(el) {
+  var values = [];
+  each(el.options, o => {
+    if (o.selected) {
+      values.push(o.value);
+    }
+  });
+  return values.length ? values : null;
+}
+
+function getSelectSingle_(el) {
+  var selectedIndex = el.selectedIndex;
+  return selectedIndex >= 0 ? el.options[selectedIndex].value :
+    null;
+}
+
+function getValue(el) {
+  var type = el.type;
+  if (!type) {
+    return null;
+  }
+  switch (type.toLowerCase()) {
+    case 'select-one':
+      return getSelectSingle_(el);
+    case 'select-multiple':
+      return getSelectMultiple_(el);
+    case 'radio':
+      return (el.checked) ? el.value : null;
+    case 'checkbox':
+      return (el.checked) ? el.value : null;
+    default:
+      return el.value ? el.value : null;
+  }
+}
 
 fn.extend({
 
@@ -13,17 +44,30 @@ fn.extend({
     var formEl = this[0].elements,
         query = '';
 
-    each(formEl,field => {
-      if (field.name && formExcludes.indexOf(field.type) < 0) {
-        if ( field.type === 'select-multiple') {
-          each(field.options, o => {
-            if ( o.selected) {
-              query += encode(field.name,o.value);
-            }
-          });
-        } else if ( !isCheckable(field) || (isCheckable(field) && field.checked) )  {
-          query += encode(field.name,field.value);
-        }
+    each(formEl, el => {
+      if (el.disabled || el.tagName === 'FIELDSET') {
+        return;
+      }
+      var name = el.name;
+      switch (el.type.toLowerCase()) {
+        case 'file':
+        case 'reset':
+        case 'submit':
+        case 'button':
+          break;
+        case 'select-multiple':
+          var values = getValue(el);
+          if (values !== null) {
+            each(values, value => {
+              query += encode(name, value);
+            });
+          }
+          break;
+        default:
+          var value = getValue(el);
+          if (value !== null) {
+            query += encode(name, value);
+          }
       }
     });
 
