@@ -642,7 +642,7 @@
 
     val: function (value) {
       if (value === undefined) {
-        return this[0].value;
+        return getValue(this[0]);
       } else {
         return this.each(function (v) {
           return v.value = value;

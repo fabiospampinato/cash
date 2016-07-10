@@ -76,7 +76,7 @@ fn.extend({
 
   val(value) {
     if (value === undefined) {
-      return this[0].value;
+      return getValue(this[0]);
     } else {
       return this.each(v => v.value = value);
     }
