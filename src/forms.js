@@ -41,10 +41,9 @@ function getValue(el) {
 fn.extend({
 
   serialize() {
-    var formEl = this[0].elements,
-        query = '';
+    var query = '';
 
-    each(formEl, el => {
+    each(this[0].elements || this, el => {
       if (el.disabled || el.tagName === 'FIELDSET') {
         return;
       }

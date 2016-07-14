@@ -608,9 +608,9 @@
 
   fn.extend({
     serialize: function () {
-      var formEl = this[0].elements, query = "";
+      var query = "";
 
-      each(formEl, function (el) {
+      each(this[0].elements || this, function (el) {
         if (el.disabled || el.tagName === "FIELDSET") {
           return;
         }
