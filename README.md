@@ -110,7 +110,7 @@ $(element).addClass(className) // => collection
 | [$.isFunction()](#isfunction) | [$.extend()](#extend) |
 | [$.isNumeric()](#isnumeric) | [$.matches()](#matches) |
 | [$.isString()](#isstring) | [$.parseHTML()](#parsehtml) |
-
+||$.ajax()
 ----
 
 #### $.fn
@@ -724,3 +724,40 @@ Returns a collection from an HTML string.
 $.parseHTML(htmlString) // => Collection
 ```
 
+### $.ajax()
+
+Very simple GET and POST requests.
+
+```js
+$.ajax("https://httpbin.org/post/", {method: "POST", postParams: {name: "Mats", age: 14}}, function() {
+  console.log(this.responseText);
+})
+
+$.ajax("https://httpbin.org/", {}, function() {
+  console.log(this.responseText);
+})
+```
+
+Options:
+
+```js
+{
+  // HTTP method (GET or POST)
+  method: "GET"
+  // What is expected as a response
+  responseType: "",
+  // Extra event listeners for the request, e.g {onReadyStateChange: function() {
+  //   console.log("Ready state changed");
+  // }}
+  listeners: {},
+  // The event that calls the callback
+  callbackEvent: "load",
+  // Username and password for HTTP auth (null means no auth)
+  user: null,
+  password: null,
+  // Extra headers, e.g {"X-MY-HEADER", "Hey"}
+  headers: {},
+  // Parameters for the POST request (this is only necessary for post requests)
+  postParams: {}
+}
+```
