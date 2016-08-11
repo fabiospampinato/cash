@@ -28,6 +28,7 @@
   // @include ./manipulation.js
   // @include ./offset.js
   // @include ./traversal.js
+  // @include ./ajax.js
 
   return cash;
 });
