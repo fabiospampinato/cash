@@ -279,12 +279,14 @@ QUnit.test( "outerWidth", function( assert ) {
 
 QUnit.test( "on", function( assert ) {
   var i = 1;
-  $('.event-fixture').on('click', function(){
+  $('.event-fixture').on('click touchstart', function(){
     i++;
     this.textContent = i;
   });
   $('.event-fixture').trigger('click');
   assert.equal($('.event-fixture')[0].textContent, 2, "on Passed!" );
+  $('.event-fixture').trigger('click');
+  assert.equal($('.event-fixture')[0].textContent, 3, "on Passed!" );
 });
 
 QUnit.test( "on(delegate)", function( assert ) {
@@ -299,7 +301,7 @@ QUnit.test( "on(delegate)", function( assert ) {
 
 QUnit.test( "off", function( assert ) {
   var i = 1;
-  $('.off-fixture').on('click', function(){
+  $('.off-fixture').on('click, touchstart', function(){
     i++;
     this.textContent = i;
   });
@@ -307,16 +309,22 @@ QUnit.test( "off", function( assert ) {
   $('.off-fixture').off('click');
   $('.off-fixture').trigger('click');
   assert.equal($('.off-fixture')[0].textContent, 2, "on Passed!" );
+  $('.off-fixture').trigger('touchstart');
+  $('.off-fixture').off('touchstart');
+  $('.off-fixture').trigger('touchstart');
+  assert.equal($('.off-fixture')[0].textContent, 3, "on Passed!" );
 });
 
 QUnit.test( "trigger", function( assert ) {
   var i = 1;
-  $('.trigger-fixture').on('click', function(){
+  $('.trigger-fixture').on('click     touchstart', function(){
     i++;
     this.textContent = i;
   });
   $('.trigger-fixture').trigger('click');
   assert.equal($('.trigger-fixture')[0].textContent, 2, "trigger Passed!" );
+  $('.trigger-fixture').trigger('click touchstart');
+  assert.equal($('.trigger-fixture')[0].textContent, 4, "trigger Passed!" );
 });
 
 QUnit.test( "trigger(data)", function( assert ) {

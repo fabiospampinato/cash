@@ -1,18 +1,22 @@
-function registerEvent(node, eventName, callback) {
+function registerEvent(node, events, callback) {
   var eventCache = getData(node,'_cashEvents') || setData(node, '_cashEvents', {});
-  eventCache[eventName] = eventCache[eventName] || [];
-  eventCache[eventName].push(callback);
-  node.addEventListener(eventName, callback);
+  events.split(/[,\s]+/g).forEach(function(eventName) {
+    eventCache[eventName] = eventCache[eventName] || [];
+    eventCache[eventName].push(callback);
+    node.addEventListener(eventName, callback);
+  });
 }
 
-function removeEvent(node, eventName, callback){
-  var eventCache = getData(node,'_cashEvents')[eventName];
-  if (callback) {
-    node.removeEventListener(eventName, callback);
-  } else {
-    each(eventCache, event => { node.removeEventListener(eventName, event); });
-    eventCache = [];
-  }
+function removeEvent(node, events, callback){
+  var eventCache = getData(node,'_cashEvents');
+  events.split(/[,\s]+/g).forEach(function(eventName) {
+    if (callback) {
+      node.removeEventListener(eventName, callback);
+    } else {
+      each(eventCache[eventName], event => { node.removeEventListener(eventName, event); });
+      eventCache[eventName] = [];
+    }
+  });
 }
 
 fn.extend({
@@ -72,17 +76,20 @@ fn.extend({
     });
   },
 
-  one(eventName, delegate, callback) {
-    return this.on(eventName, delegate, callback, true);
+  one(events, delegate, callback) {
+    return this.on(events, delegate, callback, true);
   },
 
   ready: onReady,
 
-  trigger(eventName, data) {
-    var evt = doc.createEvent('HTMLEvents');
-    evt.data = data;
-    evt.initEvent(eventName, true, false);
-    return this.each(v => v.dispatchEvent(evt));
+  trigger(events, data) {
+    var collection = this;
+    return events.split(/[,\s]+/g).forEach(function(eventName) {
+      var evt = doc.createEvent('HTMLEvents');
+      evt.data = data;
+      evt.initEvent(eventName, true, false);
+      return collection.each(v => v.dispatchEvent(evt));
+    });
   }
 
 });
