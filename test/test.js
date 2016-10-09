@@ -494,3 +494,19 @@ QUnit.test( "$.unique", function( assert ) {
   var test = $.merge( $("#id-fixture"),  $("#id-fixture") );
   assert.equal($.unique( test ).length, 1, "$.unique Passed!" );
 });
+
+// DOM ready
+QUnit.test( "$(fn)", function( assert ) {
+  var called = false;
+  var readyFn = function() { called = true; }
+
+  $(readyFn);
+  assert.equal(called, false);
+
+  stop();
+
+  setTimeout(function() {
+    assert.equal(called, true);
+    start();
+  }, 10);
+});

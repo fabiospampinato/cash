@@ -28,7 +28,7 @@ function parseHTML(str) {
 }
 
 function onReady(fn) {
-  if ( doc.readyState !== 'loading' ) { fn(); }
+  if ( doc.readyState !== 'loading' ) { setTimeout(fn); }
   else { doc.addEventListener('DOMContentLoaded', fn); }
 }
 
