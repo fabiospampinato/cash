@@ -6,9 +6,16 @@ function registerEvent(node, eventName, callback) {
 }
 
 function removeEvent(node, eventName, callback){
-  var eventCache = getData(node,'_cashEvents')[eventName];
+  var events = getData(node,'_cashEvents'),
+      eventCache = (events && events[eventName]),
+      index;
+
+  if ( !eventCache ) { return; }
+
   if (callback) {
     node.removeEventListener(eventName, callback);
+    index = eventCache.indexOf(callback);
+    if ( index >= 0 ) { eventCache.splice( index, 1); }
   } else {
     each(eventCache, event => { node.removeEventListener(eventName, event); });
     eventCache = [];
