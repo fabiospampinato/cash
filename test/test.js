@@ -339,6 +339,11 @@ QUnit.test( "serialize", function( assert ) {
   assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
 });
 
+QUnit.test( "serialize control elements", function( assert ) {
+  var data = $('input[type=text]').serialize();
+  assert.equal(data, "text=text", "serialize elemnts passed!" );
+});
+
 QUnit.test( "val", function( assert ) {
   assert.equal($('input[type=text]').val(), "text", "val get Passed!" );
   $('input[type=text]').val(0);
