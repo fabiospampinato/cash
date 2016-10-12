@@ -1,29 +1,43 @@
-"use strict";
+/*!
+  cash-dom 1.3.5, https://github.com/kenwheeler/cash @license MIT
+  */
 
-/*! cash-dom 1.3.5, https://github.com/kenwheeler/cash @license MIT */
 ;(function (root, factory) {
-  if (typeof define === "function" && define.amd) {
+  if (typeof define === 'function' && define.amd) {
     define(factory);
-  } else if (typeof exports !== "undefined") {
+  } else if (typeof exports !== 'undefined') {
     module.exports = factory();
   } else {
     root.cash = root.$ = factory();
   }
 })(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
 
-  var noop = function () {}, isFunction = function (item) {
+  "use strict";
+
+  var doc = document,
+      win = window,
+      ArrayProto = Array.prototype,
+      slice = ArrayProto.slice,
+      _filter = ArrayProto.filter,
+      push = ArrayProto.push;
+
+  var noop = function noop() {},
+      isFunction = function isFunction(item) {
     // @see https://crbug.com/568448
     return typeof item === typeof noop && item.call;
-  }, isString = function (item) {
-    return typeof item === typeof "";
+  },
+      isString = function isString(item) {
+    return typeof item === typeof '';
   };
 
-  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
+  var idMatch = /^#[\w-]*$/,
+      classMatch = /^\.[\w-]*$/,
+      htmlMatch = /<.+>/,
+      singlet = /^\w+$/;
 
-  function find(selector, context) {
+  function _find(selector, context) {
     context = context || doc;
-    var elems = (classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector));
+    var elems = classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
     return elems;
   }
 
@@ -31,7 +45,7 @@
   function parseHTML(str) {
     if (!frag) {
       frag = doc.implementation.createHTMLDocument();
-      var base = frag.createElement("base");
+      var base = frag.createElement('base');
       base.href = doc.location.href;
       frag.head.appendChild(base);
     }
@@ -42,14 +56,15 @@
   }
 
   function onReady(fn) {
-    if (doc.readyState !== "loading") {
+    if (doc.readyState !== 'loading') {
       fn();
     } else {
-      doc.addEventListener("DOMContentLoaded", fn);
+      doc.addEventListener('DOMContentLoaded', fn);
     }
   }
 
   function Init(selector, context) {
+
     if (!selector) {
       return this;
     }
@@ -59,16 +74,18 @@
       return selector;
     }
 
-    var elems = selector, i = 0, length;
+    var elems = selector,
+        i = 0,
+        length;
 
     if (isString(selector)) {
-      elems = (idMatch.test(selector) ?
+      elems = idMatch.test(selector) ?
       // If an ID use the faster getElementById check
       doc.getElementById(selector.slice(1)) : htmlMatch.test(selector) ?
       // If HTML, parse it into real elements
       parseHTML(selector) :
       // else use `find`
-      find(selector, context));
+      _find(selector, context);
 
       // If function, use as shortcut for DOM ready
     } else if (isFunction(selector)) {
@@ -107,17 +124,18 @@
     init: Init
   };
 
-  Object.defineProperty(fn, "constructor", { value: cash });
+  Object.defineProperty(fn, 'constructor', { value: cash });
 
   cash.parseHTML = parseHTML;
   cash.noop = noop;
   cash.isFunction = isFunction;
   cash.isString = isString;
-
   cash.extend = fn.extend = function (target) {
     target = target || {};
 
-    var args = slice.call(arguments), length = args.length, i = 1;
+    var args = slice.call(arguments),
+        length = args.length,
+        i = 1;
 
     if (args.length === 1) {
       target = this;
@@ -138,8 +156,9 @@
     return target;
   };
 
-  function each(collection, callback) {
-    var l = collection.length, i = 0;
+  function _each(collection, callback) {
+    var l = collection.length,
+        i = 0;
 
     for (; i < l; i++) {
       if (callback.call(collection[i], collection[i], i, collection) === false) {
@@ -155,16 +174,17 @@
 
   function getCompareFunction(selector) {
     return (
-    /* Use browser's `matches` function if string */
-    isString(selector) ? matches :
-    /* Match a cash element */
-    selector.cash ? function (el) {
-      return selector.is(el);
-    } :
-    /* Direct comparison */
-    function (el, selector) {
-      return el === selector;
-    });
+      /* Use browser's `matches` function if string */
+      isString(selector) ? matches :
+      /* Match a cash element */
+      selector.cash ? function (el) {
+        return selector.is(el);
+      } :
+      /* Direct comparison */
+      function (el, selector) {
+        return el === selector;
+      }
+    );
   }
 
   function unique(collection) {
@@ -174,8 +194,10 @@
   }
 
   cash.extend({
-    merge: function (first, second) {
-      var len = +second.length, i = first.length, j = 0;
+    merge: function merge(first, second) {
+      var len = +second.length,
+          i = first.length,
+          j = 0;
 
       for (; j < len; i++, j++) {
         first[i] = second[j];
@@ -185,51 +207,51 @@
       return first;
     },
 
-    each: each,
+
+    each: _each,
     matches: matches,
     unique: unique,
     isArray: Array.isArray,
-    isNumeric: function (n) {
+    isNumeric: function isNumeric(n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
-
   });
-
-  var uid = cash.uid = "_cash" + Date.now();
+  var uid = cash.uid = '_cash' + Date.now();
 
   function getDataCache(node) {
-    return (node[uid] = node[uid] || {});
+    return node[uid] = node[uid] || {};
   }
 
   function setData(node, key, value) {
-    return (getDataCache(node)[key] = value);
+    return getDataCache(node)[key] = value;
   }
 
   function getData(node, key) {
     var c = getDataCache(node);
     if (c[key] === undefined) {
-      c[key] = node.dataset ? node.dataset[key] : cash(node).attr("data-" + key);
+      c[key] = node.dataset ? node.dataset[key] : cash(node).attr('data-' + key);
     }
     return c[key];
   }
 
-  function removeData(node, key) {
+  function _removeData(node, key) {
     var c = getDataCache(node);
     if (c) {
       delete c[key];
     } else if (node.dataset) {
       delete node.dataset[key];
     } else {
-      cash(node).removeAttr("data-" + name);
+      cash(node).removeAttr('data-' + name);
     }
   }
 
   fn.extend({
-    data: function (name, value) {
+    data: function data(name, value) {
+
       if (isString(name)) {
-        return (value === undefined ? getData(this[0], name) : this.each(function (v) {
+        return value === undefined ? getData(this[0], name) : this.each(function (v) {
           return setData(v, name, value);
-        }));
+        });
       }
 
       for (var key in name) {
@@ -238,54 +260,50 @@
 
       return this;
     },
-
-    removeData: function (key) {
+    removeData: function removeData(key) {
       return this.each(function (v) {
-        return removeData(v, key);
+        return _removeData(v, key);
       });
     }
-
   });
-
   var notWhiteMatch = /\S+/g;
 
   function getClasses(c) {
     return isString(c) && c.match(notWhiteMatch);
   }
 
-  function hasClass(v, c) {
-    return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
+  function _hasClass(v, c) {
+    return v.classList ? v.classList.contains(c) : new RegExp('(^| )' + c + '( |$)', 'gi').test(v.className);
   }
 
-  function addClass(v, c, spacedName) {
+  function _addClass(v, c, spacedName) {
     if (v.classList) {
       v.classList.add(c);
-    } else if (spacedName.indexOf(" " + c + " ")) {
-      v.className += " " + c;
+    } else if (spacedName.indexOf(' ' + c + ' ')) {
+      v.className += ' ' + c;
     }
   }
 
-  function removeClass(v, c) {
+  function _removeClass(v, c) {
     if (v.classList) {
       v.classList.remove(c);
     } else {
-      v.className = v.className.replace(c, "");
+      v.className = v.className.replace(c, '');
     }
   }
 
   fn.extend({
-    addClass: function (c) {
+    addClass: function addClass(c) {
       var classes = getClasses(c);
 
-      return (classes ? this.each(function (v) {
-        var spacedName = " " + v.className + " ";
-        each(classes, function (c) {
-          addClass(v, c, spacedName);
+      return classes ? this.each(function (v) {
+        var spacedName = ' ' + v.className + ' ';
+        _each(classes, function (c) {
+          _addClass(v, c, spacedName);
         });
-      }) : this);
+      }) : this;
     },
-
-    attr: function (name, value) {
+    attr: function attr(name, value) {
       if (!name) {
         return undefined;
       }
@@ -310,23 +328,23 @@
 
       return this;
     },
-
-    hasClass: function (c) {
-      var check = false, classes = getClasses(c);
+    hasClass: function hasClass(c) {
+      var check = false,
+          classes = getClasses(c);
       if (classes && classes.length) {
         this.each(function (v) {
-          check = hasClass(v, classes[0]);
+          check = _hasClass(v, classes[0]);
           return !check;
         });
       }
       return check;
     },
+    prop: function prop(name, value) {
 
-    prop: function (name, value) {
       if (isString(name)) {
-        return (value === undefined ? this[0][name] : this.each(function (v) {
+        return value === undefined ? this[0][name] : this.each(function (v) {
           v[name] = value;
-        }));
+        });
       }
 
       for (var key in name) {
@@ -335,8 +353,7 @@
 
       return this;
     },
-
-    removeAttr: function (name) {
+    removeAttr: function removeAttr(name) {
       return this.each(function (v) {
         if (v.removeAttribute) {
           v.removeAttribute(name);
@@ -345,101 +362,94 @@
         }
       });
     },
-
-    removeClass: function (c) {
+    removeClass: function removeClass(c) {
       if (!arguments.length) {
-        return this.attr("class", "");
+        return this.attr('class', '');
       }
       var classes = getClasses(c);
-      return (classes ? this.each(function (v) {
-        each(classes, function (c) {
-          removeClass(v, c);
+      return classes ? this.each(function (v) {
+        _each(classes, function (c) {
+          _removeClass(v, c);
         });
-      }) : this);
+      }) : this;
     },
-
-    removeProp: function (name) {
+    removeProp: function removeProp(name) {
       return this.each(function (v) {
         delete v[name];
       });
     },
-
-    toggleClass: function (c, state) {
+    toggleClass: function toggleClass(c, state) {
       if (state !== undefined) {
-        return this[state ? "addClass" : "removeClass"](c);
+        return this[state ? 'addClass' : 'removeClass'](c);
       }
       var classes = getClasses(c);
-      return (classes ? this.each(function (v) {
-        var spacedName = " " + v.className + " ";
-        each(classes, function (c) {
-          if (hasClass(v, c)) {
-            removeClass(v, c);
+      return classes ? this.each(function (v) {
+        var spacedName = ' ' + v.className + ' ';
+        _each(classes, function (c) {
+          if (_hasClass(v, c)) {
+            _removeClass(v, c);
           } else {
-            addClass(v, c, spacedName);
+            _addClass(v, c, spacedName);
           }
         });
-      }) : this);
-    } });
-
+      }) : this;
+    }
+  });
   fn.extend({
-    add: function (selector, context) {
+    add: function add(selector, context) {
       return unique(cash.merge(this, cash(selector, context)));
     },
-
-    each: function (callback) {
-      each(this, callback);
+    each: function each(callback) {
+      _each(this, callback);
       return this;
     },
-
-    eq: function (index) {
+    eq: function eq(index) {
       return cash(this.get(index));
     },
-
-    filter: function (selector) {
+    filter: function filter(selector) {
       if (!selector) {
         return this;
       }
 
-      var comparator = (isFunction(selector) ? selector : getCompareFunction(selector));
+      var comparator = isFunction(selector) ? selector : getCompareFunction(selector);
 
-      return cash(filter.call(this, function (e) {
+      return cash(_filter.call(this, function (e) {
         return comparator(e, selector);
       }));
     },
-
-    first: function () {
+    first: function first() {
       return this.eq(0);
     },
-
-    get: function (index) {
+    get: function get(index) {
       if (index === undefined) {
         return slice.call(this);
       }
-      return (index < 0 ? this[index + this.length] : this[index]);
+      return index < 0 ? this[index + this.length] : this[index];
     },
-
-    index: function (elem) {
-      var child = elem ? cash(elem)[0] : this[0], collection = elem ? this : cash(child).parent().children();
+    index: function index(elem) {
+      var child = elem ? cash(elem)[0] : this[0],
+          collection = elem ? this : cash(child).parent().children();
       return slice.call(collection).indexOf(child);
     },
-
-    last: function () {
+    last: function last() {
       return this.eq(-1);
     }
-
   });
-
-  var camelCase = (function () {
-    var camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /[\s-_]+/g;
+  var camelCase = function () {
+    var camelRegex = /(?:^\w|[A-Z]|\b\w)/g,
+        whiteSpace = /[\s-_]+/g;
     return function (str) {
       return str.replace(camelRegex, function (letter, index) {
-        return letter[index === 0 ? "toLowerCase" : "toUpperCase"]();
-      }).replace(whiteSpace, "");
+        return letter[index === 0 ? 'toLowerCase' : 'toUpperCase']();
+      }).replace(whiteSpace, '');
     };
-  }());
+  }();
 
-  var getPrefixedProp = (function () {
-    var cache = {}, doc = document, div = doc.createElement("div"), style = div.style;
+  var getPrefixedProp = function () {
+    var cache = {},
+        doc = document,
+        div = doc.createElement('div'),
+        style = div.style;
 
     return function (prop) {
       prop = camelCase(prop);
@@ -447,9 +457,11 @@
         return cache[prop];
       }
 
-      var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1), prefixes = ["webkit", "moz", "ms", "o"], props = (prop + " " + (prefixes).join(ucProp + " ") + ucProp).split(" ");
+      var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+          prefixes = ['webkit', 'moz', 'ms', 'o'],
+          props = (prop + ' ' + prefixes.join(ucProp + ' ') + ucProp).split(' ');
 
-      each(props, function (p) {
+      _each(props, function (p) {
         if (p in style) {
           cache[p] = prop = cache[prop] = p;
           return false;
@@ -458,18 +470,18 @@
 
       return cache[prop];
     };
-  }());
+  }();
 
   cash.prefixedProp = getPrefixedProp;
   cash.camelCase = camelCase;
 
   fn.extend({
-    css: function (prop, value) {
+    css: function css(prop, value) {
       if (isString(prop)) {
         prop = getPrefixedProp(prop);
-        return (arguments.length > 1 ? this.each(function (v) {
+        return arguments.length > 1 ? this.each(function (v) {
           return v.style[prop] = value;
-        }) : win.getComputedStyle(this[0])[prop]);
+        }) : win.getComputedStyle(this[0])[prop];
       }
 
       for (var key in prop) {
@@ -478,38 +490,38 @@
 
       return this;
     }
-
   });
-
   function compute(el, prop) {
     return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
   }
 
-  each(["Width", "Height"], function (v) {
+  _each(['Width', 'Height'], function (v) {
+
     var lower = v.toLowerCase();
 
     fn[lower] = function () {
       return this[0].getBoundingClientRect()[lower];
     };
 
-    fn["inner" + v] = function () {
-      return this[0]["client" + v];
+    fn['inner' + v] = function () {
+      return this[0]['client' + v];
     };
 
-    fn["outer" + v] = function (margins) {
-      return this[0]["offset" + v] + (margins ? compute(this, "margin" + (v === "Width" ? "Left" : "Top")) + compute(this, "margin" + (v === "Width" ? "Right" : "Bottom")) : 0);
+    fn['outer' + v] = function (margins) {
+      return this[0]['offset' + v] + (margins ? compute(this, 'margin' + (v === 'Width' ? 'Left' : 'Top')) + compute(this, 'margin' + (v === 'Width' ? 'Right' : 'Bottom')) : 0);
     };
   });
-
   function registerEvent(node, eventName, callback) {
-    var eventCache = getData(node, "_cashEvents") || setData(node, "_cashEvents", {});
+    var eventCache = getData(node, '_cashEvents') || setData(node, '_cashEvents', {});
     eventCache[eventName] = eventCache[eventName] || [];
     eventCache[eventName].push(callback);
     node.addEventListener(eventName, callback);
   }
 
   function removeEvent(node, eventName, callback) {
-    var events = getData(node, "_cashEvents"), eventCache = (events && events[eventName]), index;
+    var events = getData(node, '_cashEvents'),
+        eventCache = events && events[eventName],
+        index;
 
     if (!eventCache) {
       return;
@@ -522,7 +534,7 @@
         eventCache.splice(index, 1);
       }
     } else {
-      each(eventCache, function (event) {
+      _each(eventCache, function (event) {
         node.removeEventListener(eventName, event);
       });
       eventCache = [];
@@ -530,13 +542,12 @@
   }
 
   fn.extend({
-    off: function (eventName, callback) {
+    off: function off(eventName, callback) {
       return this.each(function (v) {
         return removeEvent(v, eventName, callback);
       });
     },
-
-    on: function (eventName, delegate, callback, runOnce) {
+    on: function on(eventName, delegate, callback, runOnce) {
       // jshint ignore:line
 
       var originalCallback;
@@ -553,19 +564,19 @@
         delegate = null;
       }
 
-      if (eventName === "ready") {
+      if (eventName === 'ready') {
         onReady(callback);
         return this;
       }
 
       if (delegate) {
         originalCallback = callback;
-        callback = function (e) {
+        callback = function callback(e) {
           var t = e.target;
 
           while (!matches(t, delegate)) {
             if (t === this) {
-              return (t = false);
+              return t = false;
             }
             t = t.parentNode;
           }
@@ -577,41 +588,39 @@
       }
 
       return this.each(function (v) {
-        var finalCallback = callback;
+        var _finalCallback = callback;
         if (runOnce) {
-          finalCallback = function () {
+          _finalCallback = function finalCallback() {
             callback.apply(this, arguments);
-            removeEvent(v, eventName, finalCallback);
+            removeEvent(v, eventName, _finalCallback);
           };
         }
-        registerEvent(v, eventName, finalCallback);
+        registerEvent(v, eventName, _finalCallback);
       });
     },
-
-    one: function (eventName, delegate, callback) {
+    one: function one(eventName, delegate, callback) {
       return this.on(eventName, delegate, callback, true);
     },
 
+
     ready: onReady,
 
-    trigger: function (eventName, data) {
-      var evt = doc.createEvent("HTMLEvents");
+    trigger: function trigger(eventName, data) {
+      var evt = doc.createEvent('HTMLEvents');
       evt.data = data;
       evt.initEvent(eventName, true, false);
       return this.each(function (v) {
         return v.dispatchEvent(evt);
       });
     }
-
   });
-
   function encode(name, value) {
-    return "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(/%20/g, "+");
+    return '&' + encodeURIComponent(name) + '=' + encodeURIComponent(value).replace(/%20/g, '+');
   }
 
   function getSelectMultiple_(el) {
     var values = [];
-    each(el.options, function (o) {
+    _each(el.options, function (o) {
       if (o.selected) {
         values.push(o.value);
       }
@@ -630,38 +639,38 @@
       return null;
     }
     switch (type.toLowerCase()) {
-      case "select-one":
+      case 'select-one':
         return getSelectSingle_(el);
-      case "select-multiple":
+      case 'select-multiple':
         return getSelectMultiple_(el);
-      case "radio":
-        return (el.checked) ? el.value : null;
-      case "checkbox":
-        return (el.checked) ? el.value : null;
+      case 'radio':
+        return el.checked ? el.value : null;
+      case 'checkbox':
+        return el.checked ? el.value : null;
       default:
         return el.value ? el.value : null;
     }
   }
 
   fn.extend({
-    serialize: function () {
-      var query = "";
+    serialize: function serialize() {
+      var query = '';
 
-      each(this[0].elements || this, function (el) {
-        if (el.disabled || el.tagName === "FIELDSET") {
+      _each(this[0].elements || this, function (el) {
+        if (el.disabled || el.tagName === 'FIELDSET') {
           return;
         }
         var name = el.name;
         switch (el.type.toLowerCase()) {
-          case "file":
-          case "reset":
-          case "submit":
-          case "button":
+          case 'file':
+          case 'reset':
+          case 'submit':
+          case 'button':
             break;
-          case "select-multiple":
+          case 'select-multiple':
             var values = getValue(el);
             if (values !== null) {
-              each(values, function (value) {
+              _each(values, function (value) {
                 query += encode(name, value);
               });
             }
@@ -676,8 +685,7 @@
 
       return query.substr(1);
     },
-
-    val: function (value) {
+    val: function val(value) {
       if (value === undefined) {
         return getValue(this[0]);
       } else {
@@ -686,9 +694,7 @@
         });
       }
     }
-
   });
-
   function insertElement(el, child, prepend) {
     if (prepend) {
       var first = el.childNodes[0];
@@ -702,103 +708,92 @@
     var str = isString(child);
 
     if (!str && child.length) {
-      each(child, function (v) {
+      _each(child, function (v) {
         return insertContent(parent, v, prepend);
       });
       return;
     }
 
-    each(parent, str ? function (v) {
-      return v.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
+    _each(parent, str ? function (v) {
+      return v.insertAdjacentHTML(prepend ? 'afterbegin' : 'beforeend', child);
     } : function (v, i) {
-      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend);
+      return insertElement(v, i === 0 ? child : child.cloneNode(true), prepend);
     });
   }
 
   fn.extend({
-    after: function (selector) {
+    after: function after(selector) {
       cash(selector).insertAfter(this);
       return this;
     },
-
-    append: function (content) {
+    append: function append(content) {
       insertContent(this, content);
       return this;
     },
-
-    appendTo: function (parent) {
+    appendTo: function appendTo(parent) {
       insertContent(cash(parent), this);
       return this;
     },
-
-    before: function (selector) {
+    before: function before(selector) {
       cash(selector).insertBefore(this);
       return this;
     },
-
-    clone: function () {
+    clone: function clone() {
       return cash(this.map(function (v) {
         return v.cloneNode(true);
       }));
     },
-
-    empty: function () {
-      this.html("");
+    empty: function empty() {
+      this.html('');
       return this;
     },
-
-    html: function (content) {
+    html: function html(content) {
       if (content === undefined) {
         return this[0].innerHTML;
       }
-      var source = (content.nodeType ? content[0].outerHTML : content);
+      var source = content.nodeType ? content[0].outerHTML : content;
       return this.each(function (v) {
         return v.innerHTML = source;
       });
     },
-
-    insertAfter: function (selector) {
+    insertAfter: function insertAfter(selector) {
       var _this = this;
 
-
       cash(selector).each(function (el, i) {
-        var parent = el.parentNode, sibling = el.nextSibling;
+        var parent = el.parentNode,
+            sibling = el.nextSibling;
         _this.each(function (v) {
-          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), sibling);
+          parent.insertBefore(i === 0 ? v : v.cloneNode(true), sibling);
         });
       });
 
       return this;
     },
-
-    insertBefore: function (selector) {
+    insertBefore: function insertBefore(selector) {
       var _this2 = this;
+
       cash(selector).each(function (el, i) {
         var parent = el.parentNode;
         _this2.each(function (v) {
-          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), el);
+          parent.insertBefore(i === 0 ? v : v.cloneNode(true), el);
         });
       });
       return this;
     },
-
-    prepend: function (content) {
+    prepend: function prepend(content) {
       insertContent(this, content, true);
       return this;
     },
-
-    prependTo: function (parent) {
+    prependTo: function prependTo(parent) {
       insertContent(cash(parent), this, true);
       return this;
     },
-
-    remove: function () {
+    remove: function remove() {
       return this.each(function (v) {
         return v.parentNode.removeChild(v);
       });
     },
-
-    text: function (content) {
+    text: function text(content) {
       if (content === undefined) {
         return this[0].textContent;
       }
@@ -806,48 +801,41 @@
         return v.textContent = content;
       });
     }
-
   });
-
   var docEl = doc.documentElement;
 
   fn.extend({
-    position: function () {
+    position: function position() {
       var el = this[0];
       return {
         left: el.offsetLeft,
         top: el.offsetTop
       };
     },
-
-    offset: function () {
+    offset: function offset() {
       var rect = this[0].getBoundingClientRect();
       return {
         top: rect.top + win.pageYOffset - docEl.clientTop,
         left: rect.left + win.pageXOffset - docEl.clientLeft
       };
     },
-
-    offsetParent: function () {
+    offsetParent: function offsetParent() {
       return cash(this[0].offsetParent);
     }
-
   });
-
   fn.extend({
-    children: function (selector) {
+    children: function children(selector) {
       var elems = [];
       this.each(function (el) {
         push.apply(elems, el.children);
       });
       elems = unique(elems);
 
-      return (!selector ? elems : elems.filter(function (v) {
+      return !selector ? elems : elems.filter(function (v) {
         return matches(v, selector);
-      }));
+      });
     },
-
-    closest: function (selector) {
+    closest: function closest(selector) {
       if (!selector || this.length < 1) {
         return cash();
       }
@@ -856,13 +844,13 @@
       }
       return this.parent().closest(selector);
     },
-
-    is: function (selector) {
+    is: function is(selector) {
       if (!selector) {
         return false;
       }
 
-      var match = false, comparator = getCompareFunction(selector);
+      var match = false,
+          comparator = getCompareFunction(selector);
 
       this.each(function (el) {
         match = comparator(el, selector);
@@ -871,35 +859,32 @@
 
       return match;
     },
-
-    find: function (selector) {
+    find: function find(selector) {
       if (!selector || selector.nodeType) {
         return cash(selector && this.has(selector).length ? selector : null);
       }
 
       var elems = [];
       this.each(function (el) {
-        push.apply(elems, find(selector, el));
+        push.apply(elems, _find(selector, el));
       });
 
       return unique(elems);
     },
+    has: function has(selector) {
 
-    has: function (selector) {
-      var comparator = (isString(selector) ? function (el) {
-        return find(selector, el).length !== 0;
+      var comparator = isString(selector) ? function (el) {
+        return _find(selector, el).length !== 0;
       } : function (el) {
         return el.contains(selector);
-      });
+      };
 
       return this.filter(comparator);
     },
-
-    next: function () {
+    next: function next() {
       return cash(this[0].nextElementSibling);
     },
-
-    not: function (selector) {
+    not: function not(selector) {
       if (!selector) {
         return this;
       }
@@ -910,8 +895,7 @@
         return !comparator(el, selector);
       });
     },
-
-    parent: function () {
+    parent: function parent() {
       var result = [];
 
       this.each(function (item) {
@@ -922,9 +906,9 @@
 
       return unique(result);
     },
-
-    parents: function (selector) {
-      var last, result = [];
+    parents: function parents(selector) {
+      var last,
+          result = [];
 
       this.each(function (item) {
         last = item;
@@ -932,7 +916,7 @@
         while (last && last.parentNode && last !== doc.body.parentNode) {
           last = last.parentNode;
 
-          if (!selector || (selector && matches(last, selector))) {
+          if (!selector || selector && matches(last, selector)) {
             result.push(last);
           }
         }
@@ -940,21 +924,18 @@
 
       return unique(result);
     },
-
-    prev: function () {
+    prev: function prev() {
       return cash(this[0].previousElementSibling);
     },
-
-    siblings: function () {
-      var collection = this.parent().children(), el = this[0];
+    siblings: function siblings() {
+      var collection = this.parent().children(),
+          el = this[0];
 
       return collection.filter(function (i) {
         return i !== el;
       });
     }
-
   });
-
 
   return cash;
 });

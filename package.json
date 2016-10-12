@@ -14,21 +14,68 @@
   },
   "homepage": "https://github.com/kenwheeler/cash",
   "scripts": {
-    "build": "gulp",
-    "test": "gulp test"
+    "build": "npm run compile && npm run uglify",
+    "compile": "cat -s src/{_wrapStart.js,core.js,util.js,data.js,attributes.js,collection.js,css.js,dimensions.js,events.js,forms.js,manipulation.js,offset.js,traversal.js,_wrapEnd.js} | babel -f cash.js -o dist/cash.js",
+    "uglify": "uglifyjs dist/cash.js --comments --compress --mangle --screw-ie8 -o dist/cash.min.js"
+  },
+  "babel": {
+    "plugins": [
+      "check-es2015-constants",
+      "transform-es2015-arrow-functions",
+      "transform-es2015-block-scoped-functions",
+      "transform-es2015-block-scoping",
+      "transform-es2015-classes",
+      "transform-es2015-computed-properties",
+      "transform-es2015-destructuring",
+      "transform-es2015-duplicate-keys",
+      "transform-es2015-for-of",
+      "transform-es2015-function-name",
+      "transform-es2015-literals",
+      "transform-es2015-object-super",
+      "transform-es2015-parameters",
+      "transform-es2015-shorthand-properties",
+      "transform-es2015-spread",
+      "transform-es2015-sticky-regex",
+      "transform-es2015-template-literals",
+      "transform-es2015-unicode-regex",
+      "transform-regenerator",
+      [
+        "add-header-comment",
+        {
+          "commentStart": "!\n ",
+          "commentLineStart": " ",
+          "commentEnd": " ",
+          "header": [
+            "!node -p \"var pkg = require('./package.json'); pkg.name + ' '+pkg.version +', '+pkg.homepage +' @license '+ pkg.license;\""
+          ]
+        }
+      ]
+    ]
   },
   "devDependencies": {
-    "6to5": "^1.14.11",
-    "gulp": "~3.5.0",
-    "gulp-6to5": "^1.0.2",
-    "gulp-jshint": "~1.8.4",
-    "gulp-load-plugins": "~0.3.0",
-    "gulp-preprocess": "^1.1.1",
-    "gulp-qunit": "^1.4.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-size": "~0.1.2",
-    "gulp-uglify": "^1.5.3",
-    "gulp-util": "~2.2.9"
+    "babel-cli": "^6.16.0",
+    "babel-plugin-add-header-comment": "^1.0.3",
+    "babel-plugin-check-es2015-constants": "^6.3.13",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.3.13",
+    "babel-plugin-transform-es2015-block-scoped-functions": "^6.3.13",
+    "babel-plugin-transform-es2015-block-scoping": "^6.14.0",
+    "babel-plugin-transform-es2015-classes": "^6.14.0",
+    "babel-plugin-transform-es2015-computed-properties": "^6.3.13",
+    "babel-plugin-transform-es2015-destructuring": "^6.16.0",
+    "babel-plugin-transform-es2015-duplicate-keys": "^6.6.0",
+    "babel-plugin-transform-es2015-for-of": "^6.6.0",
+    "babel-plugin-transform-es2015-function-name": "^6.9.0",
+    "babel-plugin-transform-es2015-literals": "^6.3.13",
+    "babel-plugin-transform-es2015-object-super": "^6.3.13",
+    "babel-plugin-transform-es2015-parameters": "^6.16.0",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.3.13",
+    "babel-plugin-transform-es2015-spread": "^6.3.13",
+    "babel-plugin-transform-es2015-sticky-regex": "^6.3.13",
+    "babel-plugin-transform-es2015-template-literals": "^6.6.0",
+    "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
+    "babel-plugin-transform-regenerator": "^6.16.0",
+    "uglify-js": "^2.7.3"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }
