@@ -169,7 +169,7 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
 
   addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 15, "add(collections) Passed!" );
+  assert.equal(addFixture.length, 16, "add(collections) Passed!" );
 
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 5, "add(no duplicates) Passed!" );
@@ -338,7 +338,7 @@ QUnit.test( "serialize", function( assert ) {
   var data = $('.form-fixture').serialize();
   assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
 
-  data = $( "input, textarea, select" ).serialize();
+  data = $( ".form-fixture input, .form-fixture textarea, .form-fixture select" ).serialize();
   assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
 });
 
