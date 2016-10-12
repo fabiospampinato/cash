@@ -197,6 +197,9 @@ QUnit.test( "filter", function( assert ) {
     return $(e).hasClass('qsa-fixture');
   });
   assert.equal(arrayFixture.length, 2, "filter(fn) Passed!" );
+
+  arrayFixture = $('#qunit-fixture div').filter($('#qunit-fixture div').get(0));
+  assert.equal(arrayFixture.length, 1, "filter(element) Passed!" );
 });
 
 QUnit.test( "first", function( assert ) {
