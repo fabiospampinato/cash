@@ -22,8 +22,10 @@
     "noop"       : true,
     "getData"    : true,
     "setData"    : true,
-    "removeData" : true
+    "removeData" : true,
+    "getCompareFunction": true
   },
+  "exported":     ["getCompareFunction"],
 
   "bitwise"       : true,
   "camelcase"     : true,

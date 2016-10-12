@@ -1,5 +1,5 @@
 // @echo header
-(function(root, factory) {
+;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(factory);
   } else if (typeof exports !== 'undefined') {

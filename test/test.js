@@ -169,7 +169,7 @@ QUnit.test( "add", function( assert ) {
   assert.equal(addFixture.length, 3, "add(two) Passed!" );
 
   addFixture = $('#id-fixture').add( $('#qunit-fixture a') ).add( $('#qunit-fixture input') );
-  assert.equal(addFixture.length, 14, "add(collections) Passed!" );
+  assert.equal(addFixture.length, 16, "add(collections) Passed!" );
 
   addFixture = $('#qunit-fixture a').first().add( $('#qunit-fixture a') );
   assert.equal(addFixture.length, 5, "add(no duplicates) Passed!" );
@@ -197,6 +197,9 @@ QUnit.test( "filter", function( assert ) {
     return $(e).hasClass('qsa-fixture');
   });
   assert.equal(arrayFixture.length, 2, "filter(fn) Passed!" );
+
+  arrayFixture = $('#qunit-fixture div').filter($('#qunit-fixture div').get(0));
+  assert.equal(arrayFixture.length, 1, "filter(element) Passed!" );
 });
 
 QUnit.test( "first", function( assert ) {
@@ -334,6 +337,14 @@ QUnit.test( "trigger(data)", function( assert ) {
 QUnit.test( "serialize", function( assert ) {
   var data = $('.form-fixture').serialize();
   assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
+
+  data = $( ".form-fixture input, .form-fixture textarea, .form-fixture select" ).serialize();
+  assert.equal(data, "hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2", "serialize Passed!" );
+});
+
+QUnit.test( "serialize control elements", function( assert ) {
+  var data = $('input[type=text]').serialize();
+  assert.equal(data, "text=text", "serialize elemnts passed!" );
 });
 
 QUnit.test( "val", function( assert ) {
@@ -350,7 +361,7 @@ QUnit.test( "children", function( assert ) {
 });
 
 QUnit.test( "closest", function( assert ) {
-  assert.equal($('input.prop-fixture').closest()[0].className, "prop-fixture", "closest Passed!" );
+  assert.equal($('input.prop-fixture').closest().length, 0, "closest Passed!" );
   assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
 });
 

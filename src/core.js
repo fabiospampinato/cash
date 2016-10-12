@@ -1,5 +1,8 @@
 var noop = function(){},
-    isFunction = function(item){ return typeof item === typeof noop; },
+    isFunction = function(item) {
+        // @see https://crbug.com/568448
+        return typeof item === typeof noop && item.call;
+    },
     isString = function(item) { return typeof item === typeof ''; };
 
 var idMatch    = /^#[\w-]*$/,
@@ -19,12 +22,18 @@ function find(selector,context) {
   return elems;
 }
 
-var frag, tmp;
+var frag;
 function parseHTML(str) {
-  frag = frag || doc.createDocumentFragment();
-  tmp = tmp || frag.appendChild(doc.createElement('div'));
-  tmp.innerHTML = str;
-  return tmp.childNodes;
+  if (!frag) {
+    frag = doc.implementation.createHTMLDocument();
+    var base = frag.createElement('base');
+    base.href = doc.location.href;
+    frag.head.appendChild(base);
+  }
+
+  frag.body.innerHTML = str;
+
+  return frag.body.childNodes;
 }
 
 function onReady(fn) {
@@ -78,7 +87,6 @@ function cash(selector,context) {
 }
 
 var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
-  constructor: cash,
   cash: true,
   length: 0,
   push: push,
@@ -86,6 +94,8 @@ var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
   map: ArrayProto.map,
   init: Init
 };
+
+Object.defineProperty(fn,'constructor',{ value: cash });
 
 cash.parseHTML = parseHTML;
 cash.noop = noop;
