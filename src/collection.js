@@ -14,11 +14,11 @@ fn.extend({
   },
 
   filter(selector) {
-    var fn = isFunction(selector) && selector;
-    if ( !fn ) {
-      fn = ( isString(selector) ? e => matches(e, selector) : e => e === selector );
-    }
-    return cash(filter.call(this, fn));
+    if ( !selector ) { return this; }
+
+    var comparator = ( isFunction(selector) ? selector : getCompareFunction(selector ));
+
+    return cash( filter.call(this, e => comparator(e, selector) ) );
   },
 
   first() {

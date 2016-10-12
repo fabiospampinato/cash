@@ -1,5 +1,3 @@
-function directCompare(el,selector){ return el === selector; }
-
 fn.extend({
 
   children(selector) {
@@ -7,13 +5,17 @@ fn.extend({
     this.each(el => { push.apply(elems,el.children); });
     elems = unique(elems);
 
-    return ( !selector ? elems : elems.filter(v => {
+    return (
+      !selector ? elems :
+      elems.filter(v => {
         return matches(v, selector);
-      }) );
+      })
+    );
   },
 
   closest(selector) {
-    if (!selector || matches(this[0], selector)) { return this; }
+    if ( !selector || this.length < 1 ) { return cash(); }
+    if ( this.is(selector) ) { return this.filter(selector); }
     return this.parent().closest(selector);
   },
 
@@ -21,14 +23,10 @@ fn.extend({
     if ( !selector ) { return false; }
 
     var match = false,
-        comparator = (
-          isString(selector) ? matches :
-          selector.cash ? el => { return selector.is(el); } :
-          directCompare
-        );
+        comparator = getCompareFunction(selector);
 
-    this.each((el,i) => {
-      match = comparator(el,selector,i);
+    this.each(el => {
+      match = comparator(el,selector);
       return !match;
     });
 
@@ -36,18 +34,24 @@ fn.extend({
   },
 
   find(selector) {
-    if ( !selector ) { return cash(); }
+    if ( !selector || selector.nodeType ) {
+      return cash( selector && this.has(selector).length ? selector : null );
+    }
 
     var elems = [];
-    this.each(el => { push.apply(elems,find(selector,el)); });
+    this.each(el => { push.apply(elems, find(selector,el) ); });
 
     return unique(elems);
   },
 
   has(selector) {
-    return filter.call(this, el => {
-      return cash(el).find(selector).length !== 0;
-    });
+
+    var comparator = (
+      isString(selector) ? el => { return find(selector,el).length !== 0; } :
+      el => { return el.contains(selector); }
+    );
+
+    return this.filter(comparator);
   },
 
   next() {
@@ -55,14 +59,20 @@ fn.extend({
   },
 
   not(selector) {
-    return filter.call(this, el => {
-      return !matches(el, selector);
+    if ( !selector ) { return this; }
+
+    var comparator = getCompareFunction(selector);
+
+    return this.filter(el => {
+      return !comparator(el, selector);
     });
   },
 
   parent() {
-    var result = this.map(item => {
-      return item.parentElement || doc.body.parentNode;
+    var result = [];
+
+    this.each(item => {
+      if (item && item.parentNode) { result.push(item.parentNode); }
     });
 
     return unique(result);
@@ -75,8 +85,8 @@ fn.extend({
     this.each(item => {
       last = item;
 
-      while (last !== doc.body.parentNode) {
-        last = last.parentElement;
+      while ( last && last.parentNode && last !== doc.body.parentNode ) {
+        last = last.parentNode;
 
         if (!selector || (selector && matches(last, selector))) {
           result.push(last);
@@ -95,7 +105,7 @@ fn.extend({
     var collection = this.parent().children(),
         el = this[0];
 
-    return filter.call(collection, i => i !== el);
+    return collection.filter(i => i !== el);
   }
 
 });

@@ -361,7 +361,7 @@ QUnit.test( "children", function( assert ) {
 });
 
 QUnit.test( "closest", function( assert ) {
-  assert.equal($('input.prop-fixture').closest()[0].className, "prop-fixture", "closest Passed!" );
+  assert.equal($('input.prop-fixture').closest().length, 0, "closest Passed!" );
   assert.equal($('input.prop-fixture').closest('div')[0].id, "qunit-fixture", "closest Passed!" );
 });
 
