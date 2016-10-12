@@ -92,7 +92,6 @@
   }
 
   var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
-    constructor: cash,
     cash: true,
     length: 0,
     push: push,
@@ -100,6 +99,8 @@
     map: ArrayProto.map,
     init: Init
   };
+
+  Object.defineProperty(fn, "constructor", { value: cash });
 
   cash.parseHTML = parseHTML;
   cash.noop = noop;
