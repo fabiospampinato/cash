@@ -13,7 +13,7 @@ function hasClass(v,c) {
 
 function addClass(v,c,spacedName){
   if (v.classList) { v.classList.add(c); }
-  else if ( spacedName.indexOf(` ${c} `) ) { v.className += ' ' + c; }
+  else if ( spacedName.indexOf(` ${c} `) !== -1 ) { v.className += ' ' + c; }
 }
 
 function removeClass(v,c){
