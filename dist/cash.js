@@ -257,10 +257,10 @@
     return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
   }
 
-  function addClass(v, c, spacedName) {
+  function addClass(v, c) {
     if (v.classList) {
       v.classList.add(c);
-    } else if (spacedName.indexOf(" " + c + " ")) {
+    } else if (!hasClass(v, c)) {
       v.className += " " + c;
     }
   }
@@ -278,9 +278,8 @@
       var classes = getClasses(c);
 
       return (classes ? this.each(function (v) {
-        var spacedName = " " + v.className + " ";
         each(classes, function (c) {
-          addClass(v, c, spacedName);
+          addClass(v, c);
         });
       }) : this);
     },
@@ -370,12 +369,11 @@
       }
       var classes = getClasses(c);
       return (classes ? this.each(function (v) {
-        var spacedName = " " + v.className + " ";
         each(classes, function (c) {
           if (hasClass(v, c)) {
             removeClass(v, c);
           } else {
-            addClass(v, c, spacedName);
+            addClass(v, c);
           }
         });
       }) : this);
