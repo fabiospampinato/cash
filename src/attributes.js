@@ -11,9 +11,9 @@ function hasClass(v,c) {
   );
 }
 
-function addClass(v,c,spacedName){
+function addClass(v,c){
   if (v.classList) { v.classList.add(c); }
-  else if ( spacedName.indexOf(` ${c} `) ) { v.className += ' ' + c; }
+  else if ( !hasClass(v, c)) { v.className += ' ' + c; }
 }
 
 function removeClass(v,c){
@@ -28,8 +28,7 @@ fn.extend({
 
     return ( classes ?
       this.each(v => {
-        var spacedName = ` ${v.className} `;
-        each(classes,c => { addClass(v,c,spacedName); });
+        each(classes,c => { addClass(v,c); });
       }) :
       this
     );
@@ -117,9 +116,8 @@ fn.extend({
     var classes = getClasses(c);
     return ( classes ?
       this.each(v => {
-        var spacedName = ` ${v.className} `;
         each(classes,c => {
-          if ( hasClass(v,c) ) { removeClass(v,c); } else { addClass(v,c,spacedName); }
+          if ( hasClass(v,c) ) { removeClass(v,c); } else { addClass(v,c); }
         });
       }) :
       this
