@@ -43,7 +43,7 @@
 
   function onReady(fn) {
     if (doc.readyState !== "loading") {
-      fn();
+      setTimeout(fn);
     } else {
       doc.addEventListener("DOMContentLoaded", fn);
     }
