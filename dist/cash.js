@@ -1,6 +1,6 @@
 "use strict";
 
-/*! cash-dom 1.3.5, https://github.com/kenwheeler/cash @license MIT */
+/*! cash-dom 1.3.6, https://github.com/kenwheeler/cash @license MIT */
 ;(function (root, factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
