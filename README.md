@@ -13,9 +13,9 @@ isn't a goal, but cash comes helpfully close, covering most day to day use cases
 
 | Library                   | **Cash**       | jQuery 3.0  | jQuery 2.2  |
 | ------------------------- | --------------:| -----------:| -----------:|
-| Uncompressed              | **20K**        | 263K        | 253K        |
-| Minified                  | **9.8K**       | 86K         | 76K         |
-| **Minified & Gzipped**    | **3.5K**       | 34K         | 30K         |
+| Uncompressed              | **23.1K**      | 263K        | 253K        |
+| Minified                  | **10.6K**      | 86K         | 76K         |
+| **Minified & Gzipped**    | **3.8K**       | 34K         | 30K         |
 
 ---
 
@@ -77,8 +77,8 @@ $(element).addClass(className) // => collection
 | Attributes | Collection | CSS | Data | Dimensions | Events |
 | ---------- | ---------- | --- | ---- | ---------- | ------ |
 | [$.fn.addClass()](#fnaddclass) | [$.fn](#fn) | [$.fn.css()](#fncss) | [$.fn.data()](#fndata) | [$.fn.height()](#fnheight) | [$.fn.off()](#fnoff) |
-| [$.fn.attr()](#fnattr) | [$.fn.add()](#fnadd) |     | [$.fn.removeData()](#fnremovedata) | [$.fn.innerHeight()](#fninnerheight) | [$.fn.on()](#fnon) |
-| [$.fn.hasClass()](#fnhasclass) | [$.fn.each()](#fneach) |     |      | [$.fn.innerWidth()](#fninnerwidth) | [$.fn.one()](#fnone) |
+| [$.fn.attr()](#fnattr) | [$.fn.add()](#fnadd) | [$.fn.show()](#fnshow) | [$.fn.removeData()](#fnremovedata) | [$.fn.innerHeight()](#fninnerheight) | [$.fn.on()](#fnon) |
+| [$.fn.hasClass()](#fnhasclass) | [$.fn.each()](#fneach) | [$.fn.hide()](#fnhide) |      | [$.fn.innerWidth()](#fninnerwidth) | [$.fn.one()](#fnone) |
 | [$.fn.prop()](#fnprop) | [$.fn.eq()](#fneq) |     |      | [$.fn.outerHeight()](#fnouterheight) | [$.fn.ready()](#fnready) |
 | [$.fn.removeAttr()](#fnremoveattr) | [$.fn.filter()](#fnfilter) |     |      | [$.fn.outerWidth()](#fnouterwidth) | [$.fn.trigger()](#fntrigger) |
 | [$.fn.removeClass()](#fnremoveclass) | [$.fn.first()](#fnfirst) |     |      | [$.fn.width()](#fnwidth) |        |
@@ -224,6 +224,20 @@ is supplied. Properties will be autoprefixed if needed for the user's browser.
 $(element).css(property) // => value
 $(element).css(property, value) // => collection
 $(element).css(object) // => collection
+```
+#### $.fn.show()
+
+Shows a hidden element by resetting the display CSS property.
+
+```js
+$(element).show()
+```
+#### $.fn.hide()
+
+Hides an element by setting the CSS display property to 'none'. Keeps track of the prior display value used so it can be reset properly when .show() is called.
+
+```js
+$(element).hide()
 ```
 
 #### $.fn.data()

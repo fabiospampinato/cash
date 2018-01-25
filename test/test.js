@@ -238,6 +238,10 @@ QUnit.test( "css", function( assert ) {
   assert.equal($('.css-fixture').css('height'), '100px', "css write Passed!" );
   $('.css-fixture').css({height: '50px', width: '100px'});
   assert.equal($('.css-fixture').css('width'), '100px', "css write many Passed!" );
+  $('.css-fixture').hide();
+  assert.equal($('.css-fixture').css('display'), 'none', "hide Passed!" );
+  $('.css-fixture').show();
+  assert.equal($('.css-fixture').css('display'), 'block', "hide Passed!" );
 });
 
 //Data
