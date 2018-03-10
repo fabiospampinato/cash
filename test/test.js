@@ -254,6 +254,8 @@ QUnit.test( "data", function( assert ) {
 
 QUnit.test( "height", function( assert ) {
   assert.equal($('.css-fixture').height(), 100, "height Passed!" );
+  $('.css-fixture').height(200);
+  assert.equal($('.css-fixture').height(), 250, "height set Passed!" );
 });
 
 QUnit.test( "innerHeight", function( assert ) {
@@ -267,6 +269,8 @@ QUnit.test( "outerHeight", function( assert ) {
 
 QUnit.test( "width", function( assert ) {
   assert.equal($('.css-fixture').width(), 100, "width Passed!" );
+    $('.css-fixture').width(200);
+    assert.equal($('.css-fixture').width(), 250, "width set Passed!" );
 });
 
 QUnit.test( "innerWidth", function( assert ) {
