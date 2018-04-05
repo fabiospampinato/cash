@@ -112,6 +112,11 @@ fn.extend({
       parent.replaceChild ( $eles[0], v );
       cash($eles[0]).after($eles.slice(1));
     });
-	}
+  },
+
+  replaceAll(content) {
+    cash(content).replaceWith(this);
+    return this;
+  }
 
 });
