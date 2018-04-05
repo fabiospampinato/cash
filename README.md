@@ -85,6 +85,7 @@ $(element).addClass(className) // => collection
 | [$.fn.removeProp()](#fnremoveprop) | [$.fn.get()](#fnget) |     |      |            |        |
 | [$.fn.toggleClass()](#fntoggleclass) | [$.fn.index()](#fnindex) |     |      |            |        |
 |            | [$.fn.last()](#fnlast) |     |      |            |        |
+|            | [$.fn.slice()](#fnslice) |     |      |            |        |
 
 | Forms | Manipulation | Offset | Traversal |
 | ----- | ------------ | ------ | --------- |
@@ -604,6 +605,14 @@ Returns a collection of sibling elements.
 
 ```js
 $(element).siblings() // => collection
+```
+
+#### $.fn.slice
+
+Returns a new collection with elements taken from start to end.
+
+```js
+$(selector).slice(start, end) // => collection
 ```
 
 #### $.fn.text

@@ -38,6 +38,10 @@ fn.extend({
 
   last() {
     return this.eq(-1);
+  },
+
+  slice(start, end) {
+    return cash(slice.call(this,start,end));
   }
 
 });
