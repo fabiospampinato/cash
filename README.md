@@ -324,10 +324,11 @@ $(element).hasClass(className) // => boolean
 
 #### $.fn.height()
 
-Returns the height of the element.
+Returns or set the height of the element.
 
 ```js
 $(element).height() // => Integer
+$(element).height(number) // => collection
 ```
 
 #### $.fn.html()
@@ -659,10 +660,11 @@ $(input).val(value) // => collection
 
 #### $.fn.width()
 
-Returns the width of the element.
+Returns or set the width of the element.
 
 ```js
 $(element).width() // => number
+$(element).width(number) // => collection
 ```
 
 ---

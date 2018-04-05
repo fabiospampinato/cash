@@ -6,7 +6,16 @@ each(['Width','Height'],v => {
 
   var lower = v.toLowerCase();
 
-  fn[lower] = function(){ return this[0].getBoundingClientRect()[lower]; };
+  fn[lower] = function( value ){
+    if ( typeof value === 'number' ) {
+      this[0].style[lower] = value + 'px';
+    } else if ( isString(value) ) {
+      this[0].style[lower] = value;
+    } else {
+      return this[0].getBoundingClientRect()[lower];
+    }
+    return this;
+  };
 
   fn['inner'+v] = function(){ return this[0]['client'+v]; };
 
