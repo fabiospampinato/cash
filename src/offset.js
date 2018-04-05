@@ -4,6 +4,9 @@ fn.extend({
 
   position(){
     var el = this[0];
+    if ( !el ) {
+      return;
+    }
     return {
       left: el.offsetLeft,
       top: el.offsetTop
@@ -11,6 +14,9 @@ fn.extend({
   },
 
   offset(){
+    if ( !this[0] ) {
+      return;
+    }
     var rect = this[0].getBoundingClientRect();
     return {
       top: rect.top + win.pageYOffset - docEl.clientTop,

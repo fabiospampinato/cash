@@ -73,7 +73,7 @@ fn.extend({
 
     if ( isString(name) ) {
       return ( value === undefined ?
-        this[0][name] :
+        ( this[0] ? this[0][name] : undefined ) :
         this.each(v => { v[name] = value; })
       );
     }

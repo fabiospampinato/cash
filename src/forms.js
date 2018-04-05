@@ -41,6 +41,9 @@ function getValue(el) {
 fn.extend({
 
   serialize() {
+    if ( !this[0] ) {
+      return '';
+    }
     var query = '';
 
     each(this[0].elements || this, el => {
@@ -75,7 +78,7 @@ fn.extend({
 
   val(value) {
     if (value === undefined) {
-      return getValue(this[0]);
+      return this[0] ? getValue(this[0]) : undefined;
     } else {
       return this.each(v => v.value = value);
     }

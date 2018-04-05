@@ -55,7 +55,7 @@ fn.extend({
   },
 
   next() {
-    return cash(this[0].nextElementSibling);
+    return cash(this[0] ? this[0].nextElementSibling : undefined);
   },
 
   not(selector) {
@@ -98,7 +98,7 @@ fn.extend({
   },
 
   prev() {
-    return cash(this[0].previousElementSibling);
+    return cash(this[0] ? this[0].previousElementSibling : undefined);
   },
 
   siblings() {

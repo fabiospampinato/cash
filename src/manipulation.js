@@ -53,7 +53,7 @@ fn.extend({
   },
 
   html(content) {
-    if ( content === undefined ) { return this[0].innerHTML; }
+    if ( content === undefined ) { return this[0] ? this[0].innerHTML : undefined; }
     var source = ( content.nodeType ? content[0].outerHTML : content );
     return this.each(v => v.innerHTML = source);
   },
@@ -92,7 +92,7 @@ fn.extend({
   },
 
   text(content) {
-    if ( content === undefined ) { return this[0].textContent; }
+    if ( content === undefined ) { return this[0] ? this[0].textContent : ''; }
     return this.each(v => v.textContent = content);
   }
 

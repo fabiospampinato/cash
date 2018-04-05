@@ -29,7 +29,7 @@ fn.extend({
 
     if ( isString(name) ) {
       return ( value === undefined ?
-          getData(this[0],name) :
+          ( this[0] ? getData(this[0],name) : undefined ) :
           this.each(v => setData(v,name,value) )
         );
     }

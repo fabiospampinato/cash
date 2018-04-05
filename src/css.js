@@ -43,7 +43,7 @@ fn.extend({
       prop = getPrefixedProp(prop);
       return ( arguments.length > 1 ?
         this.each(v => v.style[prop] = value ) :
-        win.getComputedStyle(this[0])[prop]
+        ( this[0] ? win.getComputedStyle(this[0])[prop] : undefined )
       );
     }
 
