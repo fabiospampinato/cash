@@ -139,6 +139,7 @@ $(element).add(collection) // => collection
 #### $.fn.addClass()
 
 Adds the className argument to collection elements.
+Accepts space-separated className for adding multiple classes.
 
 ```js
 $(element).addClass(className) // => collection
@@ -568,8 +569,9 @@ $(element).removeAttr(attrName) // => collection
 
 #### $.fn.removeClass()
 
-Removes className from collection elements. Accepts space-separated classNames
-for removing multiple classes. Providing no arguments will remove all classes.
+Removes className from collection elements.
+Accepts space-separated className for adding multiple classes.
+Providing no arguments will remove all classes.
 
 ```js
 $(element).removeClass() // => collection
