@@ -423,9 +423,12 @@ $(element).not(collection) // => collection
 
 Removes event listener from collection elements.
 Accepts space-separated eventName for removing multiple events listeners.
+Can remove all event listeners if called without arguments.
 
 ```js
 $(element).off(eventName,eventHandler) // => collection
+$(element).off(eventName) // => collection
+$(element).off() // => collection
 ```
 
 #### $.fn.offset()

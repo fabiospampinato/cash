@@ -11,29 +11,43 @@ function registerEvent(node, eventName, callback) {
   node.addEventListener(eventName, callback);
 }
 
+function removeEventListeners(events, node, eventName) {
+  each(events[eventName], callback => { node.removeEventListener(eventName, callback); });
+  delete events[eventName];
+}
+
 function removeEvent(node, eventName, callback){
-  var events = getData(node,'_cashEvents'),
-      eventCache = (events && events[eventName]),
-      index;
-
-  if ( !eventCache ) { return; }
-
-  if (callback) {
-    node.removeEventListener(eventName, callback);
-    index = eventCache.indexOf(callback);
-    if ( index >= 0 ) { eventCache.splice( index, 1); }
+  var events = getData(node,'_cashEvents');
+  if ( !events ) { return; }
+  if ( eventName === undefined ) {
+    for ( eventName in events ) {
+      if ( !events.hasOwnProperty(eventName) ) { continue; }
+      removeEventListeners(events,node,eventName);
+    }
   } else {
-    each(eventCache, event => { node.removeEventListener(eventName, event); });
-    delete events[eventName];
+    var eventCache = events[eventName];
+    if ( !eventCache ) { return; }
+
+    if (callback) {
+      node.removeEventListener(eventName, callback);
+      var index = eventCache.indexOf(callback);
+      if ( index >= 0 ) { eventCache.splice( index, 1); }
+    } else {
+      removeEventListeners(events,node,eventName);
+    }
   }
 }
 
 fn.extend({
 
   off(eventName, callback) {
-    each( eventName.split(eventsSeparatorMatch), eventName => {
-      this.each(v => removeEvent(v, unnamespaceEvent(eventName), callback) );
-    });
+    if ( eventName === undefined ) {
+      this.each(v => removeEvent (v));
+    } else {
+      each( eventName.split(eventsSeparatorMatch), eventName => {
+        this.each(v => removeEvent(v, unnamespaceEvent(eventName), callback) );
+      });
+    }
     return this;
   },
 
