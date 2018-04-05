@@ -276,9 +276,10 @@ $.fn.extend(source) // => object
 
 #### $.fn.filter()
 
-Returns the collection that results from applying the filter method.
+Returns the collection that results from applying the filter selector/method.
 
 ```js
+$(element).filter(selector) // => collection
 $(element).filter(function) // => collection
 ```
 
