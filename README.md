@@ -106,10 +106,11 @@ $(element).addClass(className) // => collection
 
 | Type Checking | Utilities |
 | ------------- | --------- |
-| [$.isArray()](#isarray) | [$.each()](#each) |
-| [$.isFunction()](#isfunction) | [$.extend()](#extend) |
-| [$.isNumeric()](#isnumeric) | [$.matches()](#matches) |
-| [$.isString()](#isstring) | [$.parseHTML()](#parsehtml) |
+| [$.isArray()](#isarray) | [$.guid](#guid) |
+| [$.isFunction()](#isfunction) | [$.each()](#each) |
+| [$.isNumeric()](#isnumeric) | [$.extend()](#extend) |
+| [$.isString()](#isstring) | [$.matches()](#matches) |
+|  | [$.parseHTML()](#parsehtml) |
 
 ----
 
@@ -690,6 +691,14 @@ $.isString('hello') // => true
 ---
 
 ### Utilities
+
+#### $.guid
+
+A unique number.
+
+```js
+$.guid++ // => number
+```
 
 #### $.each()
 
