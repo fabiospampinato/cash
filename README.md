@@ -630,7 +630,9 @@ Triggers supplied event on elements in collection. Data can be passed along as t
 
 ```js
 $(element).trigger(eventName) // => collection
+$(element).trigger(eventObj) // => collection
 $(element).trigger(eventName,data) // => collection
+$(element).trigger(eventObj,data) // => collection
 ```
 
 #### $.fn.val()
