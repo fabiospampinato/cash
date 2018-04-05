@@ -86,9 +86,12 @@ fn.extend({
   ready: onReady,
 
   trigger(eventName, data) {
-    var evt = doc.createEvent('HTMLEvents');
+    var evt = eventName;
+    if (isString(eventName)) {
+      evt = doc.createEvent('HTMLEvents');
+      evt.initEvent(eventName, true, false);
+    }
     evt.data = data;
-    evt.initEvent(eventName, true, false);
     return this.each(v => v.dispatchEvent(evt));
   }
 
