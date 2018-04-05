@@ -20,6 +20,15 @@ cash.extend = fn.extend = function(target) {
   return target;
 };
 
+function contains(container, contained) {
+  while ( ( contained = contained.parentNode ) ) {
+    if ( contained === container ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function each(collection, callback) {
   var l = collection.length,
       i = 0;
@@ -72,6 +81,7 @@ cash.extend({
     return first;
   },
 
+  contains: contains,
   each: each,
   matches: matches,
   unique: unique,

@@ -109,9 +109,10 @@ $(element).addClass(className) // => collection
 | Type Checking | Utilities |
 | ------------- | --------- |
 | [$.isArray()](#isarray) | [$.guid](#guid) |
-| [$.isFunction()](#isfunction) | [$.each()](#each) |
-| [$.isNumeric()](#isnumeric) | [$.extend()](#extend) |
-| [$.isString()](#isstring) | [$.matches()](#matches) |
+| [$.isFunction()](#isfunction) | [$.contains()](#contains) |
+| [$.isNumeric()](#isnumeric) | [$.each()](#each) |
+| [$.isString()](#isstring) | [$.extend()](#extend) |
+|  | [$.matches()](#matches) |
 |  | [$.parseHTML()](#parsehtml) |
 
 ----
@@ -730,6 +731,14 @@ A unique number.
 
 ```js
 $.guid++ // => number
+```
+
+#### $.contains()
+
+Check to see if a DOM element is a descendant of another DOM element.
+
+```js
+$.contains(container, contained) // => boolean
 ```
 
 #### $.each()
