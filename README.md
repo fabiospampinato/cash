@@ -558,7 +558,7 @@ $(document).ready(callback) // => collection/span
 
 #### $.fn.remove()
 
-Removes collection elements from the DOM.
+Removes collection elements from the DOM and removes all event listeners.
 
 ```js
 $(element).remove() // => collection

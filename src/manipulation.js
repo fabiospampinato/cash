@@ -88,7 +88,7 @@ fn.extend({
   },
 
   remove() {
-    return this.each(v => v.parentNode.removeChild(v));
+    return this.each(v => v.parentNode.removeChild(v)).off ();
   },
 
   text(content) {
