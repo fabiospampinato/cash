@@ -24,7 +24,7 @@ function removeEvent(node, eventName, callback){
     if ( index >= 0 ) { eventCache.splice( index, 1); }
   } else {
     each(eventCache, event => { node.removeEventListener(eventName, event); });
-    eventCache = [];
+    delete events[eventName];
   }
 }
 
