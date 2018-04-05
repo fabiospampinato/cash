@@ -412,10 +412,11 @@ $(element).next() // => collection
 
 #### $.fn.not()
 
-Filters collection by false match on selector.
+Filters collection by false match on collection/selector.
 
 ```js
 $(element).not(selector) // => collection
+$(element).not(collection) // => collection
 ```
 
 #### $.fn.off()
