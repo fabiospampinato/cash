@@ -1,3 +1,5 @@
+var eventsSeparatorMatch = /[,\s]+/g;
+
 function registerEvent(node, eventName, callback) {
   var eventCache = getData(node,'_cashEvents') || setData(node, '_cashEvents', {});
   eventCache[eventName] = eventCache[eventName] || [];
@@ -25,7 +27,10 @@ function removeEvent(node, eventName, callback){
 fn.extend({
 
   off(eventName, callback) {
-    return this.each(v => removeEvent(v, eventName, callback) );
+    each( eventName.split(eventsSeparatorMatch), eventName => {
+      this.each(v => removeEvent(v, eventName, callback) );
+    });
+    return this;
   },
 
   on(eventName, delegate, callback, runOnce) { // jshint ignore:line
@@ -67,16 +72,19 @@ fn.extend({
       };
     }
 
-    return this.each(v => {
-      var finalCallback = callback;
-      if ( runOnce ) {
-        finalCallback = function(){
-          callback.apply(this,arguments);
-          removeEvent(v, eventName, finalCallback);
-        };
-      }
-      registerEvent(v, eventName, finalCallback);
+    each( eventName.split(eventsSeparatorMatch), eventName => {
+      this.each(v => {
+        var finalCallback = callback;
+        if ( runOnce ) {
+          finalCallback = function(){
+            callback.apply(this,arguments);
+            removeEvent(v, eventName, finalCallback);
+          };
+        }
+        registerEvent(v, eventName, finalCallback);
+      });
     });
+    return this;
   },
 
   one(eventName, delegate, callback) {
