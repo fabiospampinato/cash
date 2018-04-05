@@ -417,6 +417,7 @@ $(element).not(selector) // => collection
 #### $.fn.off()
 
 Removes event listener from collection elements.
+Accepts space-separated eventName for removing multiple events listeners.
 
 ```js
 $(element).off(eventName,eventHandler) // => collection
@@ -440,8 +441,9 @@ $(element).offsetParent() // => collection
 
 #### $.fn.on()
 
-Adds event listener to collection elements. Event is delegated if delegate is
-supplied.
+Adds event listener to collection elements.
+Accepts space-separated eventName for listening to multiple events.
+Event is delegated if delegate is supplied.
 
 ```js
 $(element).on(eventName, eventHandler) // => collection
@@ -451,6 +453,7 @@ $(element).on(eventName, delegate, eventHandler) // => collection
 #### $.fn.one()
 
 Adds event listener to collection elements that only triggers once for each element.
+Accepts space-separated eventName for listening to multiple events.
 Event is delegated if delegate is supplied.
 
 ```js
