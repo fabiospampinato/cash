@@ -98,6 +98,20 @@ fn.extend({
   text(content) {
     if ( content === undefined ) { return this[0] ? this[0].textContent : ''; }
     return this.each(v => v.textContent = content);
-  }
+  },
+
+	replaceWith(content) {
+    return this.each(v=>{
+      var parent = v.parentNode;
+      if ( !parent ) { return false; }
+      var $eles = cash(content);
+      if ( !$eles[0] ) {
+        this.remove ();
+        return false;
+      }
+      parent.replaceChild ( $eles[0], v );
+      cash($eles[0]).after($eles.slice(1));
+    });
+	}
 
 });

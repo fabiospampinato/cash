@@ -102,6 +102,7 @@ $(element).addClass(className) // => collection
 |       | [$.fn.prepend()](#fnprepend) |        | [$.fn.siblings()](#fnsiblings) |
 |       | [$.fn.prependTo()](#fnprependto) |        |  |
 |       | [$.fn.remove()](#fnremove) |        |           |
+|       | [$.fn.replaceWith()](#fnreplacewith) |        |           |
 |       | [$.fn.text()](#fntext) |        |           |
 
 ### Utilities
@@ -572,6 +573,14 @@ Removes collection elements from the DOM and removes all their event listeners.
 
 ```js
 $(element).remove() // => collection
+```
+
+#### $.fn.replaceWith()
+
+Replace collection elements with the provided new content.
+
+```js
+$(element).replaceWith(content) // => collection
 ```
 
 #### $.fn.removeAttr()
