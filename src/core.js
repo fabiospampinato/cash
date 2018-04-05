@@ -42,7 +42,7 @@ function onReady(fn) {
   else { doc.addEventListener('DOMContentLoaded', fn); }
 }
 
-function Init(selector,context){
+function Cash(selector,context){
 
   if ( !selector ) { return this; }
 
@@ -84,16 +84,16 @@ function Init(selector,context){
 }
 
 function cash(selector,context) {
-  return new Init(selector,context);
+  return new Cash(selector,context);
 }
 
-var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
+var fn = cash.fn = cash.prototype = Cash.prototype = { // jshint ignore:line
   cash: true,
   length: 0,
   push: push,
   splice: ArrayProto.splice,
   map: ArrayProto.map,
-  init: Init
+  init: Cash
 };
 
 Object.defineProperty(fn,'constructor',{ value: cash });
