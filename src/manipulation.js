@@ -87,8 +87,12 @@ fn.extend({
     return this;
   },
 
+  detach () {
+    return this.each(v => v.parentNode.removeChild(v));
+  },
+
   remove() {
-    return this.each(v => v.parentNode.removeChild(v)).off ();
+    return this.detach ().off ();
   },
 
   text(content) {
