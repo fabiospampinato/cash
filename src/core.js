@@ -1,4 +1,5 @@
-var noop = function(){},
+var guid = 1,
+    noop = function(){},
     isFunction = function(item) {
         // @see https://crbug.com/568448
         return typeof item === typeof noop && item.call;
@@ -98,6 +99,7 @@ var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
 Object.defineProperty(fn,'constructor',{ value: cash });
 
 cash.parseHTML = parseHTML;
+cash.guid = guid;
 cash.noop = noop;
 cash.isFunction = isFunction;
 cash.isString = isString;
