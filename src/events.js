@@ -1,6 +1,7 @@
 var eventsSeparatorMatch = /[,\s]+/g;
 
 function registerEvent(node, eventName, callback) {
+  callback.guid = ( callback.guid || guid++ );
   var eventCache = getData(node,'_cashEvents') || setData(node, '_cashEvents', {});
   eventCache[eventName] = eventCache[eventName] || [];
   eventCache[eventName].push(callback);
@@ -25,9 +26,11 @@ function removeEvent(node, eventName, callback){
     if ( !eventCache ) { return; }
 
     if (callback) {
-      node.removeEventListener(eventName, callback);
-      var index = eventCache.indexOf(callback);
-      if ( index >= 0 ) { eventCache.splice( index, 1); }
+      callback.guid = ( callback.guid || guid++ );
+      events[eventName] = eventCache.filter ( cb => {
+        if ( cb.guid !== callback.guid ) { return true; }
+        node.removeEventListener(eventName, cb);
+      });
     } else {
       removeEventListeners(events,node,eventName);
     }
@@ -49,8 +52,6 @@ fn.extend({
 
   on(eventName, delegate, callback, runOnce) { // jshint ignore:line
 
-    var originalCallback;
-
     if ( !isString(eventName) ) {
       for (var key in eventName) {
         this.on(key,delegate,eventName[key]);
@@ -69,7 +70,7 @@ fn.extend({
     }
 
     if ( delegate ) {
-      originalCallback = callback;
+      var originalCallback = callback;
       callback = function(e) {
         var t = e.target;
 
@@ -84,6 +85,7 @@ fn.extend({
           originalCallback.call(t, e);
         }
       };
+      callback.guid = originalCallback.guid = ( originalCallback.guid || guid++ );
     }
 
     each( eventName.split(eventsSeparatorMatch), eventName => {
