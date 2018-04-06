@@ -90,13 +90,17 @@ fn.extend({
 
     each( eventName.split(eventsSeparatorMatch), eventName => {
       this.each(v => {
-        var finalCallback = callback;
+        function dataCallback(event) {
+          callback.call ( this, event, event.data );
+        }
+        dataCallback.guid = callback.guid = ( callback.guid || guid++ );
+        var finalCallback = dataCallback;
         if ( runOnce ) {
-          finalCallback = function(){
-            callback.apply(this,arguments);
+          finalCallback = function(event){
+            dataCallback.call(this,event);
             removeEvent(v, eventName, finalCallback);
           };
-          finalCallback.guid = callback.guid = ( callback.guid || guid++ );
+          finalCallback.guid = dataCallback.guid = ( dataCallback.guid || guid++ );
         }
         registerEvent(v, eventName, finalCallback);
       });
