@@ -96,6 +96,7 @@ fn.extend({
             callback.apply(this,arguments);
             removeEvent(v, eventName, finalCallback);
           };
+          finalCallback.guid = callback.guid;
         }
         registerEvent(v, eventName, finalCallback);
       });
