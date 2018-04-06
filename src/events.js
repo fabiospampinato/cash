@@ -1,9 +1,5 @@
 var eventsSeparatorMatch = /[,\s]+/g;
 
-function unnamespaceEvent(eventName){
-  return eventName.split('.')[0];
-}
-
 function registerEvent(node, eventName, callback) {
   var eventCache = getData(node,'_cashEvents') || setData(node, '_cashEvents', {});
   eventCache[eventName] = eventCache[eventName] || [];
@@ -45,7 +41,7 @@ fn.extend({
       this.each(v => removeEvent (v));
     } else {
       each( eventName.split(eventsSeparatorMatch), eventName => {
-        this.each(v => removeEvent(v, unnamespaceEvent(eventName), callback) );
+        this.each(v => removeEvent(v, eventName, callback) );
       });
     }
     return this;
@@ -91,7 +87,6 @@ fn.extend({
     }
 
     each( eventName.split(eventsSeparatorMatch), eventName => {
-      eventName = unnamespaceEvent(eventName);
       this.each(v => {
         var finalCallback = callback;
         if ( runOnce ) {
@@ -116,7 +111,7 @@ fn.extend({
     var evt = eventName;
     if (isString(eventName)) {
       evt = doc.createEvent('HTMLEvents');
-      evt.initEvent(unnamespaceEvent(eventName), true, false);
+      evt.initEvent(eventName, true, false);
     }
     evt.data = data;
     return this.each(v => v.dispatchEvent(evt));
