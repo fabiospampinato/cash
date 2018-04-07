@@ -685,7 +685,7 @@ $(element).width () // => number
 $(element).width ( number ) // => collection
 ```
 
-### Global Methods
+### Cash Methods
 
 These methods are exported from the global `$` object, and are called like so:
 
