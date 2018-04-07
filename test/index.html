@@ -2,13 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Cash</title>
+  <title>Cash | Test</title>
   <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.15.0.css">
+  <script src="http://code.jquery.com/qunit/qunit-1.15.0.js"></script>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
-
     <div class="class-fixture"></div>
     <fieldset class="tagname-fixture"></fieldset>
     <div id="id-fixture"></div>
@@ -16,29 +16,21 @@
     <div class="qsa-fixture"></div>
     <div class="attr-fixture has-class-two has-class has-class-three" data-index="5" success="get"></div>
     <div class="attr-fixture2 has-class-two has-class-three" data-index="6" success="get"></div>
-
     <span class="css-fixture" style="display: block; height: 50px; width: 50px; padding: 20px; margin: 20px; border: 5px solid black;"></span>
-
     <input type="checkbox" class="prop-fixture" checked/>
-
     <a class="event-fixture">Click Me</a>
     <a class="trigger-fixture">Click Me</a>
     <a class="trigger-data-fixture">Click Me</a>
     <a class="delegate-fixture"><span class="delegate-trigger">Click Me</span></a>
     <a class="off-fixture">Click Me</a>
-
     <form class="form-fixture" name="form-fixture">
       <input type="hidden" value="5" name="hidden"/>
       <input type="text" value="text" name="text"/>
-
       <input type="text" value="I'm disabled" name="disabled-check" disabled />
-
       <input type="checkbox" value="yes" checked="checked" name="checkbox-yes" />
       <input type="checkbox" value="no" name="checkbox-no" />
-
       <input type="radio" value="yes" checked="checked" name="radio" />
       <input type="radio" value="no" name="radio" />
-
       <select name="select">
         <option value="not-selected">Not Selected</option>
         <option value="selected" selected>Selected</option>
@@ -50,10 +42,8 @@
       <input type="file" name="file" />
       <input type="submit" value="submit" name="submit"/>
     </form>
-
   </div>
-  <script src="http://code.jquery.com/qunit/qunit-1.15.0.js"></script>
   <script type="text/javascript" src="../dist/cash.js"></script>
-  <script src="test.js"></script>
+  <script src="./index.js"></script>
 </body>
 </html>

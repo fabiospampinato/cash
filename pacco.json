@@ -1,0 +1,13 @@
+{
+  "paths": {
+    "tokens": {
+      "bundle": "cash"
+    },
+    "output": {
+      "javascript": {
+        "unminified": "[dist]/[bundle].js",
+        "minified": "[dist]/[bundle].min.js"
+      }
+    }
+  }
+}

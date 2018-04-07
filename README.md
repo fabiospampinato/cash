@@ -1,505 +1,488 @@
 # Cash
+
 *An absurdly small jQuery alternative for modern browsers (IE9+)*
 
-![https://travis-ci.org/kenwheeler/cash.svg?branch=master](https://travis-ci.org/kenwheeler/cash.svg?branch=master) ![Minified](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?label=Size%20%28minified%29) ![GZIP](https://badge-size.herokuapp.com/kenwheeler/cash/master/dist/cash.min.js.svg?compression=gzip&label=Size%20%28gzipped%29)
+Cash is a small library for modern browsers (IE9+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
-Cash is a small library for modern browsers (Chrome, Firefox, Safari and Internet
-Explorer 9+) that provides jQuery style syntax for manipulating the DOM. Utilizing
-modern browser features to minimize the codebase, developers can use the familiar
-chainable methods at a fraction of the file size. 100% feature parity with jQuery
-isn't a goal, but cash comes helpfully close, covering most day to day use cases.
+## Size Comparison
 
-#### Size Comparison
+|                    | Cash        | jQuery 3.3.1 |
+| ------------------ | ----------- | ------------ |
+| Uncompressed       | **29.8 KB** | 271 KB       |
+| Minified           | **11 KB**   | 87 KB        |
+| Minified & Gzipped | **3.9 KB**  | 30.3 KB      |
 
-| Library                   | **Cash**       | jQuery 3.0  | jQuery 2.2  |
-| ------------------------- | --------------:| -----------:| -----------:|
-| Uncompressed              | **20K**        | 263K        | 253K        |
-| Minified                  | **9.8K**       | 86K         | 76K         |
-| **Minified & Gzipped**    | **3.5K**       | 34K         | 30K         |
-
----
+An **87%** gain in size reduction. If you need a smaller file, partial builds are supported too since this project is bundled using [pacco](https://github.com/fabiospampinato/pacco).
 
 ## Usage
 
-Add cash to your project on your server or using the [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@1.3.5/dist/cash.min.js) or [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/1.3.0/cash.min.js) CDNs, and use cash to manipulate the DOM!
+Get the [minified version of cash](https://raw.githubusercontent.com/fabiospampinato/cash/master/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/cash-dom@1.3.5/dist/cash.min.js"></script>
+<script src="/cash.min.js"></script>
 <script>
-$(function(){
-
-  $('html').addClass('dom-loaded');
-
-  $('<footer>Appended with cash</footer>').appendTo(document.body);
-
-});
+  $(function () {
+    $('html').addClass('dom-loaded');
+    $('<footer>Appended with cash</footer>').appendTo(document.body);
+  });
 </script>
 ```
 
-Cash is also available through [NPM](http://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
-```
-npm install cash-dom --save-dev
-```
-
-And through [Bower](http://bower.io/) as `cash`:
-```
-bower install cash
-```
-
----
-
 ## Documentation
-
 
 ### $()
 
-This is the main selector method for cash. It returns an actionable collection
-of nodes. If a function is provided, the function will be run once the DOM is ready.
+This is the main selector method for cash. It returns an actionable collection of nodes.
+
+If a function is provided, the function will be run once the DOM is ready.
 
 ```js
-$(selector,[context]) // => collection
+$( selector, [context] ) // => collection
 $(node) // => collection
 $(nodeList) // => collection
 $(htmlString) // => collection
 $(collection) // => self
-$(function) // => document ready callback
+$(function () {}) // => document ready callback
 ```
 
 ### Collection Methods
 
-These methods from the collection prototype ( [$.fn](#fn) ) are available once
-you create a collection with `$()` and are called like so:
+These methods from the collection prototype ([$.fn](#fn)) are available once you create a collection with `$()` and are called like so:
 
 ```js
-$(element).addClass(className) // => collection
+$(element).addClass ( className ) // => collection
 ```
 
-| Attributes | Collection | CSS | Data | Dimensions | Events |
-| ---------- | ---------- | --- | ---- | ---------- | ------ |
-| [$.fn.addClass()](#fnaddclass) | [$.fn](#fn) | [$.fn.css()](#fncss) | [$.fn.data()](#fndata) | [$.fn.height()](#fnheight) | [$.fn.off()](#fnoff) |
-| [$.fn.attr()](#fnattr) | [$.fn.add()](#fnadd) |     | [$.fn.removeData()](#fnremovedata) | [$.fn.innerHeight()](#fninnerheight) | [$.fn.on()](#fnon) |
-| [$.fn.hasClass()](#fnhasclass) | [$.fn.each()](#fneach) |     |      | [$.fn.innerWidth()](#fninnerwidth) | [$.fn.one()](#fnone) |
-| [$.fn.prop()](#fnprop) | [$.fn.eq()](#fneq) |     |      | [$.fn.outerHeight()](#fnouterheight) | [$.fn.ready()](#fnready) |
-| [$.fn.removeAttr()](#fnremoveattr) | [$.fn.filter()](#fnfilter) |     |      | [$.fn.outerWidth()](#fnouterwidth) | [$.fn.trigger()](#fntrigger) |
-| [$.fn.removeClass()](#fnremoveclass) | [$.fn.first()](#fnfirst) |     |      | [$.fn.width()](#fnwidth) |        |
-| [$.fn.removeProp()](#fnremoveprop) | [$.fn.get()](#fnget) |     |      |            |        |
-| [$.fn.toggleClass()](#fntoggleclass) | [$.fn.index()](#fnindex) |     |      |            |        |
-|            | [$.fn.last()](#fnlast) |     |      |            |        |
-|            | [$.fn.slice()](#fnslice) |     |      |            |        |
+| Attributes                          | Collection                | CSS                 | Data                              | Dimensions                          | Events                      |
+| ----------------------------------  | ------------------------- | ------------------  | --------------------------------- | ----------------------------------- | --------------------------- |
+| [fn.addClass ()](#fnaddclass)       | [fn.add ()](#fnadd)       | [fn.css ()](#fncss) | [fn.data ()](#fndata)             | [fn.height ()](#fnheight)           | [fn.off ()](#fnoff)         |
+| [fn.attr ()](#fnattr)               | [fn.each ()](#fneach)     |                     | [fn.removeData ()](#fnremovedata) | [fn.innerHeight ()](#fninnerheight) | [fn.on ()](#fnon)           |
+| [fn.hasClass ()](#fnhasclass)       | [fn.eq ()](#fneq)         |                     |                                   | [fn.innerWidth ()](#fninnerwidth)   | [fn.one ()](#fnone)         |
+| [fn.prop ()](#fnprop)               | [fn.filter ()](#fnfilter) |                     |                                   | [fn.outerHeight ()](#fnouterheight) | [fn.ready ()](#fnready)     |
+| [fn.removeAttr ()](#fnremoveattr)   | [fn.first ()](#fnfirst)   |                     |                                   | [fn.outerWidth ()](#fnouterwidth)   | [fn.trigger ()](#fntrigger) |
+| [fn.removeClass ()](#fnremoveclass) | [fn.get ()](#fnget)       |                     |                                   | [fn.width ()](#fnwidth)             |                             |
+| [fn.removeProp ()](#fnremoveprop)   | [fn.index ()](#fnindex)   |                     |                                   |                                     |                             |
+| [fn.toggleClass ()](#fntoggleclass) | [fn.last ()](#fnlast)     |                     |                                   |                                     |                             |
+|                                     | [fn.map ()](#fnmap)       |                     |                                   |                                     |                             |
+|                                     | [fn.slice ()](#fnslice)   |                     |                                   |                                     |                             |
 
-| Forms | Manipulation | Offset | Traversal |
-| ----- | ------------ | ------ | --------- |
-| [$.fn.serialize()](#fnserialize) | [$.fn.after()](#fnafter) | [$.fn.offset()](#fnoffset) | [$.fn.children()](#fnchildren) |
-| [$.fn.val()](#fnval) | [$.fn.append()](#fnappend) | [$.fn.offsetParent()](#fnoffsetparent) | [$.fn.closest()](#fnclosest) |
-|       | [$.fn.appendTo()](#fnappendto) | [$.fn.position()](#fnposition) | [$.fn.find()](#fnfind) |
-|       | [$.fn.before()](#fnbefore) |        | [$.fn.has()](#fnhas) |
-|       | [$.fn.clone()](#fnclone) |        | [$.fn.is()](#fnis) |
-|       | [$.fn.detach()](#fndetach) |        | [$.fn.next()](#fnnext) |
-|       | [$.fn.empty()](#fnempty) |        | [$.fn.not()](#fnnot) |
-|       | [$.fn.html()](#fnhtml) |        | [$.fn.parent()](#fnparent) |
-|       | [$.fn.insertAfter()](#fninsertafter) |        | [$.fn.parents()](#fnparents) |
-|       | [$.fn.insertBefore()](#fninsertbefore) |        | [$.fn.prev()](#fnprev) |
-|       | [$.fn.prepend()](#fnprepend) |        | [$.fn.siblings()](#fnsiblings) |
-|       | [$.fn.prependTo()](#fnprependto) |        |  |
-|       | [$.fn.remove()](#fnremove) |        |           |
-|       | [$.fn.replaceAll()](#fnreplaceall) |        |           |
-|       | [$.fn.replaceWith()](#fnreplacewith) |        |           |
-|       | [$.fn.text()](#fntext) |        |           |
-
-### Utilities
-
-| Type Checking | Utilities |
-| ------------- | --------- |
-| [$.isArray()](#isarray) | [$.guid](#guid) |
-| [$.isFunction()](#isfunction) | [$.contains()](#contains) |
-| [$.isNumeric()](#isnumeric) | [$.each()](#each) |
-| [$.isString()](#isstring) | [$.extend()](#extend) |
-|  | [$.matches()](#matches) |
-|  | [$.parseHTML()](#parsehtml) |
-
-----
+| Forms                           | Manipulation                          | Offset                                | Traversal                     |
+| ------------------------------- | ------------------------------------- | ------------------------------------- | ----------------------------- |
+| [fn.serialize ()](#fnserialize) | [fn.after ()](#fnafter)               | [fn.offset ()](#fnoffset)             | [fn.children ()](#fnchildren) |
+| [fn.val ()](#fnval)             | [fn.append ()](#fnappend)             | [fn.offsetParent ()](#fnoffsetparent) | [fn.closest ()](#fnclosest)   |
+|                                 | [fn.appendTo ()](#fnappendto)         | [fn.position ()](#fnposition)         | [fn.find ()](#fnfind)         |
+|                                 | [fn.before ()](#fnbefore)             |                                       | [fn.has ()](#fnhas)           |
+|                                 | [fn.clone ()](#fnclone)               |                                       | [fn.is ()](#fnis)             |
+|                                 | [fn.detach ()](#fndetach)             |                                       | [fn.next ()](#fnnext)         |
+|                                 | [fn.empty ()](#fnempty)               |                                       | [fn.not ()](#fnnot)           |
+|                                 | [fn.html ()](#fnhtml)                 |                                       | [fn.parent ()](#fnparent)     |
+|                                 | [fn.insertAfter ()](#fninsertafter)   |                                       | [fn.parents ()](#fnparents)   |
+|                                 | [fn.insertBefore ()](#fninsertbefore) |                                       | [fn.prev ()](#fnprev)         |
+|                                 | [fn.prepend ()](#fnprepend)           |                                       | [fn.siblings ()](#fnsiblings) |
+|                                 | [fn.prependTo ()](#fnprependto)       |                                       |                               |
+|                                 | [fn.remove ()](#fnremove)             |                                       |                               |
+|                                 | [fn.replaceAll ()](#fnreplaceall)     |                                       |                               |
+|                                 | [fn.replaceWith ()](#fnreplacewith)   |                                       |                               |
+|                                 | [fn.text ()](#fntext)                 |                                       |                               |
 
 #### $.fn
 
-The main prototype for collections, allowing you to extend cash with plugins
-by adding methods to all collections.
+The main prototype for collections, allowing you to extend cash with plugins by adding methods to all collections.
 
 ```js
 $.fn // => cash.prototype
-$.fn.myMethod = function(){ }; // Custom method added to all collections
-$.fn.extend(object); // Add multiple methods to the prototype.
+$.fn.myMethod = function () {}; // Custom method added to all collections
+$.fn.extend ( object ); // Add multiple methods to the prototype
 ```
 
-#### $.fn.add()
+#### fn.add ()
 
 Returns a new collection with the element(s) added to the end.
 
 ```js
-$(element).add(element) // => collection
-$(element).add(selector) // => collection
-$(element).add(collection) // => collection
+$(element).add ( element ) // => collection
+$(element).add ( selector ) // => collection
+$(element).add ( collection ) // => collection
 ```
 
-#### $.fn.addClass()
+#### fn.addClass ()
 
-Adds the className argument to collection elements.
-Accepts space-separated className for adding multiple classes.
+Adds the `className` class to each element in the collection.
+
+Accepts space-separated `className` for adding multiple classes.
 
 ```js
-$(element).addClass(className) // => collection
+$(element).addClass ( className ) // => collection
 ```
 
-#### $.fn.after()
+#### fn.after ()
 
 Inserts content or elements after the collection.
 
 ```js
-$(element).after(element) // => collection
-$(element).after(htmlString) // => collection
+$(element).after ( element ) // => collection
+$(element).after ( htmlString ) // => collection
 ```
 
-#### $.fn.append()
+#### fn.append ()
 
-Appends the target element to the each element in the collection.
+Appends the target element to each element in the collection.
 
 ```js
-$(element).append(element) // => collection
+$(element).append ( element ) // => collection
 ```
 
-#### $.fn.appendTo()
+#### fn.appendTo ()
 
-Adds the elements in a collection to the target element(s).
+Adds the elements in the collection to the target element(s).
 
 ```js
-$(element).appendTo(element) // => collection
+$(element).appendTo ( element ) // => collection
 ```
 
-#### $.fn.attr()
+#### fn.attr ()
 
-Without attrValue, returns the attribute value of the first element in the
-collection. With attrValue, sets the attribute value of each element of the
-collection.
+Without attrValue, returns the attribute value of the first element in the collection.
+
+With attrValue, sets the attribute value of each element of the collection.
 
 ```js
-$(element).attr(attrName) // => AttributeValue
-$(element).attr(attrName, attrValue) // => collection
+$(element).attr ( attrName ) // => AttributeValue
+$(element).attr ( attrName, attrValue ) // => collection
 ```
 
-#### $.fn.before()
+#### fn.before ()
 
 Inserts content or elements before the collection.
 
 ```js
-$(element).before(element) // => collection
-$(element).before(htmlString) // => collection
+$(element).before ( element ) // => collection
+$(element).before ( htmlString ) // => collection
 ```
 
-#### $.fn.children()
+#### fn.children ()
 
-Without a selector specified, returns a collection of child elements. With a
-selector, returns child elements that match the selector.
+Without a selector specified, returns a collection of child elements.
+
+With a selector, returns child elements that match the selector.
 
 ```js
-$(element).children() // => collection
-$(element).children(selector) // => collection
+$(element).children () // => collection
+$(element).children ( selector ) // => collection
 ```
 
-#### $.fn.closest()
+#### fn.closest ()
 
 Returns the closest matching selector up the DOM tree.
 
 ```js
-$(element).closest() // => collection
-$(element).closest(selector) // => collection
+$(element).closest () // => collection
+$(element).closest ( selector ) // => collection
 ```
 
-#### $.fn.clone()
+#### fn.clone ()
 
 Returns a clone of the collection.
 
 ```js
-$(element).clone() // => collection
+$(element).clone () // => collection
 ```
 
-#### $.fn.detach()
+#### fn.detach ()
 
 Removes collection elements from the DOM.
 
 ```js
-$(element).detach() // => collection
+$(element).detach () // => collection
 ```
 
-#### $.fn.css()
+#### fn.css ()
 
-Returns a CSS property value when just property is supplied. Sets a CSS property
-when property and value are supplied, and set multiple properties when an object
-is supplied. Properties will be autoprefixed if needed for the user's browser.
+Returns a CSS property value when just property is supplied.
+
+Sets a CSS property when property and value are supplied.
+
+Sets multiple properties when an object is supplied.
+
+Properties will be autoprefixed if needed for the user's browser.
 
 ```js
-$(element).css(property) // => value
-$(element).css(property, value) // => collection
-$(element).css(object) // => collection
+$(element).css ( property ) // => value
+$(element).css ( property, value ) // => collection
+$(element).css ( object ) // => collection
 ```
 
-#### $.fn.data()
+#### fn.data ()
 
-Link some data (string, object, array, etc.) to an element when both key and value
-are supplied. If only a key is supplied, returns the linked data and falls back to
-data attribute value if no data is already linked. Multiple data can be set when
-an object is supplied.
+Link some data (string, object, array, etc.) to an element when both key and value are supplied.
+
+If only a key is supplied, returns the linked data and falls back to data attribute value if no data is already linked.
+
+Multiple data can be set when an object is supplied.
 
 ```js
-$(element).data(key) // => value
-$(element).data(key, value) // => collection
-$(element).data(object) // => collection
+$(element).data ( key ) // => value
+$(element).data ( key, value ) // => collection
+$(element).data ( object ) // => collection
 ```
 
-#### $.fn.each()
+#### fn.each ()
 
-Iterates over a collection with callback(value, index, array).
+Iterates over a collection with `callback ( value, index, array )`.
 
 ```js
-$(element).each(callback) // => collection
+$(element).each ( callback ) // => collection
 ```
 
-#### $.fn.empty()
+#### fn.empty ()
 
-Empties an elements interior markup.
+Empties the elements interior markup.
 
 ```js
-$(element).empty() // => collection
+$(element).empty () // => collection
 ```
 
-#### $.fn.eq()
+#### fn.eq ()
 
 Returns a collection with the element at index.
 
 ```js
-$(element).eq(index) // => collection
+$(element).eq ( index ) // => collection
 ```
 
-#### $.fn.extend()
+#### fn.extend ()
 
 Adds properties to the cash collection prototype.
 
 ```js
-$.fn.extend(source) // => object
+$.fn.extend(object) // => object
 ```
 
-#### $.fn.filter()
+#### fn.filter ()
 
 Returns the collection that results from applying the filter selector/method.
 
 ```js
-$(element).filter(selector) // => collection
-$(element).filter(function) // => collection
+$(element).filter ( selector ) // => collection
+$(element).filter ( function () {} ) // => collection
 ```
 
-#### $.fn.find()
+#### fn.find ()
 
 Returns selector match descendants from the first element in the collection.
 
 ```js
-$(element).find(selector) // => collection
+$(element).find ( selector ) // => collection
 ```
 
-#### $.fn.first()
+#### fn.first ()
 
-Returns the first element in the collection.
+Returns a collection containing only the first element.
 
 ```js
-$(element).first() // => collection
+$(element).first () // => collection
 ```
 
-#### $.fn.get()
+#### fn.get ()
 
-Returns the element at the index.
+Returns the element at the index, or returns all elements.
 
 ```js
-$(element).get(index) // => domNode
+$(element).get ( index ) // => domNode
+$(element).get () // => domNode[]
 ```
 
-#### $.fn.has()
+#### fn.has ()
 
 Returns boolean result of the selector argument against the collection.
 
 ```js
-$(element).has(selector) // => boolean
+$(element).has ( selector ) // => boolean
 ```
 
-#### $.fn.hasClass()
+#### fn.hasClass ()
 
-Returns the boolean result of checking if the first element in the collection
-has the className attribute.
+Returns the boolean result of checking if the first element in the collection has the `className` attribute.
 
 ```js
-$(element).hasClass(className) // => boolean
+$(element).hasClass ( className ) // => boolean
 ```
 
-#### $.fn.height()
+#### fn.height ()
 
-Returns or set the height of the element.
+Returns or sets the height of the element.
 
 ```js
-$(element).height() // => Integer
-$(element).height(number) // => collection
+$(element).height () // => Integer
+$(element).height ( number ) // => collection
 ```
 
-#### $.fn.html()
+#### fn.html ()
 
-Returns the HTML text of the first element in the collection, sets the HTML if
-provided.
+Returns the HTML text of the first element in the collection, sets the HTML if provided.
 
 ```js
-$(element).html() // => HTML Text
-$(element).html(HTML) // => HTML Text
+$(element).html () // => HTML Text
+$(element).html ( htmlString ) // => HTML Text
 ```
 
-#### $.fn.index()
+#### fn.index ()
 
-Returns the index of the element in its parent if an element or selector isn't
-provided. Returns index within element or selector if it is.
+Returns the index of the element in its parent if an element or selector isn't provided. Returns index within element or selector if it is.
 
 ```js
-$(element).index() // => Integer
-$(element).index(element) // => Integer
+$(element).index () // => Integer
+$(element).index ( element ) // => Integer
 ```
 
-#### $.fn.innerHeight()
+#### fn.innerHeight ()
 
 Returns the height of the element + padding.
 
 ```js
-$(element).innerHeight() // => Integer
+$(element).innerHeight () // => Integer
 ```
 
-#### $.fn.innerWidth()
+#### fn.innerWidth ()
 
 Returns the width of the element + padding.
 
 ```js
-$(element).innerWidth() // => Integer
+$(element).innerWidth () // => Integer
 ```
 
-#### $.fn.insertAfter()
+#### fn.insertAfter ()
 
 Inserts collection after specified element.
 
-
 ```js
-$(element).insertAfter(element) // => collection
+$(element).insertAfter ( element ) // => collection
 ```
 
-#### $.fn.insertBefore()
+#### fn.insertBefore ()
 
 Inserts collection before specified element.
 
 ```js
-$(element).insertBefore(element) // => collection
+$(element).insertBefore ( element ) // => collection
 ```
 
-#### $.fn.is()
+#### fn.is ()
 
 Returns whether the provided selector, element or collection matches any element in the collection.
 
 ```js
-$(element).is(selector) // => boolean
+$(element).is ( selector ) // => boolean
 ```
 
-#### $.fn.last()
+#### fn.last ()
 
-Returns last element in the collection.
+Returns a collection containing only the last element.
 
 ```js
-$(element).last() // => collection
+$(element).last () // => collection
 ```
 
-#### $.fn.next()
+#### fn.map ()
+
+Returns a new collection, mapping each element with `callback ( value, index, array )`.
+
+```js
+$(selector).map ( callback ) // => collection
+```
+
+#### fn.next ()
 
 Returns next sibling.
 
 ```js
-$(element).next() // => collection
+$(element).next () // => collection
 ```
 
-#### $.fn.not()
+#### fn.not ()
 
 Filters collection by false match on collection/selector.
 
 ```js
-$(element).not(selector) // => collection
-$(element).not(collection) // => collection
+$(element).not ( selector ) // => collection
+$(element).not ( collection ) // => collection
 ```
 
-#### $.fn.off()
+#### fn.off ()
 
 Removes event listener from collection elements.
+
 Accepts space-separated eventName for removing multiple events listeners.
-Can remove all event listeners if called without arguments.
+
+Removes all event listeners if called without arguments.
 
 ```js
-$(element).off(eventName,eventHandler) // => collection
-$(element).off(eventName) // => collection
-$(element).off() // => collection
+$(element).off ( eventName, eventHandler ) // => collection
+$(element).off ( eventName ) // => collection
+$(element).off () // => collection
 ```
 
-#### $.fn.offset()
+#### fn.offset ()
 
 Get the coordinates of the first element in a collection relative to the document.
 
 ```js
-$(element).offset() // => Object
+$(element).offset () // => Object
 ```
 
-#### $.fn.offsetParent()
+#### fn.offsetParent ()
 
 Get the first element's ancestor that's positioned.
 
 ```js
-$(element).offsetParent() // => collection
+$(element).offsetParent () // => collection
 ```
 
-#### $.fn.on()
+#### fn.on ()
 
 Adds event listener to collection elements.
+
 Accepts space-separated eventName for listening to multiple events.
+
 Event is delegated if delegate is supplied.
 
 ```js
-$(element).on(eventName, eventHandler) // => collection
-$(element).on(eventName, delegate, eventHandler) // => collection
+$(element).on ( eventName, eventHandler ) // => collection
+$(element).on ( eventName, delegate, eventHandler ) // => collection
 ```
 
-#### $.fn.one()
+#### fn.one ()
 
 Adds event listener to collection elements that only triggers once for each element.
+
 Accepts space-separated eventName for listening to multiple events.
+
 Event is delegated if delegate is supplied.
 
 ```js
-$(element).one(eventName, eventHandler) // => collection
-$(element).one(eventName, delegate, eventHandler) // => collection
+$(element).one ( eventName, eventHandler ) // => collection
+$(element).one ( eventName, delegate, eventHandler ) // => collection
 ```
 
-#### $.fn.outerHeight()
+#### fn.outerHeight ()
 
-Returns the outer height of the element. Includes margins if margin is set to true.
+Returns the outer height of the element. Includes margins if `includeMargings` is set to true.
 
 ```js
-$(element).outerHeight() // => Integer
-$(element).outerHeight(includeMargin) // => Integer
+$(element).outerHeight () // => Integer
+$(element).outerHeight ( includeMargins ) // => Integer
 ```
 
-#### $.fn.outerWidth()
+#### fn.outerWidth ()
 
-Returns the outer width of the element. Includes margins if margin is set to true.
+Returns the outer width of the element. Includes margins if `includeMargings` is set to true.
 
 ```js
-$(element).outerWidth() // => Integer
-$(element).outerWidth(includeMargin) // => Integer
+$(element).outerWidth () // => Integer
+$(element).outerWidth ( includeMargins ) // => Integer
 ```
 
-#### $.fn.parent()
+#### fn.parent ()
 
 Returns parent element.
 
@@ -507,241 +490,233 @@ Returns parent element.
 $(element).parent() // => collection
 ```
 
-#### $.fn.parents()
+#### fn.parents ()
 
 Returns collection of elements who are parents of element. Optionally filtering by selector.
 
 ```js
-$(element).parents() // => collection
-$(element).parents(selector) // => collection
+$(element).parents () // => collection
+$(element).parents ( selector ) // => collection
 ```
 
-#### $.fn.position()
+#### fn.position ()
 
 Get the coordinates of the first element in a collection relative to its `offsetParent`.
 
 ```js
-$(element).position() // => object
+$(element).position () // => object
 ```
 
-#### $.fn.prepend()
+#### fn.prepend ()
 
 Prepends element to the each element in collection.
 
 ```js
-$(element).prepend(element) // => collection
+$(element).prepend ( element ) // => collection
 ```
 
-#### $.fn.prependTo()
+#### fn.prependTo ()
 
 Prepends elements in a collection to the target element(s).
 
 ```js
-$(element).prependTo(element) // => collection
+$(element).prependTo ( element ) // => collection
 ```
 
-#### $.fn.prev()
+#### fn.prev ()
 
 Returns the previous adjacent element.
 
 ```js
-$(element).prev() // => collection
+$(element).prev () // => collection
 ```
 
-#### $.fn.prop()
+#### fn.prop ()
 
-Returns a property value when just property is supplied. Sets a property
-when property and value are supplied, and sets multiple properties when an object
-is supplied.
+Returns a property value when just property is supplied.
+
+Sets a property when property and value are supplied, and sets multiple properties when an object is supplied.
 
 ```js
-$(element).prop(property) // => property value
-$(element).prop(property, value) // => collection
-$(element).prop(object) // => collection
+$(element).prop ( property ) // => property value
+$(element).prop ( property, value ) // => collection
+$(element).prop ( object ) // => collection
 ```
 
-#### $.fn.ready()
+#### fn.ready ()
 
 Calls callback method on DOMContentLoaded.
 
 ```js
-$(document).ready(callback) // => collection/span
+$(document).ready ( callback ) // => collection/span
 ```
 
-#### $.fn.remove()
+#### fn.remove ()
 
 Removes collection elements from the DOM and removes all their event listeners.
 
 ```js
-$(element).remove() // => collection
+$(element).remove () // => collection
 ```
 
-#### $.fn.replaceAll()
+#### fn.replaceAll ()
 
-This is similar to `$.fn.replaceWith()`, but with the source and target reversed.
+This is similar to [fn.replaceWith()](#fnreplacewith), but with the source and target reversed.
 
 ```js
-$(element).replaceAll(content) // => collection
+$(element).replaceAll ( content ) // => collection
 ```
 
-#### $.fn.replaceWith()
+#### fn.replaceWith ()
 
 Replace collection elements with the provided new content.
 
 ```js
-$(element).replaceWith(content) // => collection
+$(element).replaceWith ( content ) // => collection
 ```
 
-#### $.fn.removeAttr()
+#### fn.removeAttr ()
 
 Removes attribute from collection elements.
 
 ```js
-$(element).removeAttr(attrName) // => collection
+$(element).removeAttr ( attrName ) // => collection
 ```
 
-#### $.fn.removeClass()
+#### fn.removeClass ()
 
 Removes className from collection elements.
+
 Accepts space-separated className for adding multiple classes.
+
 Providing no arguments will remove all classes.
 
 ```js
-$(element).removeClass() // => collection
-$(element).removeClass(className) // => collection
+$(element).removeClass () // => collection
+$(element).removeClass ( className ) // => collection
 ```
 
-#### $.fn.removeData()
+#### fn.removeData ()
 
 Removes linked data and data-attributes from collection elements.
 
 ```js
-$(element).removeData(name) // => collection
+$(element).removeData ( name ) // => collection
 ```
 
-#### $.fn.removeProp()
+#### fn.removeProp ()
 
 Removes property from collection elements.
 
 ```js
-$(element).removeProp(propName) // => collection
+$(element).removeProp ( propName ) // => collection
 ```
 
-#### $.fn.serialize()
+#### fn.serialize ()
 
 When called on a form, serializes and returns form data.
 
 ```js
-$(form).serialize() // => String
+$(form).serialize () // => String
 ```
 
-#### $.fn.siblings
+#### fn.siblings ()
 
 Returns a collection of sibling elements.
 
 ```js
-$(element).siblings() // => collection
+$(element).siblings () // => collection
 ```
 
-#### $.fn.slice
+#### fn.slice ()
 
 Returns a new collection with elements taken from start to end.
 
 ```js
-$(selector).slice(start, end) // => collection
+$(selector).slice ( start, end ) // => collection
 ```
 
-#### $.fn.text
+#### fn.text ()
 
-Returns the inner text of the first element in the collection, sets the text if
-textContent is provided.
+Returns the inner text of the first element in the collection, sets the text if textContent is provided.
 
 ```js
-$(element).text() // => text
-$(element).text(textContent) // => collection
+$(element).text () // => text
+$(element).text ( textContent ) // => collection
 ```
 
-#### $.fn.toggleClass
+#### fn.toggleClass ()
 
 Adds or removes className from collection elements based on if the element already has the class.
-Accepts space-separated classNames for toggling multiple classes, and an optional `force` boolean
-to ensure classes are added (`true`) or removed (`false`).
+
+Accepts space-separated classNames for toggling multiple classes, and an optional `force` boolean to ensure classes are added (`true`) or removed (`false`).
 
 ```js
-$(element).toggleClass(className) // => collection
-$(element).toggleClass(className,force) // => collection
+$(element).toggleClass ( className ) // => collection
+$(element).toggleClass ( className, force ) // => collection
 ```
 
-#### $.fn.trigger()
+#### fn.trigger ()
 
 Triggers supplied event on elements in collection. Data can be passed along as the second parameter.
 
 ```js
-$(element).trigger(eventName) // => collection
-$(element).trigger(eventObj) // => collection
-$(element).trigger(eventName,data) // => collection
-$(element).trigger(eventObj,data) // => collection
+$(element).trigger ( eventName ) // => collection
+$(element).trigger ( eventObj ) // => collection
+$(element).trigger ( eventName, data ) // => collection
+$(element).trigger ( eventObj, data ) // => collection
 ```
 
-#### $.fn.val()
+#### fn.val ()
 
-Returns an inputs value. If value is supplied, sets all inputs in collection's
-value to the value argument.
+Returns an inputs value. If value is supplied, sets all inputs in collection's value to the value argument.
 
 ```js
-$(input).val() // => value
-$(input).val(value) // => collection
+$(input).val () // => value
+$(input).val ( value ) // => collection
 ```
 
-#### $.fn.width()
+#### fn.width ()
 
-Returns or set the width of the element.
+Returns or sets the width of the element.
 
 ```js
-$(element).width() // => number
-$(element).width(number) // => collection
+$(element).width () // => number
+$(element).width ( number ) // => collection
 ```
 
----
+### Global Methods
 
-### Type Checking
-
-#### $.isArray()
-
-Check if the argument is an array.
+These methods are exported from the global `$` object, and are called like so:
 
 ```js
-$.isArray([1,2,3]) // => true
+$.isString ( str ) // => boolean
 ```
 
-#### $.isFunction()
+| Type Checking                 | Utilities                   |
+| ----------------------------- | --------------------------- |
+| [$.isArray()](#isarray)       | [$.guid](#guid)             |
+| [$.isFunction()](#isfunction) | [$.each()](#each)           |
+| [$.isNumeric()](#isnumeric)   | [$.extend()](#extend)       |
+| [$.isString()](#isstring)     | [$.matches()](#matches)     |
+|                               | [$.parseHTML()](#parsehtml) |
+|                               | [$.unique()](#unique)       |
 
-Check if the argument is a function.
+#### $.each ()
+
+Iterates through an array and calls the `callback ( value, index, array )` method on each.
 
 ```js
-var func = function(){};
-$.isFunction(func) // => true
+$.each ( array, callback ) // => undefined
 ```
 
-#### $.isNumeric()
+#### $.extend ()
 
-Check if the argument is numeric.
+Extends target object with properties from the source object. If no target is provided, cash itself will be extended.
 
 ```js
-$.isNumeric(57) // => true
+$.extend ( target, source ) // => object
 ```
-
-#### $.isString()
-
-Check if the argument is a string.
-
-```js
-$.isString('hello') // => true
-```
-
----
-
-### Utilities
 
 #### $.guid
 
@@ -751,44 +726,59 @@ A unique number.
 $.guid++ // => number
 ```
 
-#### $.contains()
+#### $.isArray ()
 
-Check to see if a DOM element is a descendant of another DOM element.
-
-```js
-$.contains(container, contained) // => boolean
-```
-
-#### $.each()
-
-Iterates through a collection and calls the callback method on each.
+Check if the argument is an array.
 
 ```js
-$.each(collection, callback) // => collection
+$.isArray ([ 1, 2, 3 ]) // => true
 ```
 
-#### $.extend()
+#### $.isFunction ()
 
-Extends target object with properties from the source object. If no target is provided,
-cash itself will be extended.
+Check if the argument is a function.
 
 ```js
-$.extend(target,source) // => object
+function fn () {};
+$.isFunction ( fn ) // => true
 ```
 
-#### $.matches()
+#### $.isNumeric ()
+
+Check if the argument is numeric.
+
+```js
+$.isNumeric ( 57 ) // => true
+```
+
+#### $.isString ()
+
+Check if the argument is a string.
+
+```js
+$.isString ( 'hello' ) // => true
+```
+
+#### $.matches ()
 
 Checks a selector against an element, returning a boolean value for match.
 
 ```js
-$.matches(element, selector) // => boolean
+$.matches ( element, selector ) // => boolean
 ```
 
-#### $.parseHTML()
+#### $.parseHTML ()
 
 Returns a collection from an HTML string.
 
 ```js
-$.parseHTML(htmlString) // => Collection
+$.parseHTML ( htmlString ) // => collection
 ```
 
+#### $.unique ()
+
+Returns a new array with duplicates removed.
+
+```js
+$.parseHTML ( array ) // => array
+```

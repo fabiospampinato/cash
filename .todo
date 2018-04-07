@@ -1,0 +1,8 @@
+
+☐ remove useless features
+☐ check embedded todos
+☐ update `README.md`
+☐ ask if they need a manintainer
+☐ add tests for new features
+☐ actually compile the code for IE9+, not just IE10+
+☐ maybe add back `extend`

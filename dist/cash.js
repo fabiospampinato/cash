@@ -1,93 +1,77 @@
 "use strict";
 
-/*! cash-dom 1.3.7, https://github.com/kenwheeler/cash @license MIT */
-;(function (root, factory) {
-  if (typeof define === "function" && define.amd) {
-    define(factory);
-  } else if (typeof exports !== "undefined") {
-    module.exports = factory();
-  } else {
-    root.cash = root.$ = factory();
-  }
-})(this, function () {
-  var doc = document, win = window, ArrayProto = Array.prototype, slice = ArrayProto.slice, filter = ArrayProto.filter, push = ArrayProto.push;
+// @optional attributes/index.js
+// @optional collection/index.js
+// @optional css/index.js
+// @optional data/index.js
+// @optional dimensions/index.js
+// @optional events/index.js
+// @optional forms/index.js
+// @optional manipulation/index.js
+// @optional offset/index.js
+// @optional traversal/index.js
+// @require core/index.js
+(function () {
+  // @concat-content
+  function hasClass(ele, cls) {
+    //FIXME: The regex won't work for classes containing special characters, sush as `$`
+    return ele.classList ? ele.classList.contains(cls) : new RegExp("(^| )" + cls + "( |$)", 'gi').test(ele.className);
+  } // @require ./has_class.js
 
-  var noop = function () {}, isFunction = function (item) {
-    // @see https://crbug.com/568448
-    return typeof item === typeof noop && item.call;
-  }, isString = function (item) {
-    return typeof item === typeof "";
-  };
 
-  var idMatch = /^#[\w-]*$/, classMatch = /^\.[\w-]*$/, htmlMatch = /<.+>/, singlet = /^\w+$/;
-
-  function find(selector, context) {
-    context = context || doc;
-    var elems = (classMatch.test(selector) ? context.getElementsByClassName(selector.slice(1)) : singlet.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector));
-    return elems;
-  }
-
-  var frag;
-  function parseHTML(str) {
-    if (!frag) {
-      frag = doc.implementation.createHTMLDocument(null);
-      var base = frag.createElement("base");
-      base.href = doc.location.href;
-      frag.head.appendChild(base);
+  function addClass(ele, cls) {
+    if (ele.classList) {
+      ele.classList.add(cls);
+    } else if (!hasClass(ele, cls)) {
+      ele.className += " " + cls;
     }
-
-    frag.body.innerHTML = str;
-
-    return frag.body.childNodes;
   }
 
-  function onReady(fn) {
-    if (doc.readyState !== "loading") {
-      setTimeout(fn);
+  function removeClass(ele, cls) {
+    if (ele.classList) {
+      ele.classList.remove(cls);
     } else {
-      doc.addEventListener("DOMContentLoaded", fn);
+      ele.className = ele.className.replace(cls, '');
     }
   }
 
-  function Init(selector, context) {
-    if (!selector) {
-      return this;
-    }
+  var doc = document,
+      docEl = doc.documentElement,
+      win = window,
+      _Array$prototype = Array.prototype,
+      push = _Array$prototype.push,
+      slice = _Array$prototype.slice;
+  var idRe = /^#[\w-]*$/,
+      classRe = /^\.[\w-]*$/,
+      htmlRe = /<.+>/,
+      tagRe = /^\w+$/,
+      notWhitespaceRe = /\S+/g,
+      eventsSeparatorRe = /[,\s]+/g,
+      querySpaceRe = /%20/g;
+  var datasNamespace = '__cash_datas__',
+      eventsNamespace = '__cash_events__'; // @require ./variables.js
 
-    // If already a cash collection, don't do any further processing
-    if (selector.cash && selector !== win) {
-      return selector;
-    }
-
-    var elems = selector, i = 0, length;
+  function Cash(selector, context) {
+    if (!selector) return this;
+    if (selector.cash && selector !== win) return selector;
+    var eles = selector;
 
     if (isString(selector)) {
-      elems = (idMatch.test(selector) ?
-      // If an ID use the faster getElementById check
-      doc.getElementById(selector.slice(1)) : htmlMatch.test(selector) ?
-      // If HTML, parse it into real elements
-      parseHTML(selector) :
-      // else use `find`
-      find(selector, context));
-
-      // If function, use as shortcut for DOM ready
+      eles = idRe.test(selector) ? doc.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
     } else if (isFunction(selector)) {
-      onReady(selector);return this;
+      return this.ready(selector); //FIXME: `fn.ready` is not included in `core`
     }
 
-    if (!elems) {
-      return this;
-    }
+    if (!eles) return this;
 
-    // If a single DOM element is passed in or received via ID, return the single element
-    if (elems.nodeType || elems === win) {
-      this[0] = elems;
+    if (eles.nodeType || eles === win) {
+      this[0] = eles;
       this.length = 1;
     } else {
-      // Treat like an array and loop through each item.
-      length = this.length = elems.length;
-      for (; i < length; i++) {
-        this[i] = elems[i];
+      this.length = eles.length;
+
+      for (var i = 0, l = this.length; i < l; i++) {
+        this[i] = eles[i];
       }
     }
 
@@ -95,864 +79,1084 @@
   }
 
   function cash(selector, context) {
-    return new Init(selector, context);
+    return new Cash(selector, context);
+  }
+  /* PROTOTYPE */
+
+
+  var fn = cash.fn = cash.prototype = Cash.prototype = {
+    init: Cash,
+    cash: true,
+    length: 0
+  };
+  Object.defineProperty(fn, 'constructor', {
+    value: cash
+  }); // @require ./cash.js
+
+  function each(arr, callback) {
+    for (var i = 0, l = arr.length; i < l; i++) {
+      if (callback.call(arr[i], arr[i], i, arr) === false) break;
+    }
   }
 
-  var fn = cash.fn = cash.prototype = Init.prototype = { // jshint ignore:line
-    cash: true,
-    length: 0,
-    push: push,
-    splice: ArrayProto.splice,
-    map: ArrayProto.map,
-    init: Init
-  };
+  cash.each = each; // @require ./cash.js
 
-  Object.defineProperty(fn, "constructor", { value: cash });
-
-  cash.parseHTML = parseHTML;
-  cash.noop = noop;
-  cash.isFunction = isFunction;
-  cash.isString = isString;
-
-  cash.extend = fn.extend = function (target) {
-    target = target || {};
-
-    var args = slice.call(arguments), length = args.length, i = 1;
-
-    if (args.length === 1) {
+  function extend(target) {
+    if (target === void 0) {
       target = this;
-      i = 0;
     }
 
-    for (; i < length; i++) {
-      if (!args[i]) {
-        continue;
-      }
+    var args = arguments,
+        length = args.length;
+
+    for (var i = length < 2 ? 0 : 1; i < length; i++) {
       for (var key in args[i]) {
-        if (args[i].hasOwnProperty(key)) {
-          target[key] = args[i][key];
-        }
+        target[key] = args[i][key];
       }
     }
 
     return target;
-  };
+  }
 
-  function each(collection, callback) {
-    var l = collection.length, i = 0;
+  ;
+  cash.extend = fn.extend = extend; // @require ./cash.js
 
-    for (; i < l; i++) {
-      if (callback.call(collection[i], collection[i], i, collection) === false) {
-        break;
-      }
+  function find(selector, context) {
+    if (context === void 0) {
+      context = doc;
     }
+
+    return classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
+  } // @require ./cash.js
+
+
+  var guid = 1;
+  cash.guid = guid; // @require ./cash.js
+
+  function matches(ele, selector) {
+    var matches = ele && (ele.matches || ele.webkitMatchesSelector || ele.mozMatchesSelector || ele.msMatchesSelector || ele.oMatchesSelector);
+    return !!matches && matches.call(ele, selector);
   }
 
-  function matches(el, selector) {
-    var m = el && (el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector);
-    return !!m && m.call(el, selector);
+  cash.matches = matches; // @require ./cash.js
+
+  var fragment;
+
+  function initFragment() {
+    if (fragment) return;
+    fragment = doc.implementation.createHTMLDocument(null);
+    var base = fragment.createElement('base');
+    base.href = doc.location.href;
+    fragment.head.appendChild(base);
   }
+
+  function parseHTML(html) {
+    initFragment();
+    fragment.body.innerHTML = html;
+    return fragment.body.childNodes;
+  }
+
+  cash.parseHTML = parseHTML; // @require ./cash.js
+
+  function isFunction(x) {
+    return typeof x === 'function';
+  }
+
+  cash.isFunction = isFunction;
+
+  function isString(x) {
+    return typeof x === 'string';
+  }
+
+  cash.isString = isString;
+
+  function isNumeric(x) {
+    return !isNaN(parseFloat(x)) && isFinite(x);
+  }
+
+  cash.isNumeric = isNumeric;
+  var isArray = Array.isArray;
+  cash.isArray = isArray; // @require ./matches.js
+  // @require ./type_checking.js
 
   function getCompareFunction(selector) {
-    return (
-    /* Use browser's `matches` function if string */
-    isString(selector) ? matches :
-    /* Match a cash element */
-    selector.cash ? function (el) {
-      return selector.is(el);
-    } :
-    /* Direct comparison */
-    function (el, selector) {
-      return el === selector;
+    return isString(selector) ? matches : selector.cash ? function (ele) {
+      return selector.is(ele);
+    } : function (ele, selector) {
+      return ele === selector;
+    };
+  } // @require ./cash.js
+
+
+  function unique(arr) {
+    return arr.filter(function (item, index, self) {
+      return self.indexOf(item) === index;
     });
   }
 
-  function unique(collection) {
-    return cash(slice.call(collection).filter(function (item, index, self) {
-      return self.indexOf(item) === index;
-    }));
-  }
+  cash.unique = unique; // @require ./cash.js
+  // @require ./each.js
+  // @require ./extend.js
+  // @require ./find.js
+  // @require ./get_compare_function.js
+  // @require ./guid.js
+  // @require ./matches.js
+  // @require ./parse_html.js
+  // @require ./type_checking.js
+  // @require ./unique.js
+  // @require ./variables.js
+  // @require core/index.js
 
-  cash.extend({
-    merge: function (first, second) {
-      var len = +second.length, i = first.length, j = 0;
+  function getClasses(cls) {
+    return isString(cls) && cls.match(notWhitespaceRe);
+  } // @require core/index.js
 
-      for (; j < len; i++, j++) {
-        first[i] = second[j];
-      }
 
-      first.length = i;
-      return first;
-    },
+  fn.add = function (selector, context) {
+    return cash(unique(this.get().concat(cash(selector, context).get())));
+  }; // @require core/index.js
 
-    each: each,
-    matches: matches,
-    unique: unique,
-    isArray: Array.isArray,
-    isNumeric: function (n) {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
 
-  });
+  fn.each = function (callback) {
+    each(this, callback);
+    return this;
+  }; // @require collection/each.js
+  // @require ./helpers/get_classes.js
+  // @require ./helpers/add_class.js
 
-  var uid = cash.uid = "_cash" + Date.now();
 
-  function getDataCache(node) {
-    return (node[uid] = node[uid] || {});
-  }
-
-  function setData(node, key, value) {
-    return (getDataCache(node)[key] = value);
-  }
-
-  function getData(node, key) {
-    var c = getDataCache(node);
-    if (c[key] === undefined) {
-      c[key] = node.dataset ? node.dataset[key] : cash(node).attr("data-" + key);
-    }
-    return c[key];
-  }
-
-  function removeData(node, key) {
-    var c = getDataCache(node);
-    if (c) {
-      delete c[key];
-    } else if (node.dataset) {
-      delete node.dataset[key];
-    } else {
-      cash(node).removeAttr("data-" + name);
-    }
-  }
-
-  fn.extend({
-    data: function (name, value) {
-      if (isString(name)) {
-        return (value === undefined ? getData(this[0], name) : this.each(function (v) {
-          return setData(v, name, value);
-        }));
-      }
-
-      for (var key in name) {
-        this.data(key, name[key]);
-      }
-
-      return this;
-    },
-
-    removeData: function (key) {
-      return this.each(function (v) {
-        return removeData(v, key);
+  fn.addClass = function (cls) {
+    var classes = getClasses(cls);
+    if (!classes) return this;
+    return this.each(function (ele) {
+      each(classes, function (c) {
+        return addClass(ele, c);
       });
-    }
+    });
+  }; // @require collection/each.js
 
-  });
 
-  var notWhiteMatch = /\S+/g;
+  fn.attr = function (attr, value) {
+    if (!attr || !this[0]) return;
 
-  function getClasses(c) {
-    return isString(c) && c.match(notWhiteMatch);
-  }
-
-  function hasClass(v, c) {
-    return (v.classList ? v.classList.contains(c) : new RegExp("(^| )" + c + "( |$)", "gi").test(v.className));
-  }
-
-  function addClass(v, c) {
-    if (v.classList) {
-      v.classList.add(c);
-    } else if (!hasClass(v, c)) {
-      v.className += " " + c;
-    }
-  }
-
-  function removeClass(v, c) {
-    if (v.classList) {
-      v.classList.remove(c);
-    } else {
-      v.className = v.className.replace(c, "");
-    }
-  }
-
-  fn.extend({
-    addClass: function (c) {
-      var classes = getClasses(c);
-
-      return (classes ? this.each(function (v) {
-        each(classes, function (c) {
-          addClass(v, c);
-        });
-      }) : this);
-    },
-
-    attr: function (name, value) {
-      if (!name) {
-        return undefined;
+    if (isString(attr)) {
+      if (value === undefined) {
+        return this[0].getAttribute ? this[0].getAttribute(attr) : this[0][attr];
       }
 
-      if (isString(name)) {
-        if (value === undefined) {
-          return this[0] ? this[0].getAttribute ? this[0].getAttribute(name) : this[0][name] : undefined;
-        }
-
-        return this.each(function (v) {
-          if (v.setAttribute) {
-            v.setAttribute(name, value);
-          } else {
-            v[name] = value;
-          }
-        });
-      }
-
-      for (var key in name) {
-        this.attr(key, name[key]);
-      }
-
-      return this;
-    },
-
-    hasClass: function (c) {
-      var check = false, classes = getClasses(c);
-      if (classes && classes.length) {
-        this.each(function (v) {
-          check = hasClass(v, classes[0]);
-          return !check;
-        });
-      }
-      return check;
-    },
-
-    prop: function (name, value) {
-      if (isString(name)) {
-        return (value === undefined ? this[0][name] : this.each(function (v) {
-          v[name] = value;
-        }));
-      }
-
-      for (var key in name) {
-        this.prop(key, name[key]);
-      }
-
-      return this;
-    },
-
-    removeAttr: function (name) {
-      return this.each(function (v) {
-        if (v.removeAttribute) {
-          v.removeAttribute(name);
+      return this.each(function (ele) {
+        if (ele.setAttribute) {
+          ele.setAttribute(attr, value);
         } else {
-          delete v[name];
+          ele[attr] = value;
         }
       });
-    },
-
-    removeClass: function (c) {
-      if (!arguments.length) {
-        return this.attr("class", "");
-      }
-      var classes = getClasses(c);
-      return (classes ? this.each(function (v) {
-        each(classes, function (c) {
-          removeClass(v, c);
-        });
-      }) : this);
-    },
-
-    removeProp: function (name) {
-      return this.each(function (v) {
-        delete v[name];
-      });
-    },
-
-    toggleClass: function (c, state) {
-      if (state !== undefined) {
-        return this[state ? "addClass" : "removeClass"](c);
-      }
-      var classes = getClasses(c);
-      return (classes ? this.each(function (v) {
-        each(classes, function (c) {
-          if (hasClass(v, c)) {
-            removeClass(v, c);
-          } else {
-            addClass(v, c);
-          }
-        });
-      }) : this);
-    } });
-
-  fn.extend({
-    add: function (selector, context) {
-      return unique(cash.merge(this, cash(selector, context)));
-    },
-
-    each: function (callback) {
-      each(this, callback);
-      return this;
-    },
-
-    eq: function (index) {
-      return cash(this.get(index));
-    },
-
-    filter: function (selector) {
-      if (!selector) {
-        return this;
-      }
-
-      var comparator = (isFunction(selector) ? selector : getCompareFunction(selector));
-
-      return cash(filter.call(this, function (e) {
-        return comparator(e, selector);
-      }));
-    },
-
-    first: function () {
-      return this.eq(0);
-    },
-
-    get: function (index) {
-      if (index === undefined) {
-        return slice.call(this);
-      }
-      return (index < 0 ? this[index + this.length] : this[index]);
-    },
-
-    index: function (elem) {
-      var child = elem ? cash(elem)[0] : this[0], collection = elem ? this : cash(child).parent().children();
-      return slice.call(collection).indexOf(child);
-    },
-
-    last: function () {
-      return this.eq(-1);
     }
 
-  });
+    for (var key in attr) {
+      this.attr(key, attr[key]);
+    }
 
-  var camelCase = (function () {
-    var camelRegex = /(?:^\w|[A-Z]|\b\w)/g, whiteSpace = /[\s-_]+/g;
-    return function (str) {
-      return str.replace(camelRegex, function (letter, index) {
-        return letter[index === 0 ? "toLowerCase" : "toUpperCase"]();
-      }).replace(whiteSpace, "");
-    };
-  }());
+    return this;
+  }; // @require collection/each.js
+  // @require ./helpers/get_classes.js
+  // @require ./helpers/has_class.js
 
-  var getPrefixedProp = (function () {
-    var cache = {}, doc = document, div = doc.createElement("div"), style = div.style;
 
-    return function (prop) {
-      prop = camelCase(prop);
-      if (cache[prop]) {
-        return cache[prop];
+  fn.hasClass = function (cls) {
+    var classes = getClasses(cls);
+    if (!classes || !classes.length) return false;
+    var check = false;
+    this.each(function (ele) {
+      check = hasClass(ele, classes[0]);
+      return !check;
+    });
+    return check;
+  }; // @require collection/each.js
+
+
+  fn.prop = function (prop, value) {
+    if (isString(prop)) {
+      return value === undefined ? this[0] ? this[0][prop] : undefined : this.each(function (ele) {
+        ele[prop] = value;
+      });
+    }
+
+    for (var key in prop) {
+      this.prop(key, prop[key]);
+    }
+
+    return this;
+  }; // @require collection/each.js
+
+
+  fn.removeAttr = function (attr) {
+    return this.each(function (ele) {
+      if (ele.removeAttribute) {
+        ele.removeAttribute(attr);
+      } else {
+        delete ele[attr];
       }
+    });
+  }; // @require collection/each.js
+  // @require ./helpers/get_classes.js
+  // @require ./helpers/remove_class.js
+  // @require ./attr.js
 
-      var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1), prefixes = ["webkit", "moz", "ms", "o"], props = (prop + " " + (prefixes).join(ucProp + " ") + ucProp).split(" ");
 
-      each(props, function (p) {
-        if (p in style) {
-          cache[p] = prop = cache[prop] = p;
-          return false;
+  fn.removeClass = function (cls) {
+    if (cls === undefined) return this.attr('class', '');
+    var classes = getClasses(cls);
+    if (!classes) return this;
+    return this.each(function (ele) {
+      each(classes, function (c) {
+        return removeClass(ele, c);
+      });
+    });
+  }; // @require collection/each.js
+
+
+  fn.removeProp = function (prop) {
+    return this.each(function (ele) {
+      delete ele[prop];
+    });
+  }; // @require collection/each.js
+  // @require ./helpers/add_class.js
+  // @require ./helpers/get_classes.js
+  // @require ./helpers/has_class.js
+  // @require ./helpers/remove_class.js
+  // @require ./add_class.js
+  // @require ./remove_class.js
+
+
+  fn.toggleClass = function (cls, force) {
+    if (force !== undefined) return this[force ? 'addClass' : 'removeClass'](cls);
+    var classes = getClasses(cls);
+    if (!classes) return this;
+    return this.each(function (ele) {
+      each(classes, function (c) {
+        if (hasClass(ele, c)) {
+          removeClass(ele, c);
+        } else {
+          addClass(ele, c);
         }
       });
+    });
+  }; // @optional ./add_class.js
+  // @optional ./attr.js
+  // @optional ./has_class.js
+  // @optional ./prop.js
+  // @optional ./remove_attr.js
+  // @optional ./remove_class.js
+  // @optional ./remove_prop.js
+  // @optional ./toggle_class.js
+  // @require core/index.js
 
-      return cache[prop];
-    };
-  }());
 
-  cash.prefixedProp = getPrefixedProp;
-  cash.camelCase = camelCase;
+  fn.get = function (index) {
+    if (index === undefined) return slice.call(this);
+    return index < 0 ? this[index + this.length] : this[index];
+  }; // @require ./get.js
 
-  fn.extend({
-    css: function (prop, value) {
-      if (isString(prop)) {
-        prop = getPrefixedProp(prop);
-        return (arguments.length > 1 ? this.each(function (v) {
-          return v.style[prop] = value;
-        }) : win.getComputedStyle(this[0])[prop]);
-      }
 
-      for (var key in prop) {
-        this.css(key, prop[key]);
-      }
+  fn.eq = function (index) {
+    return cash(this.get(index));
+  }; // @require collection/get.js
 
-      return this;
-    }
 
-  });
+  fn.filter = function (selector) {
+    if (!selector) return this;
+    var comparator = isFunction(selector) ? selector : getCompareFunction(selector);
+    return cash(this.get().filter(function (ele) {
+      return comparator(ele, selector);
+    }));
+  }; // @require ./eq.js
 
-  function compute(el, prop) {
-    return parseInt(win.getComputedStyle(el[0], null)[prop], 10) || 0;
+
+  fn.first = function () {
+    return this.eq(0);
+  }; // @require ./eq.js
+
+
+  fn.last = function () {
+    return this.eq(-1);
+  }; // @require ./get.js
+
+
+  fn.map = function (callback) {
+    return cash(this.get().map(callback));
+  }; // @require core/index.js
+
+
+  fn.slice = function () {
+    return cash(slice.apply(this, arguments));
+  }; // @require core/index.js
+
+
+  var camelRe = /(?:^\w|[A-Z]|\b\w)/g,
+      camelWhitespaceRe = /[\s-_]+/g;
+
+  function camelCase(str) {
+    return str.replace(camelRe, function (letter, index) {
+      return letter[!index ? 'toLowerCase' : 'toUpperCase']();
+    }).replace(camelWhitespaceRe, '');
   }
 
-  each(["Width", "Height"], function (v) {
-    var lower = v.toLowerCase();
+  ;
+  cash.camelCase = camelCase; // @require core/each.js
+  // @require ./camel_case.js
 
-    fn[lower] = function () {
-      return this[0].getBoundingClientRect()[lower];
+  var prefixedProps = {},
+      div = doc.createElement('div'),
+      style = div.style,
+      stylePrefixes = ['webkit', 'moz', 'ms', 'o'];
+
+  function prefixedProp(prop) {
+    prop = camelCase(prop);
+    if (prefixedProps[prop]) return prefixedProps[prop];
+    var ucProp = prop.charAt(0).toUpperCase() + prop.slice(1),
+        props = (prop + " " + stylePrefixes.join(ucProp + " ") + ucProp).split(' ');
+    each(props, function (prop) {
+      if (prop in style) {
+        prefixedProps[prop] = prop = prefixedProps[prop] = prop;
+        return false;
+      }
+    });
+    return prefixedProps[prop];
+  }
+
+  ;
+  cash.prefixedProp = prefixedProp; // @require collection/each.js
+  // @require ./helpers/camel_case.js
+  // @require ./helpers/get_prefixed_prop.js
+
+  fn.css = function (prop, value) {
+    if (isString(prop)) {
+      prop = prefixedProp(prop);
+      return arguments.length > 1 ? this.each(function (ele) {
+        ele.style[prop] = value;
+      }) : this[0] ? win.getComputedStyle(this[0])[prop] : undefined;
+    }
+
+    for (var key in prop) {
+      this.css(key, prop[key]);
+    }
+
+    return this;
+  }; // @optional ./css.js
+
+
+  function getDataCache(ele) {
+    return ele[datasNamespace] = ele[datasNamespace] || {};
+  } // @require attributes/attr.js
+  // @require ./get_data_cache.js
+
+
+  function getData(ele, key) {
+    var cache = getDataCache(ele);
+
+    if (!(key in cache)) {
+      cache[key] = ele.dataset ? ele.dataset[key] : cash(ele).attr("data-" + key);
+    }
+
+    return cache[key];
+  } // @require attributes/remove_attr.js
+  // @require ./get_data_cache.js
+
+
+  function removeData(ele, key) {
+    var cache = getDataCache(ele);
+
+    if (cache) {
+      //FIXME: An object is always returned, what's the point of this? Maybe we should check if `key in cache`. Check how jQuery behaves here
+      delete cache[key];
+    } else if (ele.dataset) {
+      delete ele.dataset[key];
+    } else {
+      cash(ele).removeAttr("data-" + name);
+    }
+  } // @require ./get_data_cache.js
+
+
+  function setData(ele, key, value) {
+    return getDataCache(ele)[key] = value;
+  } // @require collection/each.js
+  // @require ./helpers/get_data.js
+  // @require ./helpers/set_data.js
+
+
+  fn.data = function (name, value) {
+    if (isString(name)) {
+      return value === undefined ? this[0] ? getData(this[0], name) : undefined : this.each(function (ele) {
+        setData(ele, name, value);
+      });
+    }
+
+    for (var key in name) {
+      this.data(key, name[key]);
+    }
+
+    return this;
+  }; // @require collection/each.js
+  // @require ./helpers/remove_data.js
+
+
+  fn.removeData = function (key) {
+    return this.each(function (ele) {
+      return removeData(ele, key);
+    });
+  }; // @optional ./data.js
+  // @optional ./remove_data.js
+  // @require core/index.js
+
+
+  function computeStyleInt(ele, prop) {
+    return parseInt(win.getComputedStyle(ele, null)[prop], 10) || 0;
+  } // @require core/index.js
+
+
+  each(['Width', 'Height'], function (prop) {
+    fn["inner" + prop] = function () {
+      return this[0] ? this[0]["client" + prop] : undefined;
     };
+  }); // @require core/index.js
 
-    fn["inner" + v] = function () {
-      return this[0]["client" + v];
+  each(['width', 'height'], function (prop) {
+    fn[prop] = function (value) {
+      if (!this[0]) return value === undefined ? undefined : this;
+
+      if (isNumeric(value)) {
+        this[0].style[prop] = value + "px";
+      } else if (isString(value)) {
+        this[0].style[prop] = value;
+      } else {
+        return this[0].getBoundingClientRect()[prop];
+      }
+
+      return this;
     };
+  }); // @require core/index.js
+  // @require ./helpers/compute_style_int.js
 
-    fn["outer" + v] = function (margins) {
-      return this[0]["offset" + v] + (margins ? compute(this, "margin" + (v === "Width" ? "Left" : "Top")) + compute(this, "margin" + (v === "Width" ? "Right" : "Bottom")) : 0);
+  each(['Width', 'Height'], function (prop, index) {
+    fn["outer" + prop] = function (includeMargins) {
+      if (!this[0]) return;
+      return this[0]["offset" + prop] + (includeMargins ? computeStyleInt(this[0], "margin" + (!index ? 'Left' : 'Top')) + computeStyleInt(this[0], "margin" + (!index ? 'Right' : 'Bottom')) : 0);
     };
-  });
+  }); // @optional ./inner.js
+  // @optional ./normal.js
+  // @optional ./outer.js
+  // @require core/index.js
+  // @require data/helpers/get_data.js
+  // @require data/helpers/set_data.js
 
-  function registerEvent(node, eventName, callback) {
-    var eventCache = getData(node, "_cashEvents") || setData(node, "_cashEvents", {});
+  function addEvent(ele, eventName, callback) {
+    callback.guid = callback.guid || guid++;
+    var eventCache = getData(ele, eventsNamespace) || setData(ele, eventsNamespace, {});
     eventCache[eventName] = eventCache[eventName] || [];
     eventCache[eventName].push(callback);
-    node.addEventListener(eventName, callback);
-  }
+    ele.addEventListener(eventName, callback);
+  } // @require core/index.js
 
-  function removeEvent(node, eventName, callback) {
-    var events = getData(node, "_cashEvents"), eventCache = (events && events[eventName]), index;
 
-    if (!eventCache) {
-      return;
-    }
+  function removeEventListeners(events, ele, eventName) {
+    each(events[eventName], function (callback) {
+      ele.removeEventListener(eventName, callback);
+    });
+    delete events[eventName];
+  } // @require core/index.js
+  // @require data/helpers/get_data.js
+  // @require ./remove_event_listeners.js
 
-    if (callback) {
-      node.removeEventListener(eventName, callback);
-      index = eventCache.indexOf(callback);
-      if (index >= 0) {
-        eventCache.splice(index, 1);
+
+  function removeEvent(ele, eventName, callback) {
+    var events = getData(ele, eventsNamespace);
+    if (!events) return;
+
+    if (eventName === undefined) {
+      for (eventName in events) {
+        removeEventListeners(events, ele, eventName);
       }
     } else {
-      each(eventCache, function (event) {
-        node.removeEventListener(eventName, event);
-      });
-      eventCache = [];
+      var eventCache = events[eventName];
+      if (!eventCache) return;
+
+      if (callback) {
+        callback.guid = callback.guid || guid++;
+        events[eventName] = eventCache.filter(function (cb) {
+          if (cb.guid !== callback.guid) return true;
+          ele.removeEventListener(eventName, cb);
+        });
+      } else {
+        removeEventListeners(events, ele, eventName);
+      }
     }
-  }
+  } // @require collection/each.js
+  // @require ./helpers/remove_event.js
 
-  fn.extend({
-    off: function (eventName, callback) {
-      return this.each(function (v) {
-        return removeEvent(v, eventName, callback);
+
+  fn.off = function (eventName, callback) {
+    var _this = this;
+
+    if (eventName === undefined) {
+      this.each(function (ele) {
+        return removeEvent(ele);
       });
-    },
+    } else {
+      each(eventName.split(eventsSeparatorRe), function (eventName) {
+        _this.each(function (ele) {
+          return removeEvent(ele, eventName, callback);
+        });
+      });
+    }
 
-    on: function (eventName, delegate, callback, runOnce) {
-      // jshint ignore:line
+    return this;
+  }; // @require collection/each.js
+  // @require ./helpers/add_event.js
+  // @require ./helpers/remove_event.js
 
-      var originalCallback;
 
-      if (!isString(eventName)) {
-        for (var key in eventName) {
-          this.on(key, delegate, eventName[key]);
+  fn.on = function (eventName, delegate, callback, runOnce) {
+    var _this2 = this;
+
+    if (!isString(eventName)) {
+      for (var key in eventName) {
+        this.on(key, delegate, eventName[key]);
+      }
+
+      return this;
+    }
+
+    if (isFunction(delegate)) {
+      callback = delegate;
+      delegate = null;
+    }
+
+    if (eventName === 'ready') {
+      return this.ready(callback);
+    }
+
+    if (delegate) {
+      var originalCallback = callback;
+
+      callback = function callback(event) {
+        var target = event.target;
+
+        while (!matches(target, delegate)) {
+          if (target === this) {
+            return target = false;
+          }
+
+          target = target.parentNode;
         }
-        return this;
-      }
 
-      if (isFunction(delegate)) {
-        callback = delegate;
-        delegate = null;
-      }
+        if (target) {
+          originalCallback.call(target, event);
+        }
+      };
 
-      if (eventName === "ready") {
-        onReady(callback);
-        return this;
-      }
+      callback.guid = originalCallback.guid = originalCallback.guid || guid++;
+    }
 
-      if (delegate) {
-        originalCallback = callback;
-        callback = function (e) {
-          var t = e.target;
+    function dataCallback(event) {
+      callback.call(this, event, event.data);
+    }
 
-          while (!matches(t, delegate)) {
-            if (t === this) {
-              return (t = false);
-            }
-            t = t.parentNode;
-          }
+    dataCallback.guid = callback.guid = callback.guid || guid++;
+    each(eventName.split(eventsSeparatorRe), function (eventName) {
+      _this2.each(function (ele) {
+        var finalCallback = dataCallback;
 
-          if (t) {
-            originalCallback.call(t, e);
-          }
-        };
-      }
-
-      return this.each(function (v) {
-        var finalCallback = callback;
         if (runOnce) {
-          finalCallback = function () {
-            callback.apply(this, arguments);
-            removeEvent(v, eventName, finalCallback);
+          finalCallback = function finalCallback(event) {
+            dataCallback.call(this, event);
+            removeEvent(ele, eventName, finalCallback);
           };
+
+          finalCallback.guid = dataCallback.guid = dataCallback.guid || guid++;
         }
-        registerEvent(v, eventName, finalCallback);
+
+        addEvent(ele, eventName, finalCallback);
       });
-    },
+    });
+    return this;
+  }; // @require ./on.js
 
-    one: function (eventName, delegate, callback) {
-      return this.on(eventName, delegate, callback, true);
-    },
 
-    ready: onReady,
+  fn.one = function (eventName, delegate, callback) {
+    return this.on(eventName, delegate, callback, true);
+  }; // @require core/index.js
 
-    trigger: function (eventName, data) {
-      var evt = doc.createEvent("HTMLEvents");
-      evt.data = data;
-      evt.initEvent(eventName, true, false);
-      return this.each(function (v) {
-        return v.dispatchEvent(evt);
-      });
+
+  fn.ready = function (callback) {
+    if (doc.readyState !== 'loading') {
+      setTimeout(callback);
+    } else {
+      doc.addEventListener('DOMContentLoaded', callback);
     }
 
-  });
+    return this;
+  }; // @require collection/each.js
 
-  function encode(name, value) {
-    return "&" + encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(/%20/g, "+");
+
+  fn.trigger = function (eventName, data) {
+    var evt = eventName;
+
+    if (isString(eventName)) {
+      evt = doc.createEvent('HTMLEvents');
+      evt.initEvent(eventName, true, false);
+    }
+
+    evt.data = data;
+    return this.each(function (ele) {
+      ele.dispatchEvent(evt);
+    }); //FIXME: Maybe the return value of `dispatchEvent` is actually useful here?
+  }; // @optional ./off.js
+  // @optional ./on.js
+  // @optional ./one.js
+  // @optional ./ready.js
+  // @optional ./trigger.js
+
+
+  function getValue(ele) {
+    var type = ele.type;
+    if (!type) return null;
+
+    switch (type.toLowerCase()) {
+      case 'select-one':
+        return getValueSelectSingle(ele);
+
+      case 'select-multiple':
+        return getValueSelectMultiple(ele);
+
+      case 'radio':
+      case 'checkbox':
+        return ele.checked ? ele.value : null;
+
+      default:
+        return ele.value || null;
+    }
   }
 
-  function getSelectMultiple_(el) {
+  function getValueSelectMultiple(ele) {
     var values = [];
-    each(el.options, function (o) {
-      if (o.selected) {
-        values.push(o.value);
+    each(ele.options, function (option) {
+      if (option.selected) {
+        values.push(option.value);
       }
     });
     return values.length ? values : null;
   }
 
-  function getSelectSingle_(el) {
-    var selectedIndex = el.selectedIndex;
-    return selectedIndex >= 0 ? el.options[selectedIndex].value : null;
-  }
+  function getValueSelectSingle(ele) {
+    var selectedIndex = ele.selectedIndex;
+    return selectedIndex >= 0 ? ele.options[selectedIndex].value : null;
+  } // @require core/index.js
 
-  function getValue(el) {
-    var type = el.type;
-    if (!type) {
-      return null;
-    }
-    switch (type.toLowerCase()) {
-      case "select-one":
-        return getSelectSingle_(el);
-      case "select-multiple":
-        return getSelectMultiple_(el);
-      case "radio":
-        return (el.checked) ? el.value : null;
-      case "checkbox":
-        return (el.checked) ? el.value : null;
-      default:
-        return el.value ? el.value : null;
-    }
-  }
 
-  fn.extend({
-    serialize: function () {
-      var query = "";
+  function queryEncode(prop, value) {
+    return "&" + encodeURIComponent(prop) + "=" + encodeURIComponent(value).replace(querySpaceRe, '+');
+  } // @require core/index.js
+  // @require ./helpers/get_value.js
+  // @require ./helpers/query_encode.js
 
-      each(this[0].elements || this, function (el) {
-        if (el.disabled || el.tagName === "FIELDSET") {
-          return;
-        }
-        var name = el.name;
-        switch (el.type.toLowerCase()) {
-          case "file":
-          case "reset":
-          case "submit":
-          case "button":
-            break;
-          case "select-multiple":
-            var values = getValue(el);
-            if (values !== null) {
-              each(values, function (value) {
-                query += encode(name, value);
-              });
-            }
-            break;
-          default:
-            var value = getValue(el);
-            if (value !== null) {
-              query += encode(name, value);
-            }
-        }
-      });
 
-      return query.substr(1);
-    },
+  fn.serialize = function () {
+    if (!this[0]) return '';
+    var query = '';
+    each(this[0].elements || this, function (ele) {
+      if (ele.disabled || ele.tagName === 'FIELDSET') return;
 
-    val: function (value) {
-      if (value === undefined) {
-        return getValue(this[0]);
-      } else {
-        return this.each(function (v) {
-          return v.value = value;
-        });
+      switch (ele.type.toLowerCase()) {
+        case 'file':
+        case 'reset':
+        case 'submit':
+        case 'button':
+          break;
+
+        default:
+          var value = getValue(ele);
+
+          if (value !== null) {
+            var _name = ele.name;
+            var values = isArray(value) ? value : [value];
+            each(values, function (value) {
+              query += queryEncode(_name, value);
+            });
+          }
+
       }
-    }
+    });
+    return query.substr(1);
+  }; // @require collection/each.js
+  // @require ./helpers/get_value.js
 
-  });
 
-  function insertElement(el, child, prepend) {
-    if (prepend) {
-      var first = el.childNodes[0];
-      el.insertBefore(child, first);
+  fn.val = function (value) {
+    if (value === undefined) {
+      return this[0] ? getValue(this[0]) : undefined;
     } else {
-      el.appendChild(child);
+      return this.each(function (ele) {
+        ele.value = value;
+      });
     }
-  }
+  }; // @optional ./serialize.js
+  // @optional ./val.js
+  // @require core/index.js
+
+
+  fn.clone = function () {
+    return this.map(function (ele) {
+      return ele.cloneNode(true);
+    });
+  }; // @require collection/each.js
+
+
+  fn.detach = function () {
+    return this.each(function (ele) {
+      ele.parentNode.removeChild(ele);
+    });
+  };
+
+  function insertElement(ele, child, prepend) {
+    if (prepend) {
+      ele.insertBefore(child, ele.childNodes[0]);
+    } else {
+      ele.appendChild(child);
+    }
+  } // @require core/index.js
+  // @require ./insert_element.js
+
 
   function insertContent(parent, child, prepend) {
-    var str = isString(child);
+    var isStr = isString(child);
 
-    if (!str && child.length) {
-      each(child, function (v) {
-        return insertContent(parent, v, prepend);
+    if (!isStr && child.length) {
+      each(child, function (ele) {
+        return insertContent(parent, ele, prepend);
       });
-      return;
+    } else {
+      each(parent, isStr ? function (ele) {
+        return ele.insertAdjacentHTML(prepend ? 'afterbegin' : 'beforeend', child);
+      } : function (ele, index) {
+        return insertElement(ele, !index ? child : child.cloneNode(true), prepend);
+      });
     }
+  } // @require ./helpers/insert_content.js
 
-    each(parent, str ? function (v) {
-      return v.insertAdjacentHTML(prepend ? "afterbegin" : "beforeend", child);
-    } : function (v, i) {
-      return insertElement(v, (i === 0 ? child : child.cloneNode(true)), prepend);
+
+  fn.append = function (content) {
+    insertContent(this, content);
+    return this;
+  }; // @require ./helpers/insert_content.js
+
+
+  fn.appendTo = function (parent) {
+    insertContent(cash(parent), this);
+    return this;
+  }; // @require collection/each.js
+
+
+  fn.html = function (content) {
+    if (content === undefined) return this[0] ? this[0].innerHTML : undefined;
+    var source = content.nodeType ? content[0].outerHTML : content;
+    return this.each(function (ele) {
+      return ele.innerHTML = source;
     });
-  }
+  }; // @require ./html.js
 
-  fn.extend({
-    after: function (selector) {
-      cash(selector).insertAfter(this);
-      return this;
-    },
 
-    append: function (content) {
-      insertContent(this, content);
-      return this;
-    },
+  fn.empty = function () {
+    return this.html('');
+  }; // @require collection/each.js
 
-    appendTo: function (parent) {
-      insertContent(cash(parent), this);
-      return this;
-    },
 
-    before: function (selector) {
-      cash(selector).insertBefore(this);
-      return this;
-    },
+  fn.insertAfter = function (content) {
+    var _this3 = this;
 
-    clone: function () {
-      return cash(this.map(function (v) {
-        return v.cloneNode(true);
-      }));
-    },
+    cash(content).each(function (ele, index) {
+      var parent = ele.parentNode,
+          sibling = ele.nextSibling;
 
-    empty: function () {
-      this.html("");
-      return this;
-    },
-
-    html: function (content) {
-      if (content === undefined) {
-        return this[0].innerHTML;
-      }
-      var source = (content.nodeType ? content[0].outerHTML : content);
-      return this.each(function (v) {
-        return v.innerHTML = source;
+      _this3.each(function (v) {
+        parent.insertBefore(!index ? v : v.cloneNode(true), sibling);
       });
-    },
+    });
+    return this;
+  }; // @require ./insert_after.js
 
-    insertAfter: function (selector) {
-      var _this = this;
+
+  fn.after = function (content) {
+    cash(content).insertAfter(this);
+    return this;
+  }; // @require collection/each.js
 
 
-      cash(selector).each(function (el, i) {
-        var parent = el.parentNode, sibling = el.nextSibling;
-        _this.each(function (v) {
-          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), sibling);
-        });
+  fn.insertBefore = function (selector) {
+    var _this4 = this;
+
+    cash(selector).each(function (ele, index) {
+      var parent = ele.parentNode;
+
+      _this4.each(function (v) {
+        parent.insertBefore(!index ? v : v.cloneNode(true), ele);
       });
+    });
+    return this;
+  }; // @require ./insert_before.js
 
-      return this;
-    },
 
-    insertBefore: function (selector) {
-      var _this2 = this;
-      cash(selector).each(function (el, i) {
-        var parent = el.parentNode;
-        _this2.each(function (v) {
-          parent.insertBefore((i === 0 ? v : v.cloneNode(true)), el);
-        });
-      });
-      return this;
-    },
+  fn.before = function (content) {
+    cash(content).insertBefore(this);
+    return this;
+  }; // @require ./helpers/insert_content.js
 
-    prepend: function (content) {
-      insertContent(this, content, true);
-      return this;
-    },
 
-    prependTo: function (parent) {
-      insertContent(cash(parent), this, true);
-      return this;
-    },
+  fn.prepend = function (content) {
+    insertContent(this, content, true);
+    return this;
+  }; // @require ./helpers/insert_content.js
 
-    remove: function () {
-      return this.each(function (v) {
-        return v.parentNode.removeChild(v);
-      });
-    },
 
-    text: function (content) {
-      if (content === undefined) {
-        return this[0].textContent;
-      }
-      return this.each(function (v) {
-        return v.textContent = content;
-      });
-    }
+  fn.prependTo = function (parent) {
+    insertContent(cash(parent), this, true);
+    return this;
+  }; // @require events/off.js
+  // @require ./detach.js
 
-  });
 
-  var docEl = doc.documentElement;
+  fn.remove = function () {
+    return this.detach().off();
+  }; // @require collection/each.js
+  // @require ./after.js
+  // @require ./remove.js
 
-  fn.extend({
-    position: function () {
-      var el = this[0];
-      return {
-        left: el.offsetLeft,
-        top: el.offsetTop
-      };
-    },
 
-    offset: function () {
-      var rect = this[0].getBoundingClientRect();
-      return {
-        top: rect.top + win.pageYOffset - docEl.clientTop,
-        left: rect.left + win.pageXOffset - docEl.clientLeft
-      };
-    },
+  fn.replaceWith = function (content) {
+    var _this5 = this;
 
-    offsetParent: function () {
-      return cash(this[0].offsetParent);
-    }
+    return this.each(function (ele) {
+      var parent = ele.parentNode;
+      if (!parent) return;
+      var $eles = cash(content);
 
-  });
+      if (!$eles[0]) {
+        _this5.remove();
 
-  fn.extend({
-    children: function (selector) {
-      var elems = [];
-      this.each(function (el) {
-        push.apply(elems, el.children);
-      });
-      elems = unique(elems);
-
-      return (!selector ? elems : elems.filter(function (v) {
-        return matches(v, selector);
-      }));
-    },
-
-    closest: function (selector) {
-      if (!selector || this.length < 1) {
-        return cash();
-      }
-      if (this.is(selector)) {
-        return this.filter(selector);
-      }
-      return this.parent().closest(selector);
-    },
-
-    is: function (selector) {
-      if (!selector) {
         return false;
       }
 
-      var match = false, comparator = getCompareFunction(selector);
+      parent.replaceChild($eles[0], ele);
+      cash($eles[0]).after($eles.slice(1));
+    });
+  }; // @require ./replace_with.js
 
-      this.each(function (el) {
-        match = comparator(el, selector);
-        return !match;
-      });
 
-      return match;
-    },
+  fn.replaceAll = function (content) {
+    cash(content).replaceWith(this);
+    return this;
+  }; // @require collection/each.js
 
-    find: function (selector) {
-      if (!selector || selector.nodeType) {
-        return cash(selector && this.has(selector).length ? selector : null);
-      }
 
-      var elems = [];
-      this.each(function (el) {
-        push.apply(elems, find(selector, el));
-      });
+  fn.text = function (content) {
+    if (content === undefined) return this[0] ? this[0].textContent : '';
+    return this.each(function (ele) {
+      ele.textContent = content;
+    });
+  }; // @optional ./after.js
+  // @optional ./append.js
+  // @optional ./append_to.js
+  // @optional ./before.js
+  // @optional ./clone.js
+  // @optional ./detach.js
+  // @optional ./empty.js
+  // @optional ./html.js
+  // @optional ./insert_after.js
+  // @optional ./insert_before.js
+  // @optional ./prepend.js
+  // @optional ./prepend_to.js
+  // @optional ./remove.js
+  // @optional ./replace_all.js
+  // @optional ./replace_with.js
+  // @optional ./text.js
+  // @require core/index.js
 
-      return unique(elems);
-    },
 
-    has: function (selector) {
-      var comparator = (isString(selector) ? function (el) {
-        return find(selector, el).length !== 0;
-      } : function (el) {
-        return el.contains(selector);
-      });
+  fn.offset = function () {
+    var ele = this[0];
+    if (!ele) return;
+    var rect = ele.getBoundingClientRect();
+    return {
+      top: rect.top + win.pageYOffset - docEl.clientTop,
+      left: rect.left + win.pageXOffset - docEl.clientLeft
+    };
+  }; // @require core/index.js
 
-      return this.filter(comparator);
-    },
 
-    next: function () {
-      return cash(this[0].nextElementSibling);
-    },
+  fn.offsetParent = function () {
+    return cash(this[0].offsetParent); //FIXME: It throws an error for empty collections
+  }; // @require core/index.js
 
-    not: function (selector) {
-      if (!selector) {
-        return this;
-      }
 
-      var comparator = getCompareFunction(selector);
+  fn.position = function () {
+    var ele = this[0];
+    if (!ele) return;
+    return {
+      left: ele.offsetLeft,
+      top: ele.offsetTop
+    };
+  }; // @optional ./offset.js
+  // @optional ./offset_parent.js
+  // @optional ./position.js
+  // @require collection/each.js
+  // @require collection/filter.js
 
-      return this.filter(function (el) {
-        return !comparator(el, selector);
-      });
-    },
 
-    parent: function () {
-      var result = [];
+  fn.children = function (selector) {
+    var result = [];
+    this.each(function (ele) {
+      push.apply(result, ele.children);
+    });
+    result = cash(unique(result));
+    if (!selector) return result;
+    return result.filter(function (ele) {
+      return matches(ele, selector);
+    });
+  }; // @require collection/filter.js
 
-      this.each(function (item) {
-        if (item && item.parentNode) {
-          result.push(item.parentNode);
-        }
-      });
 
-      return unique(result);
-    },
+  fn.has = function (selector) {
+    var comparator = isString(selector) ? function (ele) {
+      return !!find(selector, ele).length;
+    } : function (ele) {
+      return ele.contains(selector);
+    };
+    return this.filter(comparator);
+  }; // @require collection/each.js
+  // @require ./has.js
 
-    parents: function (selector) {
-      var last, result = [];
 
-      this.each(function (item) {
-        last = item;
-
-        while (last && last.parentNode && last !== doc.body.parentNode) {
-          last = last.parentNode;
-
-          if (!selector || (selector && matches(last, selector))) {
-            result.push(last);
-          }
-        }
-      });
-
-      return unique(result);
-    },
-
-    prev: function () {
-      return cash(this[0].previousElementSibling);
-    },
-
-    siblings: function () {
-      var collection = this.parent().children(), el = this[0];
-
-      return collection.filter(function (i) {
-        return i !== el;
-      });
+  fn.find = function (selector) {
+    if (!selector || selector.nodeType) {
+      return cash(selector && this.has(selector).length ? selector : null);
     }
 
-  });
+    var result = [];
+    this.each(function (ele) {
+      push.apply(result, find(selector, ele));
+    });
+    return cash(unique(result));
+  }; // @require collection/each.js
 
 
-  return cash;
-});
+  fn.is = function (selector) {
+    if (!selector || !this[0]) return false;
+    var comparator = getCompareFunction(selector);
+    var match = false;
+    this.each(function (ele) {
+      match = comparator(ele, selector);
+      return !match;
+    });
+    return match;
+  }; // @require core/index.js
+
+
+  fn.next = function () {
+    return cash(this[0] ? this[0].nextElementSibling : undefined);
+  }; // @require collection/filter.js
+
+
+  fn.not = function (selector) {
+    if (!selector || !this[0]) return this;
+    var comparator = getCompareFunction(selector);
+    return this.filter(function (ele) {
+      return !comparator(ele, selector);
+    });
+  }; // @require collection/each.js
+
+
+  fn.parent = function () {
+    var result = [];
+    this.each(function (ele) {
+      if (ele && ele.parentNode) {
+        result.push(ele.parentNode);
+      }
+    });
+    return cash(unique(result));
+  }; // @require traversal/children.js
+  // @require traversal/parent.js
+  // @require ./get.js
+  //FIXME Ugly file name, is there a better option?
+
+
+  fn.index = function (ele) {
+    var child = ele ? cash(ele)[0] : this[0],
+        collection = ele ? this : cash(child).parent().children();
+    return collection.get().indexOf(child);
+  }; // @optional ./add.js
+  // @optional ./each.js
+  // @optional ./eq.js
+  // @optional ./filter.js
+  // @optional ./first.js
+  // @optional ./get.js
+  // @optional ./indexFn.js
+  // @optional ./last.js
+  // @optional ./map.js
+  // @optional ./slice.js
+  // @require collection/filter.js
+  // @require ./is.js
+  // @require ./parent.js
+
+
+  fn.closest = function (selector) {
+    if (!selector || !this[0]) return cash();
+    if (this.is(selector)) return this.filter(selector);
+    return this.parent().closest(selector);
+  }; // @require collection/each.js
+
+
+  fn.parents = function (selector) {
+    var result = [];
+    var last;
+    this.each(function (ele) {
+      last = ele;
+
+      while (last && last.parentNode && last !== doc.body.parentNode) {
+        last = last.parentNode;
+
+        if (!selector || selector && matches(last, selector)) {
+          result.push(last);
+        }
+      }
+    });
+    return cash(unique(result));
+  }; // @require core/index.js
+
+
+  fn.prev = function () {
+    return cash(this[0] ? this[0].previousElementSibling : undefined);
+  }; // @require collection/filter.js
+  // @require ./children.js
+  // @require ./parent.js
+
+
+  fn.siblings = function () {
+    var ele = this[0];
+    return this.parent().children().filter(function (child) {
+      return child !== ele;
+    });
+  }; // @optional ./children.js
+  // @optional ./closest.js
+  // @optional ./find.js
+  // @optional ./has.js
+  // @optional ./is.js
+  // @optional ./next.js
+  // @optional ./not.js
+  // @optional ./parent.js
+  // @optional ./parents.js
+  // @optional ./prev.js
+  // @optional ./siblings.js
+
+
+  window.cash = window.$ = cash;
+})();
