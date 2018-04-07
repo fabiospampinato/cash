@@ -55,35 +55,35 @@ $(element).addClass ( className ) // => collection
 
 | Attributes                          | Collection                | CSS                 | Data                              | Dimensions                          | Events                      |
 | ----------------------------------  | ------------------------- | ------------------  | --------------------------------- | ----------------------------------- | --------------------------- |
-| [fn.addClass ()](#fnaddclass)       | [fn.add ()](#fnadd)       | [fn.css ()](#fncss) | [fn.data ()](#fndata)             | [fn.height ()](#fnheight)           | [fn.off ()](#fnoff)         |
-| [fn.attr ()](#fnattr)               | [fn.each ()](#fneach)     |                     | [fn.removeData ()](#fnremovedata) | [fn.innerHeight ()](#fninnerheight) | [fn.on ()](#fnon)           |
-| [fn.hasClass ()](#fnhasclass)       | [fn.eq ()](#fneq)         |                     |                                   | [fn.innerWidth ()](#fninnerwidth)   | [fn.one ()](#fnone)         |
-| [fn.prop ()](#fnprop)               | [fn.filter ()](#fnfilter) |                     |                                   | [fn.outerHeight ()](#fnouterheight) | [fn.ready ()](#fnready)     |
-| [fn.removeAttr ()](#fnremoveattr)   | [fn.first ()](#fnfirst)   |                     |                                   | [fn.outerWidth ()](#fnouterwidth)   | [fn.trigger ()](#fntrigger) |
-| [fn.removeClass ()](#fnremoveclass) | [fn.get ()](#fnget)       |                     |                                   | [fn.width ()](#fnwidth)             |                             |
-| [fn.removeProp ()](#fnremoveprop)   | [fn.index ()](#fnindex)   |                     |                                   |                                     |                             |
-| [fn.toggleClass ()](#fntoggleclass) | [fn.last ()](#fnlast)     |                     |                                   |                                     |                             |
-|                                     | [fn.map ()](#fnmap)       |                     |                                   |                                     |                             |
-|                                     | [fn.slice ()](#fnslice)   |                     |                                   |                                     |                             |
+| [fn.addClass ()](#fnaddclass-)       | [fn.add ()](#fnadd-)       | [fn.css ()](#fncss-) | [fn.data ()](#fndata-)             | [fn.height ()](#fnheight-)           | [fn.off ()](#fnoff-)         |
+| [fn.attr ()](#fnattr-)               | [fn.each ()](#fneach-)     |                     | [fn.removeData ()](#fnremovedata-) | [fn.innerHeight ()](#fninnerheight-) | [fn.on ()](#fnon-)           |
+| [fn.hasClass ()](#fnhasclass-)       | [fn.eq ()](#fneq-)         |                     |                                   | [fn.innerWidth ()](#fninnerwidth-)   | [fn.one ()](#fnone-)         |
+| [fn.prop ()](#fnprop-)               | [fn.filter ()](#fnfilter-) |                     |                                   | [fn.outerHeight ()](#fnouterheight-) | [fn.ready ()](#fnready-)     |
+| [fn.removeAttr ()](#fnremoveattr-)   | [fn.first ()](#fnfirst-)   |                     |                                   | [fn.outerWidth ()](#fnouterwidth-)   | [fn.trigger ()](#fntrigger-) |
+| [fn.removeClass ()](#fnremoveclass-) | [fn.get ()](#fnget-)       |                     |                                   | [fn.width ()](#fnwidth-)             |                             |
+| [fn.removeProp ()](#fnremoveprop-)   | [fn.index ()](#fnindex-)   |                     |                                   |                                     |                             |
+| [fn.toggleClass ()](#fntoggleclass-) | [fn.last ()](#fnlast-)     |                     |                                   |                                     |                             |
+|                                     | [fn.map ()](#fnmap-)       |                     |                                   |                                     |                             |
+|                                     | [fn.slice ()](#fnslice-)   |                     |                                   |                                     |                             |
 
 | Forms                           | Manipulation                          | Offset                                | Traversal                     |
 | ------------------------------- | ------------------------------------- | ------------------------------------- | ----------------------------- |
-| [fn.serialize ()](#fnserialize) | [fn.after ()](#fnafter)               | [fn.offset ()](#fnoffset)             | [fn.children ()](#fnchildren) |
-| [fn.val ()](#fnval)             | [fn.append ()](#fnappend)             | [fn.offsetParent ()](#fnoffsetparent) | [fn.closest ()](#fnclosest)   |
-|                                 | [fn.appendTo ()](#fnappendto)         | [fn.position ()](#fnposition)         | [fn.find ()](#fnfind)         |
-|                                 | [fn.before ()](#fnbefore)             |                                       | [fn.has ()](#fnhas)           |
-|                                 | [fn.clone ()](#fnclone)               |                                       | [fn.is ()](#fnis)             |
-|                                 | [fn.detach ()](#fndetach)             |                                       | [fn.next ()](#fnnext)         |
-|                                 | [fn.empty ()](#fnempty)               |                                       | [fn.not ()](#fnnot)           |
-|                                 | [fn.html ()](#fnhtml)                 |                                       | [fn.parent ()](#fnparent)     |
-|                                 | [fn.insertAfter ()](#fninsertafter)   |                                       | [fn.parents ()](#fnparents)   |
-|                                 | [fn.insertBefore ()](#fninsertbefore) |                                       | [fn.prev ()](#fnprev)         |
-|                                 | [fn.prepend ()](#fnprepend)           |                                       | [fn.siblings ()](#fnsiblings) |
-|                                 | [fn.prependTo ()](#fnprependto)       |                                       |                               |
-|                                 | [fn.remove ()](#fnremove)             |                                       |                               |
-|                                 | [fn.replaceAll ()](#fnreplaceall)     |                                       |                               |
-|                                 | [fn.replaceWith ()](#fnreplacewith)   |                                       |                               |
-|                                 | [fn.text ()](#fntext)                 |                                       |                               |
+| [fn.serialize ()](#fnserialize-) | [fn.after ()](#fnafter-)               | [fn.offset ()](#fnoffset-)             | [fn.children ()](#fnchildren-) |
+| [fn.val ()](#fnval-)             | [fn.append ()](#fnappend-)             | [fn.offsetParent ()](#fnoffsetparent-) | [fn.closest ()](#fnclosest-)   |
+|                                 | [fn.appendTo ()](#fnappendto-)         | [fn.position ()](#fnposition-)         | [fn.find ()](#fnfind-)         |
+|                                 | [fn.before ()](#fnbefore-)             |                                       | [fn.has ()](#fnhas-)           |
+|                                 | [fn.clone ()](#fnclone-)               |                                       | [fn.is ()](#fnis-)             |
+|                                 | [fn.detach ()](#fndetach-)             |                                       | [fn.next ()](#fnnext-)         |
+|                                 | [fn.empty ()](#fnempty-)               |                                       | [fn.not ()](#fnnot-)           |
+|                                 | [fn.html ()](#fnhtml-)                 |                                       | [fn.parent ()](#fnparent-)     |
+|                                 | [fn.insertAfter ()](#fninsertafter-)   |                                       | [fn.parents ()](#fnparents-)   |
+|                                 | [fn.insertBefore ()](#fninsertbefore-) |                                       | [fn.prev ()](#fnprev-)         |
+|                                 | [fn.prepend ()](#fnprepend-)           |                                       | [fn.siblings ()](#fnsiblings-) |
+|                                 | [fn.prependTo ()](#fnprependto-)       |                                       |                               |
+|                                 | [fn.remove ()](#fnremove-)             |                                       |                               |
+|                                 | [fn.replaceAll ()](#fnreplaceall-)     |                                       |                               |
+|                                 | [fn.replaceWith ()](#fnreplacewith-)   |                                       |                               |
+|                                 | [fn.text ()](#fntext-)                 |                                       |                               |
 
 #### $.fn
 
@@ -561,7 +561,7 @@ $(element).remove () // => collection
 
 #### fn.replaceAll ()
 
-This is similar to [fn.replaceWith()](#fnreplacewith), but with the source and target reversed.
+This is similar to [fn.replaceWith()](#fnreplacewith-), but with the source and target reversed.
 
 ```js
 $(element).replaceAll ( content ) // => collection
@@ -695,12 +695,12 @@ $.isString ( str ) // => boolean
 
 | Type Checking                 | Utilities                   |
 | ----------------------------- | --------------------------- |
-| [$.isArray()](#isarray)       | [$.guid](#guid)             |
-| [$.isFunction()](#isfunction) | [$.each()](#each)           |
-| [$.isNumeric()](#isnumeric)   | [$.extend()](#extend)       |
-| [$.isString()](#isstring)     | [$.matches()](#matches)     |
-|                               | [$.parseHTML()](#parsehtml) |
-|                               | [$.unique()](#unique)       |
+| [$.isArray()](#isarray-)       | [$.guid](#guid)             |
+| [$.isFunction()](#isfunction-) | [$.each()](#each-)           |
+| [$.isNumeric()](#isnumeric-)   | [$.extend()](#extend-)       |
+| [$.isString()](#isstring-)     | [$.matches()](#matches-)     |
+|                               | [$.parseHTML()](#parsehtml-) |
+|                               | [$.unique()](#unique-)       |
 
 #### $.each ()
 
