@@ -1,4 +1,6 @@
 
-function hasClass ( ele, cls ) { //FIXME: The regex won't work for classes containing special characters, sush as `$`
-  return ele.classList ? ele.classList.contains ( cls ) : new RegExp ( `(^| )${cls}( |$)`, 'gi' ).test ( ele.className );
+// @require ./escape_regexp.js
+
+function hasClass ( ele, cls ) {
+  return ele.classList ? ele.classList.contains ( cls ) : new RegExp ( `(^| )${escapeRegExp ( cls )}( |$)`, 'gi' ).test ( ele.className );
 }
