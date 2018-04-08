@@ -28,7 +28,7 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "pacco": "1.0.0"
+    "pacco": "^1.1.0"
   },
   "devDependencies": {}
 }
