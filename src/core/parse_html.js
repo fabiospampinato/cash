@@ -5,7 +5,7 @@ let fragment;
 
 function initFragment () {
   if ( fragment ) return;
-  fragment = doc.implementation.createHTMLDocument ( null );
+  fragment = doc.implementation.createHTMLDocument ( '' );
   const base = fragment.createElement ( 'base' );
   base.href = doc.location.href;
   fragment.head.appendChild ( base );
