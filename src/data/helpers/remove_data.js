@@ -12,7 +12,7 @@ function removeData ( ele, key ) {
     if ( ele.dataset ) {
       delete ele.dataset[key];
     } else {
-      cash ( ele ).removeAttr ( `data-${name}` );
+      cash ( ele ).removeAttr ( `data-${key}` );
     }
   }
 
