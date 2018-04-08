@@ -13,9 +13,15 @@
 // @require core/index.js
 (function () {
   // @concat-content
+  var specialRegExpCharactersRe = /[-[\]{}()*+?.,\\^$|#\s]/g;
+
+  function escapeRegExp(str) {
+    return str.replace(specialRegExpCharactersRe, '\\$&');
+  } // @require ./escape_regexp.js
+
+
   function hasClass(ele, cls) {
-    //FIXME: The regex won't work for classes containing special characters, sush as `$`
-    return ele.classList ? ele.classList.contains(cls) : new RegExp("(^| )" + cls + "( |$)", 'gi').test(ele.className);
+    return ele.classList ? ele.classList.contains(cls) : new RegExp("(^| )" + escapeRegExp(cls) + "( |$)", 'gi').test(ele.className);
   } // @require ./has_class.js
 
 
@@ -59,7 +65,7 @@
     if (isString(selector)) {
       eles = idRe.test(selector) ? doc.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
     } else if (isFunction(selector)) {
-      return this.ready(selector); //FIXME: `fn.ready` is not included in `core`
+      return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
     }
 
     if (!eles) return this;
@@ -144,7 +150,7 @@
 
   function initFragment() {
     if (fragment) return;
-    fragment = doc.implementation.createHTMLDocument(null);
+    fragment = doc.implementation.createHTMLDocument('');
     var base = fragment.createElement('base');
     base.href = doc.location.href;
     fragment.head.appendChild(base);
@@ -467,13 +473,14 @@
   function removeData(ele, key) {
     var cache = getDataCache(ele);
 
-    if (cache) {
-      //FIXME: An object is always returned, what's the point of this? Maybe we should check if `key in cache`. Check how jQuery behaves here
-      delete cache[key];
-    } else if (ele.dataset) {
-      delete ele.dataset[key];
+    if (key in cache) {
+      cache[key] = undefined;
     } else {
-      cash(ele).removeAttr("data-" + name);
+      if (ele.dataset) {
+        delete ele.dataset[key];
+      } else {
+        cash(ele).removeAttr("data-" + key);
+      }
     }
   } // @require ./get_data_cache.js
 
@@ -778,10 +785,10 @@
           var value = getValue(ele);
 
           if (value !== null) {
-            var _name = ele.name;
+            var name = ele.name;
             var values = isArray(value) ? value : [value];
             each(values, function (value) {
-              query += queryEncode(_name, value);
+              query += queryEncode(name, value);
             });
           }
 
@@ -994,7 +1001,7 @@
 
 
   fn.offsetParent = function () {
-    return cash(this[0].offsetParent); //FIXME: It throws an error for empty collections
+    return cash(this[0] ? this[0].offsetParent : undefined);
   }; // @require core/index.js
 
 
