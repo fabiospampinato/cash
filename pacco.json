@@ -1,4 +1,5 @@
 {
+  "browsers": ["ie >= 9"],
   "paths": {
     "tokens": {
       "bundle": "cash"
