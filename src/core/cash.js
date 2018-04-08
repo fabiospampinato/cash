@@ -19,7 +19,7 @@ function Cash ( selector, context ) {
 
   } else if ( isFunction ( selector ) ) {
 
-    return this.ready ( selector ); //FIXME: `fn.ready` is not included in `core`
+    return this.ready ( selector ); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
 
   }
 
