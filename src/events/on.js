@@ -3,22 +3,22 @@
 // @require ./helpers/add_event.js
 // @require ./helpers/remove_event.js
 
-fn.on = function ( eventName, delegate, callback, runOnce ) {
+fn.on = function ( eventName, selector, callback, runOnce ) {
 
   if ( !isString ( eventName ) ) {
 
     for ( let key in eventName ) {
-      this.on ( key, delegate, eventName[key] );
+      this.on ( key, selector, eventName[key] );
     }
 
     return this;
 
   }
 
-  if ( isFunction ( delegate ) ) {
+  if ( isFunction ( selector ) ) {
 
-    callback = delegate;
-    delegate = null;
+    callback = selector;
+    selector = null;
 
   }
 
@@ -28,7 +28,7 @@ fn.on = function ( eventName, delegate, callback, runOnce ) {
 
   }
 
-  if ( delegate ) {
+  if ( selector ) {
 
     const originalCallback = callback;
 
@@ -36,7 +36,7 @@ fn.on = function ( eventName, delegate, callback, runOnce ) {
 
       let target = event.target;
 
-      while ( !matches ( target, delegate ) ) {
+      while ( !matches ( target, selector ) ) {
         if ( target === this ) {
           return target = false;
         }
