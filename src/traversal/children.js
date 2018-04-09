@@ -12,6 +12,6 @@ fn.children = function ( selector ) {
 
   if ( !selector ) return result;
 
-  return result.filter ( ele => matches ( ele, selector ) );
+  return result.filter ( ( i, ele ) => matches ( ele, selector ) );
 
 };

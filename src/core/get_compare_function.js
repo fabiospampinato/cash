@@ -5,9 +5,9 @@
 function getCompareFunction ( selector ) {
 
   return isString ( selector )
-           ? matches
+           ? ( i, ele ) => matches ( ele, selector )
            : selector.cash
-             ? ele => selector.is ( ele )
-             : ( ele, selector ) => ele === selector;
+             ? ( i, ele ) => selector.is ( ele )
+             : ( i, ele, selector ) => ele === selector;
 
 }

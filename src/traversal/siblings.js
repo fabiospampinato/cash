@@ -7,6 +7,6 @@ fn.siblings = function () {
 
   const ele = this[0];
 
-  return this.parent ().children ().filter ( child => child !== ele );
+  return this.parent ().children ().filter ( ( i, child ) => child !== ele );
 
 };

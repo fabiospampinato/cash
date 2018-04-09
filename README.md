@@ -264,7 +264,7 @@ Returns the collection that results from applying the filter selector/method.
 
 ```js
 $(element).filter ( selector ) // => collection
-$(element).filter ( function () {} ) // => collection
+$(element).filter ( function ( index, element ) {} ) // => collection
 ```
 
 #### fn.find ()

@@ -7,6 +7,6 @@ fn.not = function ( selector ) {
 
   const comparator = getCompareFunction ( selector );
 
-  return this.filter ( ele => !comparator ( ele, selector ) );
+  return this.filter ( ( i, ele ) => !comparator ( i, ele, selector ) );
 
 };

@@ -219,7 +219,7 @@ QUnit.test( "eq", function( assert ) {
 QUnit.test( "filter", function( assert ) {
   var arrayFixture = $('#qunit-fixture div').filter('.has-class');
   assert.equal(arrayFixture.length, 1, "filter(selector) Passed!" );
-  arrayFixture = $('#qunit-fixture div').filter(function(e){
+  arrayFixture = $('#qunit-fixture div').filter(function(i,e){
     return $(e).hasClass('qsa-fixture');
   });
   assert.equal(arrayFixture.length, 2, "filter(fn) Passed!" );
