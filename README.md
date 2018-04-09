@@ -385,7 +385,7 @@ $(element).last () // => collection
 
 #### fn.map ()
 
-Returns a new collection, mapping each element with `callback ( value, index, array )`.
+Returns a new collection, mapping each element with `callback ( index, element )`.
 
 ```js
 $(selector).map ( callback ) // => collection

@@ -254,7 +254,7 @@ QUnit.test( "last", function( assert ) {
 });
 
 QUnit.test( "map", function( assert ) {
-  var result = $('#id-fixture').map(function(e){ return document; });
+  var result = $('#id-fixture').map(function(i,e){ return document; });
   assert.deepEqual(result[0], document, "map Passed!" );
 });
 

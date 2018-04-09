@@ -2,5 +2,5 @@
 // @require core/index.js
 
 fn.clone = function () {
-  return this.map ( ele => ele.cloneNode ( true ) );
+  return this.map ( ( i, ele ) => ele.cloneNode ( true ) );
 };
