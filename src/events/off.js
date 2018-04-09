@@ -6,12 +6,12 @@ fn.off = function ( eventName, callback ) {
 
   if ( eventName === undefined ) {
 
-    this.each ( ele => removeEvent ( ele ) );
+    this.each ( ( i, ele ) => removeEvent ( ele ) );
 
   } else {
 
     each ( eventName.split ( eventsSeparatorRe ), eventName => {
-      this.each ( ele => removeEvent ( ele, eventName, callback ) );
+      this.each ( ( i, ele ) => removeEvent ( ele, eventName, callback ) );
     });
 
   }

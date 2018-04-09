@@ -3,13 +3,13 @@
 
 fn.insertAfter = function ( content ) {
 
-  cash ( content ).each ( ( ele, index ) => {
+  cash ( content ).each ( ( index, ele ) => {
 
     const parent = ele.parentNode,
           sibling = ele.nextSibling;
 
-    this.each ( v => {
-      parent.insertBefore ( !index ? v : v.cloneNode ( true ), sibling );
+    this.each ( ( i, e ) => {
+      parent.insertBefore ( !index ? e : e.cloneNode ( true ), sibling );
     });
 
   });

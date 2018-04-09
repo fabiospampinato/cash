@@ -13,7 +13,7 @@ fn.attr = function ( attr, value ) {
 
     }
 
-    return this.each ( ele => {
+    return this.each ( ( i, ele ) => {
       if ( ele.setAttribute ) {
         ele.setAttribute ( attr, value );
       } else {

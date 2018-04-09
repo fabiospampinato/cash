@@ -9,8 +9,8 @@ fn.is = function ( selector ) {
 
   let match = false;
 
-  this.each ( ele => {
-    match = comparator ( ele, selector );
+  this.each ( ( i, ele ) => {
+    match = comparator ( i, ele, selector );
     return !match;
   });
 

@@ -2,5 +2,5 @@
 // @require collection/each.js
 
 fn.detach = function () {
-  return this.each ( ele => { ele.parentNode.removeChild ( ele ) } );
+  return this.each ( ( i, ele ) => { ele.parentNode.removeChild ( ele ) } );
 };

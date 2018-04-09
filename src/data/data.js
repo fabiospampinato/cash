@@ -9,7 +9,7 @@ fn.data = function ( name, value ) {
 
     return value === undefined
              ? ( this[0] ? getData ( this[0], name ) : undefined )
-             : this.each ( ele => { setData ( ele, name, value ) } );
+             : this.each ( ( i, ele ) => { setData ( ele, name, value ) } );
 
   }
 

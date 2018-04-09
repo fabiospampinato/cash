@@ -3,5 +3,5 @@
 
 fn.text = function ( content ) {
   if ( content === undefined ) return this[0] ? this[0].textContent : '';
-  return this.each ( ele => { ele.textContent = content } );
+  return this.each ( ( i, ele ) => { ele.textContent = content } );
 };

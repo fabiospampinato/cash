@@ -5,7 +5,7 @@ fn.parent = function () {
 
   const result = [];
 
-  this.each ( ele => {
+  this.each ( ( i, ele ) => {
     if ( ele && ele.parentNode ) {
       result.push ( ele.parentNode );
     }

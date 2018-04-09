@@ -10,7 +10,7 @@ fn.find = function ( selector ) {
 
   const result = [];
 
-  this.each ( ele => {
+  this.each ( ( i, ele ) => {
     push.apply ( result, find ( selector, ele ) );
   });
 

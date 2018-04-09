@@ -11,7 +11,7 @@ fn.hasClass = function ( cls ) {
 
   let check = false;
 
-  this.each ( ele => {
+  this.each ( ( i, ele ) => {
     check = hasClass ( ele, classes[0] );
     return !check;
   });

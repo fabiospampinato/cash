@@ -3,12 +3,12 @@
 
 fn.insertBefore = function ( selector ) {
 
-  cash ( selector ).each ( ( ele, index ) => {
+  cash ( selector ).each ( ( index, ele ) => {
 
     const parent = ele.parentNode;
 
-    this.each ( v => {
-      parent.insertBefore ( !index ? v : v.cloneNode ( true ), ele );
+    this.each ( ( i, e ) => {
+      parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele );
     });
 
   });

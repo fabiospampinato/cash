@@ -206,7 +206,7 @@ QUnit.test( "add", function( assert ) {
 
 QUnit.test( "each", function( assert ) {
   var arrayFixture = [];
-  $('.qsa-fixture').each(function(v,i,a){
+  $('.qsa-fixture').each(function(i,v){
     arrayFixture.push(i);
   });
   assert.equal(arrayFixture.length, 2, "each Passed!" );

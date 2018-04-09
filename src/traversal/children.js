@@ -6,7 +6,7 @@ fn.children = function ( selector ) {
 
   let result = [];
 
-  this.each ( ele => { push.apply ( result, ele.children ) } );
+  this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
 
   result = cash ( unique ( result ) );
 

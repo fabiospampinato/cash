@@ -7,7 +7,7 @@ fn.prop = function ( prop, value ) {
 
     return value === undefined
              ? ( this[0] ? this[0][prop] : undefined )
-             : this.each ( ele => { ele[prop] = value } );
+             : this.each ( ( i, ele ) => { ele[prop] = value } );
 
   }
 

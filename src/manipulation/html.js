@@ -7,6 +7,6 @@ fn.html = function ( content ) {
 
   const source = content.nodeType ? content[0].outerHTML : content;
 
-  return this.each ( ele => ele.innerHTML = source );
+  return this.each ( ( i, ele ) => ele.innerHTML = source );
 
 };

@@ -5,7 +5,7 @@
 
 fn.replaceWith = function ( content ) {
 
-  return this.each ( ele => {
+  return this.each ( ( i, ele ) => {
 
     const parent = ele.parentNode;
 

@@ -228,7 +228,7 @@ $(element).data ( object ) // => collection
 
 #### fn.each ()
 
-Iterates over a collection with `callback ( value, index, array )`.
+Iterates over a collection with `callback ( index, element )`.
 
 ```js
 $(element).each ( callback ) // => collection

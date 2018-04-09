@@ -15,7 +15,7 @@ fn.toggleClass = function ( cls, force ) {
 
   if ( !classes ) return this;
 
-  return this.each ( ele => {
+  return this.each ( ( i, ele ) => {
     each ( classes, c => {
       if ( hasClass ( ele, c ) ) {
         removeClass ( ele, c );

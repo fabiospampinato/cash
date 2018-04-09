@@ -61,7 +61,7 @@ fn.on = function ( eventName, delegate, callback, runOnce ) {
 
   each ( eventName.split ( eventsSeparatorRe ), eventName => {
 
-    this.each ( ele => {
+    this.each ( ( i, ele ) => {
 
       let finalCallback = dataCallback;
 

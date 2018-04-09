@@ -10,7 +10,7 @@ fn.css = function ( prop, value ) {
     prop = prefixedProp ( prop );
 
     return arguments.length > 1
-             ? this.each ( ele => { ele.style[prop] = value } )
+             ? this.each ( ( i, ele ) => { ele.style[prop] = value } )
              : this[0] ? win.getComputedStyle ( this[0] )[prop] : undefined;
 
   }

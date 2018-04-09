@@ -3,5 +3,5 @@
 // @require ./helpers/remove_data.js
 
 fn.removeData = function ( key ) {
-  return this.each ( ele => removeData ( ele, key ) );
+  return this.each ( ( i, ele ) => removeData ( ele, key ) );
 };

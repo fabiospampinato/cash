@@ -12,7 +12,7 @@ fn.removeClass = function ( cls ) {
 
   if ( !classes ) return this;
 
-  return this.each ( ele => {
+  return this.each ( ( i, ele ) => {
     each ( classes, c => removeClass ( ele, c ) );
   });
 

@@ -14,6 +14,6 @@ fn.trigger = function ( eventName, data ) {
 
   evt.data = data;
 
-  return this.each ( ele => { ele.dispatchEvent ( evt ) } ); //FIXME: Maybe the return value of `dispatchEvent` is actually useful here?
+  return this.each ( ( i, ele ) => { ele.dispatchEvent ( evt ) } ); //FIXME: Maybe the return value of `dispatchEvent` is actually useful here?
 
 };

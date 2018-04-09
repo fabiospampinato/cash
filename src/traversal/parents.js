@@ -7,7 +7,7 @@ fn.parents = function ( selector ) {
 
   let last;
 
-  this.each ( ele => {
+  this.each ( ( i, ele ) => {
 
     last = ele;
 
