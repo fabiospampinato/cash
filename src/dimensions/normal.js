@@ -7,21 +7,13 @@ each ( ['width', 'height'], prop => {
 
     if ( !this[0] ) return value === undefined ? undefined : this;
 
-    if ( isNumeric ( value ) ) {
+    if ( !arguments.length ) return this[0].getBoundingClientRect ()[prop];
 
-      this[0].style[prop] = `${value}px`;
+    return this.each ( ( i, ele ) => {
 
-    } else if ( isString ( value ) ) {
+      ele.style[prop] = isNumeric ( value ) ? `${value}px` : value;
 
-      this[0].style[prop] = value;
-
-    } else {
-
-      return this[0].getBoundingClientRect ()[prop];
-
-    }
-
-    return this;
+    });
 
   };
 
