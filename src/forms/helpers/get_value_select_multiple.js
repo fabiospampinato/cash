@@ -9,6 +9,6 @@ function getValueSelectMultiple ( ele ) {
     }
   });
 
-  return values.length ? values : null;
+  return values;
 
 }

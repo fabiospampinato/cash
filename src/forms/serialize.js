@@ -19,9 +19,12 @@ fn.serialize = function () {
       case 'submit':
       case 'button':
         break;
+      case 'radio':
+      case 'checkbox':
+          if ( !ele.checked ) break;
       default:
         const value = getValue ( ele );
-        if ( value !== null ) {
+        if ( value ) {
           const name = ele.name;
           const values = isArray ( value ) ? value : [value];
           each ( values, value => {
