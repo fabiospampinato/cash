@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require css/css.js
 
 each ( ['width', 'height'], prop => {
 
@@ -9,11 +9,7 @@ each ( ['width', 'height'], prop => {
 
     if ( !arguments.length ) return this[0].getBoundingClientRect ()[prop];
 
-    return this.each ( ( i, ele ) => {
-
-      ele.style[prop] = isNumeric ( value ) ? `${value}px` : value;
-
-    });
+    return this.css ( 'width', value );
 
   };
 
