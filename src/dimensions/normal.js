@@ -9,7 +9,7 @@ each ( ['width', 'height'], prop => {
 
     if ( !arguments.length ) return this[0].getBoundingClientRect ()[prop];
 
-    return this.css ( 'width', value );
+    return this.css ( prop, value );
 
   };
 
