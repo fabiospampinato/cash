@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require ./cash.js
 
 const camelRe = /(?:^\w|[A-Z]|\b\w)/g,
       camelWhitespaceRe = /[\s-_]+/g;

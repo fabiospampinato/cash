@@ -1,6 +1,6 @@
 
+// @require core/camel_case.js
 // @require core/each.js
-// @require ./camel_case.js
 
 const prefixedProps = {},
       div = doc.createElement ( 'div' ),

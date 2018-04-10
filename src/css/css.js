@@ -1,6 +1,5 @@
 
 // @require collection/each.js
-// @require ./helpers/camel_case.js
 // @require ./helpers/get_prefixed_prop.js
 
 fn.css = function ( prop, value ) {

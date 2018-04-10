@@ -1,4 +1,5 @@
 
+// @require ./camel_case.js
 // @require ./cash.js
 // @require ./each.js
 // @require ./extend.js
