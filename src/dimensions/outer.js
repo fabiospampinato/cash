@@ -1,6 +1,6 @@
 
 // @require core/index.js
-// @require ./helpers/compute_style_int.js
+// @require css/helpers/compute_style_int.js
 
 each ( ['Width', 'Height'], ( prop, index ) => {
 

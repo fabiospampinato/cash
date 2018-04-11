@@ -290,9 +290,9 @@ QUnit.test( "data", function( assert ) {
 /* DIMENSIONS */
 
 QUnit.test( "height", function( assert ) {
-  assert.equal($('.css-fixture').height(), 100, "height get Passed!" );
+  assert.equal($('.css-fixture').height(), 50, "height get Passed!" );
   $('.css-fixture').height(200);
-  assert.equal($('.css-fixture').height(), 250, "height set Passed!" ); //FIXME: This doens't look right, maybe we should account for padding too
+  assert.equal($('.css-fixture').height(), 200, "height set Passed!" );
 });
 
 QUnit.test( "innerHeight", function( assert ) {
@@ -305,9 +305,9 @@ QUnit.test( "outerHeight", function( assert ) {
 });
 
 QUnit.test( "width", function( assert ) {
-  assert.equal($('.css-fixture').width(), 100, "width get Passed!" );
+  assert.equal($('.css-fixture').width(), 50, "width get Passed!" );
   $('.css-fixture').width(200);
-  assert.equal($('.css-fixture').width(), 250, "width set Passed!" ); //FIXME: This doens't look right, maybe we should account for padding too
+  assert.equal($('.css-fixture').width(), 200, "width set Passed!" );
 });
 
 QUnit.test( "innerWidth", function( assert ) {
