@@ -54,6 +54,7 @@
       notWhitespaceRe = /\S+/g,
       eventsSeparatorRe = /[,\s]+/g,
       querySpaceRe = /%20/g;
+  var eventsNamespacesSeparator = '.';
   var datasNamespace = '__cash_datas__',
       eventsNamespace = '__cash_events__'; // @require ./variables.js
 
@@ -98,6 +99,18 @@
   Object.defineProperty(fn, 'constructor', {
     value: cash
   }); // @require ./cash.js
+
+  var camelRe = /(?:^\w|[A-Z]|\b\w)/g,
+      camelWhitespaceRe = /[\s-_]+/g;
+
+  function camelCase(str) {
+    return str.replace(camelRe, function (letter, index) {
+      return letter[!index ? 'toLowerCase' : 'toUpperCase']();
+    }).replace(camelWhitespaceRe, '');
+  }
+
+  ;
+  cash.camelCase = camelCase; // @require ./cash.js
 
   function each(arr, callback) {
     for (var i = 0, l = arr.length; i < l; i++) {
@@ -186,9 +199,11 @@
   // @require ./type_checking.js
 
   function getCompareFunction(selector) {
-    return isString(selector) ? matches : selector.cash ? function (ele) {
+    return isString(selector) ? function (i, ele) {
+      return matches(ele, selector);
+    } : selector.cash ? function (i, ele) {
       return selector.is(ele);
-    } : function (ele, selector) {
+    } : function (i, ele, selector) {
       return ele === selector;
     };
   } // @require ./cash.js
@@ -200,7 +215,8 @@
     });
   }
 
-  cash.unique = unique; // @require ./cash.js
+  cash.unique = unique; // @require ./camel_case.js
+  // @require ./cash.js
   // @require ./each.js
   // @require ./extend.js
   // @require ./find.js
@@ -224,7 +240,9 @@
 
 
   fn.each = function (callback) {
-    each(this, callback);
+    each(this, function (ele, i) {
+      return callback.call(ele, i, ele);
+    });
     return this;
   }; // @require collection/each.js
   // @require ./helpers/get_classes.js
@@ -234,7 +252,7 @@
   fn.addClass = function (cls) {
     var classes = getClasses(cls);
     if (!classes) return this;
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       each(classes, function (c) {
         return addClass(ele, c);
       });
@@ -250,7 +268,7 @@
         return this[0].getAttribute ? this[0].getAttribute(attr) : this[0][attr];
       }
 
-      return this.each(function (ele) {
+      return this.each(function (i, ele) {
         if (ele.setAttribute) {
           ele.setAttribute(attr, value);
         } else {
@@ -273,7 +291,7 @@
     var classes = getClasses(cls);
     if (!classes || !classes.length) return false;
     var check = false;
-    this.each(function (ele) {
+    this.each(function (i, ele) {
       check = hasClass(ele, classes[0]);
       return !check;
     });
@@ -283,7 +301,7 @@
 
   fn.prop = function (prop, value) {
     if (isString(prop)) {
-      return value === undefined ? this[0] ? this[0][prop] : undefined : this.each(function (ele) {
+      return value === undefined ? this[0] ? this[0][prop] : undefined : this.each(function (i, ele) {
         ele[prop] = value;
       });
     }
@@ -297,7 +315,7 @@
 
 
   fn.removeAttr = function (attr) {
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       if (ele.removeAttribute) {
         ele.removeAttribute(attr);
       } else {
@@ -314,7 +332,7 @@
     if (cls === undefined) return this.attr('class', '');
     var classes = getClasses(cls);
     if (!classes) return this;
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       each(classes, function (c) {
         return removeClass(ele, c);
       });
@@ -323,7 +341,7 @@
 
 
   fn.removeProp = function (prop) {
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       delete ele[prop];
     });
   }; // @require collection/each.js
@@ -339,7 +357,7 @@
     if (force !== undefined) return this[force ? 'addClass' : 'removeClass'](cls);
     var classes = getClasses(cls);
     if (!classes) return this;
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       each(classes, function (c) {
         if (hasClass(ele, c)) {
           removeClass(ele, c);
@@ -373,8 +391,8 @@
   fn.filter = function (selector) {
     if (!selector) return this;
     var comparator = isFunction(selector) ? selector : getCompareFunction(selector);
-    return cash(this.get().filter(function (ele) {
-      return comparator(ele, selector);
+    return cash(this.get().filter(function (ele, i) {
+      return comparator.call(ele, i, ele, selector);
     }));
   }; // @require ./eq.js
 
@@ -390,7 +408,9 @@
 
 
   fn.map = function (callback) {
-    return cash(this.get().map(callback));
+    return cash(this.get().map(function (ele, i) {
+      return callback.call(ele, i, ele);
+    }));
   }; // @require core/index.js
 
 
@@ -399,18 +419,17 @@
   }; // @require core/index.js
 
 
-  var camelRe = /(?:^\w|[A-Z]|\b\w)/g,
-      camelWhitespaceRe = /[\s-_]+/g;
+  function computeStyle(ele, prop) {
+    var style = win.getComputedStyle(ele, null);
+    return prop ? style[prop] : style;
+  } // @require ./compute_style.js
 
-  function camelCase(str) {
-    return str.replace(camelRe, function (letter, index) {
-      return letter[!index ? 'toLowerCase' : 'toUpperCase']();
-    }).replace(camelWhitespaceRe, '');
-  }
 
-  ;
-  cash.camelCase = camelCase; // @require core/each.js
-  // @require ./camel_case.js
+  function computeStyleInt(ele, prop) {
+    return parseInt(computeStyle(ele, prop), 10) || 0;
+  } // @require core/camel_case.js
+  // @require core/each.js
+
 
   var prefixedProps = {},
       div = doc.createElement('div'),
@@ -432,14 +451,35 @@
   }
 
   ;
-  cash.prefixedProp = prefixedProp; // @require collection/each.js
-  // @require ./helpers/camel_case.js
+  cash.prefixedProp = prefixedProp;
+  var numberProps = {
+    animationIterationCount: true,
+    columnCount: true,
+    fillOpacity: true,
+    flexGrow: true,
+    flexShrink: true,
+    fontWeight: true,
+    lineHeight: true,
+    opacity: true,
+    order: true,
+    orphans: true,
+    widows: true,
+    zIndex: true,
+    zoom: true
+  };
+
+  function getSuffixedValue(prop, value) {
+    return !numberProps[prop] && isNumeric(value) ? value + "px" : value;
+  } // @require collection/each.js
   // @require ./helpers/get_prefixed_prop.js
+  // @require ./helpers/get_suffixed_value.js
+
 
   fn.css = function (prop, value) {
     if (isString(prop)) {
       prop = prefixedProp(prop);
-      return arguments.length > 1 ? this.each(function (ele) {
+      value = arguments.length > 1 ? getSuffixedValue(prop, value) : value;
+      return arguments.length > 1 ? this.each(function (i, ele) {
         ele.style[prop] = value;
       }) : this[0] ? win.getComputedStyle(this[0])[prop] : undefined;
     }
@@ -462,7 +502,13 @@
     var cache = getDataCache(ele);
 
     if (!(key in cache)) {
-      cache[key] = ele.dataset ? ele.dataset[key] : cash(ele).attr("data-" + key);
+      var value = ele.dataset ? ele.dataset[camelCase(key)] : cash(ele).attr("data-" + key);
+
+      try {
+        value = JSON.parse(value);
+      } catch (e) {}
+
+      cache[key] = value;
     }
 
     return cache[key];
@@ -494,7 +540,7 @@
 
   fn.data = function (name, value) {
     if (isString(name)) {
-      return value === undefined ? this[0] ? getData(this[0], name) : undefined : this.each(function (ele) {
+      return value === undefined ? this[0] ? getData(this[0], name) : undefined : this.each(function (i, ele) {
         setData(ele, name, value);
       });
     }
@@ -509,16 +555,16 @@
 
 
   fn.removeData = function (key) {
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       return removeData(ele, key);
     });
   }; // @optional ./data.js
   // @optional ./remove_data.js
-  // @require core/index.js
+  // @require css/helpers/compute_style_int.js
 
 
-  function computeStyleInt(ele, prop) {
-    return parseInt(win.getComputedStyle(ele, null)[prop], 10) || 0;
+  function getExtraSpace(ele, xAxis) {
+    return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom'));
   } // @require core/index.js
 
 
@@ -526,24 +572,22 @@
     fn["inner" + prop] = function () {
       return this[0] ? this[0]["client" + prop] : undefined;
     };
-  }); // @require core/index.js
+  }); // @require css/helpers/compute_style.js
+  // @require css/helpers/get_suffixed_value.js
+  // @require ./helpers/get_extra_space.js
 
-  each(['width', 'height'], function (prop) {
+  each(['width', 'height'], function (prop, index) {
     fn[prop] = function (value) {
       if (!this[0]) return value === undefined ? undefined : this;
-
-      if (isNumeric(value)) {
-        this[0].style[prop] = value + "px";
-      } else if (isString(value)) {
-        this[0].style[prop] = value;
-      } else {
-        return this[0].getBoundingClientRect()[prop];
-      }
-
-      return this;
+      if (!arguments.length) return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
+      value = parseInt(value, 10);
+      return this.each(function (i, ele) {
+        var boxSizing = computeStyle(ele, 'boxSizing');
+        ele.style[prop] = getSuffixedValue(prop, value + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
+      });
     };
   }); // @require core/index.js
-  // @require ./helpers/compute_style_int.js
+  // @require css/helpers/compute_style_int.js
 
   each(['Width', 'Height'], function (prop, index) {
     fn["outer" + prop] = function (includeMargins) {
@@ -557,62 +601,119 @@
   // @require data/helpers/get_data.js
   // @require data/helpers/set_data.js
 
-  function addEvent(ele, eventName, callback) {
+  function addEvent(ele, name, namespaces, callback) {
     callback.guid = callback.guid || guid++;
     var eventCache = getData(ele, eventsNamespace) || setData(ele, eventsNamespace, {});
-    eventCache[eventName] = eventCache[eventName] || [];
-    eventCache[eventName].push(callback);
-    ele.addEventListener(eventName, callback);
+    eventCache[name] = eventCache[name] || [];
+    eventCache[name].push([namespaces, callback]);
+    ele.addEventListener(name, callback);
+  }
+
+  var returnFalse = function returnFalse() {
+    return false;
+  },
+      returnTrue = function returnTrue() {
+    return true;
+  };
+
+  function addEventMethods(event) {
+    if (event.isDefaultPrevented) return;
+
+    event.isDefaultPrevented = function () {
+      return this.defaultPrevented;
+    };
+
+    event.isPropagationStopped = returnFalse;
+    var stopPropagation = event.stopPropagation;
+
+    event.stopPropagation = function () {
+      event.isPropagationStopped = returnTrue;
+      return stopPropagation.call(this);
+    };
+
+    event.isImmediatePropagationStopped = returnFalse;
+    var stopImmediatePropagation = event.stopImmediatePropagation;
+
+    event.stopImmediatePropagation = function () {
+      event.isPropagationStopped = returnTrue;
+      event.isImmediatePropagationStopped = returnTrue;
+      return stopImmediatePropagation.call(this);
+    };
+  }
+
+  function hasNamespaces(ns1, ns2) {
+    for (var i = 0, l = ns2.length; i < l; i++) {
+      if (ns1.indexOf(ns2[i]) < 0) return false;
+    }
+
+    return true;
+  }
+
+  function parseEventName(eventFullName) {
+    var parts = eventFullName.split(eventsNamespacesSeparator);
+    return [parts[0], parts.slice(1).sort()]; // [name, namespaces]
   } // @require core/index.js
 
 
-  function removeEventListeners(events, ele, eventName) {
-    each(events[eventName], function (callback) {
-      ele.removeEventListener(eventName, callback);
+  function removeEventListeners(events, ele, name) {
+    each(events[name], function (_ref) {
+      var namespaces = _ref[0],
+          callback = _ref[1];
+      ele.removeEventListener(name, callback);
     });
-    delete events[eventName];
+    delete events[name];
   } // @require core/index.js
   // @require data/helpers/get_data.js
+  // @require ./has_namespaces.js
+  // @require ./parse_event_name.js
   // @require ./remove_event_listeners.js
 
 
-  function removeEvent(ele, eventName, callback) {
+  function removeEvent(ele, name, namespaces, callback) {
     var events = getData(ele, eventsNamespace);
     if (!events) return;
 
-    if (eventName === undefined) {
-      for (eventName in events) {
-        removeEventListeners(events, ele, eventName);
+    if (!name) {
+      if (!namespaces || !namespaces.length) {
+        for (name in events) {
+          removeEventListeners(events, ele, name);
+        }
+      } else {
+        for (name in events) {
+          removeEvent(ele, name, namespaces, callback);
+        }
       }
     } else {
-      var eventCache = events[eventName];
+      var eventCache = events[name];
       if (!eventCache) return;
-
-      if (callback) {
-        callback.guid = callback.guid || guid++;
-        events[eventName] = eventCache.filter(function (cb) {
-          if (cb.guid !== callback.guid) return true;
-          ele.removeEventListener(eventName, cb);
-        });
-      } else {
-        removeEventListeners(events, ele, eventName);
-      }
+      if (callback) callback.guid = callback.guid || guid++;
+      events[name] = eventCache.filter(function (_ref2) {
+        var ns = _ref2[0],
+            cb = _ref2[1];
+        if (callback && cb.guid !== callback.guid || !hasNamespaces(ns, namespaces)) return true;
+        ele.removeEventListener(name, cb);
+      });
     }
   } // @require collection/each.js
+  // @require ./helpers/parse_event_name.js
   // @require ./helpers/remove_event.js
 
 
-  fn.off = function (eventName, callback) {
+  fn.off = function (eventFullName, callback) {
     var _this = this;
 
-    if (eventName === undefined) {
-      this.each(function (ele) {
+    if (eventFullName === undefined) {
+      this.each(function (i, ele) {
         return removeEvent(ele);
       });
     } else {
-      each(eventName.split(eventsSeparatorRe), function (eventName) {
-        _this.each(function (ele) {
-          return removeEvent(ele, eventName, callback);
+      each(eventFullName.split(eventsSeparatorRe), function (eventFullName) {
+        var _parseEventName = parseEventName(eventFullName),
+            name = _parseEventName[0],
+            namespaces = _parseEventName[1];
+
+        _this.each(function (i, ele) {
+          return removeEvent(ele, name, namespaces, callback);
         });
       });
     }
@@ -620,78 +721,69 @@
     return this;
   }; // @require collection/each.js
   // @require ./helpers/add_event.js
+  // @require ./helpers/add_event_methods.js
+  // @require ./helpers/has_namespaces.js
+  // @require ./helpers/parse_event_name.js
   // @require ./helpers/remove_event.js
 
 
-  fn.on = function (eventName, delegate, callback, runOnce) {
+  fn.on = function (eventFullName, selector, callback, _one) {
     var _this2 = this;
 
-    if (!isString(eventName)) {
-      for (var key in eventName) {
-        this.on(key, delegate, eventName[key]);
+    if (!isString(eventFullName)) {
+      for (var key in eventFullName) {
+        this.on(key, selector, eventFullName[key]);
       }
 
       return this;
     }
 
-    if (isFunction(delegate)) {
-      callback = delegate;
-      delegate = null;
+    if (isFunction(selector)) {
+      callback = selector;
+      selector = null;
     }
 
-    if (eventName === 'ready') {
+    if (eventFullName === 'ready') {
       return this.ready(callback);
     }
 
-    if (delegate) {
-      var originalCallback = callback;
+    each(eventFullName.split(eventsSeparatorRe), function (eventFullName) {
+      var _parseEventName2 = parseEventName(eventFullName),
+          name = _parseEventName2[0],
+          namespaces = _parseEventName2[1];
 
-      callback = function callback(event) {
-        var target = event.target;
+      _this2.each(function (i, ele) {
+        var finalCallback = function finalCallback(event) {
+          if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator))) return;
 
-        while (!matches(target, delegate)) {
-          if (target === this) {
-            return target = false;
+          if (selector) {
+            var target = event.target;
+
+            while (!matches(target, selector)) {
+              if (target === ele) return;
+              target = target.parentNode;
+            }
           }
 
-          target = target.parentNode;
-        }
+          event.namespace = event.namespace || '';
+          addEventMethods(event);
+          callback.call(ele, event, event.data);
 
-        if (target) {
-          originalCallback.call(target, event);
-        }
-      };
+          if (_one) {
+            removeEvent(ele, name, namespaces, finalCallback);
+          }
+        };
 
-      callback.guid = originalCallback.guid = originalCallback.guid || guid++;
-    }
-
-    function dataCallback(event) {
-      callback.call(this, event, event.data);
-    }
-
-    dataCallback.guid = callback.guid = callback.guid || guid++;
-    each(eventName.split(eventsSeparatorRe), function (eventName) {
-      _this2.each(function (ele) {
-        var finalCallback = dataCallback;
-
-        if (runOnce) {
-          finalCallback = function finalCallback(event) {
-            dataCallback.call(this, event);
-            removeEvent(ele, eventName, finalCallback);
-          };
-
-          finalCallback.guid = dataCallback.guid = dataCallback.guid || guid++;
-        }
-
-        addEvent(ele, eventName, finalCallback);
+        finalCallback.guid = callback.guid = callback.guid || guid++;
+        addEvent(ele, name, namespaces, finalCallback);
       });
     });
     return this;
   }; // @require ./on.js
 
 
-  fn.one = function (eventName, delegate, callback) {
-    return this.on(eventName, delegate, callback, true);
+  fn.one = function (eventFullName, delegate, callback) {
+    return this.on(eventFullName, delegate, callback, true);
   }; // @require core/index.js
 
 
@@ -704,18 +796,26 @@
 
     return this;
   }; // @require collection/each.js
+  // @require ./helpers/add_event_methods.js
+  // @require ./helpers/parse_event_name.js
 
 
-  fn.trigger = function (eventName, data) {
-    var evt = eventName;
+  fn.trigger = function (eventFullName, data) {
+    var evt = eventFullName;
 
-    if (isString(eventName)) {
+    if (isString(eventFullName)) {
+      var _parseEventName3 = parseEventName(eventFullName),
+          name = _parseEventName3[0],
+          namespaces = _parseEventName3[1];
+
       evt = doc.createEvent('HTMLEvents');
-      evt.initEvent(eventName, true, false);
+      evt.initEvent(name, true, false);
+      evt.namespace = namespaces.join(eventsNamespacesSeparator);
     }
 
     evt.data = data;
-    return this.each(function (ele) {
+    addEventMethods(evt);
+    return this.each(function (i, ele) {
       ele.dispatchEvent(evt);
     }); //FIXME: Maybe the return value of `dispatchEvent` is actually useful here?
   }; // @optional ./off.js
@@ -727,7 +827,7 @@
 
   function getValue(ele) {
     var type = ele.type;
-    if (!type) return null;
+    if (!type) return undefined;
 
     switch (type.toLowerCase()) {
       case 'select-one':
@@ -736,12 +836,8 @@
       case 'select-multiple':
         return getValueSelectMultiple(ele);
 
-      case 'radio':
-      case 'checkbox':
-        return ele.checked ? ele.value : null;
-
       default:
-        return ele.value || null;
+        return ele.value;
     }
   }
 
@@ -752,7 +848,7 @@
         values.push(option.value);
       }
     });
-    return values.length ? values : null;
+    return values;
   }
 
   function getValueSelectSingle(ele) {
@@ -781,10 +877,14 @@
         case 'button':
           break;
 
+        case 'radio':
+        case 'checkbox':
+          if (!ele.checked) break;
+
         default:
           var value = getValue(ele);
 
-          if (value !== null) {
+          if (value) {
             var name = ele.name;
             var values = isArray(value) ? value : [value];
             each(values, function (value) {
@@ -803,9 +903,9 @@
     if (value === undefined) {
       return this[0] ? getValue(this[0]) : undefined;
     } else {
-      return this.each(function (ele) {
+      return this.each(function (i, ele) {
         ele.value = value;
-      });
+      }); //TODO: Does it work for select[multiple] too?
     }
   }; // @optional ./serialize.js
   // @optional ./val.js
@@ -813,14 +913,14 @@
 
 
   fn.clone = function () {
-    return this.map(function (ele) {
+    return this.map(function (i, ele) {
       return ele.cloneNode(true);
     });
   }; // @require collection/each.js
 
 
   fn.detach = function () {
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       ele.parentNode.removeChild(ele);
     });
   };
@@ -867,7 +967,7 @@
   fn.html = function (content) {
     if (content === undefined) return this[0] ? this[0].innerHTML : undefined;
     var source = content.nodeType ? content[0].outerHTML : content;
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       return ele.innerHTML = source;
     });
   }; // @require ./html.js
@@ -881,12 +981,12 @@
   fn.insertAfter = function (content) {
     var _this3 = this;
 
-    cash(content).each(function (ele, index) {
+    cash(content).each(function (index, ele) {
       var parent = ele.parentNode,
           sibling = ele.nextSibling;
 
-      _this3.each(function (v) {
-        parent.insertBefore(!index ? v : v.cloneNode(true), sibling);
+      _this3.each(function (i, e) {
+        parent.insertBefore(!index ? e : e.cloneNode(true), sibling);
       });
     });
     return this;
@@ -902,11 +1002,11 @@
   fn.insertBefore = function (selector) {
     var _this4 = this;
 
-    cash(selector).each(function (ele, index) {
+    cash(selector).each(function (index, ele) {
       var parent = ele.parentNode;
 
-      _this4.each(function (v) {
-        parent.insertBefore(!index ? v : v.cloneNode(true), ele);
+      _this4.each(function (i, e) {
+        parent.insertBefore(!index ? e : e.cloneNode(true), ele);
       });
     });
     return this;
@@ -942,7 +1042,7 @@
   fn.replaceWith = function (content) {
     var _this5 = this;
 
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       var parent = ele.parentNode;
       if (!parent) return;
       var $eles = cash(content);
@@ -967,7 +1067,7 @@
 
   fn.text = function (content) {
     if (content === undefined) return this[0] ? this[0].textContent : '';
-    return this.each(function (ele) {
+    return this.each(function (i, ele) {
       ele.textContent = content;
     });
   }; // @optional ./after.js
@@ -1021,21 +1121,21 @@
 
   fn.children = function (selector) {
     var result = [];
-    this.each(function (ele) {
+    this.each(function (i, ele) {
       push.apply(result, ele.children);
     });
     result = cash(unique(result));
     if (!selector) return result;
-    return result.filter(function (ele) {
+    return result.filter(function (i, ele) {
       return matches(ele, selector);
     });
   }; // @require collection/filter.js
 
 
   fn.has = function (selector) {
-    var comparator = isString(selector) ? function (ele) {
+    var comparator = isString(selector) ? function (i, ele) {
       return !!find(selector, ele).length;
-    } : function (ele) {
+    } : function (i, ele) {
       return ele.contains(selector);
     };
     return this.filter(comparator);
@@ -1049,7 +1149,7 @@
     }
 
     var result = [];
-    this.each(function (ele) {
+    this.each(function (i, ele) {
       push.apply(result, find(selector, ele));
     });
     return cash(unique(result));
@@ -1060,8 +1160,8 @@
     if (!selector || !this[0]) return false;
     var comparator = getCompareFunction(selector);
     var match = false;
-    this.each(function (ele) {
-      match = comparator(ele, selector);
+    this.each(function (i, ele) {
+      match = comparator(i, ele, selector);
       return !match;
     });
     return match;
@@ -1076,15 +1176,15 @@
   fn.not = function (selector) {
     if (!selector || !this[0]) return this;
     var comparator = getCompareFunction(selector);
-    return this.filter(function (ele) {
-      return !comparator(ele, selector);
+    return this.filter(function (i, ele) {
+      return !comparator(i, ele, selector);
     });
   }; // @require collection/each.js
 
 
   fn.parent = function () {
     var result = [];
-    this.each(function (ele) {
+    this.each(function (i, ele) {
       if (ele && ele.parentNode) {
         result.push(ele.parentNode);
       }
@@ -1125,7 +1225,7 @@
   fn.parents = function (selector) {
     var result = [];
     var last;
-    this.each(function (ele) {
+    this.each(function (i, ele) {
       last = ele;
 
       while (last && last.parentNode && last !== doc.body.parentNode) {
@@ -1149,7 +1249,7 @@
 
   fn.siblings = function () {
     var ele = this[0];
-    return this.parent().children().filter(function (child) {
+    return this.parent().children().filter(function (i, child) {
       return child !== ele;
     });
   }; // @optional ./children.js
