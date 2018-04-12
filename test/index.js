@@ -454,7 +454,7 @@ QUnit.test( "trigger(namespaces)", function( assert ) {
   function handler (){
     i++;
   }
-  $('.event-fixture').on('foo.ns1.ns2', handler).trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  $('.event-fixture').on('foo.ns1.ns2', handler).trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3').trigger('foo.ns1.ns3');
   assert.equal(i, 4, "off(namespaces) Passed!" );
 });
 
