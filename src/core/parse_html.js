@@ -11,7 +11,7 @@ function initFragment () {
   fragment.head.appendChild ( base );
 }
 
-function parseHTML ( html ) {
+function parseHTML ( html ) { //FIXME: `<tr></tr>` can't be parsed with this
   initFragment ();
   fragment.body.innerHTML = html;
   return fragment.body.childNodes;
