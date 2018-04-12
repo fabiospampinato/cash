@@ -3,15 +3,15 @@
 // @require data/helpers/get_data.js
 // @require data/helpers/set_data.js
 
-function addEvent ( ele, eventName, callback ) {
+function addEvent ( ele, name, namespaces, callback ) {
 
   callback.guid = ( callback.guid || guid++ );
 
   const eventCache = getData ( ele, eventsNamespace ) || setData ( ele, eventsNamespace, {} );
 
-  eventCache[eventName] = ( eventCache[eventName] || [] );
-  eventCache[eventName].push ( callback );
+  eventCache[name] = ( eventCache[name] || [] );
+  eventCache[name].push ([ namespaces, callback ]);
 
-  ele.addEventListener ( eventName, callback );
+  ele.addEventListener ( name, callback );
 
 }

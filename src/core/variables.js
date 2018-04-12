@@ -12,5 +12,7 @@ const idRe = /^#[\w-]*$/,
       eventsSeparatorRe = /[,\s]+/g,
       querySpaceRe = /%20/g;
 
+const eventsNamespacesSeparator = '.';
+
 const datasNamespace = '__cash_datas__',
       eventsNamespace = '__cash_events__';

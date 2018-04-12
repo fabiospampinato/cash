@@ -342,15 +342,25 @@ QUnit.test( "on(delegate)", function( assert ) {
   var i = 1;
   function delegateHandler (){
     i++;
-    this.textContent = i;
   };
   $('#qunit-fixture').on('click','.delegate-fixture', delegateHandler);
   $('.delegate-trigger').trigger('click');
-  assert.equal($('.delegate-fixture')[0].textContent, 2, "on(delegate) Passed!" );
+  assert.equal(i, 2, "on(delegate) Passed!" );
 
   $('#qunit-fixture').off('click',delegateHandler);
   $('.delegate-trigger').trigger('click');
-  assert.equal($('.delegate-fixture')[0].textContent, 2, "on(delegate) can be removedPassed!" );
+  assert.equal(i, 2, "on(delegate) can be removedPassed!" );
+});
+
+QUnit.test( "on(namespaces)", function( assert ) {
+  var i = 1;
+  function handler (){
+    i++;
+  }
+  $('.event-fixture').on('foo bar.ns1', handler);
+  $('.event-fixture').on('foo.ns1.ns2', handler);
+  $('.event-fixture').trigger('foo.ns1.ns2').trigger('foo.ns1').trigger('foo.ns2');
+  assert.equal(i, 4, "on(namespaces) Passed!" );
 });
 
 QUnit.test( "one", function( assert ) {
@@ -390,6 +400,20 @@ QUnit.test( "off", function( assert ) {
   assert.equal($('.off-fixture')[0].textContent, 2, "off all Passed!" );
 });
 
+QUnit.test( "off(namespaces)", function( assert ) {
+  var i = 1;
+  function handler (){
+    i++;
+  }
+  $('.event-fixture').on('foo.ns1.ns2', handler).off('foo').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  $('.event-fixture').on('foo.ns1.ns2', handler).off('foo.ns1').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  $('.event-fixture').on('foo.ns1.ns2', handler).off('foo.ns2').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  $('.event-fixture').on('foo.ns1.ns2', handler).off('foo.ns1.ns2').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  $('.event-fixture').on('foo.ns1.ns2 bar.ns1.ns2 baz.ns1.ns2', handler).off('.ns1').trigger('foo').trigger('bar').trigger('baz');
+  $('.event-fixture').on('foo.ns1.ns2', handler).off('foo.ns3').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  assert.equal(i, 4, "off(namespaces) Passed!" );
+});
+
 QUnit.test( "trigger", function( assert ) {
   var i = 1;
   $('.trigger-fixture').on('click', function(){
@@ -413,6 +437,25 @@ QUnit.test( "trigger(data)", function( assert ) {
 
   $('.trigger-data-fixture').trigger('custom',123);
   assert.equal(data, 123, "trigger(data) argument Passed!" );
+});
+
+QUnit.test( "trigger(event.namespace)", function( assert ) {
+  var namespaces = [];
+  function handler (event){
+    namespaces.push ( event.namespace );
+  }
+  $('.event-fixture').on('foo.ns1.ns2', handler);
+  $('.event-fixture').trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns1.ns2');
+  assert.equal(namespaces[0] === '' && namespaces[1] === 'ns1' && namespaces[2] === 'ns2' && namespaces[3] === 'ns1.ns2', true, "off(namespaces) Passed!" );
+});
+
+QUnit.test( "trigger(namespaces)", function( assert ) {
+  var i = 1;
+  function handler (){
+    i++;
+  }
+  $('.event-fixture').on('foo.ns1.ns2', handler).trigger('foo').trigger('foo.ns1').trigger('foo.ns2').trigger('foo.ns3');
+  assert.equal(i, 4, "off(namespaces) Passed!" );
 });
 
 /* FORMS */

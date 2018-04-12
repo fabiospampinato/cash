@@ -1,17 +1,22 @@
 
 // @require collection/each.js
+// @require ./helpers/parse_event_name.js
 // @require ./helpers/remove_event.js
 
-fn.off = function ( eventName, callback ) {
+fn.off = function ( eventFullName, callback ) {
 
-  if ( eventName === undefined ) {
+  if ( eventFullName === undefined ) {
 
     this.each ( ( i, ele ) => removeEvent ( ele ) );
 
   } else {
 
-    each ( eventName.split ( eventsSeparatorRe ), eventName => {
-      this.each ( ( i, ele ) => removeEvent ( ele, eventName, callback ) );
+    each ( eventFullName.split ( eventsSeparatorRe ), eventFullName => {
+
+      const [name, namespaces] = parseEventName ( eventFullName );
+
+      this.each ( ( i, ele ) => removeEvent ( ele, name, namespaces, callback ) );
+
     });
 
   }

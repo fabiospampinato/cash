@@ -1,14 +1,18 @@
 
 // @require collection/each.js
+// @require ./helpers/parse_event_name.js
 
-fn.trigger = function ( eventName, data ) {
+fn.trigger = function ( eventFullName, data ) {
 
-  let evt = eventName;
+  let evt = eventFullName;
 
-  if ( isString ( eventName ) ) {
+  if ( isString ( eventFullName ) ) {
+
+    const [name, namespaces] = parseEventName ( eventFullName );
 
     evt = doc.createEvent ( 'HTMLEvents' );
-    evt.initEvent ( eventName, true, false );
+    evt.initEvent ( name, true, false );
+    evt.namespace = namespaces.join ( eventsNamespacesSeparator );
 
   }
 

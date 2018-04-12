@@ -1,6 +1,6 @@
 
 // @require ./on.js
 
-fn.one = function ( eventName, delegate, callback ) {
-  return this.on ( eventName, delegate, callback, true );
+fn.one = function ( eventFullName, delegate, callback ) {
+  return this.on ( eventFullName, delegate, callback, true );
 };

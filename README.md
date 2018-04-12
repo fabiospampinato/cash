@@ -10,9 +10,9 @@ Cash is a small library for modern browsers (IE9+) that provides jQuery-style sy
 | ------------------ | ----------- | ------------ |
 | Uncompressed       | **29.8 KB** | 271 KB       |
 | Minified           | **11 KB**   | 87 KB        |
-| Minified & Gzipped | **4 KB**    | 30.3 KB      |
+| Minified & Gzipped | **4.3 KB**  | 30.3 KB      |
 
-An **87%** gain in size reduction. If you need a smaller file, partial builds are supported too since this project is bundled using [pacco](https://github.com/fabiospampinato/pacco).
+An **86%** gain in size reduction. If you need a smaller file, partial builds are supported too since this project is bundled using [pacco](https://github.com/fabiospampinato/pacco).
 
 ## Usage
 

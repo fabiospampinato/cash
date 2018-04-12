@@ -1,14 +1,18 @@
 
 // @require collection/each.js
 // @require ./helpers/add_event.js
+// @require ./helpers/has_namespaces.js
+// @require ./helpers/parse_event_name.js
 // @require ./helpers/remove_event.js
 
-fn.on = function ( eventName, selector, callback, runOnce ) {
+fn.on = function ( eventFullName, selector, callback, _one ) {
 
-  if ( !isString ( eventName ) ) {
+  if ( !isString ( eventFullName ) ) {
 
-    for ( let key in eventName ) {
-      this.on ( key, selector, eventName[key] );
+    for ( let key in eventFullName ) {
+
+      this.on ( key, selector, eventFullName[key] );
+
     }
 
     return this;
@@ -22,61 +26,48 @@ fn.on = function ( eventName, selector, callback, runOnce ) {
 
   }
 
-  if ( eventName === 'ready' ) {
+  if ( eventFullName === 'ready' ) {
 
     return this.ready ( callback );
 
   }
 
-  if ( selector ) {
+  each ( eventFullName.split ( eventsSeparatorRe ), eventFullName => {
 
-    const originalCallback = callback;
-
-    callback = function ( event ) {
-
-      let target = event.target;
-
-      while ( !matches ( target, selector ) ) {
-        if ( target === this ) {
-          return target = false;
-        }
-        target = target.parentNode;
-      }
-
-      if ( target ) {
-        originalCallback.call ( target, event );
-      }
-
-    };
-
-    callback.guid = originalCallback.guid = ( originalCallback.guid || guid++ );
-
-  }
-
-  function dataCallback ( event ) {
-    callback.call ( this, event, event.data );
-  }
-
-  dataCallback.guid = callback.guid = ( callback.guid || guid++ );
-
-  each ( eventName.split ( eventsSeparatorRe ), eventName => {
+    const [name, namespaces] = parseEventName ( eventFullName );
 
     this.each ( ( i, ele ) => {
 
-      let finalCallback = dataCallback;
+      const finalCallback = function ( event ) {
 
-      if ( runOnce ) {
+        if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
-        finalCallback = function finalCallback ( event ) {
-          dataCallback.call ( this, event );
-          removeEvent ( ele, eventName, finalCallback );
-        };
+        if ( selector ) {
 
-        finalCallback.guid = dataCallback.guid = ( dataCallback.guid || guid++ );
+          let target = event.target;
 
-      }
+          while ( !matches ( target, selector ) ) {
+            if ( target === ele ) return;
+            target = target.parentNode;
+          }
 
-      addEvent ( ele, eventName, finalCallback );
+        }
+
+        event.namespace = ( event.namespace || '' );
+
+        callback.call ( ele, event, event.data );
+
+        if ( _one ) {
+
+          removeEvent ( ele, name, namespaces, finalCallback );
+
+        }
+
+      };
+
+      finalCallback.guid = callback.guid = ( callback.guid || guid++ );
+
+      addEvent ( ele, name, namespaces, finalCallback );
 
     });
 
