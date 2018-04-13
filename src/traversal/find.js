@@ -1,19 +1,17 @@
 
-// @require collection/each.js
-// @require ./has.js
+// @require core/index.js
 
 fn.find = function ( selector ) {
 
-  if ( !selector || selector.nodeType ) {
-    return cash ( selector && this.has ( selector ).length ? selector : null );
-  }
-
   const result = [];
 
-  this.each ( ( i, ele ) => {
-    push.apply ( result, find ( selector, ele ) );
-  });
+  for ( let i = 0, l = this.length; i < l; i++ ) {
+    const found = find ( selector, this[i] );
+    if ( found.length ) {
+      push.apply ( result, found );
+    }
+  }
 
-  return cash ( unique ( result ) );
+  return cash ( result.length ? unique ( result ) : null );
 
 };
