@@ -7,6 +7,6 @@ fn.filter = function ( selector ) {
 
   const comparator = isFunction ( selector ) ? selector : getCompareFunction ( selector );
 
-  return cash ( this.get ().filter ( ( ele, i ) => comparator.call ( ele, i, ele, selector ) ) );
+  return cash ( filter.call ( this, ( ele, i ) => comparator.call ( ele, i, ele, selector ) ) );
 
 };
