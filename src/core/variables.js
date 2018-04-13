@@ -2,7 +2,7 @@
 const doc = document,
       docEl = doc.documentElement,
       win = window,
-      {filter, push, slice} = Array.prototype;
+      {filter, map, push, slice} = Array.prototype;
 
 const idRe = /^#[\w-]*$/,
       classRe = /^\.[\w-]*$/,
