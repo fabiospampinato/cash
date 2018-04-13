@@ -11,7 +11,7 @@ function Cash ( selector, context ) {
 
   if ( isString ( selector ) ) {
 
-    eles = idRe.test ( selector)
+    eles = idRe.test ( selector )
               ? doc.getElementById ( selector.slice ( 1 ) )
               : htmlRe.test ( selector )
                 ? parseHTML ( selector )
