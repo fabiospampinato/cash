@@ -1,9 +1,17 @@
 language: node_js
 dist: trusty
-node_js: 8.11
+node_js:
+  - 8
+  - node
 
 addons:
   chrome: stable
+
+install:
+  - npm ci
+
+before_install:
+  - npm i -g npm@latest
 
 script:
   # xvfb-run is needed for headless testing with real browsers
