@@ -279,13 +279,19 @@ QUnit.test( "css", function( assert ) {
 
 QUnit.test( "data", function( assert ) {
   assert.equal($('.attr-fixture').data('index'), 5, "data read Passed!" );
+  assert.equal($('.attr-fixture').data('index-other'), 100, "data read Passed!" );
   $('.attr-fixture').data('index',10);
+  $('.attr-fixture').data('index-other',10);
   assert.equal($('.attr-fixture').data('index'), 10, "data set Passed!" );
+  assert.equal($('.attr-fixture').data('index-other'), 10, "data set Passed!" );
   $('.attr-fixture').removeData('index');
-  assert.notEqual($('.attr-fixture').data('index'), 10, "data remove Passed!" );
+  assert.equal($('.attr-fixture').data('index'), 5, "data remove Passed!" );
+  assert.equal($('.attr-fixture').data('index-other'), 10, "data remove Passed!" );
+  $('.attr-fixture').data('index',10);
+  $('.attr-fixture').removeData();
+  assert.equal($('.attr-fixture').data('index'), 5, "data remove all Passed!" );
+  assert.equal($('.attr-fixture').data('index-other'), 100, "data remove all Passed!" );
 });
-
-//TODO: removeData
 
 /* DIMENSIONS */
 

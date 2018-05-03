@@ -1,19 +1,20 @@
 
 // @require attributes/remove_attr.js
 // @require ./get_data_cache.js
+// @require ./remove_data_cache.js
 
 function removeData ( ele, key ) {
 
-  const cache = getDataCache ( ele );
+  if ( key === undefined ) {
 
-  if ( key in cache ) {
-    cache[key] = undefined;
+    removeDataCache ( ele );
+
   } else {
-    if ( ele.dataset ) {
-      delete ele.dataset[key];
-    } else {
-      cash ( ele ).removeAttr ( `data-${key}` );
-    }
+
+    const cache = getDataCache ( ele );
+
+    delete cache[key];
+
   }
 
 }

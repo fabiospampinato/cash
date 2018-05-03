@@ -602,6 +602,7 @@ Removes linked data and data-attributes from collection elements.
 
 ```js
 $(element).removeData ( name ) // => collection
+$(element).removeData () // => collection
 ```
 
 #### fn.removeProp ()
