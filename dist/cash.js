@@ -45,6 +45,8 @@
       docEl = doc.documentElement,
       win = window,
       _Array$prototype = Array.prototype,
+      filter = _Array$prototype.filter,
+      map = _Array$prototype.map,
       push = _Array$prototype.push,
       slice = _Array$prototype.slice;
   var idRe = /^#[\w-]*$/,
@@ -170,6 +172,7 @@
   }
 
   function parseHTML(html) {
+    //FIXME: `<tr></tr>` can't be parsed with this
     initFragment();
     fragment.body.innerHTML = html;
     return fragment.body.childNodes;
@@ -391,7 +394,7 @@
   fn.filter = function (selector) {
     if (!selector) return this;
     var comparator = isFunction(selector) ? selector : getCompareFunction(selector);
-    return cash(this.get().filter(function (ele, i) {
+    return cash(filter.call(this, function (ele, i) {
       return comparator.call(ele, i, ele, selector);
     }));
   }; // @require ./eq.js
@@ -408,7 +411,7 @@
 
 
   fn.map = function (callback) {
-    return cash(this.get().map(function (ele, i) {
+    return cash(map.call(this, function (ele, i) {
       return callback.call(ele, i, ele);
     }));
   }; // @require core/index.js
@@ -512,21 +515,21 @@
     }
 
     return cache[key];
+  }
+
+  function removeDataCache(ele) {
+    delete ele[datasNamespace];
   } // @require attributes/remove_attr.js
   // @require ./get_data_cache.js
+  // @require ./remove_data_cache.js
 
 
   function removeData(ele, key) {
-    var cache = getDataCache(ele);
-
-    if (key in cache) {
-      cache[key] = undefined;
+    if (key === undefined) {
+      removeDataCache(ele);
     } else {
-      if (ele.dataset) {
-        delete ele.dataset[key];
-      } else {
-        cash(ele).removeAttr("data-" + key);
-      }
+      var cache = getDataCache(ele);
+      delete cache[key];
     }
   } // @require ./get_data_cache.js
 
@@ -1101,7 +1104,7 @@
 
 
   fn.offsetParent = function () {
-    return cash(this[0] ? this[0].offsetParent : undefined);
+    return cash(this[0] ? this[0].offsetParent : null);
   }; // @require core/index.js
 
 
@@ -1129,6 +1132,21 @@
     return result.filter(function (i, ele) {
       return matches(ele, selector);
     });
+  }; // @require core/index.js
+
+
+  fn.find = function (selector) {
+    var result = [];
+
+    for (var i = 0, l = this.length; i < l; i++) {
+      var found = find(selector, this[i]);
+
+      if (found.length) {
+        push.apply(result, found);
+      }
+    }
+
+    return cash(result.length ? unique(result) : null);
   }; // @require collection/filter.js
 
 
@@ -1139,20 +1157,6 @@
       return ele.contains(selector);
     };
     return this.filter(comparator);
-  }; // @require collection/each.js
-  // @require ./has.js
-
-
-  fn.find = function (selector) {
-    if (!selector || selector.nodeType) {
-      return cash(selector && this.has(selector).length ? selector : null);
-    }
-
-    var result = [];
-    this.each(function (i, ele) {
-      push.apply(result, find(selector, ele));
-    });
-    return cash(unique(result));
   }; // @require collection/each.js
 
 
@@ -1169,7 +1173,7 @@
 
 
   fn.next = function () {
-    return cash(this[0] ? this[0].nextElementSibling : undefined);
+    return cash(this[0] ? this[0].nextElementSibling : null);
   }; // @require collection/filter.js
 
 
@@ -1241,7 +1245,7 @@
 
 
   fn.prev = function () {
-    return cash(this[0] ? this[0].previousElementSibling : undefined);
+    return cash(this[0] ? this[0].previousElementSibling : null);
   }; // @require collection/filter.js
   // @require ./children.js
   // @require ./parent.js
