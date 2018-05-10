@@ -218,17 +218,17 @@
     });
   }
 
-  cash.unique = unique; // @require ./camel_case.js
+  cash.unique = unique; // @optional ./camel_case.js
+  // @optional ./each.js
+  // @optional ./extend.js
+  // @optional ./get_compare_function.js
+  // @optional ./matches.js
+  // @optional ./unique.js
+  // @optional ./guid.js
   // @require ./cash.js
-  // @require ./each.js
-  // @require ./extend.js
   // @require ./find.js
-  // @require ./get_compare_function.js
-  // @require ./guid.js
-  // @require ./matches.js
   // @require ./parse_html.js
   // @require ./type_checking.js
-  // @require ./unique.js
   // @require ./variables.js
   // @require core/index.js
 

@@ -14,6 +14,19 @@ Cash is a small library for modern browsers (IE9+) that provides jQuery-style sy
 
 An **86%** gain in size reduction. If you need a smaller file, partial builds are supported too since this project is bundled using [pacco](https://github.com/fabiospampinato/pacco).
 
+#### Partial Builds
+
+Some alternative configuration files for [pacco](https://github.com/fabiospampinato/pacco) for generating partial builds are available [here](https://github.com/fabiospampinato/cash/tree/master/resources/pacco).
+
+Let's compare the size of those bundles (there's actually some room for improvement here, the source files could be decoupled more, and you could exclude specific methods you don't need):
+
+| Enabled Modules                             | Minified | Minified & Gzipped |
+| ------------------------------------------- | -------- | ------------------ |
+| <abbr title="Query Selector All">QSA</abbr> | 1.2 KB   | **0.7 KB**         |
+| attributes                                  | 3.5 KB   | **1.5 KB**         |
+| events                                      | 4.6 KB   | **2 KB**           |
+| collection + manipulation + traversal       | 5.3 KB   | **1.9 KB**         |
+
 ## Usage
 
 Get the [minified version of cash](https://raw.githubusercontent.com/fabiospampinato/cash/master/dist/cash.min.js) and use it like this:

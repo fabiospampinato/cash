@@ -1,0 +1,35 @@
+{
+  "browsers": ["ie >= 9"],
+  "components": {
+    "attributes": false,
+    "collection": false,
+    "core": {
+      "camel_case": false,
+      "each": false,
+      "extend": false,
+      "get_compare_function": false,
+      "guid": false,
+      "matches": false,
+      "unique": false
+    },
+    "css": false,
+    "data": false,
+    "dimensions": false,
+    "events": false,
+    "forms": false,
+    "manipulation": false,
+    "offset": false,
+    "traversal": false
+  },
+  "paths": {
+    "tokens": {
+      "bundle": "cash"
+    },
+    "output": {
+      "javascript": {
+        "unminified": "[dist]/[bundle].js",
+        "minified": "[dist]/[bundle].min.js"
+      }
+    }
+  }
+}
