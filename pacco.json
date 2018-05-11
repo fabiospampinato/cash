@@ -1,0 +1,23 @@
+{
+  "browsers": ["ie >= 9"],
+  "paths": {
+    "tokens": {
+      "bundle": "cash"
+    },
+    "output": {
+      "javascript": {
+        "unminified": "[dist]/[bundle].js",
+        "minified": "[dist]/[bundle].min.js"
+      }
+    }
+  },
+  "plugins": {
+    "uglify": {
+      "options": {
+        "output": {
+          "comments": "some"
+        }
+      }
+    }
+  }
+}
