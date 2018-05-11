@@ -5,7 +5,7 @@ fn.prop = function ( prop, value ) {
 
   if ( isString ( prop ) ) {
 
-    return value === undefined
+    return arguments.length < 2
              ? ( this[0] ? this[0][prop] : undefined )
              : this.each ( ( i, ele ) => { ele[prop] = value } );
 
