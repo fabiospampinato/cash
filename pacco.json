@@ -10,5 +10,14 @@
         "minified": "[dist]/[bundle].min.js"
       }
     }
+  },
+  "plugins": {
+    "uglify": {
+      "options": {
+        "output": {
+          "comments": "some"
+        }
+      }
+    }
   }
 }

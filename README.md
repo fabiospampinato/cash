@@ -16,7 +16,7 @@ An **86%** gain in size reduction. If you need a smaller file, partial builds ar
 
 #### Partial Builds
 
-Some alternative configuration files for [pacco](https://github.com/fabiospampinato/pacco) for generating partial builds are available [here](https://github.com/fabiospampinato/cash/tree/master/resources/pacco).
+Some alternative configuration files for [pacco](https://github.com/fabiospampinato/pacco) for generating partial builds are available [here](https://github.com/kenwheeler/cash/tree/master/resources/pacco).
 
 Let's compare the size of those bundles (there's actually some room for improvement here, the source files could be decoupled more, and you could exclude specific methods you don't need):
 
@@ -29,7 +29,7 @@ Let's compare the size of those bundles (there's actually some room for improvem
 
 ## Usage
 
-Get the [minified version of cash](https://raw.githubusercontent.com/fabiospampinato/cash/master/dist/cash.min.js) and use it like this:
+Get the [minified version of cash](https://raw.githubusercontent.com/kenwheeler/cash/master/dist/cash.min.js) and use it like this:
 
 ```html
 <script src="/cash.min.js"></script>

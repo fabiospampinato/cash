@@ -13,6 +13,8 @@
 
 (function () {
 
+  /** @license MIT https://github.com/kenwheeler/cash */ //FIXME: If added as a top-level comment it gets duplicated
+
   // @concat-content
 
   window.cash = window.$ = cash;

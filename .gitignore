@@ -38,6 +38,3 @@ node_modules
 .nyc_output
 coverage
 typings
-
-# Project specific paths ignore
-dist

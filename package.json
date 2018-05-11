@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "cash-dom",
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "version": "2.1.1",
@@ -16,15 +15,13 @@
     "test": "open ./test/index.html"
   },
   "bugs": {
-    "url": "https://github.com/fabiospampinato/cash/issues"
+    "url": "https://github.com/kenwheeler/cash/issues"
   },
-  "author": {
-    "name": "Fabio Spampinato",
-    "email": "spampinabio@gmail.com"
-  },
+  "homepage": "https://github.com/kenwheeler/cash",
+  "author": "Ken Wheeler <ken_wheeler@me.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fabiospampinato/cash.git"
+    "url": "https://github.com/kenwheeler/cash.git"
   },
   "dependencies": {},
   "peerDependencies": {
