@@ -50,6 +50,7 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
           while ( !matches ( target, selector ) ) {
             if ( target === ele ) return;
             target = target.parentNode;
+            if ( !target ) return;
           }
 
         }
