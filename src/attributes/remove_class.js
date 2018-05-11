@@ -6,7 +6,7 @@
 
 fn.removeClass = function ( cls ) {
 
-  if ( cls === undefined ) return this.attr ( 'class', '' );
+  if ( !arguments.length ) return this.attr ( 'class', '' );
 
   const classes = getClasses ( cls );
 
