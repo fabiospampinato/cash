@@ -12,6 +12,8 @@
 // @optional traversal/index.js
 // @require core/index.js
 (function () {
+  /** @license MIT https://github.com/kenwheeler/cash */
+  //FIXME: If added as a top-level comment it gets duplicated
   // @concat-content
   var specialRegExpCharactersRe = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
@@ -304,7 +306,7 @@
 
   fn.prop = function (prop, value) {
     if (isString(prop)) {
-      return value === undefined ? this[0] ? this[0][prop] : undefined : this.each(function (i, ele) {
+      return arguments.length < 2 ? this[0] ? this[0][prop] : undefined : this.each(function (i, ele) {
         ele[prop] = value;
       });
     }
@@ -332,7 +334,7 @@
 
 
   fn.removeClass = function (cls) {
-    if (cls === undefined) return this.attr('class', '');
+    if (!arguments.length) return this.attr('class', '');
     var classes = getClasses(cls);
     if (!classes) return this;
     return this.each(function (i, ele) {
@@ -765,6 +767,7 @@
             while (!matches(target, selector)) {
               if (target === ele) return;
               target = target.parentNode;
+              if (!target) return;
             }
           }
 
