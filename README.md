@@ -813,5 +813,5 @@ $.prefixedProp ( 'transform' ) // => 'mozTransform'
 Returns a new array with duplicates removed.
 
 ```js
-$.parseHTML ( array ) // => array
+$.unique ( array ) // => array
 ```
