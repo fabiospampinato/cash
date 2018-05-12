@@ -3,7 +3,7 @@
 
 fn.filter = function ( selector ) {
 
-  if ( !selector ) return this;
+  if ( !selector ) return cash ();
 
   const comparator = isFunction ( selector ) ? selector : getCompareFunction ( selector );
 
