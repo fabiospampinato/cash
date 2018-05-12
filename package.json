@@ -12,7 +12,8 @@
     "watch:dev": "pacco watch-javascript -e development",
     "dev": "npm run build:dev && npm run watch:dev",
     "prod": "npm run build:prod && npm run watch:prod",
-    "test": "open ./test/index.html"
+    "test": "open ./test/index.html",
+    "test:watch": "browser-sync start -s . --files test,dist/cash.min.js --startPath test --no-notify"
   },
   "bugs": {
     "url": "https://github.com/kenwheeler/cash/issues"
