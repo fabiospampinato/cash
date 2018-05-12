@@ -802,7 +802,7 @@ $.parseHTML ( htmlString ) // => collection
 
 #### $.prefixedProp ()
 
-Return a prefixed CSS property, if needed.
+Return a prefixed CSS property, if necessary.
 
 ```js
 $.prefixedProp ( 'transform' ) // => 'mozTransform'
