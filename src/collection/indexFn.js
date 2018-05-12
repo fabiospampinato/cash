@@ -10,6 +10,6 @@ fn.index = function ( ele ) {
   const child = ele ? cash ( ele )[0] : this[0],
         collection = ele ? this : cash ( child ).parent ().children ();
 
-  return collection.get ().indexOf ( child );
+  return indexOf.call ( collection, child );
 
 };
