@@ -7,19 +7,9 @@ fn.attr = function ( attr, value ) {
 
   if ( isString ( attr ) ) {
 
-    if ( value === undefined ) {
+    if ( value === undefined ) return this[0].getAttribute ( attr );
 
-      return this[0].getAttribute ? this[0].getAttribute ( attr ) : this[0][attr];
-
-    }
-
-    return this.each ( ( i, ele ) => {
-      if ( ele.setAttribute ) {
-        ele.setAttribute ( attr, value );
-      } else {
-        ele[attr] = value;
-      }
-    });
+    return this.each ( ( i, ele ) => ele.setAttribute ( attr, value ) );
 
   }
 
