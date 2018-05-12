@@ -12,12 +12,14 @@
     }
   },
   "plugins": {
-    "uglify": {
+    "closure": {
+      "enabled": true,
       "options": {
-        "output": {
-          "comments": "some"
-        }
+        "outputWrapper": "/* MIT https://github.com/kenwheeler/cash */\n(function(){%output%})();"
       }
+    },
+    "uglify": {
+      "enabled": false
     }
   }
 }

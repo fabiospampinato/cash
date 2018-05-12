@@ -44,7 +44,7 @@ function Cash ( selector, context ) {
 
 }
 
-function cash ( selector, context ) {
+win.cash = win.$ = function cash ( selector, context ) {
   return new Cash ( selector, context );
 }
 

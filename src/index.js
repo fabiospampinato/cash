@@ -10,13 +10,3 @@
 // @optional offset/index.js
 // @optional traversal/index.js
 // @require core/index.js
-
-(function () {
-
-  /** @license MIT https://github.com/kenwheeler/cash */ //FIXME: If added as a top-level comment it gets duplicated
-
-  // @concat-content
-
-  window.cash = window.$ = cash;
-
-})();
