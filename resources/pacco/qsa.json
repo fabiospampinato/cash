@@ -1,5 +1,5 @@
 {
-  "browsers": ["ie >= 9"],
+  "browsers": ["ie >= 10"],
   "components": {
     "attributes": false,
     "collection": false,
