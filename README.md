@@ -1,8 +1,8 @@
 # Cash
 
-*An absurdly small jQuery alternative for modern browsers (IE9+)*
+*An absurdly small jQuery alternative for modern browsers (IE10+)*
 
-Cash is a small library for modern browsers (IE9+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
+Cash is a small library for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
 ## Size Comparison
 

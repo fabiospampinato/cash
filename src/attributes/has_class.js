@@ -1,7 +1,6 @@
 
 // @require collection/each.js
 // @require ./helpers/get_classes.js
-// @require ./helpers/has_class.js
 
 fn.hasClass = function ( cls ) {
 
@@ -12,7 +11,7 @@ fn.hasClass = function ( cls ) {
   let check = false;
 
   this.each ( ( i, ele ) => {
-    check = hasClass ( ele, classes[0] );
+    check = ele.classList.contains ( classes[0] );
     return !check;
   });
 
