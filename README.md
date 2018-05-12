@@ -18,13 +18,13 @@ An **87%** gain in size reduction. If you need a smaller file, partial builds ar
 
 Some alternative configuration files for [pacco](https://github.com/fabiospampinato/pacco) for generating partial builds are available [here](https://github.com/kenwheeler/cash/tree/master/resources/pacco).
 
-Let's compare the size of those bundles (there's actually some room for improvement here, the source files could be decoupled more, and you could exclude specific methods you don't need):
+Let's compare the size of those partial builds (you could actually exclude individual methods and get even smaller builds):
 
 | Enabled Modules                             | Minified | Minified & Gzipped |
 | ------------------------------------------- | -------- | ------------------ |
-| <abbr title="Query Selector All">QSA</abbr> | 1.2 KB   | **0.7 KB**         |
-| attributes                                  | 3.5 KB   | **1.5 KB**         |
-| events                                      | 4.6 KB   | **2 KB**           |
+| <abbr title="Query Selector All">QSA</abbr> | 1.1 KB   | **0.6 KB**         |
+| attributes                                  | 2.8 KB   | **1.2 KB**         |
+| events                                      | 3.5 KB   | **1.5 KB**         |
 | collection + manipulation + traversal       | 5.3 KB   | **1.9 KB**         |
 
 ## Usage

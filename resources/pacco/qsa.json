@@ -8,6 +8,7 @@
       "each": false,
       "extend": false,
       "get_compare_function": false,
+      "get_split_values": false,
       "guid": false,
       "matches": false,
       "unique": false
@@ -29,6 +30,31 @@
       "javascript": {
         "unminified": "[dist]/[bundle].js",
         "minified": "[dist]/[bundle].min.js"
+      }
+    }
+  },
+  "plugins": {
+    "wrapper": {
+      "options": {
+        "templates": {
+          "default": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();"
+        }
+      }
+    }
+  },
+  "environments": {
+    "production": {
+      "plugins": {
+        "uglify": {
+          "enabled": false
+        },
+        "closure": {
+          "enabled": true,
+          "options": {
+            "outputWrapper": "",
+            "compilationLevel": "SIMPLE"
+          }
+        }
       }
     }
   }

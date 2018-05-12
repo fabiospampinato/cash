@@ -2,13 +2,10 @@
   "browsers": ["ie >= 10"],
   "components": {
     "attributes": false,
-    "attributes/attr": true,
-    "attributes/remove_attr": true,
     "collection": false,
     "collection/each": true,
     "css": false,
     "data": false,
-    "data/helpers": true,
     "dimensions": false,
     "forms": false,
     "manipulation": false,
@@ -23,6 +20,31 @@
       "javascript": {
         "unminified": "[dist]/[bundle].js",
         "minified": "[dist]/[bundle].min.js"
+      }
+    }
+  },
+  "plugins": {
+    "wrapper": {
+      "options": {
+        "templates": {
+          "default": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();"
+        }
+      }
+    }
+  },
+  "environments": {
+    "production": {
+      "plugins": {
+        "uglify": {
+          "enabled": false
+        },
+        "closure": {
+          "enabled": true,
+          "options": {
+            "outputWrapper": "",
+            "compilationLevel": "SIMPLE"
+          }
+        }
       }
     }
   }
