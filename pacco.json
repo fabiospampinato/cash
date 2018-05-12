@@ -12,14 +12,28 @@
     }
   },
   "plugins": {
-    "closure": {
-      "enabled": true,
+    "wrapper": {
       "options": {
-        "outputWrapper": "/* MIT https://github.com/kenwheeler/cash */\n(function(){%output%})();"
+        "templates": {
+          "default": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();"
+        }
       }
-    },
-    "uglify": {
-      "enabled": false
+    }
+  },
+  "environments": {
+    "production": {
+      "plugins": {
+        "uglify": {
+          "enabled": false
+        },
+        "closure": {
+          "enabled": true,
+          "options": {
+            "outputWrapper": "",
+            "compilationLevel": "SIMPLE"
+          }
+        }
+      }
     }
   }
 }
