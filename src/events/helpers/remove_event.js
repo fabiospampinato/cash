@@ -1,15 +1,13 @@
 
 // @require core/index.js
-// @require data/helpers/get_data.js
+// @require ./get_events_cache.js
 // @require ./has_namespaces.js
 // @require ./parse_event_name.js
 // @require ./remove_event_listeners.js
 
 function removeEvent ( ele, name, namespaces, callback ) {
 
-  const events = getData ( ele, eventsNamespace );
-
-  if ( !events ) return;
+  const events = getEventsCache ( ele );
 
   if ( !name ) {
 
