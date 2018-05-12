@@ -5,11 +5,10 @@ fn.insertAfter = function ( content ) {
 
   cash ( content ).each ( ( index, ele ) => {
 
-    const parent = ele.parentNode,
-          sibling = ele.nextSibling;
+    const parent = ele.parentNode;
 
     this.each ( ( i, e ) => {
-      parent.insertBefore ( !index ? e : e.cloneNode ( true ), sibling );
+      parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele.nextSibling );
     });
 
   });

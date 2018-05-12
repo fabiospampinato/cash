@@ -14,7 +14,7 @@ function insertContent ( parent, child, prepend ) {
 
     each ( parent,
       isStr
-        ? ele => ele.insertAdjacentHTML ( prepend ? 'afterbegin' : 'beforeend', child )
+        ? ele => { ele.insertAdjacentHTML ( prepend ? 'afterbegin' : 'beforeend', child ) }
         : ( ele, index ) => insertElement ( ele, !index ? child : child.cloneNode ( true ), prepend )
     );
 

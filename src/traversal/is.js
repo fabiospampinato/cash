@@ -7,13 +7,13 @@ fn.is = function ( selector ) {
 
   const comparator = getCompareFunction ( selector );
 
-  let match = false;
+  let check = false;
 
   this.each ( ( i, ele ) => {
-    match = comparator ( i, ele, selector );
-    return !match;
+    check = comparator ( i, ele, selector );
+    return !check;
   });
 
-  return match;
+  return check;
 
 };

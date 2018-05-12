@@ -1,6 +1,8 @@
 
 // @require core/index.js
 
+const docEle = doc.documentElement;
+
 fn.offset = function () {
 
   const ele = this[0];
@@ -10,8 +12,8 @@ fn.offset = function () {
   const rect = ele.getBoundingClientRect ();
 
   return {
-    top: rect.top + win.pageYOffset - docEl.clientTop,
-    left: rect.left + win.pageXOffset - docEl.clientLeft
+    top: rect.top + win.pageYOffset - docEle.clientTop,
+    left: rect.left + win.pageXOffset - docEle.clientLeft
   };
 
 };

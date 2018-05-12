@@ -1,5 +1,6 @@
 
 // @require collection/each.js
+// @require ./helpers/compute_style.js
 // @require ./helpers/get_prefixed_prop.js
 // @require ./helpers/get_suffixed_value.js
 
@@ -7,17 +8,20 @@ fn.css = function ( prop, value ) {
 
   if ( isString ( prop ) ) {
 
-    prop = prefixedProp ( prop );
-    value = arguments.length > 1 ? getSuffixedValue ( prop, value ) : value;
+    prop = getPrefixedProp ( prop );
 
-    return arguments.length > 1
-             ? this.each ( ( i, ele ) => { ele.style[prop] = value } )
-             : this[0] ? win.getComputedStyle ( this[0] )[prop] : undefined;
+    if ( arguments.length < 2 ) return this[0] && computeStyle ( this[0], prop );
+
+    value = getSuffixedValue ( prop, value );
+
+    return this.each ( ( i, ele ) => { ele.style[prop] = value } );
 
   }
 
   for ( let key in prop ) {
+
     this.css ( key, prop[key] );
+
   }
 
   return this;

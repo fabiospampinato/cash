@@ -1,19 +1,22 @@
 
 // @require collection/each.js
-// @require ./helpers/get_classes.js
-// @require ./add_class.js
-// @require ./remove_class.js
+// @require ./attr.js
 
 fn.toggleClass = function ( cls, force ) {
 
-  if ( force !== undefined ) return this[force ? 'addClass' : 'removeClass']( cls );
+  const classes = getSplitValues ( cls ),
+        isForce = ( force !== undefined );
 
-  const classes = getClasses ( cls );
-
-  if ( !classes ) return this;
+  if ( !classes.length ) return ( isForce && !force ) ? this.attr ( 'class', '' ) : this;
 
   return this.each ( ( i, ele ) => {
-    each ( classes, c => ele.classList.toggle ( c ) );
+    each ( classes, c => {
+      if ( isForce ) {
+        force ? ele.classList.add ( c ) : ele.classList.remove ( c );
+      } else {
+        ele.classList.toggle ( c );
+      }
+    });
   });
 
 };

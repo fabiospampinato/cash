@@ -1,10 +1,10 @@
 
 // @require core/index.js
 
-function removeEventListeners ( events, ele, name ) {
+function removeEventListeners ( cache, ele, name ) {
 
-  each ( events[name], ([ namespaces, callback ]) => { ele.removeEventListener ( name, callback ) } );
+  each ( cache[name], ([ namespaces, callback ]) => { ele.removeEventListener ( name, callback ) } );
 
-  delete events[name];
+  delete cache[name];
 
 }

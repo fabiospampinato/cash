@@ -3,37 +3,38 @@
 // @require ./helpers/get_value.js
 // @require ./helpers/query_encode.js
 
-fn.serialize = function () {
+const skippableRe = /file|reset|submit|button/i,
+      checkableRe = /radio|checkbox/i;
 
-  if ( !this[0] ) return '';
+fn.serialize = function () {
 
   let query = '';
 
-  each ( this[0].elements || this, ele => {
+  if ( this[0] ) {
 
-    if ( ele.disabled || ele.tagName === 'FIELDSET' ) return;
+    each ( this[0].elements || this, ele => {
 
-    switch ( ele.type.toLowerCase () ) {
-      case 'file':
-      case 'reset':
-      case 'submit':
-      case 'button':
-        break;
-      case 'radio':
-      case 'checkbox':
-          if ( !ele.checked ) break;
-      default:
-        const value = getValue ( ele );
-        if ( value ) {
-          const name = ele.name;
-          const values = isArray ( value ) ? value : [value];
-          each ( values, value => {
-            query += queryEncode ( name, value );
-          });
-        }
-    }
+      if ( ele.disabled || ele.tagName === 'FIELDSET' ) return;
 
-  });
+      if ( skippableRe.test ( ele.type ) ) return;
+
+      if ( checkableRe.test ( ele.type ) && !ele.checked ) return;
+
+      const value = getValue ( ele );
+
+      if ( value ) {
+
+        const values = isArray ( value ) ? value : [value];
+
+        each ( values, value => {
+          query += queryEncode ( ele.name, value );
+        });
+
+      }
+
+    });
+
+  }
 
   return query.substr ( 1 );
 

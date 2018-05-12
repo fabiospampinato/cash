@@ -1,8 +1,6 @@
 
 function getValueSelectSingle ( ele ) {
 
-  const selectedIndex = ele.selectedIndex;
-
-  return selectedIndex >= 0 ? ele.options[selectedIndex].value : null;
+  return ele.selectedIndex < 0 ? null : ele.options[ele.selectedIndex].value;
 
 }

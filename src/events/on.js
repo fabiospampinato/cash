@@ -1,5 +1,6 @@
 
 // @require collection/each.js
+// @require ./helpers/variables.js
 // @require ./helpers/add_event.js
 // @require ./helpers/has_namespaces.js
 // @require ./helpers/parse_event_name.js
@@ -22,17 +23,11 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
   if ( isFunction ( selector ) ) {
 
     callback = selector;
-    selector = null;
+    selector = false;
 
   }
 
-  if ( eventFullName === 'ready' ) {
-
-    return this.ready ( callback );
-
-  }
-
-  each ( eventFullName.split ( eventsSeparatorRe ), eventFullName => {
+  each ( getSplitValues ( eventFullName ), eventFullName => {
 
     const [name, namespaces] = parseEventName ( eventFullName );
 

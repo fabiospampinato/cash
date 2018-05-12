@@ -17,7 +17,7 @@ each ( ['width', 'height'], ( prop, index ) => {
 
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 
-      ele.style[prop] = getSuffixedValue ( prop, value + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index )  : 0 ) );
+      ele.style[prop] = getSuffixedValue ( prop, value + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
 
     });
 

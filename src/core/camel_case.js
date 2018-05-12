@@ -1,13 +1,13 @@
 
 // @require ./cash.js
 
-const camelRe = /(?:^\w|[A-Z]|\b\w)/g,
-      camelWhitespaceRe = /[\s-_]+/g;
+const camelCaseRe = /(?:^\w|[A-Z]|\b\w)/g,
+      camelCaseWhitespaceRe = /[\s-_]+/g;
 
 function camelCase ( str ) {
-  return str.replace ( camelRe, function ( letter, index ) {
+  return str.replace ( camelCaseRe, function ( letter, index ) {
     return letter[ !index ? 'toLowerCase' : 'toUpperCase' ]();
-  }).replace ( camelWhitespaceRe, '' );
+  }).replace ( camelCaseWhitespaceRe, '' );
 };
 
 cash.camelCase = camelCase;

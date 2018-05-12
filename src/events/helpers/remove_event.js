@@ -7,21 +7,21 @@
 
 function removeEvent ( ele, name, namespaces, callback ) {
 
-  const events = getEventsCache ( ele );
+  const cache = getEventsCache ( ele );
 
   if ( !name ) {
 
     if ( !namespaces || !namespaces.length ) {
 
-      for ( name in events ) {
+      for ( name in cache ) {
 
-        removeEventListeners ( events, ele, name );
+        removeEventListeners ( cache, ele, name );
 
       }
 
     } else {
 
-      for ( name in events ) {
+      for ( name in cache ) {
 
         removeEvent ( ele, name, namespaces, callback );
 
@@ -31,13 +31,13 @@ function removeEvent ( ele, name, namespaces, callback ) {
 
   } else {
 
-    const eventCache = events[name];
+    const eventCache = cache[name];
 
     if ( !eventCache ) return;
 
     if ( callback ) callback.guid = ( callback.guid || guid++ );
 
-    events[name] = eventCache.filter ( ([ ns, cb ]) => {
+    cache[name] = eventCache.filter ( ([ ns, cb ]) => {
 
       if ( ( callback && cb.guid !== callback.guid ) || !hasNamespaces ( ns, namespaces ) ) return true;
 

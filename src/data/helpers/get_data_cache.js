@@ -1,4 +1,6 @@
 
+// @require ./variables.js
+
 function getDataCache ( ele ) {
-  return ele[datasNamespace] = ( ele[datasNamespace] || {} );
+  return ele[dataNamespace] = ( ele[dataNamespace] || {} );
 }

@@ -12,6 +12,6 @@ fn.find = function ( selector ) {
     }
   }
 
-  return cash ( result.length ? unique ( result ) : null );
+  return cash ( result.length && unique ( result ) );
 
 };

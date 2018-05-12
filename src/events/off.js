@@ -11,7 +11,7 @@ fn.off = function ( eventFullName, callback ) {
 
   } else {
 
-    each ( eventFullName.split ( eventsSeparatorRe ), eventFullName => {
+    each ( getSplitValues ( eventFullName ), eventFullName => {
 
       const [name, namespaces] = parseEventName ( eventFullName );
 

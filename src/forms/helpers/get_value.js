@@ -1,17 +1,15 @@
 
+const selectOneRe = /select-one/i,
+      selectMultipleRe = /select-multiple/i;
+
 function getValue ( ele ) {
 
   const type = ele.type;
 
-  if ( !type ) return undefined;
+  if ( selectOneRe.test ( type ) ) return getValueSelectSingle ( ele );
 
-  switch ( type.toLowerCase () ) {
-    case 'select-one':
-      return getValueSelectSingle ( ele );
-    case 'select-multiple':
-      return getValueSelectMultiple ( ele );
-    default:
-      return ele.value;
-  }
+  if ( selectMultipleRe.test ( type ) ) return getValueSelectMultiple ( ele );
+
+  return ele.value;
 
 }

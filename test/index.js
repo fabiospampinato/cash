@@ -188,7 +188,7 @@ QUnit.test( "toggleClass", function( assert ) {
 
 QUnit.test( "add", function( assert ) {
   var addFixture = $('#id-fixture').add( $('.class-fixture') );
-  assert.equal(addFixture.cash, true, "add Passed!" );
+  assert.equal(addFixture.__cash, true, "add Passed!" );
   assert.equal(addFixture.length, 2, "add(one) Passed!" );
 
   addFixture = $('#id-fixture').add( $('a').eq(0) ).add( $('a').eq(1) );

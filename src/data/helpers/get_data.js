@@ -8,7 +8,7 @@ function getData ( ele, key ) {
 
   if ( !( key in cache ) ) {
 
-    let value =  ele.dataset ? ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
+    let value = ele.dataset ? ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
 
     try {
       value = JSON.parse ( value );

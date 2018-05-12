@@ -1,0 +1,2 @@
+
+const dataNamespace = '__cashData';
