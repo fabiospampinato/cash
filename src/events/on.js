@@ -1,7 +1,6 @@
 
 // @require collection/each.js
 // @require ./helpers/add_event.js
-// @require ./helpers/add_event_methods.js
 // @require ./helpers/has_namespaces.js
 // @require ./helpers/parse_event_name.js
 // @require ./helpers/remove_event.js
@@ -56,8 +55,6 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
         }
 
         event.namespace = ( event.namespace || '' );
-
-        addEventMethods ( event );
 
         callback.call ( ele, event, event.data );
 
