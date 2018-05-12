@@ -3,28 +3,28 @@
 // @require core/each.js
 
 const prefixedProps = {},
-      div = doc.createElement ( 'div' ),
-      style = div.style,
-      stylePrefixes = ['webkit', 'moz', 'ms', 'o'];
+      {style} = doc.createElement ( 'div' ),
+      vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
-function prefixedProp ( prop ) {
+function getPrefixedProp ( prop ) {
 
-  prop = camelCase ( prop );
+  if ( !prefixedProps[prop] ) {
 
-  if ( prefixedProps[prop] ) return prefixedProps[prop];
+    const propCC = camelCase ( prop ),
+          propUC = `${propCC.charAt ( 0 ).toUpperCase ()}${propCC.slice ( 1 )}`,
+          props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
-  const ucProp = prop.charAt ( 0 ).toUpperCase () + prop.slice ( 1 ),
-        props = ( `${prop} ${stylePrefixes.join ( `${ucProp} ` )}${ucProp}` ).split ( ' ' );
+    each ( props, p => {
+      if ( p in style ) {
+        prefixedProps[prop] = p;
+        return false;
+      }
+    });
 
-  each ( props, prop => {
-    if ( prop in style ) {
-      prefixedProps[prop] = prop = prefixedProps[prop] = prop;
-      return false;
-    }
-  });
+  }
 
   return prefixedProps[prop];
 
 };
 
-cash.prefixedProp = prefixedProp;
+cash.prefixedProp = getPrefixedProp;
