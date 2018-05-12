@@ -307,10 +307,11 @@ $(element).get () // => domNode[]
 
 #### fn.has ()
 
-Returns boolean result of the selector argument against the collection.
+Reduce the set of matched elements to those that have a descendant that matches the selector or DOM element.
 
 ```js
-$(element).has ( selector ) // => boolean
+$(element).has ( selector ) // => collection
+$(element).has ( element ) // => collection
 ```
 
 #### fn.hasClass ()
