@@ -29,7 +29,7 @@ Let's compare the size of those partial builds (you could actually exclude indiv
 
 ## Usage
 
-Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@1.3.5/dist/cash.min.js) and use it like this:
+Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.1.3/dist/cash.min.js) and use it like this:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cash.min.js"></script>
