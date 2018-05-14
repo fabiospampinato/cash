@@ -12,7 +12,7 @@ fn.trigger = function ( eventFullName, data ) {
     const [name, namespaces] = parseEventName ( eventFullName );
 
     evt = doc.createEvent ( 'HTMLEvents' );
-    evt.initEvent ( name, true, false );
+    evt.initEvent ( name, true, true );
     evt.namespace = namespaces.join ( eventsNamespacesSeparator );
 
   }
