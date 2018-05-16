@@ -153,7 +153,7 @@ QUnit.test( "removeClass", function( assert ) {
   assert.equal( $('.attr-fixture2')[0].className, "attr-fixture2", "removeClass Multiple Passed!" );
 
   $cf.removeClass();
-  assert.equal( $cf.className, undefined, 'removing all classes passed!' );
+  assert.equal( $cf[0].className, '', 'removing all classes passed!' );
   $cf.addClass('class-fixture');
 
   var hasClass = $('.attr-fixture').addClass('foo$bar').removeClass('foo$bar').hasClass('foo$bar');

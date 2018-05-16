@@ -1,6 +1,7 @@
 
+// @require ./attr.js
 // @require ./toggle_class.js
 
 fn.removeClass = function ( cls ) {
-  return this.toggleClass ( cls, false );
+  return !arguments.length ? this.attr ( 'class', '' ) : this.toggleClass ( cls, false );
 };

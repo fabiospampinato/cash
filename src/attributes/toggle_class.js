@@ -7,7 +7,7 @@ fn.toggleClass = function ( cls, force ) {
   const classes = getSplitValues ( cls ),
         isForce = ( force !== undefined );
 
-  if ( !classes.length ) return ( isForce && !force ) ? this.attr ( 'class', '' ) : this;
+  if ( !classes.length ) return this;
 
   return this.each ( ( i, ele ) => {
     each ( classes, c => {
