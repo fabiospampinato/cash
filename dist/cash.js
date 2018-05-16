@@ -267,7 +267,7 @@ fn.removeProp = function (prop) {
 fn.toggleClass = function (cls, force) {
   var classes = getSplitValues(cls),
       isForce = force !== undefined;
-  if (!classes.length) return isForce && !force ? this.attr('class', '') : this;
+  if (!classes.length) return this;
   return this.each(function (i, ele) {
     each(classes, function (c) {
       if (isForce) {
@@ -282,11 +282,12 @@ fn.toggleClass = function (cls, force) {
 
 fn.addClass = function (cls) {
   return this.toggleClass(cls, true);
-}; // @require ./toggle_class.js
+}; // @require ./attr.js
+// @require ./toggle_class.js
 
 
 fn.removeClass = function (cls) {
-  return this.toggleClass(cls, false);
+  return !arguments.length ? this.attr('class', '') : this.toggleClass(cls, false);
 }; // @optional ./add_class.js
 // @optional ./attr.js
 // @optional ./has_class.js
