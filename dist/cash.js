@@ -645,6 +645,7 @@ fn.on = function (eventFullName, selector, callback, _one) {
     _this2.each(function (i, ele) {
       var finalCallback = function finalCallback(event) {
         if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator))) return;
+        var thisArg = ele;
 
         if (selector) {
           var target = event.target;
@@ -654,10 +655,12 @@ fn.on = function (eventFullName, selector, callback, _one) {
             target = target.parentNode;
             if (!target) return;
           }
+
+          thisArg = target;
         }
 
         event.namespace = event.namespace || '';
-        callback.call(ele, event, event.data);
+        callback.call(thisArg, event, event.data);
 
         if (_one) {
           removeEvent(ele, name, namespaces, finalCallback);
