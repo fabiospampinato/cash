@@ -37,6 +37,8 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
+        let thisArg = ele;
+
         if ( selector ) {
 
           let target = event.target;
@@ -47,11 +49,13 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
             if ( !target ) return;
           }
 
+          thisArg = target;
+
         }
 
         event.namespace = ( event.namespace || '' );
 
-        callback.call ( ele, event, event.data );
+        callback.call ( thisArg, event, event.data );
 
         if ( _one ) {
 
