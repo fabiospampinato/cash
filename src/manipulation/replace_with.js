@@ -1,5 +1,7 @@
 
+// @require core/cash.js
 // @require collection/each.js
+// @require collection/slice.js
 // @require ./after.js
 // @require ./remove.js
 

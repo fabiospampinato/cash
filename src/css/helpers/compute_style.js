@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require core/variables.js
 
 function computeStyle ( ele, prop ) {
   const style = win.getComputedStyle ( ele, null );

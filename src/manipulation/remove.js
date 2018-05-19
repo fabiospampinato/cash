@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require events/off.js
 // @require ./detach.js
 

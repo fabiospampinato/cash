@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require ./get.js
 
 fn.eq = function ( index ) {

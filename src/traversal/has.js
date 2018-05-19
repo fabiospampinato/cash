@@ -1,4 +1,7 @@
 
+// @require core/cash.js
+// @require core/find.js
+// @require core/type_checking.js
 // @require collection/filter.js
 
 fn.has = function ( selector ) {

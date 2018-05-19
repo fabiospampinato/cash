@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/get_split_values.js
 // @require collection/each.js
 
 fn.hasClass = function ( cls ) {

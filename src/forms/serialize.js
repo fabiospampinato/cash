@@ -1,5 +1,7 @@
 
-// @require core/index.js
+// @require core/cash.js
+// @require core/each.js
+// @require core/type_checking.js
 // @require ./helpers/get_value.js
 // @require ./helpers/query_encode.js
 

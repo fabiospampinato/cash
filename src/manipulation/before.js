@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require ./insert_before.js
 
 fn.before = function ( content ) {

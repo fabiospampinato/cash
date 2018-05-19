@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require core/each.js
 
 function removeEventListeners ( cache, ele, name ) {
 

@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require ./attr.js
 // @require ./toggle_class.js
 

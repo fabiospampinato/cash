@@ -1,5 +1,6 @@
 
 // @require ./cash.js
+// @require ./variables.js
 
 let fragment;
 

@@ -1,5 +1,6 @@
 
-// @require core/index.js
+// @require core/each.js
+// @require core/type_checking.js
 // @require ./insert_element.js
 
 function insertContent ( parent, child, prepend ) {

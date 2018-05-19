@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/type_checking.js
 // @require collection/each.js
 
 fn.attr = function ( attr, value ) {

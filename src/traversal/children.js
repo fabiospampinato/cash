@@ -1,4 +1,7 @@
 
+// @require core/cash.js
+// @require core/matches.js
+// @require core/unique.js
 // @require collection/each.js
 // @require collection/filter.js
 

@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require core/guid.js
 // @require ./get_events_cache.js
 // @require ./has_namespaces.js
 // @require ./parse_event_name.js

@@ -1,7 +1,10 @@
 
+// @require core/cash.js
+// @require core/type_checking.js
+// @require core/variables.js
 // @require collection/each.js
-// @require ./helpers/variables.js
 // @require ./helpers/parse_event_name.js
+// @require ./helpers/variables.js
 
 fn.trigger = function ( eventFullName, data ) {
 

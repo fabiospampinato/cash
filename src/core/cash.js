@@ -1,4 +1,5 @@
 
+// @require ./find.js
 // @require ./variables.js
 
 function Cash ( selector, context ) {

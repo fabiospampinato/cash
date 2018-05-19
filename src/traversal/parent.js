@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/unique.js
 // @require collection/each.js
 
 fn.parent = function () {

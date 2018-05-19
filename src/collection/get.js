@@ -1,5 +1,6 @@
 
-// @require core/index.js
+// @require core/cash.js
+// @require core/variables.js
 
 fn.get = function ( index ) {
 

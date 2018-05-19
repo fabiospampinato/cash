@@ -1,6 +1,8 @@
 
+// @require core/cash.js
+// @require core/each.js
+// @require core/get_split_values.js
 // @require collection/each.js
-// @require ./attr.js
 
 fn.toggleClass = function ( cls, force ) {
 

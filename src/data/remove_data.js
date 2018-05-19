@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require collection/each.js
 // @require ./helpers/remove_data.js
 

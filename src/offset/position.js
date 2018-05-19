@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require core/cash.js
 
 fn.position = function () {
 

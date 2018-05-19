@@ -1,5 +1,8 @@
 
-// @require core/index.js
+// @require core/cash.js
+// @require core/unique.js
+// @require core/find.js
+// @require core/variables.js
 
 fn.find = function ( selector ) {
 

@@ -1,5 +1,5 @@
 
-// @require ./cash.js
+// @require ./variables.js
 
 function find ( selector, context = doc ) {
 

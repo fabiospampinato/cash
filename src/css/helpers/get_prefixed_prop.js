@@ -1,6 +1,8 @@
 
 // @require core/camel_case.js
+// @require core/cash.js
 // @require core/each.js
+// @require core/variables.js
 
 const prefixedProps = {},
       {style} = doc.createElement ( 'div' ),

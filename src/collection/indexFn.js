@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/variables.js
 // @require traversal/children.js
 // @require traversal/parent.js
 // @require ./get.js

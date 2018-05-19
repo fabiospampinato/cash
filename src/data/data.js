@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/type_checking.js
 // @require collection/each.js
 // @require ./helpers/get_data.js
 // @require ./helpers/set_data.js

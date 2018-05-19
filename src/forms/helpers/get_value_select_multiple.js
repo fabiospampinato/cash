@@ -1,4 +1,6 @@
 
+// @require core/each.js
+
 function getValueSelectMultiple ( ele ) {
 
   const values = [];

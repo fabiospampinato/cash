@@ -1,4 +1,6 @@
 
+// @require core/type_checking.js
+
 const numericProps = {
   columnCount: true,
   flexGrow: true,

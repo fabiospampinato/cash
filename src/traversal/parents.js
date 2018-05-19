@@ -1,4 +1,8 @@
 
+// @require core/cash.js
+// @require core/matches.js
+// @require core/unique.js
+// @require core/variables.js
 // @require collection/each.js
 
 fn.parents = function ( selector ) {

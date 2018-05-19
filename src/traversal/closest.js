@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require collection/filter.js
 // @require ./is.js
 // @require ./parent.js

@@ -1,5 +1,5 @@
 
-// @require core/index.js
+// @require core/guid.js
 // @require events/helpers/get_events_cache.js
 
 function addEvent ( ele, name, namespaces, callback ) {

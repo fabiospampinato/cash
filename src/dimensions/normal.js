@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/each.js
 // @require css/helpers/compute_style.js
 // @require css/helpers/get_suffixed_value.js
 // @require ./helpers/get_extra_space.js

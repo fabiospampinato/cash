@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require collection/each.js
 
 fn.text = function ( content ) {

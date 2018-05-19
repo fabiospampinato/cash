@@ -1,4 +1,5 @@
 
+// @require core/cash.js
 // @require ./on.js
 
 fn.one = function ( eventFullName, delegate, callback ) {

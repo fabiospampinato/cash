@@ -1,5 +1,6 @@
 
-// @require core/index.js
+// @require core/cash.js
+// @require core/each.js
 
 each ( ['Width', 'Height'], prop => {
 

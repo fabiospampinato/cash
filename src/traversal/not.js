@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/get_compare_function.js
 // @require collection/filter.js
 
 fn.not = function ( selector ) {

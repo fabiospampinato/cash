@@ -1,4 +1,6 @@
 
+// @require core/cash.js
+// @require core/each.js
 // @require collection/each.js
 // @require ./helpers/parse_event_name.js
 // @require ./helpers/remove_event.js

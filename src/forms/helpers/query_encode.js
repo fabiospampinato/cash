@@ -1,6 +1,4 @@
 
-// @require core/index.js
-
 const queryEncodeSpaceRe = /%20/g;
 
 function queryEncode ( prop, value ) {

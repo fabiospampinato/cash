@@ -1,4 +1,9 @@
 
+// @require core/cash.js
+// @require core/get_split_values.js
+// @require core/guid.js
+// @require core/matches.js
+// @require core/type_checking.js
 // @require collection/each.js
 // @require ./helpers/variables.js
 // @require ./helpers/add_event.js
