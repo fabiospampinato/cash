@@ -13,7 +13,8 @@
     "dev": "npm run build:dev && npm run watch:dev",
     "prod": "npm run build:prod && npm run watch:prod",
     "test": "open ./test/index.html",
-    "test:watch": "browser-sync start -s . --files test,dist/cash.js --startPath test --no-notify"
+    "test:watch": "browser-sync start -s . --files test,dist/cash.js --startPath test --no-notify",
+    "graph": "pacco build-javascript --dependencies-graph --fresh"
   },
   "bugs": {
     "url": "https://github.com/kenwheeler/cash/issues"
