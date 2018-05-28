@@ -30,8 +30,8 @@
     "url": "https://github.com/kenwheeler/cash.git"
   },
   "dependencies": {},
-  "peerDependencies": {
+  "peerDependencies": {},
+  "devDependencies": {
     "pacco": "^1.2.0"
-  },
-  "devDependencies": {}
+  }
 }
