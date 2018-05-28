@@ -21,6 +21,28 @@
     }
   },
   "environments": {
+    "esm": {
+      "components": {
+        "core/export_window": false
+      },
+      "paths": {
+        "output": {
+          "javascript": {
+            "unminified": "[dist]/[bundle].esm.js",
+            "minified": false
+          }
+        }
+      },
+      "plugins": {
+        "wrapper": {
+          "options": {
+            "templates": {
+              "default": "/* MIT https://github.com/kenwheeler/cash */\n[content]\nexport default cash;\n"
+            }
+          }
+        }
+      }
+    },
     "production": {
       "plugins": {
         "uglify": {

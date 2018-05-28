@@ -1,5 +1,4 @@
 /* MIT https://github.com/kenwheeler/cash */
-(function(){
 "use strict";
 
 var doc = document,
@@ -139,10 +138,7 @@ fn.removeProp = function (prop) {
     delete ele[prop];
   });
 }; // @require ./cash.js
-// @require ./variables.js
 
-
-win.cash = win.$ = cash; // @require ./cash.js
 
 function extend(target) {
   if (target === void 0) {
@@ -1254,4 +1250,4 @@ fn.siblings = function () {
 // @optional offset/index.js
 // @optional traversal/index.js
 // @require core/index.js
-})();
+export default cash;
