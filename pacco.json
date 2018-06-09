@@ -15,7 +15,8 @@
     "wrapper": {
       "options": {
         "templates": {
-          "default": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();"
+          "unminified": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();",
+          "minified": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]})();"
         }
       }
     }
@@ -37,7 +38,7 @@
         "wrapper": {
           "options": {
             "templates": {
-              "default": "/* MIT https://github.com/kenwheeler/cash */\n[content]\nexport default cash;\n"
+              "unminified": "/* MIT https://github.com/kenwheeler/cash */\n[content]\nexport default cash;\n"
             }
           }
         }
@@ -51,8 +52,8 @@
         "closure": {
           "enabled": true,
           "options": {
-            "outputWrapper": "",
-            "compilationLevel": "SIMPLE"
+            "output_wrapper": "",
+            "compilation_level": "SIMPLE"
           }
         }
       }

@@ -16,7 +16,7 @@
     "watch:dev": "pacco watch-javascript -e development",
     "dev": "npm run build:dev && npm run watch:dev",
     "prod": "npm run build:prod && npm run watch:prod",
-    "test": "open ./test/index.html",
+    "test": "opn ./test/index.html",
     "test:watch": "browser-sync start -s . --files test,dist/cash.js --startPath test --no-notify",
     "graph": "pacco build-javascript --dependencies-graph --fresh"
   },
@@ -30,8 +30,11 @@
     "url": "https://github.com/kenwheeler/cash.git"
   },
   "dependencies": {},
-  "peerDependencies": {
-    "pacco": "^1.2.0"
+  "devDependencies": {
+    "browser-sync": "^2.24.4",
+    "opn-cli": "^3.1.0"
   },
-  "devDependencies": {}
+  "peerDependencies": {
+    "pacco": "^1.3.2"
+  }
 }
