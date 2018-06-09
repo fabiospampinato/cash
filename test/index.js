@@ -369,6 +369,17 @@ QUnit.test( "on(namespaces)", function( assert ) {
   assert.equal(i, 4, "on(namespaces) Passed!" );
 });
 
+QUnit.test( "on(return false)", function( assert ) {
+  var i = 1;
+  function handler (){
+    i++;
+    return false;
+  }
+  $('html').on('foo', handler);
+  $('.event-fixture').on('foo', handler).trigger('foo');
+  assert.equal(i, 2, "on(return false) Passed!" );
+});
+
 QUnit.test( "one", function( assert ) {
   var i = 1;
   var handler = function(){
