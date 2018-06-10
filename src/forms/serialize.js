@@ -24,15 +24,13 @@ fn.serialize = function () {
 
       const value = getValue ( ele );
 
-      if ( value ) {
+      if ( value === undefined ) return;
 
-        const values = isArray ( value ) ? value : [value];
+      const values = isArray ( value ) ? value : [value];
 
-        each ( values, value => {
-          query += queryEncode ( ele.name, value );
-        });
-
-      }
+      each ( values, value => {
+        query += queryEncode ( ele.name, value );
+      });
 
     });
 
