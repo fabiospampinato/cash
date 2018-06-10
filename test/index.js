@@ -278,6 +278,7 @@ QUnit.test( "css", function( assert ) {
 /* DATA */
 
 QUnit.test( "data", function( assert ) {
+  assert.deepEqual($('.attr-fixture').data(), {index: 5, 'index-other': 100}, "data read all Passed!" );
   assert.equal($('.attr-fixture').data('index'), 5, "data read Passed!" );
   assert.equal($('.attr-fixture').data('index-other'), 100, "data read Passed!" );
   $('.attr-fixture').data('index',10);

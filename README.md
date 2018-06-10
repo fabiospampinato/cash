@@ -239,6 +239,7 @@ If only a key is supplied, returns the linked data and falls back to data attrib
 Multiple data can be set when an object is supplied.
 
 ```js
+$(element).data () // => object
 $(element).data ( key ) // => value
 $(element).data ( key, value ) // => collection
 $(element).data ( object ) // => collection

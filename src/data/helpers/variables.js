@@ -1,2 +1,3 @@
 
-const dataNamespace = '__cashData';
+const dataNamespace = '__cashData',
+      dataAttributeRe = /^data-(.*)/;
