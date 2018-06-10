@@ -5,7 +5,7 @@
 // @require ./helpers/get_value.js
 // @require ./helpers/query_encode.js
 
-const skippableRe = /file|reset|submit|button/i,
+const skippableRe = /file|reset|submit|button|image/i,
       checkableRe = /radio|checkbox/i;
 
 fn.serialize = function () {
