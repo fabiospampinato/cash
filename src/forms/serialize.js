@@ -16,7 +16,7 @@ fn.serialize = function () {
 
     each ( this[0].elements || this, ele => {
 
-      if ( ele.disabled || ele.tagName === 'FIELDSET' ) return;
+      if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' ) return;
 
       if ( skippableRe.test ( ele.type ) ) return;
 
