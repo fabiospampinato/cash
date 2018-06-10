@@ -508,9 +508,21 @@ QUnit.test( "after", function( assert ) {
   assert.equal($('.anchor').siblings ().length, 1, "after Passed!" );
 });
 
+QUnit.test( "after(multi)", function( assert ) {
+  $('.class-fixture').append('<div class="anchor">');
+  $('.anchor').after('<div class="test">', '<div class="test">', '<div class="test">');
+  assert.equal($('.anchor').prev ().length, 0, "after(multi) Passed!" );
+  assert.equal($('.anchor').siblings ().length, 3, "after(multi) Passed!" );
+});
+
 QUnit.test( "append", function( assert ) {
   $('#qunit-fixture').append('<div class="test">');
   assert.equal($('.test').length, 1, "append Passed!" );
+});
+
+QUnit.test( "append(multi)", function( assert ) {
+  $('#qunit-fixture').append('<div class="test">', '<div class="test">', '<div class="test">');
+  assert.equal($('.test').length, 3, "append(multi) Passed!" );
 });
 
 QUnit.test( "appendTo", function( assert ) {
@@ -523,6 +535,13 @@ QUnit.test( "before", function( assert ) {
   $('.anchor').before('<div class="test">');
   assert.equal($('.anchor').next ().length, 0, "before Passed!" );
   assert.equal($('.anchor').siblings ().length, 1, "before Passed!" );
+});
+
+QUnit.test( "before(multi)", function( assert ) {
+  $('.class-fixture').append('<div class="anchor">');
+  $('.anchor').before('<div class="test">', '<div class="test">', '<div class="test">');
+  assert.equal($('.anchor').next ().length, 0, "before(multi) Passed!" );
+  assert.equal($('.anchor').siblings ().length, 3, "before(multi) Passed!" );
 });
 
 QUnit.test( "clone", function( assert ) {
@@ -575,6 +594,11 @@ QUnit.test( "insertBefore", function( assert ) {
 QUnit.test( "prepend", function( assert ) {
   $('.form-fixture').prepend('<div class="test"></div>');
   assert.equal($('.test').index(), 0, "prepend Passed!" );
+});
+
+QUnit.test( "prepend(multi)", function( assert ) {
+  $('.form-fixture').prepend('<div class="test"></div>', '<div class="test"></div>', '<div class="test"></div>');
+  assert.equal($('.test').length, 3, "prepend Passed!" );
 });
 
 QUnit.test( "prependTo", function( assert ) {

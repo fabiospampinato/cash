@@ -140,14 +140,17 @@ Inserts content or elements after the collection.
 ```js
 $(element).after ( element ) // => collection
 $(element).after ( htmlString ) // => collection
+$(element).after ( content [, content] ) // => collection
 ```
 
 #### fn.append ()
 
-Appends the target element to each element in the collection.
+Appends content or elements to each element in the collection.
 
 ```js
 $(element).append ( element ) // => collection
+$(element).append ( htmlString ) // => collection
+$(element).append ( element [, element] ) // => collection
 ```
 
 #### fn.appendTo ()
@@ -176,6 +179,7 @@ Inserts content or elements before the collection.
 ```js
 $(element).before ( element ) // => collection
 $(element).before ( htmlString ) // => collection
+$(element).before ( content [, content] ) // => collection
 ```
 
 #### fn.children ()
@@ -529,10 +533,12 @@ $(element).position () // => object
 
 #### fn.prepend ()
 
-Prepends element to the each element in collection.
+Prepends content or elements to the each element in collection.
 
 ```js
 $(element).prepend ( element ) // => collection
+$(element).prepend ( htmlString ) // => collection
+$(element).prepend ( content [, content] ) // => collection
 ```
 
 #### fn.prependTo ()
