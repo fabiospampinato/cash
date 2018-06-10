@@ -6,18 +6,28 @@ function getData ( ele, key ) {
 
   const cache = getDataCache ( ele );
 
-  if ( !( key in cache ) ) {
+  if ( key ) {
 
-    let value = ele.dataset ? ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
+    if ( !( key in cache ) ) {
 
-    try {
-      value = JSON.parse ( value );
-    } catch ( e ) {}
+      let value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
 
-    cache[key] = value;
+      if ( value !== undefined ) {
+
+        try {
+          value = JSON.parse ( value );
+        } catch ( e ) {}
+
+        cache[key] = value;
+
+      }
+
+    }
+
+    return cache[key];
 
   }
 
-  return cache[key];
+  return cache;
 
 }
