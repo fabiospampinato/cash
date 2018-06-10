@@ -4,13 +4,15 @@
 
 fn.ready = function ( callback ) {
 
+  const finalCallback = () => callback ( cash );
+
   if ( doc.readyState !== 'loading' ) {
 
-    setTimeout ( callback );
+    setTimeout ( finalCallback );
 
   } else {
 
-    doc.addEventListener ( 'DOMContentLoaded', callback );
+    doc.addEventListener ( 'DOMContentLoaded', finalCallback );
 
   }
 
