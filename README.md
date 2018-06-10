@@ -598,6 +598,8 @@ $(element).replaceWith ( content ) // => collection
 
 Removes attribute from collection elements.
 
+Accepts space-separated attrName for removing multiple attributes.
+
 ```js
 $(element).removeAttr ( attrName ) // => collection
 ```
