@@ -3,6 +3,7 @@
 // @require ./is_css_variable.js
 
 const numericProps = {
+  animationIterationCount: true,
   columnCount: true,
   flexGrow: true,
   flexShrink: true,
