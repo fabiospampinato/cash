@@ -6,7 +6,7 @@ function getValueSelectMultiple ( ele ) {
   const values = [];
 
   each ( ele.options, option => {
-    if ( option.selected ) {
+    if ( option.selected && !option.disabled && !option.parentNode.disabled ) {
       values.push ( option.value );
     }
   });
