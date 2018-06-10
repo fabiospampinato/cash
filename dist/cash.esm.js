@@ -706,10 +706,15 @@ fn.on = function (eventFullName, selector, callback, _one) {
         }
 
         event.namespace = event.namespace || '';
-        callback.call(thisArg, event, event.data);
+        var returnValue = callback.call(thisArg, event, event.data);
 
         if (_one) {
           removeEvent(ele, name, namespaces, finalCallback);
+        }
+
+        if (returnValue === false) {
+          event.preventDefault();
+          event.stopPropagation();
         }
       };
 
