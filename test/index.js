@@ -501,7 +501,12 @@ QUnit.test( "val", function( assert ) {
 
 /* MANIPULATION */
 
-//TODO: after
+QUnit.test( "after", function( assert ) {
+  $('.class-fixture').append('<div class="anchor">');
+  $('.anchor').after('<div class="test">');
+  assert.equal($('.anchor').prev ().length, 0, "after Passed!" );
+  assert.equal($('.anchor').siblings ().length, 1, "after Passed!" );
+});
 
 QUnit.test( "append", function( assert ) {
   $('#qunit-fixture').append('<div class="test">');
@@ -513,7 +518,12 @@ QUnit.test( "appendTo", function( assert ) {
   assert.equal($('.test').length, 1, "appendTo Passed!" );
 });
 
-//TODO: before
+QUnit.test( "before", function( assert ) {
+  $('.class-fixture').append('<div class="anchor">');
+  $('.anchor').before('<div class="test">');
+  assert.equal($('.anchor').next ().length, 0, "before Passed!" );
+  assert.equal($('.anchor').siblings ().length, 1, "before Passed!" );
+});
 
 QUnit.test( "clone", function( assert ) {
   assert.equal($('.class-fixture').clone()[0].className, 'class-fixture', "clone Passed!" );
