@@ -14,6 +14,7 @@ function initFragment () {
 
 function parseHTML ( html ) { //FIXME: `<tr></tr>` can't be parsed with this
   initFragment ();
+  if ( !isString ( html ) ) html = '';
   fragment.body.innerHTML = html;
   return fragment.body.childNodes;
 }
