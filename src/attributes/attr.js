@@ -9,7 +9,15 @@ fn.attr = function ( attr, value ) {
 
   if ( isString ( attr ) ) {
 
-    if ( arguments.length < 2 ) return this[0] && this[0].getAttribute ( attr );
+    if ( arguments.length < 2 ) {
+
+      if ( !this[0] ) return;
+
+      const value = this[0].getAttribute ( attr );
+
+      return value === null ? undefined : value;
+
+    }
 
     return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
 
