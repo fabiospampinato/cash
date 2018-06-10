@@ -14,6 +14,8 @@ fn.css = function ( prop, value ) {
 
     if ( arguments.length < 2 ) return this[0] && computeStyle ( this[0], prop );
 
+    if ( !prop ) return this;
+
     value = getSuffixedValue ( prop, value );
 
     return this.each ( ( i, ele ) => { ele.style[prop] = value } );
