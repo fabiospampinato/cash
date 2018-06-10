@@ -17,6 +17,8 @@ each ( ['width', 'height'], ( prop, index ) => {
 
     return this.each ( ( i, ele ) => {
 
+      if ( ele.nodeType !== 1 ) return;
+
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 
       ele.style[prop] = getSuffixedValue ( prop, value + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
