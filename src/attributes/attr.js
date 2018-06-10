@@ -2,6 +2,7 @@
 // @require core/cash.js
 // @require core/type_checking.js
 // @require collection/each.js
+// @require ./remove_attr.js
 
 fn.attr = function ( attr, value ) {
 
@@ -18,6 +19,8 @@ fn.attr = function ( attr, value ) {
       return value === null ? undefined : value;
 
     }
+
+    if ( value === null ) return this.removeAttr ( attr );
 
     return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
 
