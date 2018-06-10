@@ -1,5 +1,6 @@
 
 // @require core/type_checking.js
+// @require ./is_css_variable.js
 
 const numericProps = {
   columnCount: true,
@@ -14,8 +15,8 @@ const numericProps = {
   zIndex: true
 };
 
-function getSuffixedValue ( prop, value ) {
+function getSuffixedValue ( prop, value, isVariable = isCSSVariable ( prop ) ) {
 
-  return !numericProps[prop] && isNumeric ( value ) ? `${value}px` : value;
+  return !isVariable && !numericProps[prop] && isNumeric ( value ) ? `${value}px` : value;
 
 }

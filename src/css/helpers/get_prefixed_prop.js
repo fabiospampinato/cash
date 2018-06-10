@@ -3,12 +3,15 @@
 // @require core/cash.js
 // @require core/each.js
 // @require core/variables.js
+// @require ./is_css_variable.js
 
 const prefixedProps = {},
       {style} = doc.createElement ( 'div' ),
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
-function getPrefixedProp ( prop ) {
+function getPrefixedProp ( prop, isVariable = isCSSVariable ( prop ) ) {
+
+  if ( isVariable ) return prop;
 
   if ( !prefixedProps[prop] ) {
 
