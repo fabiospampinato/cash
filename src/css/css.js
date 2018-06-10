@@ -18,7 +18,13 @@ fn.css = function ( prop, value ) {
 
     value = getSuffixedValue ( prop, value );
 
-    return this.each ( ( i, ele ) => { ele.style[prop] = value } );
+    return this.each ( ( i, ele ) => {
+
+      if ( ele.nodeType !== 1 ) return;
+
+      ele.style[prop] = value;
+
+    });
 
   }
 
