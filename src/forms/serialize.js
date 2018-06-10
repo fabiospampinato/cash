@@ -12,9 +12,9 @@ fn.serialize = function () {
 
   let query = '';
 
-  if ( this[0] ) {
+  this.each ( ( i, ele ) => {
 
-    each ( this[0].elements || this, ele => {
+    each ( ele.elements || [ele], ele => {
 
       if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' ) return;
 
@@ -34,7 +34,7 @@ fn.serialize = function () {
 
     });
 
-  }
+  });
 
   return query.substr ( 1 );
 
