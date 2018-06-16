@@ -45,5 +45,6 @@ function cash ( selector, context ) {
 const fn = cash.fn = cash.prototype = Cash.prototype = {
   constructor: cash,
   __cash: true,
-  length: 0
+  length: 0,
+  splice // Ensures a cash collection gets printed as array-like in Chrome
 };
