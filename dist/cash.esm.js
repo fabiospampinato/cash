@@ -9,7 +9,8 @@ var doc = document,
     map = _Array$prototype.map,
     push = _Array$prototype.push,
     reverse = _Array$prototype.reverse,
-    slice = _Array$prototype.slice;
+    slice = _Array$prototype.slice,
+    splice = _Array$prototype.splice;
 var idRe = /^#[\w-]*$/,
     classRe = /^\.[\w-]*$/,
     htmlRe = /<.+>/,
@@ -54,7 +55,9 @@ function cash(selector, context) {
 var fn = cash.fn = cash.prototype = Cash.prototype = {
   constructor: cash,
   __cash: true,
-  length: 0
+  length: 0,
+  splice: splice // Ensures a cash collection gets printed as array-like in Chrome
+
 }; // @require core/cash.js
 // @require core/variables.js
 
