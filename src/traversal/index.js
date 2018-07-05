@@ -1,6 +1,7 @@
 
 // @optional ./children.js
 // @optional ./closest.js
+// @optional ./contents.js
 // @optional ./find.js
 // @optional ./has.js
 // @optional ./is.js

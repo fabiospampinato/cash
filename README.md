@@ -88,16 +88,16 @@ $(element).addClass ( className ) // => collection
 | -------------------------------- | -------------------------------------- | -------------------------------------- | ------------------------------ |
 | [fn.serialize ()](#fnserialize-) | [fn.after ()](#fnafter-)               | [fn.offset ()](#fnoffset-)             | [fn.children ()](#fnchildren-) |
 | [fn.val ()](#fnval-)             | [fn.append ()](#fnappend-)             | [fn.offsetParent ()](#fnoffsetparent-) | [fn.closest ()](#fnclosest-)   |
-|                                  | [fn.appendTo ()](#fnappendto-)         | [fn.position ()](#fnposition-)         | [fn.find ()](#fnfind-)         |
-|                                  | [fn.before ()](#fnbefore-)             |                                        | [fn.has ()](#fnhas-)           |
-|                                  | [fn.clone ()](#fnclone-)               |                                        | [fn.is ()](#fnis-)             |
-|                                  | [fn.detach ()](#fndetach-)             |                                        | [fn.next ()](#fnnext-)         |
-|                                  | [fn.empty ()](#fnempty-)               |                                        | [fn.not ()](#fnnot-)           |
-|                                  | [fn.html ()](#fnhtml-)                 |                                        | [fn.parent ()](#fnparent-)     |
-|                                  | [fn.insertAfter ()](#fninsertafter-)   |                                        | [fn.parents ()](#fnparents-)   |
-|                                  | [fn.insertBefore ()](#fninsertbefore-) |                                        | [fn.prev ()](#fnprev-)         |
-|                                  | [fn.prepend ()](#fnprepend-)           |                                        | [fn.siblings ()](#fnsiblings-) |
-|                                  | [fn.prependTo ()](#fnprependto-)       |                                        |                                |
+|                                  | [fn.appendTo ()](#fnappendto-)         | [fn.position ()](#fnposition-)         | [fn.contents ()](#fncontents-)         |
+|                                  | [fn.before ()](#fnbefore-)             |                                        | [fn.find ()](#fnfind-)         |
+|                                  | [fn.clone ()](#fnclone-)               |                                        | [fn.has ()](#fnhas-)           |
+|                                  | [fn.detach ()](#fndetach-)             |                                        | [fn.is ()](#fnis-)             |
+|                                  | [fn.empty ()](#fnempty-)               |                                        | [fn.next ()](#fnnext-)         |
+|                                  | [fn.html ()](#fnhtml-)                 |                                        | [fn.not ()](#fnnot-)           |
+|                                  | [fn.insertAfter ()](#fninsertafter-)   |                                        | [fn.parent ()](#fnparent-)     |
+|                                  | [fn.insertBefore ()](#fninsertbefore-) |                                        | [fn.parents ()](#fnparents-)   |
+|                                  | [fn.prepend ()](#fnprepend-)           |                                        | [fn.prev ()](#fnprev-)         |
+|                                  | [fn.prependTo ()](#fnprependto-)       |                                        | [fn.siblings ()](#fnsiblings-) |                               |
 |                                  | [fn.remove ()](#fnremove-)             |                                        |                                |
 |                                  | [fn.replaceAll ()](#fnreplaceall-)     |                                        |                                |
 |                                  | [fn.replaceWith ()](#fnreplacewith-)   |                                        |                                |
@@ -200,6 +200,16 @@ Returns the closest matching selector up the DOM tree.
 ```js
 $(element).closest () // => collection
 $(element).closest ( selector ) // => collection
+```
+
+#### fn.contents ()
+
+Get the children of each element in the set of matched elements, including text and comment nodes.
+
+Useful for selecting elements in friendly iframes.
+
+```js
+$('iframe').contents ().find ( '*' ) // => collection
 ```
 
 #### fn.clone ()
