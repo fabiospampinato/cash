@@ -602,14 +602,19 @@ function getExtraSpace(ele, xAxis) {
   return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top') + "Width") + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom') + "Width");
 } // @require core/cash.js
 // @require core/each.js
+// @require core/variables.js
 
 
 each(['Width', 'Height'], function (prop) {
   fn["inner" + prop] = function () {
-    return this[0] && this[0]["client" + prop];
+    if (!this[0]) return;
+    if (this[0] === win) return win["inner" + prop];
+    return this[0]["client" + prop];
   };
-}); // @require core/cash.js
+}); // @require core/camel_case.js
+// @require core/cash.js
 // @require core/each.js
+// @require core/variables.js
 // @require css/helpers/compute_style.js
 // @require css/helpers/get_suffixed_value.js
 // @require ./helpers/get_extra_space.js
@@ -617,7 +622,12 @@ each(['Width', 'Height'], function (prop) {
 each(['width', 'height'], function (prop, index) {
   fn[prop] = function (value) {
     if (!this[0]) return value === undefined ? undefined : this;
-    if (!arguments.length) return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
+
+    if (!arguments.length) {
+      if (this[0] === win) return this[0][camelCase("outer-" + prop)];
+      return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
+    }
+
     value = parseInt(value, 10);
     return this.each(function (i, ele) {
       if (ele.nodeType !== 1) return;
@@ -627,11 +637,13 @@ each(['width', 'height'], function (prop, index) {
   };
 }); // @require core/cash.js
 // @require core/each.js
+// @require core/variables.js
 // @require css/helpers/compute_style_int.js
 
 each(['Width', 'Height'], function (prop, index) {
   fn["outer" + prop] = function (includeMargins) {
     if (!this[0]) return;
+    if (this[0] === win) return win["outer" + prop];
     return this[0]["offset" + prop] + (includeMargins ? computeStyleInt(this[0], "margin" + (!index ? 'Left' : 'Top')) + computeStyleInt(this[0], "margin" + (!index ? 'Right' : 'Bottom')) : 0);
   };
 }); // @optional ./inner.js
