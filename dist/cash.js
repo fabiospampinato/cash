@@ -1198,6 +1198,17 @@ fn.children = function (selector) {
   });
 }; // @require core/cash.js
 // @require core/unique.js
+// @require collection/each.js
+
+
+fn.contents = function () {
+  var result = [];
+  this.each(function (i, ele) {
+    push.apply(result, ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes);
+  });
+  return cash(result.length && unique(result));
+}; // @require core/cash.js
+// @require core/unique.js
 // @require core/find.js
 // @require core/variables.js
 
@@ -1342,6 +1353,7 @@ fn.siblings = function () {
   });
 }; // @optional ./children.js
 // @optional ./closest.js
+// @optional ./contents.js
 // @optional ./find.js
 // @optional ./has.js
 // @optional ./is.js
