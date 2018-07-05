@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="235px" src="logo.jpg">
+</p>
+
 # Cash
 
 *An absurdly small jQuery alternative for modern browsers (IE10+)*
