@@ -298,31 +298,37 @@ QUnit.test( "data", function( assert ) {
 
 QUnit.test( "height", function( assert ) {
   assert.equal($('.css-fixture').height(), 50, "height get Passed!" );
+  assert.equal($(window).height(), window.outerHeight, "(window) height get Passed!" );
   $('.css-fixture').height(200);
   assert.equal($('.css-fixture').height(), 200, "height set Passed!" );
 });
 
 QUnit.test( "innerHeight", function( assert ) {
   assert.equal($('.css-fixture').innerHeight(), 90, "innerHeight Passed!" );
+  assert.equal($(window).innerHeight(), window.innerHeight, "(window) innerHeight Passed!" );
 });
 
 QUnit.test( "outerHeight", function( assert ) {
   assert.equal($('.css-fixture').outerHeight(), 100, "outerHeight Passed!" );
+  assert.equal($(window).outerHeight(), window.outerHeight, "(window) outerHeight Passed!" );
   assert.equal($('.css-fixture').outerHeight(true), 140, "outerHeight(margins) Passed!" );
 });
 
 QUnit.test( "width", function( assert ) {
   assert.equal($('.css-fixture').width(), 50, "width get Passed!" );
+  assert.equal($(window).width(), window.outerWidth, "(window) width get Passed!" );
   $('.css-fixture').width(200);
   assert.equal($('.css-fixture').width(), 200, "width set Passed!" );
 });
 
 QUnit.test( "innerWidth", function( assert ) {
   assert.equal($('.css-fixture').innerWidth(), 90, "innerWidth Passed!" );
+  assert.equal($(window).innerWidth(), window.innerWidth, "(window) innerWidth Passed!" );
 });
 
 QUnit.test( "outerWidth", function( assert ) {
   assert.equal($('.css-fixture').outerWidth(), 100, "outerWidth Passed!" );
+  assert.equal($(window).outerWidth(), window.outerWidth, "(window) outerWidth Passed!" );
   assert.equal($('.css-fixture').outerWidth(true), 140, "outerWidth(margins) Passed!" );
 });
 

@@ -1,6 +1,8 @@
 
+// @require core/camel_case.js
 // @require core/cash.js
 // @require core/each.js
+// @require core/variables.js
 // @require css/helpers/compute_style.js
 // @require css/helpers/get_suffixed_value.js
 // @require ./helpers/get_extra_space.js
@@ -11,7 +13,13 @@ each ( ['width', 'height'], ( prop, index ) => {
 
     if ( !this[0] ) return value === undefined ? undefined : this;
 
-    if ( !arguments.length ) return this[0].getBoundingClientRect ()[prop] - getExtraSpace ( this[0], !index );
+    if ( !arguments.length ) {
+
+      if ( this[0] === win ) return this[0][ camelCase ( `outer-${prop}` )];
+
+      return this[0].getBoundingClientRect ()[prop] - getExtraSpace ( this[0], !index );
+
+    }
 
     value = parseInt ( value, 10 );
 
