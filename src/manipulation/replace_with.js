@@ -13,7 +13,7 @@ fn.replaceWith = function ( content ) {
 
     if ( !parent ) return;
 
-    const $eles = cash ( content );
+    const $eles = i ? cash ( content ).clone () : cash ( content );
 
     if ( !$eles[0] ) {
       this.remove ();
