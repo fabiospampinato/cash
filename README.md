@@ -5,9 +5,7 @@
 
 # Cash
 
-*An absurdly small jQuery alternative for modern browsers (IE10+)*
-
-Cash is a small library for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
+Cash is an absurdly small jQuery alternative for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
 ## Size Comparison
 
@@ -15,29 +13,16 @@ Cash is a small library for modern browsers (IE10+) that provides jQuery-style s
 | ------------------ | ----------- | ------------ |
 | Uncompressed       | **28.7 KB** | 271 KB       |
 | Minified           | **11 KB**   | 87 KB        |
-| Minified & Gzipped | **4.4 KB**  | 30.3 KB      |
+| Minified & Gzipped | **4.5 KB**  | 30.3 KB      |
 
-An **85%** gain in size reduction. If you need a smaller file, partial builds are supported too since this project is bundled using [pacco](https://github.com/fabiospampinato/pacco).
-
-#### Partial Builds
-
-Some alternative configuration files for [pacco](https://github.com/fabiospampinato/pacco) for generating partial builds are available [here](https://github.com/kenwheeler/cash/tree/master/resources/pacco).
-
-Let's compare the size of those partial builds (you could actually exclude individual methods and get even smaller builds):
-
-| Enabled Modules                             | Minified | Minified & Gzipped |
-| ------------------------------------------- | -------- | ------------------ |
-| <abbr title="Query Selector All">QSA</abbr> | 1.1 KB   | **0.6 KB**         |
-| attributes                                  | 2.8 KB   | **1.2 KB**         |
-| events                                      | 3.5 KB   | **1.5 KB**         |
-| collection + manipulation + traversal       | 5.3 KB   | **1.9 KB**         |
+An **85%** gain in size reduction. If you need a smaller bundle, we support [partial builds](https://github.com/kenwheeler/cash/blob/master/docs/partial_builds.md) too.
 
 ## Usage
 
-Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.1.3/dist/cash.min.js) and use it like this:
+Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.2/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.3.2/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.2/cash.min.js"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );
@@ -47,11 +32,14 @@ Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.1.3/cas
 ```
 
 Cash is also available through [NPM](http://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
-```
+
+```sh
 npm install cash-dom --save-dev
 ```
 
 ## Documentation
+
+Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery.
 
 ### $()
 
