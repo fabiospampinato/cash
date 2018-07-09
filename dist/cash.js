@@ -928,6 +928,8 @@ fn.serialize = function () {
   });
   return query.substr(1);
 }; // @require core/cash.js
+// @require core/each.js
+// @require core/type_checking.js
 // @require collection/each.js
 // @require ./helpers/get_value.js
 
@@ -935,8 +937,14 @@ fn.serialize = function () {
 fn.val = function (value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
-    ele.value = value;
-  }); //TODO: Does it work for select[multiple] too?
+    if (selectMultipleRe.test(ele.type) && isArray(value)) {
+      each(ele.options, function (option) {
+        option.selected = value.indexOf(option.value) >= 0;
+      });
+    } else {
+      ele.value = value;
+    }
+  });
 }; // @optional ./serialize.js
 // @optional ./val.js
 // @require core/cash.js
@@ -1116,7 +1124,7 @@ fn.replaceWith = function (content) {
   return this.each(function (i, ele) {
     var parent = ele.parentNode;
     if (!parent) return;
-    var $eles = cash(content);
+    var $eles = i ? cash(content).clone() : cash(content);
 
     if (!$eles[0]) {
       _this10.remove();
