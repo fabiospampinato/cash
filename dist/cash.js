@@ -28,12 +28,17 @@ function find(selector, context) {
 
 
 function Cash(selector, context) {
+  if (context === void 0) {
+    context = doc;
+  }
+
   if (!selector) return;
   if (selector.__cash) return selector;
   var eles = selector;
 
   if (isString(selector)) {
-    eles = idRe.test(selector) ? doc.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
+    if (context.__cash) context = context[0];
+    eles = idRe.test(selector) ? context.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
     if (!eles) return;
   } else if (isFunction(selector)) {
     return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality

@@ -19,10 +19,10 @@ An **85%** gain in size reduction. If you need a smaller bundle, we support [par
 
 ## Usage
 
-Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.2/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.3.2/dist/cash.min.js) and use it like this:
+Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.3/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.3.3/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.2/cash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.3/cash.min.js"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );

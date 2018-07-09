@@ -27,12 +27,17 @@ function find(selector, context) {
 
 
 function Cash(selector, context) {
+  if (context === void 0) {
+    context = doc;
+  }
+
   if (!selector) return;
   if (selector.__cash) return selector;
   var eles = selector;
 
   if (isString(selector)) {
-    eles = idRe.test(selector) ? doc.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
+    if (context.__cash) context = context[0];
+    eles = idRe.test(selector) ? context.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
     if (!eles) return;
   } else if (isFunction(selector)) {
     return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
@@ -924,6 +929,8 @@ fn.serialize = function () {
   });
   return query.substr(1);
 }; // @require core/cash.js
+// @require core/each.js
+// @require core/type_checking.js
 // @require collection/each.js
 // @require ./helpers/get_value.js
 
@@ -931,8 +938,14 @@ fn.serialize = function () {
 fn.val = function (value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
-    ele.value = value;
-  }); //TODO: Does it work for select[multiple] too?
+    if (selectMultipleRe.test(ele.type) && isArray(value)) {
+      each(ele.options, function (option) {
+        option.selected = value.indexOf(option.value) >= 0;
+      });
+    } else {
+      ele.value = value;
+    }
+  });
 }; // @optional ./serialize.js
 // @optional ./val.js
 // @require core/cash.js
@@ -1112,7 +1125,7 @@ fn.replaceWith = function (content) {
   return this.each(function (i, ele) {
     var parent = ele.parentNode;
     if (!parent) return;
-    var $eles = cash(content);
+    var $eles = i ? cash(content).clone() : cash(content);
 
     if (!$eles[0]) {
       _this10.remove();
