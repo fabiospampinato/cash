@@ -2,7 +2,7 @@
 // @require ./find.js
 // @require ./variables.js
 
-function Cash ( selector, context ) {
+function Cash ( selector, context = doc ) {
 
   if ( !selector ) return;
 
@@ -13,7 +13,7 @@ function Cash ( selector, context ) {
   if ( isString ( selector ) ) {
 
     eles = idRe.test ( selector )
-              ? doc.getElementById ( selector.slice ( 1 ) )
+              ? context.getElementById ( selector.slice ( 1 ) )
               : htmlRe.test ( selector )
                 ? parseHTML ( selector )
                 : find ( selector, context );
