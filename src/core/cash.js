@@ -12,6 +12,8 @@ function Cash ( selector, context = doc ) {
 
   if ( isString ( selector ) ) {
 
+    if ( context.__cash ) context = context[0];
+
     eles = idRe.test ( selector )
               ? context.getElementById ( selector.slice ( 1 ) )
               : htmlRe.test ( selector )
