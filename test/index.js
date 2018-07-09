@@ -160,7 +160,10 @@ QUnit.test( "removeClass", function( assert ) {
   assert.equal(hasClass, false, "removeClass works with classes containing special characters" );
 });
 
-//TODO: removeProp
+QUnit.test( "removeProp", function( assert ) {
+  $('.prop-fixture').prop('foo',123).removeProp('foo');
+  assert.equal($('.prop-fixture').prop('foo'), undefined, "removeProp Passed!" );
+});
 
 QUnit.test( "toggleClass", function( assert ) {
 
@@ -502,7 +505,17 @@ QUnit.test( "val", function( assert ) {
   $('input[type=text]').val(0);
   assert.equal($('input[type=text]').val(), 0, "val set Passed!" );
   assert.equal($('select[name=select]').val(), "selected", "val get select Passed!" );
-  assert.equal($('select[name=select-multiple]').val(), "option-1,option-2", "val get select multiple Passed!" );
+  $('select[name=select]').val('not-selected');
+  assert.equal($('select[name=select]').val(), "not-selected", "val set select Passed!" );
+  assert.deepEqual($('select[name=select-multiple]').val(), ['option-1', 'option-2'], "val get select multiple Passed!" );
+  $('input[type=text]').val(null);
+  $('select[name=select-multiple]').val(null);
+  assert.deepEqual($('input[type=text]').val(), '', "val set to null Passed!" );
+  assert.deepEqual($('select[name=select-multiple]').val(), [], "val set to null Passed!" );
+  $('select[name=select-multiple]').val(['option-1']);
+  assert.deepEqual($('select[name=select-multiple]').val(), ['option-1'], "val set 1 option in select multiple Passed!" );
+  $('select[name=select-multiple]').val(['option-1', 'option-2']);
+  assert.deepEqual($('select[name=select-multiple]').val(), ['option-1', 'option-2'], "val set 2 options in select multiple Passed!" );
 });
 
 /* MANIPULATION */
@@ -626,8 +639,19 @@ QUnit.test( "remove", function( assert ) {
   assert.equal(i, 1, "remove events Passed!" );
 });
 
-//TODO: replaceAll
-//TODO: replaceWith
+QUnit.test( "replaceAll", function( assert ) {
+  var html = '<div class="qsa-fixture" data-foo="123"><p>Paragraph</p></div>';
+  $(html).replaceAll('.qsa-fixture');
+  $('.qsa-fixture').get ().forEach ( function ( ele ) {
+    assert.equal($(ele)[0].outerHTML, html, "replaceAll Passed!" );
+  });
+});
+
+QUnit.test( "replaceWith", function( assert ) {
+  var html = '<div class="class-fixture" data-foo="123"><p>Paragraph</p></div>';
+  $('.class-fixture').replaceWith(html);
+  assert.equal($('.class-fixture')[0].outerHTML, html, "replaceWith Passed!" );
+});
 
 QUnit.test( "text", function( assert ) {
   $('.class-fixture').text('Text Content');
@@ -638,9 +662,21 @@ QUnit.test( "text", function( assert ) {
 
 /* OFFSET */
 
-//TODO: offsetParent
-//TODO: offset
-//TODO: position
+QUnit.test( "offsetParent", function( assert ) {
+  assert.equal($('.class-fixture').offsetParent ()[0], $('#qunit-fixture')[0], "offsetParent Passed!" );
+});
+
+QUnit.test( "offset", function( assert ) {
+  var html = '<div class="offset-fixture" style="position: fixed; top: 200px; left: 100px;"></div>';
+  $('.class-fixture').html(html);
+  assert.deepEqual($('.offset-fixture').offset (), {top:200,left:100}, "offset Passed!" );
+});
+
+QUnit.test( "position", function( assert ) {
+  var html = '<div class="offset-fixture" style="position: fixed; top: 200px; left: 100px;"><div class="position-fixture" style="position: absolute; top: 20px; left: 10px;"></div></div>';
+  $('.class-fixture').html(html);
+  assert.deepEqual($('.position-fixture').position (), {top:20,left:10}, "position Passed!" );
+});
 
 /* TRAVERSAL */
 
@@ -759,7 +795,11 @@ QUnit.test( "$.parseHTML", function( assert ) {
   assert.equal($.parseHTML('<a>')[0].outerHTML, '<a></a>' , "$.parseHTML Passed!" );
 });
 
-//TODO: prefixedProp
+QUnit.test( "$.prefixedProp", function( assert ) {
+  assert.equal($.prefixedProp( 'foo-bar' ), undefined, "$.prefixedProp returns undefined Passed!" );
+  assert.equal($.prefixedProp( '--foo-bar' ), '--foo-bar', "$.prefixedProp works with css variables Passed!" );
+  assert.equal($.prefixedProp( 'width' ), 'width', "$.prefixedProp works with basic css properties Passed!" );
+});
 
 QUnit.test( "$.unique", function( assert ) {
   var test = [ $("#id-fixture")[0],  $("#id-fixture")[0] ];
