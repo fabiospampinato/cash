@@ -36,9 +36,7 @@
   "devDependencies": {
     "browser-sync": "^2.24.4",
     "jquery": "^3.3.1",
-    "opn-cli": "^3.1.0"
-  },
-  "peerDependencies": {
-    "pacco": "^1.3.2"
+    "opn-cli": "^3.1.0",
+    "pacco": "^1.3.4"
   }
 }
