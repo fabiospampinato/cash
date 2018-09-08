@@ -143,7 +143,14 @@ fn.removeProp = function (prop) {
 // @require ./variables.js
 
 
-win.cash = win.$ = cash; // @require ./cash.js
+if (typeof exports !== 'undefined') {
+  // Node.js
+  module.exports = cash;
+} else {
+  // Browser
+  win.cash = win.$ = cash;
+} // @require ./cash.js
+
 
 function extend(target) {
   if (target === void 0) {
@@ -382,7 +389,7 @@ fn.add = function (selector, context) {
   return cash(unique(this.get().concat(cash(selector, context).get())));
 }; // @optional ./camel_case.js
 // @optional ./each.js
-// @optional ./export_window.js
+// @optional ./export.js
 // @optional ./extend.js
 // @optional ./find.js
 // @optional ./get_compare_function.js

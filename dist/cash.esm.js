@@ -378,7 +378,7 @@ fn.add = function (selector, context) {
   return cash(unique(this.get().concat(cash(selector, context).get())));
 }; // @optional ./camel_case.js
 // @optional ./each.js
-// @optional ./export_window.js
+// @optional ./export.js
 // @optional ./extend.js
 // @optional ./find.js
 // @optional ./get_compare_function.js
