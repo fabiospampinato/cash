@@ -24,7 +24,7 @@
   "environments": {
     "esm": {
       "components": {
-        "core/export_window": false
+        "core/export": false
       },
       "paths": {
         "output": {
