@@ -38,17 +38,16 @@ QUnit.test( "className Query for non-existing element", function( assert ) {
 });
 
 QUnit.test( "$(fn)", function( assert ) {
+  var done = assert.async();
   var called = false;
   var readyFn = function() { called = true; }
 
   $(readyFn);
   assert.equal(called, false);
 
-  stop();
-
   setTimeout(function() {
     assert.equal(called, true);
-    start();
+    done();
   }, 10);
 });
 
@@ -496,21 +495,21 @@ QUnit.test( "serialize", function( assert ) {
 });
 
 QUnit.test( "serialize control elements", function( assert ) {
-  var data = $('input[type=text]').serialize();
+  var data = $('#qunit-fixture input[type=text]').serialize();
   assert.equal(data, "text=text", "serialize elemnts passed!" );
 });
 
 QUnit.test( "val", function( assert ) {
-  assert.equal($('input[type=text]').val(), "text", "val get Passed!" );
-  $('input[type=text]').val(0);
-  assert.equal($('input[type=text]').val(), 0, "val set Passed!" );
+  assert.equal($('#qunit-fixture input[type=text]').val(), "text", "val get Passed!" );
+  $('#qunit-fixture input[type=text]').val(0);
+  assert.equal($('#qunit-fixture input[type=text]').val(), 0, "val set Passed!" );
   assert.equal($('select[name=select]').val(), "selected", "val get select Passed!" );
   $('select[name=select]').val('not-selected');
   assert.equal($('select[name=select]').val(), "not-selected", "val set select Passed!" );
   assert.deepEqual($('select[name=select-multiple]').val(), ['option-1', 'option-2'], "val get select multiple Passed!" );
-  $('input[type=text]').val(null);
+  $('#qunit-fixture input[type=text]').val(null);
   $('select[name=select-multiple]').val(null);
-  assert.deepEqual($('input[type=text]').val(), '', "val set to null Passed!" );
+  assert.deepEqual($('#qunit-fixture input[type=text]').val(), '', "val set to null Passed!" );
   assert.deepEqual($('select[name=select-multiple]').val(), [], "val set to null Passed!" );
   $('select[name=select-multiple]').val(['option-1']);
   assert.deepEqual($('select[name=select-multiple]').val(), ['option-1'], "val set 1 option in select multiple Passed!" );
