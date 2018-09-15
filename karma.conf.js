@@ -1,6 +1,12 @@
-module.exports = function (config) {
-  config.set({
-    frameworks: ['qunit'],
+
+/* CONFIG */
+
+function config ( config ) {
+
+  config.set ({
+    frameworks: [
+      'qunit'
+    ],
     plugins: [
       'karma-qunit',
       'karma-chrome-launcher',
@@ -13,6 +19,13 @@ module.exports = function (config) {
     browsers: [
       'Chrome'
     ],
-    reporters: ['spec']
-  })
+    reporters: [
+      'spec'
+    ]
+  });
+
 }
+
+/* EXPORT */
+
+module.exports = config;

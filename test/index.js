@@ -1,6 +1,9 @@
-QUnit.module( "cash unit tests", {
-  beforeEach: function() {
-    $('#qunit-fixture').html(' \
+
+/* INIT */
+
+QUnit.module( 'Cash Test Suite', {
+  beforeEach () {
+    document.getElementById ( 'qunit-fixture' ).innerHTML = ' \
       <div class="class-fixture"></div> \
       <fieldset class="tagname-fixture"></fieldset> \
       <div id="id-fixture"></div> \
@@ -32,9 +35,9 @@ QUnit.module( "cash unit tests", {
           <option value="option-2" selected>Selected</option> \
         </select> \
         <input type="file" name="file" /> \
-        <input type="submit" value="submit" name="submit"/> \
+        <input type="submit" value="submit" name="submit" /> \
       </form> \
-    ');
+    ';
   }
 });
 
@@ -701,9 +704,7 @@ QUnit.test( "text", function( assert ) {
 /* OFFSET */
 
 QUnit.test( "offsetParent", function( assert ) {
-  // An element is said to be positioned if it has a CSS position attribute of relative, absolute, or fixed
-  $('#qunit-fixture').css('position', 'relative');
-
+  $('#qunit-fixture').css('position', 'relative'); // An element is said to be positioned if it has a CSS position attribute of relative, absolute, or fixed
   assert.equal($('.class-fixture').offsetParent ()[0], $('#qunit-fixture')[0], "offsetParent Passed!" );
 });
 
