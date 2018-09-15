@@ -5,6 +5,8 @@
 
 # Cash
 
+[![Build Status: Linux](https://travis-ci.org/kenwheeler/cash.svg?branch=master)](https://travis-ci.org/kenwheeler/cash)
+
 Cash is an absurdly small jQuery alternative for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
 
 ## Size Comparison

@@ -1,3 +1,42 @@
+QUnit.module( "cash unit tests", {
+  beforeEach: function() {
+    $('#qunit-fixture').html(' \
+      <div class="class-fixture"></div> \
+      <fieldset class="tagname-fixture"></fieldset> \
+      <div id="id-fixture"></div> \
+      <div class="qsa-fixture"></div> \
+      <div class="qsa-fixture"></div> \
+      <div class="attr-fixture has-class-two has-class has-class-three" data-index="5" data-index-other="100" success="get"></div> \
+      <div class="attr-fixture2 has-class-two has-class-three" data-index="6" success="get"></div> \
+      <span class="css-fixture" style="display: block; height: 50px; width: 50px; padding: 20px; margin: 20px; border: 5px solid black;"></span> \
+      <input type="checkbox" class="prop-fixture" checked/> \
+      <a class="event-fixture">Click Me</a> \
+      <a class="trigger-fixture">Click Me</a> \
+      <a class="trigger-data-fixture">Click Me</a> \
+      <a class="delegate-fixture"><span class="delegate-trigger">Click Me</span></a> \
+      <a class="off-fixture">Click Me</a> \
+      <form class="form-fixture" name="form-fixture"> \
+        <input type="hidden" value="5" name="hidden"/> \
+        <input type="text" value="text" name="text"/> \
+        <input type="text" value="I\'m disabled" name="disabled-check" disabled /> \
+        <input type="checkbox" value="yes" checked="checked" name="checkbox-yes" /> \
+        <input type="checkbox" value="no" name="checkbox-no" /> \
+        <input type="radio" value="yes" checked="checked" name="radio" /> \
+        <input type="radio" value="no" name="radio" /> \
+        <select name="select"> \
+          <option value="not-selected">Not Selected</option> \
+          <option value="selected" selected>Selected</option> \
+        </select> \
+        <select name="select-multiple" multiple> \
+          <option value="option-1" selected>Selected</option> \
+          <option value="option-2" selected>Selected</option> \
+        </select> \
+        <input type="file" name="file" /> \
+        <input type="submit" value="submit" name="submit"/> \
+      </form> \
+    ');
+  }
+});
 
 /* CORE */
 
@@ -662,6 +701,9 @@ QUnit.test( "text", function( assert ) {
 /* OFFSET */
 
 QUnit.test( "offsetParent", function( assert ) {
+  // An element is said to be positioned if it has a CSS position attribute of relative, absolute, or fixed
+  $('#qunit-fixture').css('position', 'relative');
+
   assert.equal($('.class-fixture').offsetParent ()[0], $('#qunit-fixture')[0], "offsetParent Passed!" );
 });
 

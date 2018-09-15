@@ -1,0 +1,14 @@
+language: node_js
+dist: trusty
+node_js: 8.11
+
+addons:
+  chrome: stable
+
+script:
+  # xvfb-run is needed for headless testing with real browsers
+  - xvfb-run karma start --single-run
+
+notifications:
+  email:
+    on_success: never
