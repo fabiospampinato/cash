@@ -834,7 +834,7 @@ QUnit.test( "$.matches", function( assert ) {
 });
 
 QUnit.test( "$.parseHTML", function( assert ) {
-  assert.equal($.parseHTML('<a>')[0].outerHTML, '<a></a>' , "$.parseHTML Passed!" );
+  assert.equal($.parseHTML('<a></a>')[0].outerHTML, '<a></a>' , "$.parseHTML Passed!" );
 });
 
 QUnit.test( "$.prefixedProp", function( assert ) {
