@@ -2,7 +2,7 @@
 /* INIT */
 
 QUnit.module( 'Cash Test Suite', {
-  beforeEach () {
+  beforeEach: function () {
     document.getElementById ( 'qunit-fixture' ).innerHTML = ' \
       <div class="class-fixture"></div> \
       <fieldset class="tagname-fixture"></fieldset> \
