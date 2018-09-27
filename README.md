@@ -842,6 +842,11 @@ Returns a new array with duplicates removed.
 $.unique ( array ) // => array
 ```
 
+## Thanks
+
+- **[@hisk](https://github.com/hisk)** - The "design focused engineer" behind our awesome logo.
+- **[Sauce Labs](https://saucelabs.com)** - The cross-browser testing platform we use for testing our builds in all the supported environments.
+
 ## License
 
 MIT © Ken Wheeler
