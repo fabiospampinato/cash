@@ -841,3 +841,7 @@ Returns a new array with duplicates removed.
 ```js
 $.unique ( array ) // => array
 ```
+
+## License
+
+MIT © Ken Wheeler
