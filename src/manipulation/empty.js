@@ -8,7 +8,9 @@ fn.empty = function () {
   if ( ele ) {
 
     while ( ele.firstChild ) {
-      ele.removeChild( ele.firstChild );
+
+      ele.removeChild ( ele.firstChild );
+
     }
 
   }
