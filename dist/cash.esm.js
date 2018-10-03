@@ -966,6 +966,19 @@ fn.detach = function () {
       ele.parentNode.removeChild(ele);
     }
   });
+}; // @require core/cash.js
+
+
+fn.empty = function () {
+  var ele = this[0];
+
+  if (ele) {
+    while (ele.firstChild) {
+      ele.removeChild(ele.firstChild);
+    }
+  }
+
+  return this;
 };
 
 function insertElement(ele, child, prepend) {
@@ -1022,12 +1035,6 @@ fn.html = function (content) {
   return this.each(function (i, ele) {
     ele.innerHTML = source;
   });
-}; // @require core/cash.js
-// @require ./html.js
-
-
-fn.empty = function () {
-  return this.html('');
 }; // @require core/cash.js
 // @require collection/each.js
 
