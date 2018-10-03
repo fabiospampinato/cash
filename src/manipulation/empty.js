@@ -1,7 +1,18 @@
 
 // @require core/cash.js
-// @require ./html.js
 
 fn.empty = function () {
-  return this.html ( '' );
+
+  const ele = this[0];
+
+  if ( ele ) {
+
+    while ( ele.firstChild ) {
+      ele.removeChild( ele.firstChild );
+    }
+
+  }
+
+  return this;
+
 };
