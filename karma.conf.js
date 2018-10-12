@@ -13,8 +13,8 @@ const SauceLabsLaunchers = {
   sauce_ie_11: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
-    version: '11.103',
-    platform: 'Windows 10'
+    version: '11.0',
+    platform: 'Windows 8.1'
   },
   sauce_edge_15: {
     base: 'SauceLabs',
