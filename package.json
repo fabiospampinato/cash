@@ -24,7 +24,7 @@
     "test:jquery:build": "cat ./node_modules/jquery/dist/jquery.js ./dist/cash.js ./test/jquery_patch.js > ./test/jquery/dist/jquery.min.js",
     "test:jquery:build:watch": "while sleep 1; do npm run test:jquery:build; done",
     "graph": "pacco build-javascript --dependencies-graph --fresh",
-    "prepublish": "npm run clean && npm run build:deploy && npm run test:karma"
+    "prepublishOnly": "npm run clean && npm run build:deploy && npm run test:karma"
   },
   "bugs": {
     "url": "https://github.com/kenwheeler/cash/issues"
