@@ -340,29 +340,7 @@ fn.removeClass = function (cls) {
 // @optional ./remove_prop.js
 // @optional ./toggle_class.js
 // @require ./cash.js
-// @require ./variables.js
-// @require ./type_checking.js
 
-
-var fragment;
-
-function initFragment() {
-  if (fragment) return;
-  fragment = doc.implementation.createHTMLDocument('');
-  var base = fragment.createElement('base');
-  base.href = doc.location.href;
-  fragment.head.appendChild(base);
-}
-
-function parseHTML(html) {
-  //FIXME: `<tr></tr>` can't be parsed with this
-  initFragment();
-  if (!isString(html)) html = '';
-  fragment.body.innerHTML = html;
-  return slice.call(fragment.body.childNodes);
-}
-
-cash.parseHTML = parseHTML; // @require ./cash.js
 
 function unique(arr) {
   return arr.filter(function (item, index, self) {
@@ -376,21 +354,7 @@ cash.unique = unique; // @require core/cash.js
 
 fn.add = function (selector, context) {
   return cash(unique(this.get().concat(cash(selector, context).get())));
-}; // @optional ./camel_case.js
-// @optional ./each.js
-// @optional ./export.js
-// @optional ./extend.js
-// @optional ./find.js
-// @optional ./get_compare_function.js
-// @optional ./get_split_values.js
-// @optional ./guid.js
-// @optional ./matches.js
-// @optional ./parse_html.js
-// @optional ./unique.js
-// @optional ./variables.js
-// @require ./cash.js
-// @require ./type_checking.js
-// @require core/variables.js
+}; // @require core/variables.js
 
 
 function computeStyle(ele, prop, isVariable) {
@@ -966,8 +930,46 @@ fn.detach = function () {
       ele.parentNode.removeChild(ele);
     }
   });
-}; // @require core/cash.js
+}; // @require ./cash.js
+// @require ./variables.js
+// @require ./type_checking.js
+// @require collection/get.js
+// @require manipulation/detach.js
 
+
+var fragment;
+
+function initFragment() {
+  if (fragment) return;
+  fragment = doc.implementation.createHTMLDocument('');
+  var base = fragment.createElement('base');
+  base.href = doc.location.href;
+  fragment.head.appendChild(base);
+}
+
+function parseHTML(html) {
+  //FIXME: `<tr></tr>` can't be parsed with this
+  initFragment();
+  if (!isString(html)) html = '';
+  fragment.body.innerHTML = html;
+  return $(fragment.body.childNodes).detach().get();
+}
+
+cash.parseHTML = parseHTML; // @optional ./camel_case.js
+// @optional ./each.js
+// @optional ./export.js
+// @optional ./extend.js
+// @optional ./find.js
+// @optional ./get_compare_function.js
+// @optional ./get_split_values.js
+// @optional ./guid.js
+// @optional ./matches.js
+// @optional ./parse_html.js
+// @optional ./unique.js
+// @optional ./variables.js
+// @require ./cash.js
+// @require ./type_checking.js
+// @require core/cash.js
 
 fn.empty = function () {
   var ele = this[0];
