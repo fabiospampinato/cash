@@ -2,6 +2,8 @@
 // @require ./cash.js
 // @require ./variables.js
 // @require ./type_checking.js
+// @require collection/get.js
+// @require manipulation/detach.js
 
 let fragment;
 
@@ -17,7 +19,7 @@ function parseHTML ( html ) { //FIXME: `<tr></tr>` can't be parsed with this
   initFragment ();
   if ( !isString ( html ) ) html = '';
   fragment.body.innerHTML = html;
-  return slice.call ( fragment.body.childNodes );
+  return $(fragment.body.childNodes).detach ().get ();
 }
 
 cash.parseHTML = parseHTML;

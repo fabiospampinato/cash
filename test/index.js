@@ -835,6 +835,10 @@ QUnit.test( "$.matches", function( assert ) {
 
 QUnit.test( "$.parseHTML", function( assert ) {
   assert.equal($.parseHTML('<a></a>')[0].outerHTML, '<a></a>' , "$.parseHTML Passed!" );
+
+  var span = $('<span>CONTENT</span>');
+  $('<div></div>');
+  assert.equal(span.html(),'CONTENT', '$.parseHTML doesn\'t overwrite the content');
 });
 
 QUnit.test( "$.prefixedProp", function( assert ) {
