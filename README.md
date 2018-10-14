@@ -842,6 +842,19 @@ Returns a new array with duplicates removed.
 $.unique ( array ) // => array
 ```
 
+## Contributing
+
+If you found a problem, or have a feature request, please open an [issue](https://github.com/kenwheeler/cash/issues) about it.
+
+If you want to make a pull request you should:
+
+1. Clone the repository: `git clone https://github.com/kenwheeler/cash.git`.
+2. Enter the cloned repository: `cd cash`
+3. Install the dependencies: `npm install`.
+4. Automatically recompile cash whenever a change is made: `npm run dev`.
+5. Automatically rerun the tests whenever a change is made: `npm run test:watch`.
+6. Remember to update the readme, if necessary.
+
 ## Thanks
 
 - **[@hisk](https://github.com/hisk)** - The "design focused engineer" behind our awesome logo.
