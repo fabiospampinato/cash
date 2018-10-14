@@ -18,12 +18,13 @@
     "prod": "npm run build:prod && npm run watch:prod",
     "test": "opn ./test/index.html",
     "test:watch": "browser-sync start -s . --files test,dist/cash.js --startPath test --no-notify",
-    "test:karma": "karma start",
-    "test:karma:sauce": "karma start --sauce",
+    "test:karma": "karma start --single-run",
+    "test:karma:sauce": "karma start --single-run --sauce",
     "test:jquery": "( git -C ./test/jquery pull || git clone https://github.com/jquery/jquery.git ./test/jquery ) && npm run test:jquery:build && cd ./test/jquery && opn http://localhost:4444/test/index.html\\?module=css && php -S localhost:4444",
     "test:jquery:build": "cat ./node_modules/jquery/dist/jquery.js ./dist/cash.js ./test/jquery_patch.js > ./test/jquery/dist/jquery.min.js",
     "test:jquery:build:watch": "while sleep 1; do npm run test:jquery:build; done",
-    "graph": "pacco build-javascript --dependencies-graph --fresh"
+    "graph": "pacco build-javascript --dependencies-graph --fresh",
+    "prepublish": "npm run clean && npm run build:deploy && npm run test:karma"
   },
   "bugs": {
     "url": "https://github.com/kenwheeler/cash/issues"
