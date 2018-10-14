@@ -5,7 +5,7 @@
 
 fn.append = function () {
   each ( arguments, content => {
-    insertContent ( this, content );
+    insertContent ( this, content || [] );
   });
   return this;
 };
