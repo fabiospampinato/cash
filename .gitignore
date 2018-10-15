@@ -39,3 +39,4 @@ node_modules
 coverage
 typings
 test/jquery
+package-lock.json
