@@ -5,11 +5,10 @@ node_js: lts/*
 addons:
   chrome: stable
 
-install:
-  - npm ci
+cache: yarn
 
-before_install:
-  - npm i -g npm@latest
+install:
+  - yarn install
 
 script:
   # xvfb-run is needed for headless testing with real browsers
