@@ -16,7 +16,7 @@ script:
   - xvfb-run karma start --single-run
 
   - if [[ "$TRAVIS_EVENT_TYPE" = "push" ]]; then
-      karma start --single-run --sauce;
+      travis_retry karma start --single-run --sauce;
     fi;
 
 notifications:
