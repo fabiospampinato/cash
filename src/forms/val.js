@@ -9,6 +9,8 @@ fn.val = function ( value ) {
 
   if ( value === undefined ) return this[0] && getValue ( this[0] );
 
+  if ( value === null ) value = '';
+
   return this.each ( ( i, ele ) => {
 
     if ( selectMultipleRe.test ( ele.type ) && isArray ( value ) ) {
