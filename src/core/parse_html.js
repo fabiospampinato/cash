@@ -5,6 +5,8 @@
 // @require collection/get.js
 // @require manipulation/detach.js
 
+const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>|)$/;
+
 let fragment;
 
 function initFragment () {
@@ -15,9 +17,10 @@ function initFragment () {
   fragment.head.appendChild ( base );
 }
 
-function parseHTML ( html ) { //FIXME: `<tr></tr>` can't be parsed with this
+function parseHTML ( html ) {
   initFragment ();
   if ( !isString ( html ) ) html = '';
+  if ( singleTagRe.test ( html ) ) return [document.createElement ( RegExp.$1 )];
   fragment.body.innerHTML = html;
   return $(fragment.body.childNodes).detach ().get ();
 }
