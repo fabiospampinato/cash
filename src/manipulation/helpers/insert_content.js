@@ -5,6 +5,8 @@
 
 function insertContent ( parent, child, prepend ) {
 
+  if ( child === undefined ) return;
+
   const isStr = isString ( child );
 
   if ( !isStr && child.length ) {

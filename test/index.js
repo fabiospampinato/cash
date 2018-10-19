@@ -577,6 +577,7 @@ QUnit.test( "after(multi)", function( assert ) {
 
 QUnit.test( "append", function( assert ) {
   $('#qunit-fixture').append('<div class="test">');
+  $('#qunit-fixture').append(undefined); // It shouldn't throw
   assert.equal($('.test').length, 1, "append Passed!" );
 });
 
@@ -653,6 +654,7 @@ QUnit.test( "insertBefore", function( assert ) {
 
 QUnit.test( "prepend", function( assert ) {
   $('.form-fixture').prepend('<div class="test"></div>');
+  $('.form-fixture').prepend(undefined); // It shouldn't throw
   assert.equal($('.test').index(), 0, "prepend Passed!" );
 });
 
