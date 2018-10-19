@@ -344,7 +344,7 @@ QUnit.test( "height", function( assert ) {
   assert.equal($('.css-fixture').height(), 50, "height get Passed!" );
   assert.equal($(window).height(), window.outerHeight, "(window) height get Passed!" );
   $('.css-fixture').height(200);
-  assert.equal($('.css-fixture').height(), 200, "height set Passed!" );
+  assert.equal(Math.round($('.css-fixture').height()), 200, "height set Passed!" );
 });
 
 QUnit.test( "innerHeight", function( assert ) {
