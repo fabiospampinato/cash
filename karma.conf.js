@@ -4,49 +4,81 @@
 const isSauceLabs = process.argv.includes ( '--sauce' );
 
 const SauceLabsLaunchers = {
-  sauce_ie_10: {
+  win_ie_10: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
     version: '10.0',
     platform: 'Windows 7'
   },
-  sauce_ie_11: {
+  win_ie_11: {
     base: 'SauceLabs',
     browserName: 'internet explorer',
     version: '11.0',
     platform: 'Windows 8.1'
   },
-  sauce_edge_15: {
+  win_edge_17: {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
-    version: '15.15063'
+    version: '17.17134',
+    platform: 'Windows 10'
   },
-  sauce_edge_17: {
+  win_chrome_60: {
     base: 'SauceLabs',
-    browserName: 'MicrosoftEdge',
-    version: '17.17134'
+    browserName: 'chrome',
+    version: '60.0',
+    platform: 'Windows 10'
   },
-  sauce_safari: {
+  win_firefox_50: {
     base: 'SauceLabs',
-    browserName: 'Safari',
-    version: '11.1',
+    browserName: 'firefox',
+    version: '50.0',
+    platform: 'Windows 10'
+  },
+  linux_chrome_45: {
+    base: 'SauceLabs',
+    browserName: 'chrome',
+    version: '45.0',
+    platform: 'Linux'
+  },
+  linux_firefox_45: {
+    base: 'SauceLabs',
+    browserName: 'firefox',
+    version: '45.0',
+    platform: 'Linux'
+  },
+  mac_chrome_60: {
+    base: 'SauceLabs',
+    browserName: 'chrome',
+    version: '60.0',
     platform: 'macOS 10.13'
   },
-  sauce_iphone: {
+  mac_firefox_50: {
     base: 'SauceLabs',
+    browserName: 'firefox',
+    version: '50.0',
+    platform: 'macOS 10.13'
+  },
+  mac_safari_12: {
+    base: 'SauceLabs',
+    browserName: 'safari',
+    version: '12.0',
+    platform: 'macOS 10.13'
+  },
+  ios_9: {
+    base: 'SauceLabs',
+    deviceName: 'iPhone 6 Simulator',
     browserName: 'Safari',
-    deviceName: 'iPhone XS Simulator',
-    platformName: 'iOS',
-    platformVersion: '12.0'
+    platformVersion: '9.3',
+    platformName: 'iOS'
   },
-  sauce_android_kitkat: {
+  ios_12: {
     base: 'SauceLabs',
-    deviceName: 'Android Emulator',
-    browserName: 'Browser',
-    platformVersion: '4.4',
-    platformName: 'Android'
+    deviceName: 'iPhone XS Simulator',
+    browserName: 'Safari',
+    platformVersion: '12.0',
+    platformName: 'iOS'
   },
-  sauce_android_marshmallow: {
+  android_6: {
     base: 'SauceLabs',
     deviceName: 'Android Emulator',
     browserName: 'Chrome',
