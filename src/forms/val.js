@@ -9,21 +9,22 @@ fn.val = function ( value ) {
 
   if ( value === undefined ) return this[0] && getValue ( this[0] );
 
-  if ( value === null ) value = '';
-
   return this.each ( ( i, ele ) => {
 
-    if ( selectMultipleRe.test ( ele.type ) && isArray ( value ) ) {
+    const isMultiple = selectMultipleRe.test ( ele.type ),
+          eleValue = ( value === null ) ? ( isMultiple ? [] : '' ) : value;
+
+    if ( isMultiple && isArray ( eleValue ) ) {
 
       each ( ele.options, option => {
 
-        option.selected = value.indexOf ( option.value ) >= 0;
+        option.selected = eleValue.indexOf ( option.value ) >= 0;
 
       });
 
     } else {
 
-      ele.value = value;
+      ele.value = eleValue;
 
     }
 
