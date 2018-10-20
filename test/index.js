@@ -846,12 +846,12 @@ QUnit.test( "$.parseHTML", function( assert ) {
   assert.equal($.parseHTML('<td>')[0].outerHTML,'<td></td>', '$.parseHTML supports simple <td>');
   assert.equal($.parseHTML('<th>')[0].outerHTML,'<th></th>', '$.parseHTML supports simple <th>');
 
-  assert.equal($.parseHTML('<tbody><tr></tr><tbody>')[0].outerHTML,'<tbody><tr></tr></tbody>', '$.parseHTML supports advanced <tbody>');
-  assert.equal($.parseHTML('<thead><tr></tr><thead>')[0].outerHTML,'<thead><tr></tr></thead>', '$.parseHTML supports advanced <thead>');
-  assert.equal($.parseHTML('<tfoot><tr></tr><tfoot>')[0].outerHTML,'<tfoot><tr></tr></tfoot>', '$.parseHTML supports advanced <tfoot>');
-  assert.equal($.parseHTML('<tr><td></td><tr>')[0].outerHTML,'<tr><td></td></tr>', '$.parseHTML supports advanced <tr>');
-  assert.equal($.parseHTML('<td><p></p><td>')[0].outerHTML,'<td><p></p></td>', '$.parseHTML supports advanced <td>');
-  assert.equal($.parseHTML('<th><p></p><th>')[0].outerHTML,'<th><p></p></th>', '$.parseHTML supports advanced <th>');
+  assert.equal($.parseHTML('<tbody><tr></tr></tbody>')[0].outerHTML,'<tbody><tr></tr></tbody>', '$.parseHTML supports advanced <tbody>');
+  assert.equal($.parseHTML('<thead><tr></tr></thead>')[0].outerHTML,'<thead><tr></tr></thead>', '$.parseHTML supports advanced <thead>');
+  assert.equal($.parseHTML('<tfoot><tr></tr></tfoot>')[0].outerHTML,'<tfoot><tr></tr></tfoot>', '$.parseHTML supports advanced <tfoot>');
+  assert.equal($.parseHTML('<tr><td></td></tr>')[0].outerHTML,'<tr><td></td></tr>', '$.parseHTML supports advanced <tr>');
+  assert.equal($.parseHTML('<td><p></p></td>')[0].outerHTML,'<td><p></p></td>', '$.parseHTML supports advanced <td>');
+  assert.equal($.parseHTML('<th><p></p></th>')[0].outerHTML,'<th><p></p></th>', '$.parseHTML supports advanced <th>');
 
   var span = $('<span>CONTENT</span>');
   $('<div></div>');
