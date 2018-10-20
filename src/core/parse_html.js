@@ -5,24 +5,45 @@
 // @require collection/get.js
 // @require manipulation/detach.js
 
-const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>|)$/;
+const fragmentRe = /^\s*<(\w+)[^>]*>/,
+      singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
 
-let fragment;
+let containers;
 
-function initFragment () {
-  if ( fragment ) return;
-  fragment = doc.implementation.createHTMLDocument ( '' );
-  const base = fragment.createElement ( 'base' );
-  base.href = doc.location.href;
-  fragment.head.appendChild ( base );
+function initContainers () {
+
+  if ( containers ) return;
+
+  const table = doc.createElement ( 'table' ),
+        tr = doc.createElement ( 'tr' );
+
+  containers = {
+    '*': doc.createElement ( 'div' ),
+    tr: doc.createElement ( 'tbody' ),
+    td: tr,
+    th: tr,
+    thead: table,
+    tbody: table,
+    tfoot: table,
+  };
+
 }
 
 function parseHTML ( html ) {
-  initFragment ();
-  if ( !isString ( html ) ) html = '';
-  if ( singleTagRe.test ( html ) ) return [document.createElement ( RegExp.$1 )];
-  fragment.body.innerHTML = html;
-  return $(fragment.body.childNodes).detach ().get ();
+
+  initContainers ();
+
+  if ( !isString ( html ) ) return [];
+
+  if ( singleTagRe.test ( html ) ) return [doc.createElement ( RegExp.$1 )];
+
+  const fragment = fragmentRe.test ( html ) && RegExp.$1,
+        container = containers[fragment] || containers['*'];
+
+  container.innerHTML = html;
+
+  return $(container.childNodes).detach ().get ();
+
 }
 
 cash.parseHTML = parseHTML;
