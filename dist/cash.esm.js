@@ -902,12 +902,15 @@ fn.serialize = function () {
 fn.val = function (value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
-    if (selectMultipleRe.test(ele.type) && isArray(value)) {
+    var isMultiple = selectMultipleRe.test(ele.type),
+        eleValue = value === null ? isMultiple ? [] : '' : value;
+
+    if (isMultiple && isArray(eleValue)) {
       each(ele.options, function (option) {
-        option.selected = value.indexOf(option.value) >= 0;
+        option.selected = eleValue.indexOf(option.value) >= 0;
       });
     } else {
-      ele.value = value;
+      ele.value = eleValue;
     }
   });
 }; // @optional ./serialize.js
@@ -937,22 +940,33 @@ fn.detach = function () {
 // @require manipulation/detach.js
 
 
-var fragment;
+var fragmentRe = /^\s*<(\w+)[^>]*>/,
+    singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
+var containers;
 
-function initFragment() {
-  if (fragment) return;
-  fragment = doc.implementation.createHTMLDocument('');
-  var base = fragment.createElement('base');
-  base.href = doc.location.href;
-  fragment.head.appendChild(base);
+function initContainers() {
+  if (containers) return;
+  var table = doc.createElement('table'),
+      tr = doc.createElement('tr');
+  containers = {
+    '*': doc.createElement('div'),
+    tr: doc.createElement('tbody'),
+    td: tr,
+    th: tr,
+    thead: table,
+    tbody: table,
+    tfoot: table
+  };
 }
 
 function parseHTML(html) {
-  //FIXME: `<tr></tr>` can't be parsed with this
-  initFragment();
-  if (!isString(html)) html = '';
-  fragment.body.innerHTML = html;
-  return $(fragment.body.childNodes).detach().get();
+  initContainers();
+  if (!isString(html)) return [];
+  if (singleTagRe.test(html)) return [doc.createElement(RegExp.$1)];
+  var fragment = fragmentRe.test(html) && RegExp.$1,
+      container = containers[fragment] || containers['*'];
+  container.innerHTML = html;
+  return $(container.childNodes).detach().get();
 }
 
 cash.parseHTML = parseHTML; // @optional ./camel_case.js
@@ -995,6 +1009,7 @@ function insertElement(ele, child, prepend) {
 
 
 function insertContent(parent, child, prepend) {
+  if (child === undefined) return;
   var isStr = isString(child);
 
   if (!isStr && child.length) {
