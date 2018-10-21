@@ -966,7 +966,7 @@ function parseHTML(html) {
   var fragment = fragmentRe.test(html) && RegExp.$1,
       container = containers[fragment] || containers['*'];
   container.innerHTML = html;
-  return $(container.childNodes).detach().get();
+  return cash(container.childNodes).detach().get();
 }
 
 cash.parseHTML = parseHTML; // @optional ./camel_case.js
