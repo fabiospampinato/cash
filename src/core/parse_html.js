@@ -42,7 +42,7 @@ function parseHTML ( html ) {
 
   container.innerHTML = html;
 
-  return $(container.childNodes).detach ().get ();
+  return cash ( container.childNodes ).detach ().get ();
 
 }
 
