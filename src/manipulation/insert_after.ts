@@ -1,0 +1,19 @@
+
+// @require core/cash.ts
+// @require collection/each.ts
+
+fn.insertAfter = function ( content ) {
+
+  cash ( content ).each ( ( index, ele ) => {
+
+    const parent = ele.parentNode;
+
+    this.each ( ( i, e ) => {
+      parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele.nextSibling );
+    });
+
+  });
+
+  return this;
+
+};
