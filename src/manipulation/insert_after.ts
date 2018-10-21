@@ -2,15 +2,21 @@
 // @require core/cash.ts
 // @require collection/each.ts
 
-fn.insertAfter = function ( content ) {
+interface Cash {
+  insertAfter ( selector: Selector ): this;
+}
 
-  cash ( content ).each ( ( index, ele ) => {
+Cash.prototype.insertAfter = function ( this: Cash, selector: Selector ) {
+
+  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
 
     const parent = ele.parentNode;
 
-    this.each ( ( i, e ) => {
-      parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele.nextSibling );
-    });
+    if ( parent ) {
+      this.each ( ( i, e ) => {
+        parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele.nextSibling );
+      });
+    }
 
   });
 

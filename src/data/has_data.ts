@@ -2,6 +2,12 @@
 // @require core/cash.ts
 // @require ./helpers/variables.ts
 
-cash.hasData = function ( ele ) {
+function hasData ( ele: HTMLElement ): boolean {
   return dataNamespace in ele;
-};
+}
+
+interface CashStatic {
+  hasData ( ele: HTMLElement ): boolean;
+}
+
+cash.hasData = hasData;

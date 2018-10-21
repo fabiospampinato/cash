@@ -3,9 +3,14 @@
 // @require core/each.ts
 // @require core/variables.ts
 
-each ( ['Width', 'Height'], prop => {
+interface Cash {
+  innerWidth (): number;
+  innerHeight (): number;
+}
 
-  fn[`inner${prop}`] = function () {
+each ( ['Width', 'Height'], ( prop: string ) => {
+
+  Cash.prototype[`inner${prop}`] = function () {
 
     if ( !this[0] ) return;
 

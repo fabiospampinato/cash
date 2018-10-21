@@ -3,9 +3,13 @@
 // @require core/unique.ts
 // @require collection/each.ts
 
-fn.contents = function () {
+interface Cash {
+  contents (): Cash;
+}
 
-  let result = [];
+Cash.prototype.contents = function ( this: Cash ) {
+
+  let result: Ele[] = [];
 
   this.each ( ( i, ele ) => {
 

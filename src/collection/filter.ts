@@ -5,12 +5,16 @@
 // @require core/variables.ts
 // @require collection/get.ts
 
-fn.filter = function ( selector ) {
+interface Cash {
+  filter ( comparator: Comparator ): Cash;
+}
 
-  if ( !selector ) return cash ();
+Cash.prototype.filter = function ( this: Cash, comparator?: Comparator ) {
 
-  const comparator = isFunction ( selector ) ? selector : getCompareFunction ( selector );
+  if ( !comparator ) return cash ();
 
-  return cash ( filter.call ( this, ( ele, i ) => comparator.call ( ele, i, ele, selector ) ) );
+  const compare = getCompareFunction ( comparator );
+
+  return cash ( filter.call ( this, ( ele, i ) => compare.call ( ele, i, ele ) ) );
 
 };

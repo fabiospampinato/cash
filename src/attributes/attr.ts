@@ -4,7 +4,16 @@
 // @require collection/each.ts
 // @require ./remove_attr.ts
 
-fn.attr = function ( attr, value ) {
+interface Cash {
+  attr ( attrs: string );
+  attr ( attrs: string, value ): this;
+  attr ( attrs: plainObject ): this;
+}
+
+function attr ( this: Cash, attr: string );
+function attr ( this: Cash, attr: string, value ): Cash;
+function attr ( this: Cash, attr: plainObject ): Cash;
+function attr ( this: Cash, attr: string | plainObject, value? ) {
 
   if ( !attr ) return;
 
@@ -34,4 +43,6 @@ fn.attr = function ( attr, value ) {
 
   return this;
 
-};
+}
+
+Cash.prototype.attr = attr;

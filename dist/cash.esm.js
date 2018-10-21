@@ -1,7 +1,9 @@
 /* MIT https://github.com/kenwheeler/cash */
-(function(){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var doc = document,
     win = window,
     _a = Array.prototype,
@@ -1211,14 +1213,6 @@ Cash.prototype.siblings = function () {
 // @require core/index.ts
 // @priority -100
 // @require ./cash.ts
-// @require ./variables.ts
 
 
-if (typeof exports !== 'undefined') {
-  // Node.js
-  module.exports = cash;
-} else {
-  // Browser
-  win['cash'] = win['$'] = cash;
-}
-})();
+exports.default = cash;

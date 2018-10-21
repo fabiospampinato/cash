@@ -1,24 +1,32 @@
 
 // @require ./cash.ts
 
-function isFunction ( x ) {
+function isCash ( x ): x is Cash {
+  return x instanceof Cash;
+}
+
+function isFunction ( x ): x is Function {
   return typeof x === 'function';
 }
 
-cash.isFunction = isFunction;
-
-function isString ( x ) {
+function isString ( x ): x is string {
   return typeof x === 'string';
 }
 
-cash.isString = isString;
-
-function isNumeric ( x ) {
+function isNumeric ( x ): boolean {
   return !isNaN ( parseFloat ( x ) ) && isFinite ( x );
 }
 
+const {isArray} = Array;
+
+interface CashStatic {
+  isFunction ( x ): x is Function;
+  isString ( x ): x is string;
+  isNumeric ( x ): boolean;
+  isArray ( x ): x is Array<any>;
+}
+
+cash.isFunction = isFunction;
+cash.isString = isString;
 cash.isNumeric = isNumeric;
-
-const isArray = Array.isArray;
-
 cash.isArray = isArray;

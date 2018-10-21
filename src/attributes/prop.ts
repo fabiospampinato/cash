@@ -3,7 +3,13 @@
 // @require core/type_checking.ts
 // @require collection/each.ts
 
-fn.prop = function ( prop, value ) {
+interface Cash {
+  prop ( prop: string );
+  prop ( prop: string, value ): this;
+  prop ( props: plainObject ): this;
+}
+
+Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? ) {
 
   if ( !prop ) return;
 

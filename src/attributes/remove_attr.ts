@@ -3,7 +3,11 @@
 // @require core/get_split_values.ts
 // @require collection/each.ts
 
-fn.removeAttr = function ( attr ) {
+interface Cash {
+  removeAttr ( attrs: string ): this;
+}
+
+Cash.prototype.removeAttr = function ( this: Cash, attr: string ) {
 
   const attrs = getSplitValues ( attr );
 

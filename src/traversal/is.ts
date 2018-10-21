@@ -3,16 +3,20 @@
 // @require core/get_compare_function.ts
 // @require collection/each.ts
 
-fn.is = function ( selector ) {
+interface Cash {
+  is ( comparator: Comparator ): boolean;
+}
 
-  if ( !selector || !this[0] ) return false;
+Cash.prototype.is = function ( this: Cash, comparator: Comparator ) {
 
-  const comparator = getCompareFunction ( selector );
+  if ( !comparator || !this[0] ) return false;
+
+  const compare = getCompareFunction ( comparator );
 
   let check = false;
 
   this.each ( ( i, ele ) => {
-    check = comparator ( i, ele, selector );
+    check = compare.call ( ele, i, ele );
     return !check;
   });
 

@@ -1,6 +1,6 @@
 
 // @require ./get_data_cache.ts
 
-function setData ( ele, key, value ) {
+function setData ( ele: HTMLElement, key: string, value ): void {
   getDataCache ( ele )[key] = value;
 }

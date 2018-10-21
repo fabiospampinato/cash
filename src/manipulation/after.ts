@@ -5,9 +5,13 @@
 // @require collection/slice.ts
 // @require ./insert_after.ts
 
-fn.after = function () {
-  each ( reverse.apply ( arguments ), content => {
-    reverse.apply ( cash ( content ).slice () ).insertAfter ( this );
+interface Cash {
+  after ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.after = function ( this: Cash ) {
+  each ( reverse.apply ( arguments ), ( selector: Selector ) => {
+    reverse.apply ( cash ( selector ).slice () ).insertAfter ( this );
   });
   return this;
 };

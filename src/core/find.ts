@@ -1,7 +1,7 @@
 
 // @require ./variables.ts
 
-function find ( selector, context = doc ) {
+function find ( selector: string, context: Context = doc ) {
 
   return classRe.test ( selector )
            ? context.getElementsByClassName ( selector.slice ( 1 ) )

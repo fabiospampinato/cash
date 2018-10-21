@@ -8,7 +8,7 @@
 const fragmentRe = /^\s*<(\w+)[^>]*>/,
       singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
 
-let containers;
+let containers: { [index: string]: HTMLElement };
 
 function initContainers () {
 
@@ -29,7 +29,7 @@ function initContainers () {
 
 }
 
-function parseHTML ( html ) {
+function parseHTML ( html: string ): Ele[] {
 
   initContainers ();
 
@@ -42,8 +42,12 @@ function parseHTML ( html ) {
 
   container.innerHTML = html;
 
-  return $(container.childNodes).detach ().get ();
+  return cash ( container.childNodes ).detach ().get ();
 
+}
+
+interface CashStatic {
+  parseHTML ( html: string ): Ele[];
 }
 
 cash.parseHTML = parseHTML;

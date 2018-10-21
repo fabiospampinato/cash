@@ -4,7 +4,11 @@
 // @require ./is.ts
 // @require ./parent.ts
 
-fn.closest = function ( selector ) {
+interface Cash {
+  closest ( selector: string ): Cash;
+}
+
+Cash.prototype.closest = function ( this: Cash, selector: string ) {
 
   if ( !selector || !this[0] ) return cash ();
 

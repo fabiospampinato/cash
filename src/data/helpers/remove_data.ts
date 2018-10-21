@@ -2,7 +2,7 @@
 // @require ./variables.ts
 // @require ./get_data_cache.ts
 
-function removeData ( ele, key ) {
+function removeData ( ele: HTMLElement, key: string ): void {
 
   if ( key === undefined ) {
 

@@ -1,7 +1,6 @@
 
 // @optional ./camel_case.ts
 // @optional ./each.ts
-// @optional ./export.ts
 // @optional ./extend.ts
 // @optional ./find.ts
 // @optional ./get_compare_function.ts

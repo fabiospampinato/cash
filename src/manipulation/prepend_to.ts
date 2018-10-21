@@ -4,7 +4,11 @@
 // @require collection/slice.ts
 // @require ./helpers/insert_content.ts
 
-fn.prependTo = function ( parent ) {
-  insertContent ( cash ( parent ), reverse.apply ( this.slice () ), true );
+interface Cash {
+  prependTo ( selector: Selector ): this;
+}
+
+Cash.prototype.prependTo = function ( this: Cash, selector: Selector ) {
+  insertContent ( cash ( selector ), reverse.apply ( this.slice () ), true );
   return this;
 };

@@ -4,9 +4,14 @@
 // @require core/variables.ts
 // @require css/helpers/compute_style_int.ts
 
+interface Cash {
+  outerWidth ( includeMargins?: boolean ): number;
+  outerHeight ( includeMargins?: boolean ): number;
+}
+
 each ( ['Width', 'Height'], ( prop, index ) => {
 
-  fn[`outer${prop}`] = function ( includeMargins ) {
+  Cash.prototype[`outer${prop}`] = function ( includeMargins?: boolean ) {
 
     if ( !this[0] ) return;
 

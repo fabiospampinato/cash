@@ -5,7 +5,11 @@
 // @require ./after.ts
 // @require ./remove.ts
 
-fn.replaceWith = function ( content ) {
+interface Cash {
+  replaceWith ( selector: Selector ): this;
+}
+
+Cash.prototype.replaceWith = function ( this: Cash, selector: Selector ) {
 
   return this.each ( ( i, ele ) => {
 
@@ -13,7 +17,7 @@ fn.replaceWith = function ( content ) {
 
     if ( !parent ) return;
 
-    const $eles = i ? cash ( content ).clone () : cash ( content );
+    const $eles = i ? cash ( selector ).clone () : cash ( selector );
 
     if ( !$eles[0] ) {
       this.remove ();

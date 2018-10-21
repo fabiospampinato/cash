@@ -7,9 +7,16 @@
 // @require css/helpers/get_suffixed_value.ts
 // @require ./helpers/get_extra_space.ts
 
-each ( ['width', 'height'], ( prop, index ) => {
+interface Cash {
+  width (): number;
+  width ( value: number | string ): this;
+  height (): number;
+  height ( value: number | string ): this;
+}
 
-  fn[prop] = function ( value ) {
+each ( ['width', 'height'], ( prop: string, index: number ) => {
+
+  Cash.prototype[prop] = function ( value?: number | string ) {
 
     if ( !this[0] ) return value === undefined ? undefined : this;
 
@@ -21,7 +28,7 @@ each ( ['width', 'height'], ( prop, index ) => {
 
     }
 
-    value = parseInt ( value, 10 );
+    const valueNumber = parseInt ( value as string, 10 );
 
     return this.each ( ( i, ele ) => {
 
@@ -29,7 +36,7 @@ each ( ['width', 'height'], ( prop, index ) => {
 
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 
-      ele.style[prop] = getSuffixedValue ( prop, value + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
+      ele.style[prop] = getSuffixedValue ( prop, valueNumber + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
 
     });
 

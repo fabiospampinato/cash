@@ -1,13 +1,16 @@
 
 // @require core/cash.ts
-// @require core/matches.ts
 // @require core/unique.ts
 // @require collection/each.ts
 // @require collection/filter.ts
 
-fn.children = function ( selector ) {
+interface Cash {
+  children ( selector?: string ): Cash;
+}
 
-  let result = [];
+Cash.prototype.children = function ( this: Cash, selector?: string ) {
+
+  let result: Ele[] | Cash = [];
 
   this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
 
@@ -15,6 +18,6 @@ fn.children = function ( selector ) {
 
   if ( !selector ) return result;
 
-  return result.filter ( ( i, ele ) => matches ( ele, selector ) );
+  return result.filter ( selector );
 
 };

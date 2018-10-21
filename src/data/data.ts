@@ -6,7 +6,16 @@
 // @require ./helpers/set_data.ts
 // @require ./helpers/variables.ts
 
-fn.data = function ( name, value ) {
+interface Cash {
+  data ( name: string );
+  data ( name: string, value ): this;
+  data ( datas: plainObject ): this;
+}
+
+function data ( this: Cash, name: string );
+function data ( this: Cash, name: string, value ): Cash;
+function data ( this: Cash, name: plainObject ): Cash;
+function data ( this: Cash, name: string | plainObject, value? ) {
 
   if ( !name ) {
 
@@ -42,4 +51,6 @@ fn.data = function ( name, value ) {
 
   return this;
 
-};
+}
+
+Cash.prototype.data = data;

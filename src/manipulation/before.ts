@@ -3,9 +3,13 @@
 // @require core/each.ts
 // @require ./insert_before.ts
 
-fn.before = function () {
-  each ( arguments, content => {
-    cash ( content ).insertBefore ( this );
+interface Cash {
+  before ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.before = function ( this: Cash ) {
+  each ( arguments, ( selector: Selector ) => {
+    cash ( selector ).insertBefore ( this );
   });
   return this;
 };

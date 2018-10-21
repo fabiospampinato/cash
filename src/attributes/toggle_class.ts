@@ -4,7 +4,11 @@
 // @require core/get_split_values.ts
 // @require collection/each.ts
 
-fn.toggleClass = function ( cls, force ) {
+interface Cash {
+  toggleClass ( classes: string, force?: boolean ): this;
+}
+
+Cash.prototype.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
 
   const classes = getSplitValues ( cls ),
         isForce = ( force !== undefined );

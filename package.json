@@ -6,6 +6,7 @@
   "main": "./dist/cash.js",
   "module": "./dist/cash.esm.js",
   "jsnext:main": "./dist/cash.esm.js",
+  "types": "dist/cash.d.ts",
   "scripts": {
     "clean": "pacco clean",
     "build:esm": "pacco build-javascript -e esm",
@@ -45,7 +46,7 @@
     "karma-sauce-launcher": "^1.2.0",
     "karma-spec-reporter": "0.0.32",
     "opn-cli": "^3.1.0",
-    "pacco": "^2.0.1",
+    "pacco": "^2.0.6",
     "qunit": "^2.7.1"
   }
 }

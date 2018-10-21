@@ -5,9 +5,13 @@
 // @require core/variables.ts
 // @require collection/each.ts
 
-fn.parents = function ( selector ) {
+interface Cash {
+  parents ( selector?: string ): Cash;
+}
 
-  const result = [];
+Cash.prototype.parents = function ( this: Cash, selector?: string ) {
+
+  const result: Ele[] = [];
 
   let last;
 

@@ -11,7 +11,16 @@
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
 
-fn.on = function ( eventFullName, selector, callback, _one ) {
+interface Cash {
+  on ( events: plainObject ): this;
+  on ( events: string, callback: Function, _one?: boolean ): this;
+  on ( events: string, selector: string | Function, callback: Function, _one?: boolean ): this;
+}
+
+function on ( this: Cash, eventFullName: plainObject ): Cash;
+function on ( this: Cash, eventFullName: string, callback: Function, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string, selector: string | Function, callback: Function, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string | plainObject, selector?: string | Function, callback?: boolean | Function, _one?: boolean ) {
 
   if ( !isString ( eventFullName ) ) {
 
@@ -28,7 +37,7 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
   if ( isFunction ( selector ) ) {
 
     callback = selector;
-    selector = false;
+    selector = '';
 
   }
 
@@ -48,7 +57,7 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
 
           let target = event.target;
 
-          while ( !matches ( target, selector ) ) {
+          while ( !matches ( target, selector as string ) ) { //TSC
             if ( target === ele ) return;
             target = target.parentNode;
             if ( !target ) return;
@@ -60,7 +69,7 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
 
         event.namespace = ( event.namespace || '' );
 
-        const returnValue = callback.call ( thisArg, event, event.data );
+        const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
 
         if ( _one ) {
 
@@ -77,7 +86,7 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
 
       };
 
-      finalCallback.guid = callback.guid = ( callback.guid || guid++ );
+      finalCallback['guid'] = callback['guid'] = ( callback['guid'] || guid++ );
 
       addEvent ( ele, name, namespaces, finalCallback );
 
@@ -87,4 +96,6 @@ fn.on = function ( eventFullName, selector, callback, _one ) {
 
   return this;
 
-};
+}
+
+Cash.prototype.on = on;

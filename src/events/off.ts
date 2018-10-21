@@ -5,7 +5,11 @@
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
 
-fn.off = function ( eventFullName, callback ) {
+interface Cash {
+  off ( events?: string, callback?: Function ): this;
+}
+
+Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: Function ) {
 
   if ( eventFullName === undefined ) {
 

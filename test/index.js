@@ -43,6 +43,10 @@ QUnit.module( 'Cash Test Suite', {
 
 /* CORE */
 
+QUnit.test("is instance of cash", function ( assert ) {
+  assert.equal($() instanceof $, true, "instanceof" );
+})
+
 QUnit.test( "className Query", function( assert ) {
   assert.equal($('.class-fixture').length, 1, "className" );
 });
@@ -232,7 +236,6 @@ QUnit.test( "toggleClass", function( assert ) {
 
 QUnit.test( "add", function( assert ) {
   var addFixture = $('#id-fixture').add( $('.class-fixture') );
-  assert.equal(addFixture.__cash, true, "add" );
   assert.equal(addFixture.length, 2, "add(one)" );
 
   addFixture = $('#id-fixture').add( $('a').eq(0) ).add( $('a').eq(1) );

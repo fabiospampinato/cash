@@ -1,7 +1,11 @@
 
 // @require core/cash.ts
 
-fn.empty = function () {
+interface Cash {
+  empty (): this;
+}
+
+Cash.prototype.empty = function ( this: Cash ) {
 
   const ele = this[0];
 

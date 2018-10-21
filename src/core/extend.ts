@@ -14,6 +14,14 @@ function extend ( target = this ) {
 
   return target;
 
-};
+}
 
-cash.extend = fn.extend = extend;
+interface Cash {
+  extend ( target, ...objs: any[] ): this;
+}
+
+interface CashStatic {
+  extend ( target, ...objs: any[] );
+}
+
+Cash.prototype.extend = cash.extend = extend;

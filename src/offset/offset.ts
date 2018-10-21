@@ -4,7 +4,14 @@
 
 const docEle = doc.documentElement;
 
-fn.offset = function () {
+interface Cash {
+  offset (): undefined | {
+    top: number,
+    left: number
+  };
+}
+
+Cash.prototype.offset = function ( this: Cash ) {
 
   const ele = this[0];
 

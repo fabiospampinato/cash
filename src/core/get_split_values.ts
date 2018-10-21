@@ -3,6 +3,6 @@
 
 const splitValuesRe = /\S+/g;
 
-function getSplitValues ( str ) {
+function getSplitValues ( str: string ) {
   return isString ( str ) ? str.match ( splitValuesRe ) || [] : [];
 }

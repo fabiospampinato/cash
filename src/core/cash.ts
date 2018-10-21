@@ -2,51 +2,57 @@
 // @require ./find.ts
 // @require ./variables.ts
 
-function Cash ( selector, context = doc ) {
+class Cash {
 
-  if ( !selector ) return;
+  constructor ( selector?: Selector, context: Context | Cash = doc ) {
 
-  if ( selector.__cash ) return selector;
+    if ( !selector ) return;
 
-  let eles = selector;
+    if ( isCash ( selector ) ) return selector;
 
-  if ( isString ( selector ) ) {
+    let eles: any = selector;
 
-    if ( context.__cash ) context = context[0];
+    if ( isString ( selector ) ) {
 
-    eles = idRe.test ( selector )
-              ? context.getElementById ( selector.slice ( 1 ) )
-              : htmlRe.test ( selector )
-                ? parseHTML ( selector )
-                : find ( selector, context );
+      const ctx = isCash ( context ) ? context[0] : context;
 
-    if ( !eles ) return;
+      eles = idRe.test ( selector )
+                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ) )
+                : htmlRe.test ( selector )
+                  ? parseHTML ( selector )
+                  : find ( selector, ctx );
 
-  } else if ( isFunction ( selector ) ) {
+      if ( !eles ) return;
 
-    return this.ready ( selector ); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
+    } else if ( isFunction ( selector ) ) {
+
+      return this.ready ( selector ); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
+
+    }
+
+    if ( eles.nodeType || eles === win ) eles = [eles];
+
+    this.length = eles.length;
+
+    for ( let i = 0, l = this.length; i < l; i++ ) {
+
+      this[i] = eles[i];
+
+    }
 
   }
 
-  if ( eles.nodeType || eles === win ) eles = [eles];
+  init ( selector?: Selector, context?: Context | Cash ) {
 
-  this.length = eles.length;
+    return new Cash ( selector, context );
 
-  for ( let i = 0, l = this.length; i < l; i++ ) {
-    this[i] = eles[i];
   }
 
 }
 
-function cash ( selector, context ) {
-  return new Cash ( selector, context );
-}
+const cash = Cash.prototype.init as typeof Cash.prototype.init & CashStatic;
 
-/* PROTOTYPE */
+cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 
-const fn = cash.fn = cash.prototype = Cash.prototype = {
-  constructor: cash,
-  __cash: true,
-  length: 0,
-  splice // Ensures a cash collection gets printed as array-like in Chrome
-};
+Cash.prototype.length = 0;
+Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome

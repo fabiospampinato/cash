@@ -3,9 +3,13 @@
 // @require core/unique.ts
 // @require collection/each.ts
 
-fn.parent = function () {
+interface Cash {
+  parent (): Cash;
+}
 
-  const result = [];
+Cash.prototype.parent = function ( this: Cash ) {
+
+  const result: Ele[] = [];
 
   this.each ( ( i, ele ) => {
     if ( ele && ele.parentNode ) {

@@ -2,7 +2,12 @@
 // @require core/cash.ts
 // @require core/variables.ts
 
-fn.get = function ( index ) {
+interface Cash {
+  get (): Ele[];
+  get ( index: number ): Ele;
+}
+
+Cash.prototype.get = function ( this: Cash, index?: number ) {
 
   if ( index === undefined ) return slice.call ( this );
 

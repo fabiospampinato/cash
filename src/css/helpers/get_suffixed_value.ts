@@ -16,7 +16,7 @@ const numericProps = {
   zIndex: true
 };
 
-function getSuffixedValue ( prop, value, isVariable = isCSSVariable ( prop ) ) {
+function getSuffixedValue ( prop: string, value: number | string, isVariable: boolean = isCSSVariable ( prop ) ): number | string {
 
   return !isVariable && !numericProps[prop] && isNumeric ( value ) ? `${value}px` : value;
 

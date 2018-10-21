@@ -5,11 +5,11 @@
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-const prefixedProps = {},
+const prefixedProps: plainObject = {},
       {style} = doc.createElement ( 'div' ),
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
-function getPrefixedProp ( prop, isVariable = isCSSVariable ( prop ) ) {
+function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( prop ) ): string {
 
   if ( isVariable ) return prop;
 
@@ -31,5 +31,9 @@ function getPrefixedProp ( prop, isVariable = isCSSVariable ( prop ) ) {
   return prefixedProps[prop];
 
 };
+
+interface CashStatic {
+  prefixedProp ( prop: string, isVariable?: boolean ): string;
+}
 
 cash.prefixedProp = getPrefixedProp;

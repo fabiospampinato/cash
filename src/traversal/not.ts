@@ -3,12 +3,16 @@
 // @require core/get_compare_function.ts
 // @require collection/filter.ts
 
-fn.not = function ( selector ) {
+interface Cash {
+  not ( comparator: Comparator ): Cash;
+}
 
-  if ( !selector || !this[0] ) return this;
+Cash.prototype.not = function ( this: Cash, comparator: Comparator ) {
 
-  const comparator = getCompareFunction ( selector );
+  if ( !comparator || !this[0] ) return this;
 
-  return this.filter ( ( i, ele ) => !comparator ( i, ele, selector ) );
+  const compare = getCompareFunction ( comparator );
+
+  return this.filter ( ( i, ele ) => !compare.call ( ele, i, ele ) );
 
 };

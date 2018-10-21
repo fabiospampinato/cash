@@ -3,6 +3,10 @@
 // @require events/off.ts
 // @require ./detach.ts
 
-fn.remove = function () {
+interface Cash {
+  remove (): this;
+}
+
+Cash.prototype.remove = function ( this: Cash ) {
   return this.detach ().off ();
 };

@@ -5,14 +5,14 @@
 const selectOneRe = /select-one/i,
       selectMultipleRe = /select-multiple/i;
 
-function getValue ( ele ) {
+function getValue ( ele: HTMLElement ): string | string[] {
 
-  const type = ele.type;
+  const type = ele['type'];
 
-  if ( selectOneRe.test ( type ) ) return getValueSelectSingle ( ele );
+  if ( selectOneRe.test ( type ) ) return getValueSelectSingle ( ele as HTMLSelectElement );
 
-  if ( selectMultipleRe.test ( type ) ) return getValueSelectMultiple ( ele );
+  if ( selectMultipleRe.test ( type ) ) return getValueSelectMultiple ( ele as HTMLSelectElement );
 
-  return ele.value;
+  return ele['value'] || '';
 
 }

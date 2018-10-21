@@ -3,9 +3,13 @@
 // @require core/each.ts
 // @require ./helpers/insert_content.ts
 
-fn.append = function () {
-  each ( arguments, content => {
-    insertContent ( this, content );
+interface Cash {
+  append ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.append = function ( this: Cash ) {
+  each ( arguments, ( selector: Selector ) => {
+    insertContent ( this, cash ( selector ) );
   });
   return this;
 };

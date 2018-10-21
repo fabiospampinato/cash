@@ -2,12 +2,14 @@
 // @require ./matches.ts
 // @require ./type_checking.ts
 
-function getCompareFunction ( selector ) {
+function getCompareFunction ( comparator: Comparator ): Function {
 
-  return isString ( selector )
-           ? ( i, ele ) => matches ( ele, selector )
-           : selector.__cash
-             ? ( i, ele ) => selector.is ( ele )
-             : ( i, ele, selector ) => ele === selector;
+  return isString ( comparator )
+           ? ( i, ele ) => matches ( ele, comparator )
+           : isFunction ( comparator )
+             ? comparator
+             : isCash ( comparator )
+               ? ( i, ele ) => comparator.is ( ele )
+               : ( i, ele ) => ele === comparator;
 
 }

@@ -1,7 +1,14 @@
 
 // @require core/cash.ts
 
-fn.position = function () {
+interface Cash {
+  position (): undefined | {
+    top: number,
+    left: number
+  };
+}
+
+Cash.prototype.position = function ( this: Cash ) {
 
   const ele = this[0];
 

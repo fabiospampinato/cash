@@ -4,7 +4,11 @@
 // @require ./children.ts
 // @require ./parent.ts
 
-fn.siblings = function () {
+interface Cash {
+  siblings (): Cash;
+}
+
+Cash.prototype.siblings = function ( this: Cash ) {
 
   const ele = this[0];
 

@@ -1,9 +1,9 @@
 
 // @require core/each.ts
 
-function getValueSelectMultiple ( ele ) {
+function getValueSelectMultiple ( ele: HTMLSelectElement ): string[] {
 
-  const values = [];
+  const values: string[] = [];
 
   each ( ele.options, option => {
     if ( option.selected && !option.disabled && !option.parentNode.disabled ) {

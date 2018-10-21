@@ -4,7 +4,11 @@
 // @require core/type_checking.ts
 // @require collection/filter.ts
 
-fn.has = function ( selector ) {
+interface Cash {
+  has ( selector: string | HTMLElement ): Cash;
+}
+
+Cash.prototype.has = function ( this: Cash, selector: string | HTMLElement ) {
 
   const comparator = isString ( selector )
                        ? ( i, ele ) => !!find ( selector, ele ).length

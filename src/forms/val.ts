@@ -5,7 +5,14 @@
 // @require collection/each.ts
 // @require ./helpers/get_value.ts
 
-fn.val = function ( value ) {
+interface Cash {
+  val (): string | string[];
+  val ( value ): this;
+}
+
+function val ( this: Cash ): string | string[];
+function val ( this: Cash, value: string ): Cash;
+function val ( this: Cash, value?: string ): string | string[] | Cash {
 
   if ( value === undefined ) return this[0] && getValue ( this[0] );
 
@@ -30,4 +37,6 @@ fn.val = function ( value ) {
 
   });
 
-};
+}
+
+Cash.prototype.val = val;

@@ -7,7 +7,16 @@
 // @require ./helpers/get_suffixed_value.ts
 // @require ./helpers/is_css_variable.ts
 
-fn.css = function ( prop, value ) {
+interface Cash {
+  css ( prop: string );
+  css ( prop: string, value ): this;
+  css ( props: plainObject ): this;
+}
+
+function css ( this: Cash, prop: string );
+function css ( this: Cash, prop: string, value ): Cash;
+function css ( this: Cash, prop: plainObject ): Cash;
+function css ( this: Cash, prop: string | plainObject, value? ) {
 
   if ( isString ( prop ) ) {
 
@@ -31,7 +40,7 @@ fn.css = function ( prop, value ) {
 
       } else {
 
-        ele.style[prop] = value;
+        ele.style[prop as string] = value; //TSC
 
       }
 
@@ -48,3 +57,5 @@ fn.css = function ( prop, value ) {
   return this;
 
 };
+
+Cash.prototype.css = css;

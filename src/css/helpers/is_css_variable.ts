@@ -1,6 +1,8 @@
 
 // @require ./variables.ts
 
-function isCSSVariable ( prop ) {
+function isCSSVariable ( prop: string ): boolean {
+
   return cssVariableRe.test ( prop );
+
 }

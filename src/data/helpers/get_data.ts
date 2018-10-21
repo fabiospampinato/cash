@@ -2,7 +2,7 @@
 // @require attributes/attr.ts
 // @require ./get_data_cache.ts
 
-function getData ( ele, key ) {
+function getData ( ele: HTMLElement, key?: string ): plainObject {
 
   const cache = getDataCache ( ele );
 

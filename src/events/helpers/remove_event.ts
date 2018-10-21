@@ -5,7 +5,7 @@
 // @require ./parse_event_name.ts
 // @require ./remove_event_listeners.ts
 
-function removeEvent ( ele, name, namespaces, callback ) {
+function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?: Function ): void {
 
   const cache = getEventsCache ( ele );
 
@@ -35,11 +35,11 @@ function removeEvent ( ele, name, namespaces, callback ) {
 
     if ( !eventCache ) return;
 
-    if ( callback ) callback.guid = ( callback.guid || guid++ );
+    if ( callback ) callback['guid'] = ( callback['guid'] || guid++ );
 
     cache[name] = eventCache.filter ( ([ ns, cb ]) => {
 
-      if ( ( callback && cb.guid !== callback.guid ) || !hasNamespaces ( ns, namespaces ) ) return true;
+      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) ) return true;
 
       ele.removeEventListener ( name, cb );
 

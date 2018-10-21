@@ -13,7 +13,8 @@
         "minified": "[dist]/[bundle].min.js"
       },
       "typescript": {
-        "declaration": "[dist]/[bundle].d.ts"
+        "declaration": "[dist]/[bundle].d.ts",
+        "partial": "[dist]/[bundle].ts"
       }
     }
   },

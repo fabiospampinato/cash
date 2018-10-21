@@ -2,7 +2,11 @@
 // @require core/cash.ts
 // @require core/variables.ts
 
-fn.ready = function ( callback ) {
+interface Cash {
+  ready ( callback: Function ): this;
+}
+
+Cash.prototype.ready = function ( this: Cash, callback: Function ) {
 
   const finalCallback = () => callback ( cash );
 

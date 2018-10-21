@@ -8,7 +8,11 @@
 const skippableRe = /file|reset|submit|button|image/i,
       checkableRe = /radio|checkbox/i;
 
-fn.serialize = function () {
+interface Cash {
+  serialize (): string;
+}
+
+Cash.prototype.serialize = function ( this: Cash ) {
 
   let query = '';
 

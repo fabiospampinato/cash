@@ -2,12 +2,19 @@
 // @require core/cash.ts
 // @require collection/each.ts
 
-fn.html = function ( content ) {
+interface Cash {
+  html (): string;
+  html ( html: string ): this;
+}
 
-  if ( content === undefined ) return this[0] && this[0].innerHTML;
+function html ( this: Cash ): string;
+function html ( this: Cash, html: string ): Cash;
+function html ( this: Cash, html?: string ): string | Cash {
 
-  const source = content.nodeType ? content[0].outerHTML : content;
+  if ( html === undefined ) return this[0] && this[0].innerHTML;
 
-  return this.each ( ( i, ele ) => { ele.innerHTML = source } );
+  return this.each ( ( i, ele ) => { ele.innerHTML = html } );
 
-};
+}
+
+Cash.prototype.html = html;

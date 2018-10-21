@@ -2,7 +2,11 @@
 // @require core/cash.ts
 // @require collection/each.ts
 
-fn.detach = function () {
+interface Cash {
+  detach (): this;
+}
+
+Cash.prototype.detach = function ( this: Cash ) {
   return this.each ( ( i, ele ) => {
     if ( ele.parentNode ) {
       ele.parentNode.removeChild ( ele )

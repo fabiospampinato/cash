@@ -6,9 +6,13 @@
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/variables.ts
 
-fn.trigger = function ( eventFullName, data ) {
+interface Cash {
+  trigger ( event: string | Event, data? ): this;
+}
 
-  let evt = eventFullName;
+Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, data? ) {
+
+  let evt: string | Event = eventFullName;
 
   if ( isString ( eventFullName ) ) {
 
@@ -16,11 +20,11 @@ fn.trigger = function ( eventFullName, data ) {
 
     evt = doc.createEvent ( 'HTMLEvents' );
     evt.initEvent ( name, true, true );
-    evt.namespace = namespaces.join ( eventsNamespacesSeparator );
+    evt['namespace'] = namespaces.join ( eventsNamespacesSeparator );
 
   }
 
-  evt.data = data;
+  evt['data'] = data;
 
   return this.each ( ( i, ele ) => { ele.dispatchEvent ( evt ) } );
 

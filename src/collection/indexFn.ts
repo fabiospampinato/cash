@@ -5,12 +5,14 @@
 // @require traversal/parent.ts
 // @require ./get.ts
 
-//FIXME Ugly file name, is there a better option?
+interface Cash {
+  index ( selector?: Selector ): number;
+}
 
-fn.index = function ( ele ) {
+Cash.prototype.index = function ( this: Cash, selector?: Selector ) {
 
-  const child = ele ? cash ( ele )[0] : this[0],
-        collection = ele ? this : cash ( child ).parent ().children ();
+  const child = selector ? cash ( selector )[0] : this[0],
+        collection = selector ? this : cash ( child ).parent ().children ();
 
   return indexOf.call ( collection, child );
 

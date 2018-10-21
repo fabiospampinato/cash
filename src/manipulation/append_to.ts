@@ -2,7 +2,11 @@
 // @require core/cash.ts
 // @require ./helpers/insert_content.ts
 
-fn.appendTo = function ( parent ) {
-  insertContent ( cash ( parent ), this );
+interface Cash {
+  appendTo ( selector: Selector ): this;
+}
+
+Cash.prototype.appendTo = function ( this: Cash, selector: Selector ) {
+  insertContent ( cash ( selector ), this );
   return this;
 };
