@@ -98,6 +98,7 @@ function config ( config ) {
     plugins: [
       'karma-qunit',
       'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-sauce-launcher',
       'karma-spec-reporter'
     ],
@@ -105,7 +106,7 @@ function config ( config ) {
       'dist/cash.js',
       'test/index.js'
     ],
-    browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome'],
+    browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome', 'Firefox'],
     customLaunchers: SauceLabsLaunchers,
     reporters: [
       'spec',
