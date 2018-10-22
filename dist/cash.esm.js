@@ -1,20 +1,23 @@
 /* MIT https://github.com/kenwheeler/cash */
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var doc = document,
     win = window,
-    _Array$prototype = Array.prototype,
-    filter = _Array$prototype.filter,
-    indexOf = _Array$prototype.indexOf,
-    map = _Array$prototype.map,
-    push = _Array$prototype.push,
-    reverse = _Array$prototype.reverse,
-    slice = _Array$prototype.slice,
-    splice = _Array$prototype.splice;
+    _a = Array.prototype,
+    filter = _a.filter,
+    indexOf = _a.indexOf,
+    map = _a.map,
+    push = _a.push,
+    reverse = _a.reverse,
+    slice = _a.slice,
+    splice = _a.splice;
 var idRe = /^#[\w-]*$/,
     classRe = /^\.[\w-]*$/,
     htmlRe = /<.+>/,
-    tagRe = /^\w+$/; // @require ./variables.js
+    tagRe = /^\w+$/; // @require ./variables.ts
 
 function find(selector, context) {
   if (context === void 0) {
@@ -22,86 +25,77 @@ function find(selector, context) {
   }
 
   return classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
-} // @require ./find.js
-// @require ./variables.js
+} // @require ./find.ts
+// @require ./variables.ts
 
 
-function Cash(selector, context) {
-  if (context === void 0) {
-    context = doc;
+var Cash =
+/** @class */
+function () {
+  function Cash(selector, context) {
+    if (context === void 0) {
+      context = doc;
+    }
+
+    if (!selector) return;
+    if (isCash(selector)) return selector;
+    var eles = selector;
+
+    if (isString(selector)) {
+      var ctx = isCash(context) ? context[0] : context;
+      eles = idRe.test(selector) ? ctx.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, ctx);
+      if (!eles) return;
+    } else if (isFunction(selector)) {
+      return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
+    }
+
+    if (eles.nodeType || eles === win) eles = [eles];
+    this.length = eles.length;
+
+    for (var i = 0, l = this.length; i < l; i++) {
+      this[i] = eles[i];
+    }
   }
 
-  if (!selector) return;
-  if (selector.__cash) return selector;
-  var eles = selector;
+  Cash.prototype.init = function (selector, context) {
+    return new Cash(selector, context);
+  };
 
-  if (isString(selector)) {
-    if (context.__cash) context = context[0];
-    eles = idRe.test(selector) ? context.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, context);
-    if (!eles) return;
-  } else if (isFunction(selector)) {
-    return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
-  }
+  return Cash;
+}();
 
-  if (eles.nodeType || eles === win) eles = [eles];
-  this.length = eles.length;
+var cash = Cash.prototype.init;
+cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 
-  for (var i = 0, l = this.length; i < l; i++) {
-    this[i] = eles[i];
-  }
-}
+Cash.prototype.length = 0;
+Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
 
-function cash(selector, context) {
-  return new Cash(selector, context);
-}
-/* PROTOTYPE */
-
-
-var fn = cash.fn = cash.prototype = Cash.prototype = {
-  constructor: cash,
-  __cash: true,
-  length: 0,
-  splice: splice // Ensures a cash collection gets printed as array-like in Chrome
-
-}; // @require core/cash.js
-// @require core/variables.js
-
-fn.get = function (index) {
+Cash.prototype.get = function (index) {
   if (index === undefined) return slice.call(this);
   return this[index < 0 ? index + this.length : index];
-}; // @require core/cash.js
-// @require ./get.js
+};
 
-
-fn.eq = function (index) {
+Cash.prototype.eq = function (index) {
   return cash(this.get(index));
-}; // @require core/cash.js
-// @require ./eq.js
+};
 
-
-fn.first = function () {
+Cash.prototype.first = function () {
   return this.eq(0);
-}; // @require core/cash.js
-// @require ./eq.js
+};
 
-
-fn.last = function () {
+Cash.prototype.last = function () {
   return this.eq(-1);
-}; // @require core/cash.js
-// @require core/variables.js
+};
 
-
-fn.map = function (callback) {
+Cash.prototype.map = function (callback) {
   return cash(map.call(this, function (ele, i) {
     return callback.call(ele, i, ele);
   }));
-}; // @require core/cash.js
-// @require core/variables.js
+};
 
-
-fn.slice = function () {
+Cash.prototype.slice = function () {
   return cash(slice.apply(this, arguments));
-}; // @require ./cash.js
+}; // @require ./cash.ts
 
 
 var camelCaseRe = /(?:^\w|[A-Z]|\b\w)/g,
@@ -114,7 +108,7 @@ function camelCase(str) {
 }
 
 ;
-cash.camelCase = camelCase; // @require ./cash.js
+cash.camelCase = camelCase; // @require ./cash.ts
 
 function each(arr, callback) {
   for (var i = 0, l = arr.length; i < l; i++) {
@@ -122,23 +116,20 @@ function each(arr, callback) {
   }
 }
 
-cash.each = each; // @require core/cash.js
-// @require core/each.js
+cash.each = each;
 
-fn.each = function (callback) {
+Cash.prototype.each = function (callback) {
   each(this, function (ele, i) {
     return callback.call(ele, i, ele);
   });
   return this;
-}; // @require core/cash.js
-// @require collection/each.js
+};
 
-
-fn.removeProp = function (prop) {
+Cash.prototype.removeProp = function (prop) {
   return this.each(function (i, ele) {
     delete ele[prop];
   });
-}; // @require ./cash.js
+}; // @require ./cash.ts
 
 
 function extend(target) {
@@ -158,42 +149,41 @@ function extend(target) {
   return target;
 }
 
-;
-cash.extend = fn.extend = extend; // @require ./cash.js
+Cash.prototype.extend = cash.extend = extend; // @require ./cash.ts
 
 var guid = 1;
-cash.guid = guid; // @require ./cash.js
+cash.guid = guid; // @require ./cash.ts
 
 function matches(ele, selector) {
-  var matches = ele && (ele.matches || ele.webkitMatchesSelector || ele.mozMatchesSelector || ele.msMatchesSelector || ele.oMatchesSelector);
+  var matches = ele && (ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
   return !!matches && matches.call(ele, selector);
 }
 
-cash.matches = matches; // @require ./cash.js
+cash.matches = matches; // @require ./cash.ts
+
+function isCash(x) {
+  return x instanceof Cash;
+}
 
 function isFunction(x) {
   return typeof x === 'function';
 }
 
-cash.isFunction = isFunction;
-
 function isString(x) {
   return typeof x === 'string';
 }
-
-cash.isString = isString;
 
 function isNumeric(x) {
   return !isNaN(parseFloat(x)) && isFinite(x);
 }
 
-cash.isNumeric = isNumeric;
 var isArray = Array.isArray;
-cash.isArray = isArray; // @require core/cash.js
-// @require core/type_checking.js
-// @require collection/each.js
+cash.isFunction = isFunction;
+cash.isString = isString;
+cash.isNumeric = isNumeric;
+cash.isArray = isArray;
 
-fn.prop = function (prop, value) {
+Cash.prototype.prop = function (prop, value) {
   if (!prop) return;
 
   if (isString(prop)) {
@@ -208,44 +198,36 @@ fn.prop = function (prop, value) {
   }
 
   return this;
-}; // @require ./matches.js
-// @require ./type_checking.js
+}; // @require ./matches.ts
+// @require ./type_checking.ts
 
 
-function getCompareFunction(selector) {
-  return isString(selector) ? function (i, ele) {
-    return matches(ele, selector);
-  } : selector.__cash ? function (i, ele) {
-    return selector.is(ele);
-  } : function (i, ele, selector) {
-    return ele === selector;
+function getCompareFunction(comparator) {
+  return isString(comparator) ? function (i, ele) {
+    return matches(ele, comparator);
+  } : isFunction(comparator) ? comparator : isCash(comparator) ? function (i, ele) {
+    return comparator.is(ele);
+  } : function (i, ele) {
+    return ele === comparator;
   };
-} // @require core/cash.js
-// @require core/get_compare_function.js
-// @require core/type_checking.js
-// @require core/variables.js
-// @require collection/get.js
+}
 
-
-fn.filter = function (selector) {
-  if (!selector) return cash();
-  var comparator = isFunction(selector) ? selector : getCompareFunction(selector);
+Cash.prototype.filter = function (comparator) {
+  if (!comparator) return cash();
+  var compare = getCompareFunction(comparator);
   return cash(filter.call(this, function (ele, i) {
-    return comparator.call(ele, i, ele, selector);
+    return compare.call(ele, i, ele);
   }));
-}; // @require ./type_checking.js
+}; // @require ./type_checking.ts
 
 
 var splitValuesRe = /\S+/g;
 
 function getSplitValues(str) {
   return isString(str) ? str.match(splitValuesRe) || [] : [];
-} // @require core/cash.js
-// @require core/get_split_values.js
-// @require collection/each.js
+}
 
-
-fn.hasClass = function (cls) {
+Cash.prototype.hasClass = function (cls) {
   var classes = getSplitValues(cls);
   var check = false;
 
@@ -257,12 +239,9 @@ fn.hasClass = function (cls) {
   }
 
   return check;
-}; // @require core/cash.js
-// @require core/get_split_values.js
-// @require collection/each.js
+};
 
-
-fn.removeAttr = function (attr) {
+Cash.prototype.removeAttr = function (attr) {
   var attrs = getSplitValues(attr);
   if (!attrs.length) return this;
   return this.each(function (i, ele) {
@@ -270,22 +249,16 @@ fn.removeAttr = function (attr) {
       ele.removeAttribute(a);
     });
   });
-}; // @require core/cash.js
-// @require core/type_checking.js
-// @require collection/each.js
-// @require ./remove_attr.js
+};
 
-
-fn.attr = function (attr, value) {
+function attr(attr, value) {
   if (!attr) return;
 
   if (isString(attr)) {
     if (arguments.length < 2) {
       if (!this[0]) return;
-
-      var _value = this[0].getAttribute(attr);
-
-      return _value === null ? undefined : _value;
+      var value_1 = this[0].getAttribute(attr);
+      return value_1 === null ? undefined : value_1;
     }
 
     if (value === null) return this.removeAttr(attr);
@@ -299,13 +272,11 @@ fn.attr = function (attr, value) {
   }
 
   return this;
-}; // @require core/cash.js
-// @require core/each.js
-// @require core/get_split_values.js
-// @require collection/each.js
+}
 
+Cash.prototype.attr = attr;
 
-fn.toggleClass = function (cls, force) {
+Cash.prototype.toggleClass = function (cls, force) {
   var classes = getSplitValues(cls),
       isForce = force !== undefined;
   if (!classes.length) return this;
@@ -318,28 +289,23 @@ fn.toggleClass = function (cls, force) {
       }
     });
   });
-}; // @require core/cash.js
-// @require ./toggle_class.js
+};
 
-
-fn.addClass = function (cls) {
+Cash.prototype.addClass = function (cls) {
   return this.toggleClass(cls, true);
-}; // @require core/cash.js
-// @require ./attr.js
-// @require ./toggle_class.js
+};
 
-
-fn.removeClass = function (cls) {
+Cash.prototype.removeClass = function (cls) {
   return !arguments.length ? this.attr('class', '') : this.toggleClass(cls, false);
-}; // @optional ./add_class.js
-// @optional ./attr.js
-// @optional ./has_class.js
-// @optional ./prop.js
-// @optional ./remove_attr.js
-// @optional ./remove_class.js
-// @optional ./remove_prop.js
-// @optional ./toggle_class.js
-// @require ./cash.js
+}; // @optional ./add_class.ts
+// @optional ./attr.ts
+// @optional ./has_class.ts
+// @optional ./prop.ts
+// @optional ./remove_attr.ts
+// @optional ./remove_class.ts
+// @optional ./remove_prop.ts
+// @optional ./toggle_class.ts
+// @require ./cash.ts
 
 
 function unique(arr) {
@@ -348,40 +314,37 @@ function unique(arr) {
   });
 }
 
-cash.unique = unique; // @require core/cash.js
-// @require core/unique.js
-// @require ./get.js
+cash.unique = unique;
 
-fn.add = function (selector, context) {
+Cash.prototype.add = function (selector, context) {
   return cash(unique(this.get().concat(cash(selector, context).get())));
-}; // @require core/variables.js
+}; // @require core/variables.ts
 
 
 function computeStyle(ele, prop, isVariable) {
   if (ele.nodeType !== 1) return;
   var style = win.getComputedStyle(ele, null);
   return prop ? isVariable ? style.getPropertyValue(prop) : style[prop] : style;
-} // @require ./compute_style.js
+} // @require ./compute_style.ts
 
 
 function computeStyleInt(ele, prop) {
   return parseInt(computeStyle(ele, prop), 10) || 0;
 }
 
-var cssVariableRe = /^--/; // @require ./variables.js
+var cssVariableRe = /^--/; // @require ./variables.ts
 
 function isCSSVariable(prop) {
   return cssVariableRe.test(prop);
-} // @require core/camel_case.js
-// @require core/cash.js
-// @require core/each.js
-// @require core/variables.js
-// @require ./is_css_variable.js
+} // @require core/camel_case.ts
+// @require core/cash.ts
+// @require core/each.ts
+// @require core/variables.ts
+// @require ./is_css_variable.ts
 
 
 var prefixedProps = {},
-    _doc$createElement = doc.createElement('div'),
-    style = _doc$createElement.style,
+    style = doc.createElement('div').style,
     vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
 function getPrefixedProp(prop, isVariable) {
@@ -407,8 +370,8 @@ function getPrefixedProp(prop, isVariable) {
 }
 
 ;
-cash.prefixedProp = getPrefixedProp; // @require core/type_checking.js
-// @require ./is_css_variable.js
+cash.prefixedProp = getPrefixedProp; // @require core/type_checking.ts
+// @require ./is_css_variable.ts
 
 var numericProps = {
   animationIterationCount: true,
@@ -430,29 +393,22 @@ function getSuffixedValue(prop, value, isVariable) {
   }
 
   return !isVariable && !numericProps[prop] && isNumeric(value) ? value + "px" : value;
-} // @require core/cash.js
-// @require core/type_checking.js
-// @require collection/each.js
-// @require ./helpers/compute_style.js
-// @require ./helpers/get_prefixed_prop.js
-// @require ./helpers/get_suffixed_value.js
-// @require ./helpers/is_css_variable.js
+}
 
-
-fn.css = function (prop, value) {
+function css(prop, value) {
   if (isString(prop)) {
-    var isVariable = isCSSVariable(prop);
-    prop = getPrefixedProp(prop, isVariable);
-    if (arguments.length < 2) return this[0] && computeStyle(this[0], prop, isVariable);
+    var isVariable_1 = isCSSVariable(prop);
+    prop = getPrefixedProp(prop, isVariable_1);
+    if (arguments.length < 2) return this[0] && computeStyle(this[0], prop, isVariable_1);
     if (!prop) return this;
-    value = getSuffixedValue(prop, value, isVariable);
+    value = getSuffixedValue(prop, value, isVariable_1);
     return this.each(function (i, ele) {
       if (ele.nodeType !== 1) return;
 
-      if (isVariable) {
+      if (isVariable_1) {
         ele.style.setProperty(prop, value);
       } else {
-        ele.style[prop] = value;
+        ele.style[prop] = value; //TSC
       }
     });
   }
@@ -462,22 +418,25 @@ fn.css = function (prop, value) {
   }
 
   return this;
-}; // @optional ./css.js
+}
 
+;
+Cash.prototype.css = css; // @optional ./css.ts
 
 var dataNamespace = '__cashData',
-    dataAttributeRe = /^data-(.*)/; // @require core/cash.js
-// @require ./helpers/variables.js
+    dataAttributeRe = /^data-(.*)/; // @require core/cash.ts
+// @require ./helpers/variables.ts
 
-cash.hasData = function (ele) {
+function hasData(ele) {
   return dataNamespace in ele;
-}; // @require ./variables.js
+}
 
+cash.hasData = hasData; // @require ./variables.ts
 
 function getDataCache(ele) {
   return ele[dataNamespace] = ele[dataNamespace] || {};
-} // @require attributes/attr.js
-// @require ./get_data_cache.js
+} // @require attributes/attr.ts
+// @require ./get_data_cache.ts
 
 
 function getData(ele, key) {
@@ -500,8 +459,8 @@ function getData(ele, key) {
   }
 
   return cache;
-} // @require ./variables.js
-// @require ./get_data_cache.js
+} // @require ./variables.ts
+// @require ./get_data_cache.ts
 
 
 function removeData(ele, key) {
@@ -510,20 +469,14 @@ function removeData(ele, key) {
   } else {
     delete getDataCache(ele)[key];
   }
-} // @require ./get_data_cache.js
+} // @require ./get_data_cache.ts
 
 
 function setData(ele, key, value) {
   getDataCache(ele)[key] = value;
-} // @require core/cash.js
-// @require core/type_checking.js
-// @require collection/each.js
-// @require ./helpers/get_data.js
-// @require ./helpers/set_data.js
-// @require ./helpers/variables.js
+}
 
-
-fn.data = function (name, value) {
+function data(name, value) {
   var _this = this;
 
   if (!name) {
@@ -549,43 +502,32 @@ fn.data = function (name, value) {
   }
 
   return this;
-}; // @require core/cash.js
-// @require collection/each.js
-// @require ./helpers/remove_data.js
+}
 
+Cash.prototype.data = data;
 
-fn.removeData = function (key) {
+Cash.prototype.removeData = function (key) {
   return this.each(function (i, ele) {
     return removeData(ele, key);
   });
-}; // @optional ./data.js
-// @optional ./remove_data.js
-// @require css/helpers/compute_style_int.js
+}; // @optional ./data.ts
+// @optional ./remove_data.ts
+// @require css/helpers/compute_style_int.ts
 
 
 function getExtraSpace(ele, xAxis) {
   return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top') + "Width") + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom') + "Width");
-} // @require core/cash.js
-// @require core/each.js
-// @require core/variables.js
-
+}
 
 each(['Width', 'Height'], function (prop) {
-  fn["inner" + prop] = function () {
+  Cash.prototype["inner" + prop] = function () {
     if (!this[0]) return;
     if (this[0] === win) return win["inner" + prop];
     return this[0]["client" + prop];
   };
-}); // @require core/camel_case.js
-// @require core/cash.js
-// @require core/each.js
-// @require core/variables.js
-// @require css/helpers/compute_style.js
-// @require css/helpers/get_suffixed_value.js
-// @require ./helpers/get_extra_space.js
-
+});
 each(['width', 'height'], function (prop, index) {
-  fn[prop] = function (value) {
+  Cash.prototype[prop] = function (value) {
     if (!this[0]) return value === undefined ? undefined : this;
 
     if (!arguments.length) {
@@ -593,27 +535,23 @@ each(['width', 'height'], function (prop, index) {
       return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
     }
 
-    value = parseInt(value, 10);
+    var valueNumber = parseInt(value, 10);
     return this.each(function (i, ele) {
       if (ele.nodeType !== 1) return;
       var boxSizing = computeStyle(ele, 'boxSizing');
-      ele.style[prop] = getSuffixedValue(prop, value + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
+      ele.style[prop] = getSuffixedValue(prop, valueNumber + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
     });
   };
-}); // @require core/cash.js
-// @require core/each.js
-// @require core/variables.js
-// @require css/helpers/compute_style_int.js
-
+});
 each(['Width', 'Height'], function (prop, index) {
-  fn["outer" + prop] = function (includeMargins) {
+  Cash.prototype["outer" + prop] = function (includeMargins) {
     if (!this[0]) return;
     if (this[0] === win) return win["outer" + prop];
     return this[0]["offset" + prop] + (includeMargins ? computeStyleInt(this[0], "margin" + (!index ? 'Left' : 'Top')) + computeStyleInt(this[0], "margin" + (!index ? 'Right' : 'Bottom')) : 0);
   };
-}); // @optional ./inner.js
-// @optional ./normal.js
-// @optional ./outer.js
+}); // @optional ./inner.ts
+// @optional ./normal.ts
+// @optional ./outer.ts
 
 function hasNamespaces(ns1, ns2) {
   for (var i = 0, l = ns2.length; i < l; i++) {
@@ -621,44 +559,44 @@ function hasNamespaces(ns1, ns2) {
   }
 
   return true;
-} // @require core/each.js
+} // @require core/each.ts
 
 
 function removeEventListeners(cache, ele, name) {
-  each(cache[name], function (_ref) {
-    var namespaces = _ref[0],
-        callback = _ref[1];
+  each(cache[name], function (_a) {
+    var namespaces = _a[0],
+        callback = _a[1];
     ele.removeEventListener(name, callback);
   });
   delete cache[name];
 }
 
 var eventsNamespace = '__cashEvents',
-    eventsNamespacesSeparator = '.'; // @require ./variables.js
+    eventsNamespacesSeparator = '.'; // @require ./variables.ts
 
 function getEventsCache(ele) {
   return ele[eventsNamespace] = ele[eventsNamespace] || {};
-} // @require core/guid.js
-// @require events/helpers/get_events_cache.js
+} // @require core/guid.ts
+// @require events/helpers/get_events_cache.ts
 
 
 function addEvent(ele, name, namespaces, callback) {
-  callback.guid = callback.guid || guid++;
+  callback['guid'] = callback['guid'] || guid++;
   var eventCache = getEventsCache(ele);
   eventCache[name] = eventCache[name] || [];
   eventCache[name].push([namespaces, callback]);
-  ele.addEventListener(name, callback);
-} // @require ./variables.js
+  ele.addEventListener(name, callback); //TSC
+} // @require ./variables.ts
 
 
 function parseEventName(eventName) {
   var parts = eventName.split(eventsNamespacesSeparator);
-  return [parts[0], parts.slice(1).sort()]; // [name, namespaces]
-} // @require core/guid.js
-// @require ./get_events_cache.js
-// @require ./has_namespaces.js
-// @require ./parse_event_name.js
-// @require ./remove_event_listeners.js
+  return [parts[0], parts.slice(1).sort()]; // [name, namespace[]]
+} // @require core/guid.ts
+// @require ./get_events_cache.ts
+// @require ./has_namespaces.ts
+// @require ./parse_event_name.ts
+// @require ./remove_event_listeners.ts
 
 
 function removeEvent(ele, name, namespaces, callback) {
@@ -677,23 +615,18 @@ function removeEvent(ele, name, namespaces, callback) {
   } else {
     var eventCache = cache[name];
     if (!eventCache) return;
-    if (callback) callback.guid = callback.guid || guid++;
-    cache[name] = eventCache.filter(function (_ref2) {
-      var ns = _ref2[0],
-          cb = _ref2[1];
-      if (callback && cb.guid !== callback.guid || !hasNamespaces(ns, namespaces)) return true;
+    if (callback) callback['guid'] = callback['guid'] || guid++;
+    cache[name] = eventCache.filter(function (_a) {
+      var ns = _a[0],
+          cb = _a[1];
+      if (callback && cb['guid'] !== callback['guid'] || !hasNamespaces(ns, namespaces)) return true;
       ele.removeEventListener(name, cb);
     });
   }
-} // @require core/cash.js
-// @require core/each.js
-// @require collection/each.js
-// @require ./helpers/parse_event_name.js
-// @require ./helpers/remove_event.js
+}
 
-
-fn.off = function (eventFullName, callback) {
-  var _this2 = this;
+Cash.prototype.off = function (eventFullName, callback) {
+  var _this = this;
 
   if (eventFullName === undefined) {
     this.each(function (i, ele) {
@@ -701,32 +634,21 @@ fn.off = function (eventFullName, callback) {
     });
   } else {
     each(getSplitValues(eventFullName), function (eventFullName) {
-      var _parseEventName = parseEventName(eventFullName),
-          name = _parseEventName[0],
-          namespaces = _parseEventName[1];
+      var _a = parseEventName(eventFullName),
+          name = _a[0],
+          namespaces = _a[1];
 
-      _this2.each(function (i, ele) {
+      _this.each(function (i, ele) {
         return removeEvent(ele, name, namespaces, callback);
       });
     });
   }
 
   return this;
-}; // @require core/cash.js
-// @require core/get_split_values.js
-// @require core/guid.js
-// @require core/matches.js
-// @require core/type_checking.js
-// @require collection/each.js
-// @require ./helpers/variables.js
-// @require ./helpers/add_event.js
-// @require ./helpers/has_namespaces.js
-// @require ./helpers/parse_event_name.js
-// @require ./helpers/remove_event.js
+};
 
-
-fn.on = function (eventFullName, selector, callback, _one) {
-  var _this3 = this;
+function on(eventFullName, selector, callback, _one) {
+  var _this = this;
 
   if (!isString(eventFullName)) {
     for (var key in eventFullName) {
@@ -738,15 +660,15 @@ fn.on = function (eventFullName, selector, callback, _one) {
 
   if (isFunction(selector)) {
     callback = selector;
-    selector = false;
+    selector = '';
   }
 
   each(getSplitValues(eventFullName), function (eventFullName) {
-    var _parseEventName2 = parseEventName(eventFullName),
-        name = _parseEventName2[0],
-        namespaces = _parseEventName2[1];
+    var _a = parseEventName(eventFullName),
+        name = _a[0],
+        namespaces = _a[1];
 
-    _this3.each(function (i, ele) {
+    _this.each(function (i, ele) {
       var finalCallback = function finalCallback(event) {
         if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator))) return;
         var thisArg = ele;
@@ -755,6 +677,7 @@ fn.on = function (eventFullName, selector, callback, _one) {
           var target = event.target;
 
           while (!matches(target, selector)) {
+            //TSC
             if (target === ele) return;
             target = target.parentNode;
             if (!target) return;
@@ -764,7 +687,7 @@ fn.on = function (eventFullName, selector, callback, _one) {
         }
 
         event.namespace = event.namespace || '';
-        var returnValue = callback.call(thisArg, event, event.data);
+        var returnValue = callback.call(thisArg, event, event.data); //TSC
 
         if (_one) {
           removeEvent(ele, name, namespaces, finalCallback);
@@ -776,22 +699,23 @@ fn.on = function (eventFullName, selector, callback, _one) {
         }
       };
 
-      finalCallback.guid = callback.guid = callback.guid || guid++;
+      finalCallback['guid'] = callback['guid'] = callback['guid'] || guid++;
       addEvent(ele, name, namespaces, finalCallback);
     });
   });
   return this;
-}; // @require core/cash.js
-// @require ./on.js
+}
 
+Cash.prototype.on = on;
 
-fn.one = function (eventFullName, delegate, callback) {
-  return this.on(eventFullName, delegate, callback, true);
-}; // @require core/cash.js
-// @require core/variables.js
+function one(eventFullName, selector, callback) {
+  return this.on(eventFullName, selector, callback, true); //TSC
+}
 
+;
+Cash.prototype.one = one;
 
-fn.ready = function (callback) {
+Cash.prototype.ready = function (callback) {
   var finalCallback = function finalCallback() {
     return callback(cash);
   };
@@ -803,37 +727,31 @@ fn.ready = function (callback) {
   }
 
   return this;
-}; // @require core/cash.js
-// @require core/type_checking.js
-// @require core/variables.js
-// @require collection/each.js
-// @require ./helpers/parse_event_name.js
-// @require ./helpers/variables.js
+};
 
-
-fn.trigger = function (eventFullName, data) {
+Cash.prototype.trigger = function (eventFullName, data) {
   var evt = eventFullName;
 
   if (isString(eventFullName)) {
-    var _parseEventName3 = parseEventName(eventFullName),
-        name = _parseEventName3[0],
-        namespaces = _parseEventName3[1];
+    var _a = parseEventName(eventFullName),
+        name_1 = _a[0],
+        namespaces = _a[1];
 
     evt = doc.createEvent('HTMLEvents');
-    evt.initEvent(name, true, true);
-    evt.namespace = namespaces.join(eventsNamespacesSeparator);
+    evt.initEvent(name_1, true, true);
+    evt['namespace'] = namespaces.join(eventsNamespacesSeparator);
   }
 
-  evt.data = data;
+  evt['data'] = data;
   return this.each(function (i, ele) {
     ele.dispatchEvent(evt);
   });
-}; // @optional ./off.js
-// @optional ./on.js
-// @optional ./one.js
-// @optional ./ready.js
-// @optional ./trigger.js
-// @require core/each.js
+}; // @optional ./off.ts
+// @optional ./on.ts
+// @optional ./one.ts
+// @optional ./ready.ts
+// @optional ./trigger.ts
+// @require core/each.ts
 
 
 function getValueSelectMultiple(ele) {
@@ -848,35 +766,35 @@ function getValueSelectMultiple(ele) {
 
 function getValueSelectSingle(ele) {
   return ele.selectedIndex < 0 ? null : ele.options[ele.selectedIndex].value;
-} // @require ./get_value_select_single.js
-// @require ./get_value_select_multiple.js
+} // @require ./get_value_select_single.ts
+// @require ./get_value_select_multiple.ts
 
 
 var selectOneRe = /select-one/i,
     selectMultipleRe = /select-multiple/i;
 
 function getValue(ele) {
-  var type = ele.type;
+  var type = ele['type'];
   if (selectOneRe.test(type)) return getValueSelectSingle(ele);
   if (selectMultipleRe.test(type)) return getValueSelectMultiple(ele);
-  return ele.value;
+  return ele['value'] || '';
 }
 
 var queryEncodeSpaceRe = /%20/g;
 
 function queryEncode(prop, value) {
   return "&" + encodeURIComponent(prop) + "=" + encodeURIComponent(value).replace(queryEncodeSpaceRe, '+');
-} // @require core/cash.js
-// @require core/each.js
-// @require core/type_checking.js
-// @require ./helpers/get_value.js
-// @require ./helpers/query_encode.js
+} // @require core/cash.ts
+// @require core/each.ts
+// @require core/type_checking.ts
+// @require ./helpers/get_value.ts
+// @require ./helpers/query_encode.ts
 
 
 var skippableRe = /file|reset|submit|button|image/i,
     checkableRe = /radio|checkbox/i;
 
-fn.serialize = function () {
+Cash.prototype.serialize = function () {
   var query = '';
   this.each(function (i, ele) {
     each(ele.elements || [ele], function (ele) {
@@ -892,14 +810,9 @@ fn.serialize = function () {
     });
   });
   return query.substr(1);
-}; // @require core/cash.js
-// @require core/each.js
-// @require core/type_checking.js
-// @require collection/each.js
-// @require ./helpers/get_value.js
+};
 
-
-fn.val = function (value) {
+function val(value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
     var isMultiple = selectMultipleRe.test(ele.type),
@@ -913,31 +826,27 @@ fn.val = function (value) {
       ele.value = eleValue;
     }
   });
-}; // @optional ./serialize.js
-// @optional ./val.js
-// @require core/cash.js
-// @require collection/map.js
+}
 
+Cash.prototype.val = val;
 
-fn.clone = function () {
+Cash.prototype.clone = function () {
   return this.map(function (i, ele) {
     return ele.cloneNode(true);
   });
-}; // @require core/cash.js
-// @require collection/each.js
+};
 
-
-fn.detach = function () {
+Cash.prototype.detach = function () {
   return this.each(function (i, ele) {
     if (ele.parentNode) {
       ele.parentNode.removeChild(ele);
     }
   });
-}; // @require ./cash.js
-// @require ./variables.js
-// @require ./type_checking.js
-// @require collection/get.js
-// @require manipulation/detach.js
+}; // @require ./cash.ts
+// @require ./variables.ts
+// @require ./type_checking.ts
+// @require collection/get.ts
+// @require manipulation/detach.ts
 
 
 var fragmentRe = /^\s*<(\w+)[^>]*>/,
@@ -969,23 +878,9 @@ function parseHTML(html) {
   return cash(container.childNodes).detach().get();
 }
 
-cash.parseHTML = parseHTML; // @optional ./camel_case.js
-// @optional ./each.js
-// @optional ./export.js
-// @optional ./extend.js
-// @optional ./find.js
-// @optional ./get_compare_function.js
-// @optional ./get_split_values.js
-// @optional ./guid.js
-// @optional ./matches.js
-// @optional ./parse_html.js
-// @optional ./unique.js
-// @optional ./variables.js
-// @require ./cash.js
-// @require ./type_checking.js
-// @require core/cash.js
+cash.parseHTML = parseHTML;
 
-fn.empty = function () {
+Cash.prototype.empty = function () {
   var ele = this[0];
 
   if (ele) {
@@ -1003,156 +898,118 @@ function insertElement(ele, child, prepend) {
   } else {
     ele.appendChild(child);
   }
-} // @require core/each.js
-// @require core/type_checking.js
-// @require ./insert_element.js
+} // @require core/each.ts
+// @require core/type_checking.ts
+// @require ./insert_element.ts
 
 
 function insertContent(parent, child, prepend) {
-  if (child === undefined) return;
-  var isStr = isString(child);
-
-  if (!isStr && child.length) {
-    each(child, function (ele) {
-      return insertContent(parent, ele, prepend);
+  each(parent, function (parentEle, index) {
+    each(child, function (childEle) {
+      insertElement(parentEle, !index ? childEle : childEle.cloneNode(true), prepend);
     });
-  } else {
-    each(parent, isStr ? function (ele) {
-      ele.insertAdjacentHTML(prepend ? 'afterbegin' : 'beforeend', child);
-    } : function (ele, index) {
-      return insertElement(ele, !index ? child : child.cloneNode(true), prepend);
-    });
-  }
-} // @require core/cash.js
-// @require core/each.js
-// @require ./helpers/insert_content.js
+  });
+}
 
+Cash.prototype.append = function () {
+  var _this = this;
 
-fn.append = function () {
-  var _this4 = this;
-
-  each(arguments, function (content) {
-    insertContent(_this4, content);
+  each(arguments, function (selector) {
+    insertContent(_this, cash(selector));
   });
   return this;
-}; // @require core/cash.js
-// @require ./helpers/insert_content.js
+};
 
-
-fn.appendTo = function (parent) {
-  insertContent(cash(parent), this);
+Cash.prototype.appendTo = function (selector) {
+  insertContent(cash(selector), this);
   return this;
-}; // @require core/cash.js
-// @require collection/each.js
+};
 
-
-fn.html = function (content) {
-  if (content === undefined) return this[0] && this[0].innerHTML;
-  var source = content.nodeType ? content[0].outerHTML : content;
+function html(html) {
+  if (html === undefined) return this[0] && this[0].innerHTML;
   return this.each(function (i, ele) {
-    ele.innerHTML = source;
+    ele.innerHTML = html;
   });
-}; // @require core/cash.js
-// @require collection/each.js
+}
 
+Cash.prototype.html = html;
 
-fn.insertAfter = function (content) {
-  var _this5 = this;
-
-  cash(content).each(function (index, ele) {
-    var parent = ele.parentNode;
-
-    _this5.each(function (i, e) {
-      parent.insertBefore(!index ? e : e.cloneNode(true), ele.nextSibling);
-    });
-  });
-  return this;
-}; // @require core/cash.js
-// @require core/each.js
-// @require core/variables.js
-// @require collection/slice.js
-// @require ./insert_after.js
-
-
-fn.after = function () {
-  var _this6 = this;
-
-  each(reverse.apply(arguments), function (content) {
-    reverse.apply(cash(content).slice()).insertAfter(_this6);
-  });
-  return this;
-}; // @require core/cash.js
-// @require collection/each.js
-
-
-fn.insertBefore = function (selector) {
-  var _this7 = this;
+Cash.prototype.insertAfter = function (selector) {
+  var _this = this;
 
   cash(selector).each(function (index, ele) {
     var parent = ele.parentNode;
 
-    _this7.each(function (i, e) {
-      parent.insertBefore(!index ? e : e.cloneNode(true), ele);
-    });
+    if (parent) {
+      _this.each(function (i, e) {
+        parent.insertBefore(!index ? e : e.cloneNode(true), ele.nextSibling);
+      });
+    }
   });
   return this;
-}; // @require core/cash.js
-// @require core/each.js
-// @require ./insert_before.js
+};
 
+Cash.prototype.after = function () {
+  var _this = this;
 
-fn.before = function () {
-  var _this8 = this;
-
-  each(arguments, function (content) {
-    cash(content).insertBefore(_this8);
+  each(reverse.apply(arguments), function (selector) {
+    reverse.apply(cash(selector).slice()).insertAfter(_this);
   });
   return this;
-}; // @require core/cash.js
-// @require core/each.js
-// @require ./helpers/insert_content.js
+};
 
+Cash.prototype.insertBefore = function (selector) {
+  var _this = this;
 
-fn.prepend = function () {
-  var _this9 = this;
+  cash(selector).each(function (index, ele) {
+    var parent = ele.parentNode;
 
-  each(arguments, function (content) {
-    insertContent(_this9, content, true);
+    if (parent) {
+      _this.each(function (i, e) {
+        parent.insertBefore(!index ? e : e.cloneNode(true), ele);
+      });
+    }
   });
   return this;
-}; // @require core/cash.js
-// @require core/variables.js
-// @require collection/slice.js
-// @require ./helpers/insert_content.js
+};
 
+Cash.prototype.before = function () {
+  var _this = this;
 
-fn.prependTo = function (parent) {
-  insertContent(cash(parent), reverse.apply(this.slice()), true);
+  each(arguments, function (selector) {
+    cash(selector).insertBefore(_this);
+  });
   return this;
-}; // @require core/cash.js
-// @require events/off.js
-// @require ./detach.js
+};
 
+Cash.prototype.prepend = function () {
+  var _this = this;
 
-fn.remove = function () {
+  each(arguments, function (selector) {
+    insertContent(_this, cash(selector), true);
+  });
+  return this;
+};
+
+Cash.prototype.prependTo = function (selector) {
+  insertContent(cash(selector), reverse.apply(this.slice()), true);
+  return this;
+};
+
+Cash.prototype.remove = function () {
   return this.detach().off();
-}; // @require core/cash.js
-// @require collection/each.js
-// @require collection/slice.js
-// @require ./after.js
-// @require ./remove.js
+};
 
-
-fn.replaceWith = function (content) {
-  var _this10 = this;
+Cash.prototype.replaceWith = function (selector) {
+  var _this = this;
 
   return this.each(function (i, ele) {
     var parent = ele.parentNode;
     if (!parent) return;
-    var $eles = i ? cash(content).clone() : cash(content);
+    var $eles = i ? cash(selector).clone() : cash(selector);
 
     if (!$eles[0]) {
-      _this10.remove();
+      _this.remove();
 
       return false;
     }
@@ -1160,45 +1017,43 @@ fn.replaceWith = function (content) {
     parent.replaceChild($eles[0], ele);
     cash($eles[0]).after($eles.slice(1));
   });
-}; // @require core/cash.js
-// @require ./replace_with.js
+};
 
-
-fn.replaceAll = function (content) {
-  cash(content).replaceWith(this);
+Cash.prototype.replaceAll = function (selector) {
+  cash(selector).replaceWith(this);
   return this;
-}; // @require core/cash.js
-// @require collection/each.js
+};
 
-
-fn.text = function (content) {
-  if (content === undefined) return this[0] ? this[0].textContent : '';
+function text(text) {
+  if (text === undefined) return this[0] ? this[0].textContent : '';
   return this.each(function (i, ele) {
-    ele.textContent = content;
+    ele.textContent = text;
   });
-}; // @optional ./after.js
-// @optional ./append.js
-// @optional ./append_to.js
-// @optional ./before.js
-// @optional ./clone.js
-// @optional ./detach.js
-// @optional ./empty.js
-// @optional ./html.js
-// @optional ./insert_after.js
-// @optional ./insert_before.js
-// @optional ./prepend.js
-// @optional ./prepend_to.js
-// @optional ./remove.js
-// @optional ./replace_all.js
-// @optional ./replace_with.js
-// @optional ./text.js
-// @require core/cash.js
-// @require core/variables.js
+}
 
+;
+Cash.prototype.text = text; // @optional ./after.ts
+// @optional ./append.ts
+// @optional ./append_to.ts
+// @optional ./before.ts
+// @optional ./clone.ts
+// @optional ./detach.ts
+// @optional ./empty.ts
+// @optional ./html.ts
+// @optional ./insert_after.ts
+// @optional ./insert_before.ts
+// @optional ./prepend.ts
+// @optional ./prepend_to.ts
+// @optional ./remove.ts
+// @optional ./replace_all.ts
+// @optional ./replace_with.ts
+// @optional ./text.ts
+// @require core/cash.ts
+// @require core/variables.ts
 
 var docEle = doc.documentElement;
 
-fn.offset = function () {
+Cash.prototype.offset = function () {
   var ele = this[0];
   if (!ele) return;
   var rect = ele.getBoundingClientRect();
@@ -1206,59 +1061,40 @@ fn.offset = function () {
     top: rect.top + win.pageYOffset - docEle.clientTop,
     left: rect.left + win.pageXOffset - docEle.clientLeft
   };
-}; // @require core/cash.js
+};
 
-
-fn.offsetParent = function () {
+Cash.prototype.offsetParent = function () {
   return cash(this[0] && this[0].offsetParent);
-}; // @require core/cash.js
+};
 
-
-fn.position = function () {
+Cash.prototype.position = function () {
   var ele = this[0];
   if (!ele) return;
   return {
     left: ele.offsetLeft,
     top: ele.offsetTop
   };
-}; // @optional ./offset.js
-// @optional ./offset_parent.js
-// @optional ./position.js
-// @require core/cash.js
-// @require core/matches.js
-// @require core/unique.js
-// @require collection/each.js
-// @require collection/filter.js
+};
 
-
-fn.children = function (selector) {
+Cash.prototype.children = function (selector) {
   var result = [];
   this.each(function (i, ele) {
     push.apply(result, ele.children);
   });
   result = cash(unique(result));
   if (!selector) return result;
-  return result.filter(function (i, ele) {
-    return matches(ele, selector);
-  });
-}; // @require core/cash.js
-// @require core/unique.js
-// @require collection/each.js
+  return result.filter(selector);
+};
 
-
-fn.contents = function () {
+Cash.prototype.contents = function () {
   var result = [];
   this.each(function (i, ele) {
     push.apply(result, ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes);
   });
   return cash(result.length && unique(result));
-}; // @require core/cash.js
-// @require core/unique.js
-// @require core/find.js
-// @require core/variables.js
+};
 
-
-fn.find = function (selector) {
+Cash.prototype.find = function (selector) {
   var result = [];
 
   for (var i = 0, l = this.length; i < l; i++) {
@@ -1270,55 +1106,41 @@ fn.find = function (selector) {
   }
 
   return cash(result.length && unique(result));
-}; // @require core/cash.js
-// @require core/find.js
-// @require core/type_checking.js
-// @require collection/filter.js
+};
 
-
-fn.has = function (selector) {
+Cash.prototype.has = function (selector) {
   var comparator = isString(selector) ? function (i, ele) {
     return !!find(selector, ele).length;
   } : function (i, ele) {
     return ele.contains(selector);
   };
   return this.filter(comparator);
-}; // @require core/cash.js
-// @require core/get_compare_function.js
-// @require collection/each.js
+};
 
-
-fn.is = function (selector) {
-  if (!selector || !this[0]) return false;
-  var comparator = getCompareFunction(selector);
+Cash.prototype.is = function (comparator) {
+  if (!comparator || !this[0]) return false;
+  var compare = getCompareFunction(comparator);
   var check = false;
   this.each(function (i, ele) {
-    check = comparator(i, ele, selector);
+    check = compare.call(ele, i, ele);
     return !check;
   });
   return check;
-}; // @require core/cash.js
+};
 
-
-fn.next = function () {
+Cash.prototype.next = function () {
   return cash(this[0] && this[0].nextElementSibling);
-}; // @require core/cash.js
-// @require core/get_compare_function.js
-// @require collection/filter.js
+};
 
-
-fn.not = function (selector) {
-  if (!selector || !this[0]) return this;
-  var comparator = getCompareFunction(selector);
+Cash.prototype.not = function (comparator) {
+  if (!comparator || !this[0]) return this;
+  var compare = getCompareFunction(comparator);
   return this.filter(function (i, ele) {
-    return !comparator(i, ele, selector);
+    return !compare.call(ele, i, ele);
   });
-}; // @require core/cash.js
-// @require core/unique.js
-// @require collection/each.js
+};
 
-
-fn.parent = function () {
+Cash.prototype.parent = function () {
   var result = [];
   this.each(function (i, ele) {
     if (ele && ele.parentNode) {
@@ -1326,46 +1148,21 @@ fn.parent = function () {
     }
   });
   return cash(unique(result));
-}; // @require core/cash.js
-// @require core/variables.js
-// @require traversal/children.js
-// @require traversal/parent.js
-// @require ./get.js
-//FIXME Ugly file name, is there a better option?
+};
 
-
-fn.index = function (ele) {
-  var child = ele ? cash(ele)[0] : this[0],
-      collection = ele ? this : cash(child).parent().children();
+Cash.prototype.index = function (selector) {
+  var child = selector ? cash(selector)[0] : this[0],
+      collection = selector ? this : cash(child).parent().children();
   return indexOf.call(collection, child);
-}; // @optional ./add.js
-// @optional ./each.js
-// @optional ./eq.js
-// @optional ./filter.js
-// @optional ./first.js
-// @optional ./get.js
-// @optional ./indexFn.js
-// @optional ./last.js
-// @optional ./map.js
-// @optional ./slice.js
-// @require core/cash.js
-// @require collection/filter.js
-// @require ./is.js
-// @require ./parent.js
+};
 
-
-fn.closest = function (selector) {
+Cash.prototype.closest = function (selector) {
   if (!selector || !this[0]) return cash();
   if (this.is(selector)) return this.filter(selector);
   return this.parent().closest(selector);
-}; // @require core/cash.js
-// @require core/matches.js
-// @require core/unique.js
-// @require core/variables.js
-// @require collection/each.js
+};
 
-
-fn.parents = function (selector) {
+Cash.prototype.parents = function (selector) {
   var result = [];
   var last;
   this.each(function (i, ele) {
@@ -1380,43 +1177,42 @@ fn.parents = function (selector) {
     }
   });
   return cash(unique(result));
-}; // @require core/cash.js
+};
 
-
-fn.prev = function () {
+Cash.prototype.prev = function () {
   return cash(this[0] && this[0].previousElementSibling);
-}; // @require core/cash.js
-// @require collection/filter.js
-// @require ./children.js
-// @require ./parent.js
+};
 
-
-fn.siblings = function () {
+Cash.prototype.siblings = function () {
   var ele = this[0];
   return this.parent().children().filter(function (i, child) {
     return child !== ele;
   });
-}; // @optional ./children.js
-// @optional ./closest.js
-// @optional ./contents.js
-// @optional ./find.js
-// @optional ./has.js
-// @optional ./is.js
-// @optional ./next.js
-// @optional ./not.js
-// @optional ./parent.js
-// @optional ./parents.js
-// @optional ./prev.js
-// @optional ./siblings.js
-// @optional attributes/index.js
-// @optional collection/index.js
-// @optional css/index.js
-// @optional data/index.js
-// @optional dimensions/index.js
-// @optional events/index.js
-// @optional forms/index.js
-// @optional manipulation/index.js
-// @optional offset/index.js
-// @optional traversal/index.js
-// @require core/index.js
-export default cash;
+}; // @optional ./children.ts
+// @optional ./closest.ts
+// @optional ./contents.ts
+// @optional ./find.ts
+// @optional ./has.ts
+// @optional ./is.ts
+// @optional ./next.ts
+// @optional ./not.ts
+// @optional ./parent.ts
+// @optional ./parents.ts
+// @optional ./prev.ts
+// @optional ./siblings.ts
+// @optional attributes/index.ts
+// @optional collection/index.ts
+// @optional css/index.ts
+// @optional data/index.ts
+// @optional dimensions/index.ts
+// @optional events/index.ts
+// @optional forms/index.ts
+// @optional manipulation/index.ts
+// @optional offset/index.ts
+// @optional traversal/index.ts
+// @require core/index.ts
+// @priority -100
+// @require ./cash.ts
+
+
+exports.default = cash;
