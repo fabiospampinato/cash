@@ -38,6 +38,7 @@
   "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.26.3",
+    "bundlesize": "^0.17.0",
     "jquery": "^3.3.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
