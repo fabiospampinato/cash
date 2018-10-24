@@ -4,21 +4,17 @@
 // @require collection/each.ts
 
 interface Cash {
-  hasClass ( classes: string ): boolean;
+  hasClass ( cls: string ): boolean;
 }
 
 Cash.prototype.hasClass = function ( this: Cash, cls: string ) {
 
-  const classes = getSplitValues ( cls );
-
   let check = false;
 
-  if ( classes.length ) {
-    this.each ( ( i, ele ) => {
-      check = ele.classList.contains ( classes[0] );
-      return !check;
-    });
-  }
+  this.each ( ( i, ele ) => {
+    check = ele.classList.contains ( cls );
+    return !check;
+  });
 
   return check;
 
