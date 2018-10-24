@@ -1,14 +1,16 @@
 
 // @require ./cash.ts
 
-const camelCaseRe = /(?:^\w|[A-Z]|\b\w)/g,
-      camelCaseWhitespaceRe = /[\s-_]+/g;
+var dashAlphaRe = /-([a-z])/g;
 
-function camelCase ( str: string ): string {
-  return str.replace ( camelCaseRe, function ( letter, index ) {
-    return letter[ !index ? 'toLowerCase' : 'toUpperCase' ]();
-  }).replace ( camelCaseWhitespaceRe, '' );
-};
+function camelCaseReplace ( all, letter ) {
+	return letter.toUpperCase ();
+}
+
+/** This is a description of the foo function. */
+function camelCase ( str: string ) {
+	return str.replace ( dashAlphaRe, camelCaseReplace );
+}
 
 interface CashStatic {
   camelCase ( str: string ): string;
