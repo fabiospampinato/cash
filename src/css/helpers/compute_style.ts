@@ -3,7 +3,7 @@
 
 function computeStyle ( ele: HTMLElement, prop: string, isVariable?: boolean ): undefined | string {
 
-  if ( ele.nodeType !== 1 ) return;
+  if ( ele.nodeType !== 1 || !prop ) return;
 
   const style = win.getComputedStyle ( ele, null );
 
