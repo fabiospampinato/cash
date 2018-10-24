@@ -38,6 +38,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^10.12.0",
     "browser-sync": "^2.26.3",
     "jquery": "^3.3.1",
     "karma": "^3.0.0",
