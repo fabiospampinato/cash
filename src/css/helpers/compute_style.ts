@@ -7,6 +7,6 @@ function computeStyle ( ele: HTMLElement, prop: string, isVariable?: boolean ): 
 
   const style = win.getComputedStyle ( ele, null );
 
-  return prop ? ( isVariable ? style.getPropertyValue ( prop ) : style[prop] ) : style;
+  return prop ? ( isVariable ? style.getPropertyValue ( prop ) || undefined : style[prop] ) : style;
 
 }
