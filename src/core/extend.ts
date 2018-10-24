@@ -1,7 +1,7 @@
 
 // @require ./cash.ts
 
-function extend ( target = this ) {
+function extend ( target, ...objs: any[] ) {
 
   let args = arguments,
       length = args.length;
@@ -17,11 +17,15 @@ function extend ( target = this ) {
 }
 
 interface Cash {
-  extend ( target, ...objs: any[] ): this;
+  extend ( plugins: plainObject ): this;
 }
+
+Cash.prototype.extend = function ( plugins: plainObject ) {
+  return extend ( cash.fn, plugins );
+};
 
 interface CashStatic {
   extend ( target, ...objs: any[] );
 }
 
-Cash.prototype.extend = cash.extend = extend;
+cash.extend = extend;
