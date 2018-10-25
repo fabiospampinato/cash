@@ -3,6 +3,8 @@ var fixture = '\
   <div class="parent">\
     <div class="anchor">content</div>\
   </div>\
+  <div class="uncle"></div>\
+  <div class="aunt"></div>\
 ';
 
 describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -324,6 +326,17 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'supports multiple elements', function ( t ) {
+
+      var toReplace = $('.parent, .uncle, .aunt');
+      var html = '<p></p>';
+
+      $(html).replaceAll ( toReplace );
+
+      t.is ( $('#qunit-fixture p').length, 3 );
+
+    });
+
   });
 
   describe ( '$.fn.replaceWith', function ( it ) {
@@ -339,6 +352,17 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       t.is ( parent.html ().trim (), html );
       t.is ( $('.anchor').length, 0 );
       t.is ( $('.parent p').length, 1 );
+
+    });
+
+    it ( 'supports multiple elements', function ( t ) {
+
+      var toReplace = $('.parent, .uncle, .aunt');
+      var html = '<p></p>';
+
+      toReplace.replaceWith ( html );
+
+      t.is ( $('#qunit-fixture p').length, 3 );
 
     });
 
