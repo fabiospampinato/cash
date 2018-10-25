@@ -7,7 +7,6 @@ function camelCaseReplace ( all, letter ) {
 	return letter.toUpperCase ();
 }
 
-/** This is a description of the foo function. */
 function camelCase ( str: string ) {
 	return str.replace ( dashAlphaRe, camelCaseReplace );
 }
