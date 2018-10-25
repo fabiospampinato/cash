@@ -6,7 +6,7 @@
 // @require ./is_css_variable.ts
 
 const prefixedProps: plainObject = {},
-      {style} = doc.createElement ( 'div' ),
+      {style} = div,
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
 function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( prop ) ): string {

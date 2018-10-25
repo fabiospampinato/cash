@@ -18,7 +18,7 @@ function initContainers () {
         tr = doc.createElement ( 'tr' );
 
   containers = {
-    '*': doc.createElement ( 'div' ),
+    '*': div,
     tr: doc.createElement ( 'tbody' ),
     td: tr,
     th: tr,
