@@ -8,7 +8,7 @@ interface Cash {
 }
 
 Cash.prototype.prepend = function ( this: Cash ) {
-  each ( arguments, ( selector: Selector ) => {
+  each ( arguments, ( i, selector: Selector ) => {
     insertContent ( this, cash ( selector ), true );
   });
   return this;

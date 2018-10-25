@@ -8,7 +8,7 @@ interface Cash {
   innerHeight (): number;
 }
 
-each ( ['Width', 'Height'], ( prop: string ) => {
+each ( ['Width', 'Height'], ( i, prop: string ) => {
 
   Cash.prototype[`inner${prop}`] = function () {
 

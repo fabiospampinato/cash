@@ -9,7 +9,7 @@ interface Cash {
   outerHeight ( includeMargins?: boolean ): number;
 }
 
-each ( ['Width', 'Height'], ( prop, index ) => {
+each ( ['Width', 'Height'], ( index: number, prop: string ) => {
 
   Cash.prototype[`outer${prop}`] = function ( includeMargins?: boolean ) {
 

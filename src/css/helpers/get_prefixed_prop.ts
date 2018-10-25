@@ -19,7 +19,7 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
           propUC = `${propCC.charAt ( 0 ).toUpperCase ()}${propCC.slice ( 1 )}`,
           props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
-    each ( props, p => {
+    each ( props, ( i, p ) => {
       if ( p in style ) {
         prefixedProps[prop] = p;
         return false;

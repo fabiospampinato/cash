@@ -17,7 +17,7 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: F
 
   } else {
 
-    each ( getSplitValues ( eventFullName ), eventFullName => {
+    each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
       const [name, namespaces] = parseEventName ( eventFullName );
 

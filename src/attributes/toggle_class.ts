@@ -16,7 +16,7 @@ Cash.prototype.toggleClass = function ( this: Cash, cls: string, force?: boolean
   if ( !classes.length ) return this;
 
   return this.each ( ( i, ele ) => {
-    each ( classes, c => {
+    each ( classes, ( i, c ) => {
       if ( isForce ) {
         force ? ele.classList.add ( c ) : ele.classList.remove ( c );
       } else {

@@ -5,7 +5,7 @@ function each ( arr: ArrayLike<any>, callback: Function ): void {
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
-    if ( callback.call ( arr[i], arr[i], i, arr ) === false ) break;
+    if ( callback.call ( arr[i], i, arr[i] ) === false ) break;
 
   }
 

@@ -8,7 +8,7 @@ interface Cash {
 }
 
 Cash.prototype.before = function ( this: Cash ) {
-  each ( arguments, ( selector: Selector ) => {
+  each ( arguments, ( i, selector: Selector ) => {
     cash ( selector ).insertBefore ( this );
   });
   return this;

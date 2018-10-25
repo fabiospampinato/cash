@@ -14,7 +14,7 @@ Cash.prototype.removeAttr = function ( this: Cash, attr: string ) {
   if ( !attrs.length ) return this;
 
   return this.each ( ( i, ele ) => {
-    each ( attrs, a => {
+    each ( attrs, ( i, a ) => {
       ele.removeAttribute ( a );
     });
   });

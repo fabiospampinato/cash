@@ -18,7 +18,7 @@ Cash.prototype.serialize = function ( this: Cash ) {
 
   this.each ( ( i, ele ) => {
 
-    each ( ele.elements || [ele], ele => {
+    each ( ele.elements || [ele], ( i, ele ) => {
 
       if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' ) return;
 
@@ -32,7 +32,7 @@ Cash.prototype.serialize = function ( this: Cash ) {
 
       const values = isArray ( value ) ? value : [value];
 
-      each ( values, value => {
+      each ( values, ( i, value ) => {
         query += queryEncode ( ele.name, value );
       });
 

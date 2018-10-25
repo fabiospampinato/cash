@@ -23,7 +23,7 @@ function val ( this: Cash, value?: string ): string | string[] | Cash {
 
     if ( isMultiple && isArray ( eleValue ) ) {
 
-      each ( ele.options, option => {
+      each ( ele.options, ( i, option ) => {
 
         option.selected = eleValue.indexOf ( option.value ) >= 0;
 

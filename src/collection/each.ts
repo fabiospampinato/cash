@@ -7,6 +7,6 @@ interface Cash {
 }
 
 Cash.prototype.each = function ( this: Cash, callback: Function ) {
-  each ( this, ( ele, i ) => callback.call ( ele, i, ele ) );
+  each ( this, callback );
   return this;
 };

@@ -41,7 +41,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
   }
 
-  each ( getSplitValues ( eventFullName ), eventFullName => {
+  each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
     const [name, namespaces] = parseEventName ( eventFullName );
 

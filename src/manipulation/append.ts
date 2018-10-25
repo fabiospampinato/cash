@@ -8,7 +8,7 @@ interface Cash {
 }
 
 Cash.prototype.append = function ( this: Cash ) {
-  each ( arguments, ( selector: Selector ) => {
+  each ( arguments, ( i, selector: Selector ) => {
     insertContent ( this, cash ( selector ) );
   });
   return this;

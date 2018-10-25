@@ -10,7 +10,7 @@ interface Cash {
 }
 
 Cash.prototype.after = function ( this: Cash ) {
-  each ( reverse.apply ( arguments ), ( selector: Selector ) => {
+  each ( reverse.apply ( arguments ), ( i, selector: Selector ) => {
     reverse.apply ( cash ( selector ).slice () ).insertAfter ( this );
   });
   return this;

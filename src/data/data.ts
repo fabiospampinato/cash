@@ -21,7 +21,7 @@ function data ( this: Cash, name: string | plainObject, value? ) {
 
     if ( !this[0] ) return;
 
-    each ( this[0].attributes, attr => {
+    each ( this[0].attributes, ( i, attr ) => {
 
       const match = attr.name.match ( dataAttributeRe );
 

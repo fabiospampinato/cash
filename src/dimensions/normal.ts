@@ -14,7 +14,7 @@ interface Cash {
   height ( value: number | string ): this;
 }
 
-each ( ['width', 'height'], ( prop: string, index: number ) => {
+each ( ['width', 'height'], ( index: number, prop: string ) => {
 
   Cash.prototype[prop] = function ( value?: number | string ) {
 
