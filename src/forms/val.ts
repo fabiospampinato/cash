@@ -18,7 +18,7 @@ function val ( this: Cash, value?: string ): string | string[] | Cash {
 
   return this.each ( ( i, ele ) => {
 
-    const isMultiple = selectMultipleRe.test ( ele.type ),
+    const isMultiple = ele.multiple,
           eleValue = ( value === null ) ? ( isMultiple ? [] : '' ) : value;
 
     if ( isMultiple && isArray ( eleValue ) ) {

@@ -1,18 +1,11 @@
 
-// @require ./get_value_select_single.ts
-// @require ./get_value_select_multiple.ts
+// @require core/pluck.ts
+// @require core/variables.ts
 
-const selectOneRe = /select-one/i,
-      selectMultipleRe = /select-multiple/i;
+function getValue ( ele ): string | string[] {
 
-function getValue ( ele: HTMLElement ): string | string[] {
+  if ( ele.multiple ) return pluck ( filter.call ( ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled ), 'value' ) as string[];
 
-  const type = ele['type'];
-
-  if ( selectOneRe.test ( type ) ) return getValueSelectSingle ( ele as HTMLSelectElement );
-
-  if ( selectMultipleRe.test ( type ) ) return getValueSelectMultiple ( ele as HTMLSelectElement );
-
-  return ele['value'] || '';
+  return ele.value || '';
 
 }
