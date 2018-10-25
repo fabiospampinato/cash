@@ -30,6 +30,13 @@ function css ( this: Cash, prop: string | plainObject, value? ) {
 
     value = getSuffixedValue ( prop, value, isVariable );
 
+    // convert negative values for width/height to 0
+    if ( [ 'width', 'height' ].indexOf ( prop ) >= 0 && parseFloat( value ) < 0 ) {
+
+      value = 0;
+
+    }
+
     return this.each ( ( i, ele ) => {
 
       if ( ele.nodeType !== 1 ) return;

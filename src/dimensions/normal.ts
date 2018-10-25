@@ -28,7 +28,9 @@ each ( ['width', 'height'], ( prop: string, index: number ) => {
 
     }
 
-    const valueNumber = parseInt ( value as string, 10 );
+    let valueNumber = parseInt ( value as string, 10 );
+
+    valueNumber = Math.max( 0, valueNumber ); // convert negative values to 0
 
     return this.each ( ( i, ele ) => {
 

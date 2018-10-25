@@ -322,6 +322,12 @@ QUnit.test( "css", function( assert ) {
   assert.equal($('.css-fixture').css('width'), '100px', "css write many" );
 });
 
+QUnit.test( "negative values for width/height", function( assert ) {
+  $('.css-fixture').css({ width: '-1px', height: '-1px' });
+  assert.equal($('.css-fixture').css('width'), '0px');
+  assert.equal($('.css-fixture').css('height'), '0px');
+});
+
 /* DATA */
 
 QUnit.test( "data", function( assert ) {
@@ -377,6 +383,13 @@ QUnit.test( "outerWidth", function( assert ) {
   assert.equal($('.css-fixture').outerWidth(), 100, "outerWidth" );
   assert.equal($(window).outerWidth(), window.outerWidth, "(window) outerWidth" );
   assert.equal($('.css-fixture').outerWidth(true), 140, "outerWidth(margins)" );
+});
+
+QUnit.test( "negative values", function( assert ) {
+  $('.css-fixture').width(-1);
+  $('.css-fixture').height(-1);
+  assert.equal($('.css-fixture').width(), 0);
+  assert.equal($('.css-fixture').height(), 0);
 });
 
 /* EVENTS */
