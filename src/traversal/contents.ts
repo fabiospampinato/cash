@@ -17,6 +17,6 @@ Cash.prototype.contents = function ( this: Cash ) {
 
   });
 
-  return cash ( result.length && unique ( result ) );
+  return cash ( unique ( result ) );
 
 };

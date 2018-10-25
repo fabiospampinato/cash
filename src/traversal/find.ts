@@ -19,6 +19,6 @@ Cash.prototype.find = function ( this: Cash, selector: string ) {
     }
   }
 
-  return cash ( result.length && unique ( result ) );
+  return cash ( unique ( result ) );
 
 };
