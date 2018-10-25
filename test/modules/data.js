@@ -1,7 +1,7 @@
 
 var fixture = '\
   <div class="data" data-one="one" data-two="two"></div>\
-  <div class="types" data-int="3" data-float="3.14" data-string="foo" data-object=\'{"json": true}\' data-array="[1,2,3]"></div>\
+  <div class="types" data-true="true" data-false="false" data-null="null" data-int="3" data-float="3.14" data-string="foo" data-object=\'{"json": true}\' data-array="[1,2,3]"></div>\
 ';
 
 describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -21,6 +21,9 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var ele = $('.types');
 
+      t.is ( ele.data ( 'true' ), true );
+      t.is ( ele.data ( 'false' ), false );
+      t.is ( ele.data ( 'null' ), null );
       t.is ( ele.data ( 'int' ), 3 );
       t.is ( ele.data ( 'float' ), 3.14 );
       t.is ( ele.data ( 'string' ), 'foo' );
