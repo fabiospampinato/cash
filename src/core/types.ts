@@ -14,6 +14,6 @@ type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
 type Ele = Window | Document | HTMLElement | Element;
-type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | Cash;
+type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
 type Comparator = string | Function | Ele | Cash;
 type Context = Document | HTMLElement | Element;

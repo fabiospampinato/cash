@@ -1,7 +1,7 @@
 
 // @require ./cash.ts
 
-var dashAlphaRe = /-([a-z])/g;
+const dashAlphaRe = /-([a-z])/g;
 
 function camelCaseReplace ( all, letter ) {
 	return letter.toUpperCase ();

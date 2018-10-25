@@ -1,6 +1,7 @@
 
 // @require core/cash.ts
 // @require core/unique.ts
+// @require core/variables.ts
 // @require collection/each.ts
 // @require collection/filter.ts
 

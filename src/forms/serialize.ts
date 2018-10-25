@@ -20,11 +20,7 @@ Cash.prototype.serialize = function ( this: Cash ) {
 
     each ( ele.elements || [ele], ( i, ele ) => {
 
-      if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' ) return;
-
-      if ( skippableRe.test ( ele.type ) ) return;
-
-      if ( checkableRe.test ( ele.type ) && !ele.checked ) return;
+      if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' || skippableRe.test ( ele.type ) || ( checkableRe.test ( ele.type ) && !ele.checked ) ) return;
 
       const value = getValue ( ele );
 

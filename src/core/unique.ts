@@ -1,12 +1,13 @@
 
 // @require ./cash.ts
+// @require ./variables
 
-function unique ( arr: any[] ) {
-  return arr.filter ( ( item, index, self ) => self.indexOf ( item ) === index );
+function unique ( arr: ArrayLike<any> ): ArrayLike<any> {
+  return filter.call ( arr, ( item, index, self ) => indexOf.call ( self, item ) === index );
 }
 
 interface CashStatic {
-  unique ( arr: any[] ): any[];
+  unique ( arr: ArrayLike<any> ): ArrayLike<any>;
 }
 
 cash.unique = unique;
