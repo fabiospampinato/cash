@@ -3,9 +3,7 @@
 
 function matches ( ele: HTMLElement, selector: string ): boolean {
 
-  const matches = ele && ( ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector'] );
-
-  return !!matches && matches.call ( ele, selector );
+  return !!ele && !!ele.matches && ele.matches ( selector );
 
 }
 
