@@ -129,7 +129,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('select[name=select]').val ();
 
-      t.is ( val, null ); //TODO: Maybe we should get `undefined` here
+      t.is ( val, '' ); //TODO: Maybe we should get `undefined` here
 
     });
 
