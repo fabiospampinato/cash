@@ -6,5 +6,15 @@ interface Cash {
 }
 
 Cash.prototype.next = function ( this: Cash ) {
-  return cash ( this[0] && this[0].nextElementSibling );
+
+  let result: Ele[] = [];
+
+  this.each ( ( i, ele ) => {
+    if ( ele.nextElementSibling ) {
+      result.push ( ele.nextElementSibling ) ;
+    }
+  });
+
+  return cash ( unique ( result ) );
+
 };

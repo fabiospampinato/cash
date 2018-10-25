@@ -140,6 +140,16 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports multiple elements', function ( t ) {
+
+      var anchors = $('.child, .prevprev');
+      var next = $('.prev, .next');
+
+      t.deepEqual ( anchors.next (), next );
+
+    });
+
+
   });
 
   describe ( '$.fn.not', function ( it ) {
@@ -209,6 +219,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var prev = $('.prev');
 
       t.deepEqual ( child.prev (), prev );
+
+    });
+
+    it ( 'supports multiple elements', function ( t ) {
+
+      var anchors = $('.child, .nextnext');
+      var prev = $('.prev, .next');
+
+      t.deepEqual ( anchors.prev (), prev );
 
     });
 
