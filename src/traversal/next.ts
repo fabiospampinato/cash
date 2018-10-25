@@ -1,5 +1,7 @@
 
 // @require core/cash.ts
+// @require core/pluck.ts
+// @require core/unique.ts
 
 interface Cash {
   next (): Cash;
@@ -7,14 +9,6 @@ interface Cash {
 
 Cash.prototype.next = function ( this: Cash ) {
 
-  let result: Ele[] = [];
-
-  this.each ( ( i, ele ) => {
-    if ( ele.nextElementSibling ) {
-      result.push ( ele.nextElementSibling ) ;
-    }
-  });
-
-  return cash ( unique ( result ) );
+  return cash ( unique ( pluck ( this, 'nextElementSibling' ) ) );
 
 };
