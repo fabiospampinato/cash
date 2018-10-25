@@ -1,12 +1,6 @@
 
 function hasNamespaces ( ns1: string[], ns2: string[] ): boolean {
 
-  for ( let i = 0, l = ns2.length; i < l; i++ ) {
-
-    if ( ns1.indexOf ( ns2[i] ) < 0 ) return false;
-
-  }
-
-  return true;
+  return !ns2 || !some.call ( ns2, ns => ns1.indexOf ( ns ) < 0 );
 
 }
