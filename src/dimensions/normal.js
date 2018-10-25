@@ -23,6 +23,8 @@ each ( ['width', 'height'], ( prop, index ) => {
 
     value = parseInt ( value, 10 );
 
+    value = Math.max( 0, value ); // convert negative values to 0
+
     return this.each ( ( i, ele ) => {
 
       if ( ele.nodeType !== 1 ) return;
