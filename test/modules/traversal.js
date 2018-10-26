@@ -149,6 +149,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports selector', function ( t ) {
+
+      var child = $('.child');
+      var next = $('.next');
+
+      t.deepEqual ( child.next ( '.next' ), next );
+      t.is ( child.next ( 'foo' ).length, 0 );
+
+    });
 
   });
 
@@ -176,6 +185,16 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var parent = $('.parent');
 
       t.deepEqual ( child.parent (), parent );
+
+    });
+
+    it ( 'supports selector', function ( t ) {
+
+      var child = $('.child');
+      var parent = $('.parent');
+
+      t.deepEqual ( child.parent ( '.parent' ), parent );
+      t.deepEqual ( child.parent ( 'foo' ).length, 0 );
 
     });
 
@@ -231,6 +250,17 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports selector', function ( t ) {
+
+      var child = $('.child');
+      var prev = $('.prev');
+
+      t.deepEqual ( child.prev ( '.prev' ), prev );
+      t.is ( child.prev ( 'foo' ).length, 0 );
+
+    });
+
+
   });
 
   describe ( '$.fn.siblings', function ( it ) {
@@ -241,6 +271,18 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var siblings = $('.sibling').not ( child );
 
       t.deepEqual ( child.siblings (), siblings );
+
+    });
+
+    it ( 'supports selector', function ( t ) {
+
+      var child = $('.child');
+      var siblings = $('.sibling').not ( child );
+      var surrounding = $('.prev, .next');
+
+      t.deepEqual ( child.siblings ( '.prev, .next' ), surrounding );
+      t.deepEqual ( child.siblings ( '*' ), child.siblings () );
+      t.deepEqual ( child.siblings ( 'foo' ).length, 0 );
 
     });
 

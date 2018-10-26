@@ -1,14 +1,15 @@
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/pluck.ts
 // @require core/unique.ts
 
 interface Cash {
-  parent (): Cash;
+  parent ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.parent = function ( this: Cash ) {
+Cash.prototype.parent = function ( this: Cash, comparator?: Comparator ) {
 
-  return cash ( unique ( pluck ( this, 'parentNode' ) ) );
+  return filtered ( cash ( unique ( pluck ( this, 'parentNode' ) ) ), comparator );
 
 };
