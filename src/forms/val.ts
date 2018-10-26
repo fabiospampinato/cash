@@ -11,17 +11,16 @@ interface Cash {
 }
 
 function val ( this: Cash ): string | string[];
-function val ( this: Cash, value: string ): Cash;
-function val ( this: Cash, value?: string ): string | string[] | Cash {
+function val ( this: Cash, value: string | string[] ): Cash;
+function val ( this: Cash, value?: string | string[] ): string | string[] | Cash {
 
   if ( value === undefined ) return this[0] && getValue ( this[0] );
 
   return this.each ( ( i, ele ) => {
 
-    const isMultiple = ele.multiple,
-          eleValue = ( value === null ) ? ( isMultiple ? [] : '' ) : value;
+    if ( ele.tagName === 'SELECT' ) {
 
-    if ( isMultiple && isArray ( eleValue ) ) {
+      const eleValue = isArray ( value ) ? value : ( value === null ? [] : [value] );
 
       each ( ele.options, ( i, option ) => {
 
@@ -31,7 +30,7 @@ function val ( this: Cash, value?: string ): string | string[] | Cash {
 
     } else {
 
-      ele.value = eleValue;
+      ele.value = value === null ? '' : value;
 
     }
 
