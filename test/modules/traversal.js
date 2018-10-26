@@ -215,6 +215,14 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var parents = child.parents ();
 
       t.is ( parents.length, 5 );
+
+    });
+
+    it ( 'stops at <html>', function ( t ) {
+
+      var child = $('.child');
+      var parents = child.parents ();
+
       t.is ( parents.last ()[0], document.documentElement );
 
     });
