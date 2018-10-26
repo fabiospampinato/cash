@@ -271,6 +271,23 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
   });
 
+  describe ( '$.fn.prevAll', function ( it ) {
+
+    it ( 'gets all the previous siblings', function ( t ) {
+
+      var anchor = $('.child');
+      var prev = $('.prev');
+      var prevprev = $('.prevprev');
+      var prevs = anchor.prevAll ();
+
+      t.deepEqual ( prevs.length, 2 );
+      t.deepEqual ( prevs[0], prev[0] );
+      t.deepEqual ( prevs[1], prevprev[0] );
+
+    });
+
+  });
+
   describe ( '$.fn.siblings', function ( it ) {
 
     it ( 'gets the siblings', function ( t ) {
