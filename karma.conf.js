@@ -111,6 +111,7 @@ function config ( config ) {
       'test/modules/css.js',
       'test/modules/data.js',
       'test/modules/dimensions.js',
+      'test/modules/effects.js',
       'test/modules/events.js',
       'test/modules/forms.js',
       'test/modules/manipulation.js',
