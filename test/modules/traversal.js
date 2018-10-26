@@ -161,6 +161,23 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
   });
 
+  describe ( '$.fn.nextAll', function ( it ) {
+
+    it ( 'gets all the next siblings', function ( t ) {
+
+      var anchor = $('.child');
+      var next = $('.next');
+      var nextnext = $('.nextnext');
+      var nexts = anchor.nextAll ();
+
+      t.deepEqual ( nexts.length, 2 );
+      t.deepEqual ( nexts[0], next[0] );
+      t.deepEqual ( nexts[1], nextnext[0] );
+
+    });
+
+  });
+
   describe ( '$.fn.not', function ( it ) {
 
     it ( 'filter by negating a comparator', function ( t ) {

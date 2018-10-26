@@ -5,11 +5,11 @@
 // @require core/unique.ts
 
 interface Cash {
-  next ( comparator?: Comparator ): Cash;
+  next ( comparator?: Comparator, all?: boolean ): Cash;
 }
 
-Cash.prototype.next = function ( this: Cash, comparator?: Comparator ) {
+Cash.prototype.next = function ( this: Cash, comparator?: Comparator, all?: boolean ) {
 
-  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling' ) ) ), comparator );
+  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', all ) ) ), comparator );
 
 };
