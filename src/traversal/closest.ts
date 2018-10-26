@@ -5,15 +5,17 @@
 // @require ./parent.ts
 
 interface Cash {
-  closest ( selector: string ): Cash;
+  closest ( comparator: Comparator ): Cash;
 }
 
-Cash.prototype.closest = function ( this: Cash, selector: string ) {
+Cash.prototype.closest = function ( this: Cash, comparator: Comparator ) {
 
-  if ( !selector || !this[0] ) return cash ();
+  if ( !comparator || !this[0] ) return cash ();
 
-  if ( this.is ( selector ) ) return this.filter ( selector );
+  const filtered = this.filter ( comparator );
 
-  return this.parent ().closest ( selector );
+  if ( filtered.length ) return filtered;
+
+  return this.parent ().closest ( comparator );
 
 };
