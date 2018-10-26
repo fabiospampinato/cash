@@ -1,24 +1,21 @@
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/unique.ts
 // @require core/variables.ts
 // @require collection/each.ts
 // @require collection/filter.ts
 
 interface Cash {
-  children ( selector?: string ): Cash;
+  children ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.children = function ( this: Cash, selector?: string ) {
+Cash.prototype.children = function ( this: Cash, comparator?: Comparator ) {
 
   let result: Ele[] | Cash = [];
 
   this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
 
-  result = cash ( unique ( result ) );
-
-  if ( !selector ) return result;
-
-  return result.filter ( selector );
+  return filtered ( cash ( unique ( result ) ), comparator );
 
 };
