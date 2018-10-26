@@ -90,18 +90,18 @@ $(element).addClass ( className ) // => collection
 | -------------------------------- | -------------------------------------- | -------------------------------------- | ------------------------------ |
 | [fn.serialize ()](#fnserialize-) | [fn.after ()](#fnafter-)               | [fn.offset ()](#fnoffset-)             | [fn.children ()](#fnchildren-) |
 | [fn.val ()](#fnval-)             | [fn.append ()](#fnappend-)             | [fn.offsetParent ()](#fnoffsetparent-) | [fn.closest ()](#fnclosest-)   |
-|                                  | [fn.appendTo ()](#fnappendto-)         | [fn.position ()](#fnposition-)         | [fn.contents ()](#fncontents-)         |
+|                                  | [fn.appendTo ()](#fnappendto-)         | [fn.position ()](#fnposition-)         | [fn.contents ()](#fncontents-) |
 |                                  | [fn.before ()](#fnbefore-)             |                                        | [fn.find ()](#fnfind-)         |
 |                                  | [fn.clone ()](#fnclone-)               |                                        | [fn.has ()](#fnhas-)           |
 |                                  | [fn.detach ()](#fndetach-)             |                                        | [fn.is ()](#fnis-)             |
 |                                  | [fn.empty ()](#fnempty-)               |                                        | [fn.next ()](#fnnext-)         |
-|                                  | [fn.html ()](#fnhtml-)                 |                                        | [fn.not ()](#fnnot-)           |
-|                                  | [fn.insertAfter ()](#fninsertafter-)   |                                        | [fn.parent ()](#fnparent-)     |
-|                                  | [fn.insertBefore ()](#fninsertbefore-) |                                        | [fn.parents ()](#fnparents-)   |
-|                                  | [fn.prepend ()](#fnprepend-)           |                                        | [fn.prev ()](#fnprev-)         |
-|                                  | [fn.prependTo ()](#fnprependto-)       |                                        | [fn.siblings ()](#fnsiblings-) |                               |
-|                                  | [fn.remove ()](#fnremove-)             |                                        |                                |
-|                                  | [fn.replaceAll ()](#fnreplaceall-)     |                                        |                                |
+|                                  | [fn.html ()](#fnhtml-)                 |                                        | [fn.nextAll ()](#fnnextall-)   |
+|                                  | [fn.insertAfter ()](#fninsertafter-)   |                                        | [fn.not ()](#fnnot-)           |
+|                                  | [fn.insertBefore ()](#fninsertbefore-) |                                        | [fn.parent ()](#fnparent-)     |
+|                                  | [fn.prepend ()](#fnprepend-)           |                                        | [fn.parents ()](#fnparents-)   |
+|                                  | [fn.prependTo ()](#fnprependto-)       |                                        | [fn.prev ()](#fnprev-)         |
+|                                  | [fn.remove ()](#fnremove-)             |                                        | [fn.prevAll ()](#fnprevall-)   |
+|                                  | [fn.replaceAll ()](#fnreplaceall-)     |                                        | [fn.siblings ()](#fnsiblings-) |
 |                                  | [fn.replaceWith ()](#fnreplacewith-)   |                                        |                                |
 |                                  | [fn.text ()](#fntext-)                 |                                        |                                |
 
@@ -433,6 +433,16 @@ Returns next sibling.
 
 ```js
 $(element).next () // => collection
+$(element).next ( selector ) // => collection
+```
+
+#### fn.nextAll ()
+
+Returns all the next elements.
+
+```js
+$(element).nextAll () // => collection
+$(element).nextAll ( selector ) // => collection
 ```
 
 #### fn.not ()
@@ -523,7 +533,8 @@ $(element).outerWidth ( includeMargins ) // => Integer
 Returns parent element.
 
 ```js
-$(element).parent() // => collection
+$(element).parent () // => collection
+$(element).parent ( selector ) // => collection
 ```
 
 #### fn.parents ()
@@ -567,6 +578,16 @@ Returns the previous adjacent element.
 
 ```js
 $(element).prev () // => collection
+$(element).prev ( selector ) // => collection
+```
+
+#### fn.prevAll ()
+
+Returns all the previous elements.
+
+```js
+$(element).prevAll () // => collection
+$(element).prevAll ( selector ) // => collection
 ```
 
 #### fn.prop ()
@@ -667,6 +688,7 @@ Returns a collection of sibling elements.
 
 ```js
 $(element).siblings () // => collection
+$(element).siblings ( selector ) // => collection
 ```
 
 #### fn.slice ()
