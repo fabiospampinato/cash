@@ -16,52 +16,52 @@ const SauceLabsLaunchers = {
     version: '11.0',
     platform: 'Windows 8.1'
   },
-  win_edge_17: {
+  win_edge: {
     base: 'SauceLabs',
     browserName: 'MicrosoftEdge',
-    version: '17.17134',
+    version: 'latest',
     platform: 'Windows 10'
   },
-  win_chrome_60: {
+  win_chrome: {
     base: 'SauceLabs',
     browserName: 'chrome',
-    version: '60.0',
+    version: 'latest-5',
     platform: 'Windows 10'
   },
-  win_firefox_50: {
+  win_firefox: {
     base: 'SauceLabs',
     browserName: 'firefox',
-    version: '50.0',
+    version: 'latest-5',
     platform: 'Windows 10'
   },
-  linux_chrome_45: {
+  linux_chrome: {
     base: 'SauceLabs',
     browserName: 'chrome',
-    version: '45.0',
+    version: 'latest',
     platform: 'Linux'
   },
-  linux_firefox_45: {
+  linux_firefox: {
     base: 'SauceLabs',
     browserName: 'firefox',
-    version: '45.0',
+    version: 'latest',
     platform: 'Linux'
   },
-  mac_chrome_60: {
+  mac_chrome: {
     base: 'SauceLabs',
     browserName: 'chrome',
-    version: '60.0',
+    version: 'latest-5',
     platform: 'macOS 10.13'
   },
-  mac_firefox_50: {
+  mac_firefox: {
     base: 'SauceLabs',
     browserName: 'firefox',
-    version: '50.0',
+    version: 'latest-5',
     platform: 'macOS 10.13'
   },
-  mac_safari_12: {
+  mac_safari: {
     base: 'SauceLabs',
     browserName: 'safari',
-    version: '12.0',
+    version: 'latest',
     platform: 'macOS 10.13'
   },
   ios_9: {
