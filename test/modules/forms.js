@@ -129,7 +129,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('select[name=select]').val ();
 
-      t.is ( val, '' ); //TODO: Maybe we should get `undefined` here
+      t.true ( val === '' || val === 'not-selected' ); // This seems a bit browser-dependant, some set it to '', some auto-select the first option instead
 
     });
 

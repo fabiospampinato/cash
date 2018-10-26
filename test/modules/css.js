@@ -38,20 +38,24 @@ describe ( 'CSS', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    it ( 'supports custom variables', function ( t ) {
+    if ( Supports.CSSvariables ) {
 
-      var ele = $('.css');
+      it ( 'supports custom variables', function ( t ) {
 
-      t.is ( ele.css ( '--foo' ), undefined );
-      t.is ( ele.css ( '--bar' ), undefined );
+        var ele = $('.css');
 
-      ele.css ( '--foo', 0 );
-      ele.css ( '--bar', 'content' );
+        t.is ( ele.css ( '--foo' ), undefined );
+        t.is ( ele.css ( '--bar' ), undefined );
 
-      t.is ( ele.css ( '--foo' ), '0' );
-      t.is ( ele.css ( '--bar' ), 'content' );
+        ele.css ( '--foo', 0 );
+        ele.css ( '--bar', 'content' );
 
-    });
+        t.is ( ele.css ( '--foo' ), '0' );
+        t.is ( ele.css ( '--bar' ), 'content' );
+
+      });
+
+    }
 
     it ( 'supports invalid properties', function ( t ) {
 

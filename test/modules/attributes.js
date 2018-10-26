@@ -49,7 +49,7 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       ele.addClass ( 0 );
       ele.addClass ( '' );
-      ele.hasClass ( ' ' ); // Empty spaces will be removed
+      ele.addClass ( ' ' ); // Empty spaces will be removed
       ele.addClass ( undefined );
       ele.addClass ( null );
 
@@ -149,7 +149,6 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       ele.hasClass ( 0 );
       ele.hasClass ( '' );
-      ele.hasClass ( ' ' ); // Empty spaces will be removed
       ele.hasClass ( undefined );
       ele.hasClass ( null );
 
