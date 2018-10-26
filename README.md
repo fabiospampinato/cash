@@ -26,6 +26,8 @@ An **85%** gain in size reduction compared to jQuery. If you need a smaller bund
 | TypeScript Types         | ✔ (generated from code)      | ⚠️ (via DefinitelyTyped)       | ⚠️ (via DefinitelyTyped) |
 | Partial Builds           | ✔ (can exclude single files) | ⚠️ (can exclude whole modules) | ❌                        |
 
+If you're migrating from jQuery be sure to read our [migration guide](https://github.com/kenwheeler/cash/blob/master/docs/migration_guide.md).
+
 ## Usage
 
 Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3.0.0-beta.0/dist/cash.min.js) and use it like this:
