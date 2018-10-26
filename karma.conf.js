@@ -104,7 +104,19 @@ function config ( config ) {
     ],
     files: [
       'dist/cash.js',
-      'test/index.js'
+      'test/helpers.js',
+      'test/modules/attributes.js',
+      'test/modules/collection.js',
+      'test/modules/core.js',
+      'test/modules/css.js',
+      'test/modules/data.js',
+      'test/modules/dimensions.js',
+      'test/modules/events.js',
+      'test/modules/forms.js',
+      'test/modules/manipulation.js',
+      'test/modules/offset.js',
+      'test/modules/traversal.js',
+      'test/modules/utilities.js'
     ],
     browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome', 'Firefox'],
     customLaunchers: SauceLabsLaunchers,
