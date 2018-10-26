@@ -1,0 +1,8 @@
+{
+  "bump.files": {
+    "README.md": [
+      ["cash/([^/]+)/cash.min.js", "cash/[version]/cash.min.js"],
+      ["@([^/]+)/dist/cash.min.js", "@[version]/dist/cash.min.js"]
+    ]
+  }
+}
