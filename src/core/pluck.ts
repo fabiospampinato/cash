@@ -1,8 +1,26 @@
 
 // @require ./variables.ts
 
-function pluck ( arr: ArrayLike<any>, prop: string ): ArrayLike<any> {
+function pluck ( arr: ArrayLike<any>, prop: string, deep?: boolean ): ArrayLike<any> {
 
-  return filter.call ( map.call ( arr, ele => ele[prop] ), ele => ele != null );
+  const plucked = [];
+
+  for ( let i = 0, l = arr.length; i < l; i++ ) {
+
+    let val = arr[i][prop];
+
+    while ( val != null ) {
+
+      plucked.push ( val );
+
+      if ( !deep ) break;
+
+      val = val[prop];
+
+    }
+
+  }
+
+  return plucked;
 
 }
