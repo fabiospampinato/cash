@@ -1,11 +1,10 @@
 /* MIT https://github.com/kenwheeler/cash */
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+exports.__esModule = true;
 var doc = document,
     win = window,
+    div = doc.createElement('div'),
     _a = Array.prototype,
     filter = _a.filter,
     indexOf = _a.indexOf,
@@ -13,6 +12,7 @@ var doc = document,
     push = _a.push,
     reverse = _a.reverse,
     slice = _a.slice,
+    some = _a.some,
     splice = _a.splice;
 var idRe = /^#[\w-]*$/,
     classRe = /^\.[\w-]*$/,
@@ -98,30 +98,28 @@ Cash.prototype.slice = function () {
 }; // @require ./cash.ts
 
 
-var camelCaseRe = /(?:^\w|[A-Z]|\b\w)/g,
-    camelCaseWhitespaceRe = /[\s-_]+/g;
+var dashAlphaRe = /-([a-z])/g;
 
-function camelCase(str) {
-  return str.replace(camelCaseRe, function (letter, index) {
-    return letter[!index ? 'toLowerCase' : 'toUpperCase']();
-  }).replace(camelCaseWhitespaceRe, '');
+function camelCaseReplace(all, letter) {
+  return letter.toUpperCase();
 }
 
-;
+function camelCase(str) {
+  return str.replace(dashAlphaRe, camelCaseReplace);
+}
+
 cash.camelCase = camelCase; // @require ./cash.ts
 
 function each(arr, callback) {
   for (var i = 0, l = arr.length; i < l; i++) {
-    if (callback.call(arr[i], arr[i], i, arr) === false) break;
+    if (callback.call(arr[i], i, arr[i]) === false) break;
   }
 }
 
 cash.each = each;
 
 Cash.prototype.each = function (callback) {
-  each(this, function (ele, i) {
-    return callback.call(ele, i, ele);
-  });
+  each(this, callback);
   return this;
 };
 
@@ -133,8 +131,10 @@ Cash.prototype.removeProp = function (prop) {
 
 
 function extend(target) {
-  if (target === void 0) {
-    target = this;
+  var objs = [];
+
+  for (var _i = 1; _i < arguments.length; _i++) {
+    objs[_i - 1] = arguments[_i];
   }
 
   var args = arguments,
@@ -149,17 +149,29 @@ function extend(target) {
   return target;
 }
 
-Cash.prototype.extend = cash.extend = extend; // @require ./cash.ts
+Cash.prototype.extend = function (plugins) {
+  return extend(cash.fn, plugins);
+};
+
+cash.extend = extend; // @require ./cash.ts
 
 var guid = 1;
 cash.guid = guid; // @require ./cash.ts
 
 function matches(ele, selector) {
-  var matches = ele && (ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
-  return !!matches && matches.call(ele, selector);
+  return !!ele && !!ele.matches && ele.matches(selector);
 }
 
-cash.matches = matches; // @require ./cash.ts
+cash.matches = matches; // @require ./variables.ts
+
+function pluck(arr, prop) {
+  return filter.call(map.call(arr, function (ele) {
+    return ele[prop];
+  }), function (ele) {
+    return ele != null;
+  });
+} // @require ./cash.ts
+
 
 function isCash(x) {
   return x instanceof Cash;
@@ -228,24 +240,16 @@ function getSplitValues(str) {
 }
 
 Cash.prototype.hasClass = function (cls) {
-  var classes = getSplitValues(cls);
-  var check = false;
-
-  if (classes.length) {
-    this.each(function (i, ele) {
-      check = ele.classList.contains(classes[0]);
-      return !check;
-    });
-  }
-
-  return check;
+  return some.call(this, function (ele) {
+    return ele.classList.contains(cls);
+  });
 };
 
 Cash.prototype.removeAttr = function (attr) {
   var attrs = getSplitValues(attr);
   if (!attrs.length) return this;
   return this.each(function (i, ele) {
-    each(attrs, function (a) {
+    each(attrs, function (i, a) {
       ele.removeAttribute(a);
     });
   });
@@ -281,7 +285,7 @@ Cash.prototype.toggleClass = function (cls, force) {
       isForce = force !== undefined;
   if (!classes.length) return this;
   return this.each(function (i, ele) {
-    each(classes, function (c) {
+    each(classes, function (i, c) {
       if (isForce) {
         force ? ele.classList.add(c) : ele.classList.remove(c);
       } else {
@@ -306,12 +310,13 @@ Cash.prototype.removeClass = function (cls) {
 // @optional ./remove_prop.ts
 // @optional ./toggle_class.ts
 // @require ./cash.ts
+// @require ./variables
 
 
 function unique(arr) {
-  return arr.filter(function (item, index, self) {
-    return self.indexOf(item) === index;
-  });
+  return arr.length > 1 ? filter.call(arr, function (item, index, self) {
+    return indexOf.call(self, item) === index;
+  }) : arr;
 }
 
 cash.unique = unique;
@@ -322,9 +327,9 @@ Cash.prototype.add = function (selector, context) {
 
 
 function computeStyle(ele, prop, isVariable) {
-  if (ele.nodeType !== 1) return;
+  if (ele.nodeType !== 1 || !prop) return;
   var style = win.getComputedStyle(ele, null);
-  return prop ? isVariable ? style.getPropertyValue(prop) : style[prop] : style;
+  return prop ? isVariable ? style.getPropertyValue(prop) || undefined : style[prop] : style;
 } // @require ./compute_style.ts
 
 
@@ -344,7 +349,7 @@ function isCSSVariable(prop) {
 
 
 var prefixedProps = {},
-    style = doc.createElement('div').style,
+    style = div.style,
     vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
 function getPrefixedProp(prop, isVariable) {
@@ -358,7 +363,7 @@ function getPrefixedProp(prop, isVariable) {
     var propCC = camelCase(prop),
         propUC = "" + propCC.charAt(0).toUpperCase() + propCC.slice(1),
         props = (propCC + " " + vendorsPrefixes.join(propUC + " ") + propUC).split(' ');
-    each(props, function (p) {
+    each(props, function (i, p) {
       if (p in style) {
         prefixedProps[prop] = p;
         return false;
@@ -481,7 +486,7 @@ function data(name, value) {
 
   if (!name) {
     if (!this[0]) return;
-    each(this[0].attributes, function (attr) {
+    each(this[0].attributes, function (i, attr) {
       var match = attr.name.match(dataAttributeRe);
       if (!match) return;
 
@@ -519,14 +524,14 @@ function getExtraSpace(ele, xAxis) {
   return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top') + "Width") + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom') + "Width");
 }
 
-each(['Width', 'Height'], function (prop) {
+each(['Width', 'Height'], function (i, prop) {
   Cash.prototype["inner" + prop] = function () {
     if (!this[0]) return;
     if (this[0] === win) return win["inner" + prop];
     return this[0]["client" + prop];
   };
 });
-each(['width', 'height'], function (prop, index) {
+each(['width', 'height'], function (index, prop) {
   Cash.prototype[prop] = function (value) {
     if (!this[0]) return value === undefined ? undefined : this;
 
@@ -543,7 +548,7 @@ each(['width', 'height'], function (prop, index) {
     });
   };
 });
-each(['Width', 'Height'], function (prop, index) {
+each(['Width', 'Height'], function (index, prop) {
   Cash.prototype["outer" + prop] = function (includeMargins) {
     if (!this[0]) return;
     if (this[0] === win) return win["outer" + prop];
@@ -554,21 +559,9 @@ each(['Width', 'Height'], function (prop, index) {
 // @optional ./outer.ts
 
 function hasNamespaces(ns1, ns2) {
-  for (var i = 0, l = ns2.length; i < l; i++) {
-    if (ns1.indexOf(ns2[i]) < 0) return false;
-  }
-
-  return true;
-} // @require core/each.ts
-
-
-function removeEventListeners(cache, ele, name) {
-  each(cache[name], function (_a) {
-    var namespaces = _a[0],
-        callback = _a[1];
-    ele.removeEventListener(name, callback);
+  return !ns2 || !some.call(ns2, function (ns) {
+    return ns1.indexOf(ns) < 0;
   });
-  delete cache[name];
 }
 
 var eventsNamespace = '__cashEvents',
@@ -592,31 +585,22 @@ function addEvent(ele, name, namespaces, callback) {
 function parseEventName(eventName) {
   var parts = eventName.split(eventsNamespacesSeparator);
   return [parts[0], parts.slice(1).sort()]; // [name, namespace[]]
-} // @require core/guid.ts
-// @require ./get_events_cache.ts
+} // @require ./get_events_cache.ts
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
-// @require ./remove_event_listeners.ts
 
 
 function removeEvent(ele, name, namespaces, callback) {
   var cache = getEventsCache(ele);
 
   if (!name) {
-    if (!namespaces || !namespaces.length) {
-      for (name in cache) {
-        removeEventListeners(cache, ele, name);
-      }
-    } else {
-      for (name in cache) {
-        removeEvent(ele, name, namespaces, callback);
-      }
+    for (name in cache) {
+      removeEvent(ele, name, namespaces, callback);
     }
-  } else {
-    var eventCache = cache[name];
-    if (!eventCache) return;
-    if (callback) callback['guid'] = callback['guid'] || guid++;
-    cache[name] = eventCache.filter(function (_a) {
+
+    delete ele[eventsNamespace];
+  } else if (cache[name]) {
+    cache[name] = cache[name].filter(function (_a) {
       var ns = _a[0],
           cb = _a[1];
       if (callback && cb['guid'] !== callback['guid'] || !hasNamespaces(ns, namespaces)) return true;
@@ -633,7 +617,7 @@ Cash.prototype.off = function (eventFullName, callback) {
       return removeEvent(ele);
     });
   } else {
-    each(getSplitValues(eventFullName), function (eventFullName) {
+    each(getSplitValues(eventFullName), function (i, eventFullName) {
       var _a = parseEventName(eventFullName),
           name = _a[0],
           namespaces = _a[1];
@@ -663,7 +647,7 @@ function on(eventFullName, selector, callback, _one) {
     selector = '';
   }
 
-  each(getSplitValues(eventFullName), function (eventFullName) {
+  each(getSplitValues(eventFullName), function (i, eventFullName) {
     var _a = parseEventName(eventFullName),
         name = _a[0],
         namespaces = _a[1];
@@ -751,33 +735,15 @@ Cash.prototype.trigger = function (eventFullName, data) {
 // @optional ./one.ts
 // @optional ./ready.ts
 // @optional ./trigger.ts
-// @require core/each.ts
+// @require core/pluck.ts
+// @require core/variables.ts
 
-
-function getValueSelectMultiple(ele) {
-  var values = [];
-  each(ele.options, function (option) {
-    if (option.selected && !option.disabled && !option.parentNode.disabled) {
-      values.push(option.value);
-    }
-  });
-  return values;
-}
-
-function getValueSelectSingle(ele) {
-  return ele.selectedIndex < 0 ? null : ele.options[ele.selectedIndex].value;
-} // @require ./get_value_select_single.ts
-// @require ./get_value_select_multiple.ts
-
-
-var selectOneRe = /select-one/i,
-    selectMultipleRe = /select-multiple/i;
 
 function getValue(ele) {
-  var type = ele['type'];
-  if (selectOneRe.test(type)) return getValueSelectSingle(ele);
-  if (selectMultipleRe.test(type)) return getValueSelectMultiple(ele);
-  return ele['value'] || '';
+  if (ele.multiple) return pluck(filter.call(ele.options, function (option) {
+    return option.selected && !option.disabled && !option.parentNode.disabled;
+  }), 'value');
+  return ele.value || '';
 }
 
 var queryEncodeSpaceRe = /%20/g;
@@ -797,14 +763,12 @@ var skippableRe = /file|reset|submit|button|image/i,
 Cash.prototype.serialize = function () {
   var query = '';
   this.each(function (i, ele) {
-    each(ele.elements || [ele], function (ele) {
-      if (ele.disabled || !ele.name || ele.tagName === 'FIELDSET') return;
-      if (skippableRe.test(ele.type)) return;
-      if (checkableRe.test(ele.type) && !ele.checked) return;
+    each(ele.elements || [ele], function (i, ele) {
+      if (ele.disabled || !ele.name || ele.tagName === 'FIELDSET' || skippableRe.test(ele.type) || checkableRe.test(ele.type) && !ele.checked) return;
       var value = getValue(ele);
       if (value === undefined) return;
       var values = isArray(value) ? value : [value];
-      each(values, function (value) {
+      each(values, function (i, value) {
         query += queryEncode(ele.name, value);
       });
     });
@@ -815,11 +779,11 @@ Cash.prototype.serialize = function () {
 function val(value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
-    var isMultiple = selectMultipleRe.test(ele.type),
+    var isMultiple = ele.multiple,
         eleValue = value === null ? isMultiple ? [] : '' : value;
 
     if (isMultiple && isArray(eleValue)) {
-      each(ele.options, function (option) {
+      each(ele.options, function (i, option) {
         option.selected = eleValue.indexOf(option.value) >= 0;
       });
     } else {
@@ -858,7 +822,7 @@ function initContainers() {
   var table = doc.createElement('table'),
       tr = doc.createElement('tr');
   containers = {
-    '*': doc.createElement('div'),
+    '*': div,
     tr: doc.createElement('tbody'),
     td: tr,
     th: tr,
@@ -904,8 +868,8 @@ function insertElement(ele, child, prepend) {
 
 
 function insertContent(parent, child, prepend) {
-  each(parent, function (parentEle, index) {
-    each(child, function (childEle) {
+  each(parent, function (index, parentEle) {
+    each(child, function (i, childEle) {
       insertElement(parentEle, !index ? childEle : childEle.cloneNode(true), prepend);
     });
   });
@@ -914,7 +878,7 @@ function insertContent(parent, child, prepend) {
 Cash.prototype.append = function () {
   var _this = this;
 
-  each(arguments, function (selector) {
+  each(arguments, function (i, selector) {
     insertContent(_this, cash(selector));
   });
   return this;
@@ -952,7 +916,7 @@ Cash.prototype.insertAfter = function (selector) {
 Cash.prototype.after = function () {
   var _this = this;
 
-  each(reverse.apply(arguments), function (selector) {
+  each(reverse.apply(arguments), function (i, selector) {
     reverse.apply(cash(selector).slice()).insertAfter(_this);
   });
   return this;
@@ -976,7 +940,7 @@ Cash.prototype.insertBefore = function (selector) {
 Cash.prototype.before = function () {
   var _this = this;
 
-  each(arguments, function (selector) {
+  each(arguments, function (i, selector) {
     cash(selector).insertBefore(_this);
   });
   return this;
@@ -985,7 +949,7 @@ Cash.prototype.before = function () {
 Cash.prototype.prepend = function () {
   var _this = this;
 
-  each(arguments, function (selector) {
+  each(arguments, function (i, selector) {
     insertContent(_this, cash(selector), true);
   });
   return this;
@@ -1001,22 +965,7 @@ Cash.prototype.remove = function () {
 };
 
 Cash.prototype.replaceWith = function (selector) {
-  var _this = this;
-
-  return this.each(function (i, ele) {
-    var parent = ele.parentNode;
-    if (!parent) return;
-    var $eles = i ? cash(selector).clone() : cash(selector);
-
-    if (!$eles[0]) {
-      _this.remove();
-
-      return false;
-    }
-
-    parent.replaceChild($eles[0], ele);
-    cash($eles[0]).after($eles.slice(1));
-  });
+  return this.before(selector).remove();
 };
 
 Cash.prototype.replaceAll = function (selector) {
@@ -1091,7 +1040,7 @@ Cash.prototype.contents = function () {
   this.each(function (i, ele) {
     push.apply(result, ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes);
   });
-  return cash(result.length && unique(result));
+  return cash(unique(result));
 };
 
 Cash.prototype.find = function (selector) {
@@ -1105,7 +1054,7 @@ Cash.prototype.find = function (selector) {
     }
   }
 
-  return cash(result.length && unique(result));
+  return cash(unique(result));
 };
 
 Cash.prototype.has = function (selector) {
@@ -1129,7 +1078,7 @@ Cash.prototype.is = function (comparator) {
 };
 
 Cash.prototype.next = function () {
-  return cash(this[0] && this[0].nextElementSibling);
+  return cash(unique(pluck(this, 'nextElementSibling')));
 };
 
 Cash.prototype.not = function (comparator) {
@@ -1141,13 +1090,7 @@ Cash.prototype.not = function (comparator) {
 };
 
 Cash.prototype.parent = function () {
-  var result = [];
-  this.each(function (i, ele) {
-    if (ele && ele.parentNode) {
-      result.push(ele.parentNode);
-    }
-  });
-  return cash(unique(result));
+  return cash(unique(pluck(this, 'parentNode')));
 };
 
 Cash.prototype.index = function (selector) {
@@ -1180,7 +1123,7 @@ Cash.prototype.parents = function (selector) {
 };
 
 Cash.prototype.prev = function () {
-  return cash(this[0] && this[0].previousElementSibling);
+  return cash(unique(pluck(this, 'previousElementSibling')));
 };
 
 Cash.prototype.siblings = function () {
@@ -1215,4 +1158,4 @@ Cash.prototype.siblings = function () {
 // @require ./cash.ts
 
 
-exports.default = cash;
+exports["default"] = cash;

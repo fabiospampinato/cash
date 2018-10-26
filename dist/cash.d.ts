@@ -12,14 +12,14 @@ declare type plainObject = {
 };
 declare type falsy = undefined | null | false | 0 | '';
 declare type Ele = Window | Document | HTMLElement | Element;
-declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | Cash;
+declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
 declare type Comparator = string | Function | Ele | Cash;
 declare type Context = Document | HTMLElement | Element;
-declare const doc: Document, win: Window, filter: {
+declare const doc: Document, win: Window, div: HTMLDivElement, filter: {
     <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[];
     (callbackfn: (value: any, index: number, array: any[]) => any, thisArg?: any): any[];
-}, indexOf: (searchElement: any, fromIndex?: number | undefined) => number, map: <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], push: (...items: any[]) => number, reverse: () => any[], slice: (start?: number | undefined, end?: number | undefined) => any[], splice: {
-    (start: number, deleteCount?: number | undefined): any[];
+}, indexOf: (searchElement: any, fromIndex?: number) => number, map: <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], push: (...items: any[]) => number, reverse: () => any[], slice: (start?: number, end?: number) => any[], some: (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean, splice: {
+    (start: number, deleteCount?: number): any[];
     (start: number, deleteCount: number, ...items: any[]): any[];
 };
 declare const idRe: RegExp, classRe: RegExp, htmlRe: RegExp, tagRe: RegExp;
@@ -28,7 +28,7 @@ declare class Cash {
     constructor(selector?: Selector, context?: Context | Cash);
     init(selector?: Selector, context?: Context | Cash): Cash;
 }
-declare const cash: ((selector?: Selector, context?: Element | HTMLElement | Document | Cash | undefined) => Cash) & CashStatic;
+declare const cash: ((selector?: Selector, context?: Element | HTMLElement | Document | Cash) => Cash) & CashStatic;
 interface Cash {
     get(): Ele[];
     get(index: number): Ele;
@@ -48,7 +48,8 @@ interface Cash {
 interface Cash {
     slice(start?: number, end?: number): Cash;
 }
-declare const camelCaseRe: RegExp, camelCaseWhitespaceRe: RegExp;
+declare const dashAlphaRe: RegExp;
+declare function camelCaseReplace(all: any, letter: any): any;
 declare function camelCase(str: string): string;
 interface CashStatic {
     camelCase(str: string): string;
@@ -63,9 +64,9 @@ interface Cash {
 interface Cash {
     removeProp(prop: string): this;
 }
-declare function extend(target?: any): any;
+declare function extend(target: any, ...objs: any[]): any;
 interface Cash {
-    extend(target: any, ...objs: any[]): this;
+    extend(plugins: plainObject): this;
 }
 interface CashStatic {
     extend(target: any, ...objs: any[]): any;
@@ -78,6 +79,7 @@ declare function matches(ele: HTMLElement, selector: string): boolean;
 interface CashStatic {
     matches(ele: HTMLElement, selector: string): boolean;
 }
+declare function pluck(arr: ArrayLike<any>, prop: string): ArrayLike<any>;
 declare function isCash(x: any): x is Cash;
 declare function isFunction(x: any): x is Function;
 declare function isString(x: any): x is string;
@@ -101,7 +103,7 @@ interface Cash {
 declare const splitValuesRe: RegExp;
 declare function getSplitValues(str: string): RegExpMatchArray;
 interface Cash {
-    hasClass(classes: string): boolean;
+    hasClass(cls: string): boolean;
 }
 interface Cash {
     removeAttr(attrs: string): this;
@@ -123,9 +125,9 @@ interface Cash {
 interface Cash {
     removeClass(classes?: string): this;
 }
-declare function unique(arr: any[]): any[];
+declare function unique(arr: ArrayLike<any>): ArrayLike<any>;
 interface CashStatic {
-    unique(arr: any[]): any[];
+    unique(arr: ArrayLike<any>): ArrayLike<any>;
 }
 interface Cash {
     add(selector: Selector, context?: Context): Cash;
@@ -197,7 +199,6 @@ interface Cash {
     outerHeight(includeMargins?: boolean): number;
 }
 declare function hasNamespaces(ns1: string[], ns2: string[]): boolean;
-declare function removeEventListeners(cache: plainObject, ele: Ele, name: string): void;
 declare const eventsNamespace = "__cashEvents", eventsNamespacesSeparator = ".";
 declare function getEventsCache(ele: Ele): plainObject;
 declare function addEvent(ele: Ele, name: string, namespaces: string[], callback: Function): void;
@@ -228,10 +229,7 @@ interface Cash {
 interface Cash {
     trigger(event: string | Event, data?: any): this;
 }
-declare function getValueSelectMultiple(ele: HTMLSelectElement): string[];
-declare function getValueSelectSingle(ele: HTMLSelectElement): string;
-declare const selectOneRe: RegExp, selectMultipleRe: RegExp;
-declare function getValue(ele: HTMLElement): string | string[];
+declare function getValue(ele: any): string | string[];
 declare const queryEncodeSpaceRe: RegExp;
 declare function queryEncode(prop: string, value: string): string;
 declare const skippableRe: RegExp, checkableRe: RegExp;
@@ -309,7 +307,7 @@ interface Cash {
 }
 declare function text(this: Cash): string;
 declare function text(this: Cash, text: string): Cash;
-declare const docEle: HTMLElement | null;
+declare const docEle: HTMLElement;
 interface Cash {
     offset(): undefined | {
         top: number;

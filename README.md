@@ -28,10 +28,10 @@ An **85%** gain in size reduction compared to jQuery. If you need a smaller bund
 
 ## Usage
 
-Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.7/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@2.3.7/dist/cash.min.js) and use it like this:
+Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3.0.0-beta.0/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/2.3.7/cash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );
