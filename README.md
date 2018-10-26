@@ -5,7 +5,7 @@
 
 # Cash
 
-Cash is an absurdly small jQuery alternative for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but cash comes helpfully close, covering most day to day use cases.
+Cash is an absurdly small jQuery alternative for modern browsers (IE10+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but Cash comes helpfully close, covering most day to day use cases.
 
 ## Comparison
 
@@ -28,14 +28,14 @@ An **85%** gain in size reduction compared to jQuery. If you need a smaller bund
 
 ## Usage
 
-Get cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3.0.0-beta.0/dist/cash.min.js) and use it like this:
+Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3.0.0-beta.0/dist/cash.min.js) and use it like this:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0-beta.0/cash.min.js"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );
-    $('<footer>Appended with cash</footer>').appendTo ( document.body );
+    $('<footer>Appended with Cash</footer>').appendTo ( document.body );
   });
 </script>
 ```
@@ -52,7 +52,7 @@ Cash gives you a query selector, [collection methods](#collection-methods) and s
 
 ### $()
 
-This is the main selector method for cash. It returns an actionable collection of nodes.
+This is the main selector method for Cash. It returns an actionable collection of nodes.
 
 If a function is provided, the function will be run once the DOM is ready.
 
@@ -107,10 +107,10 @@ $(element).addClass ( className ) // => collection
 
 #### $.fn
 
-The main prototype for collections, allowing you to extend cash with plugins by adding methods to all collections.
+The main prototype for collections, allowing you to extend Cash with plugins by adding methods to all collections.
 
 ```js
-$.fn // => cash.prototype
+$.fn // => Cash.prototype
 $.fn.myMethod = function () {}; // Custom method added to all collections
 $.fn.extend ( object ); // Add multiple methods to the prototype
 ```
@@ -287,7 +287,7 @@ $(element).eq ( index ) // => collection
 
 #### fn.extend ()
 
-Adds properties to the cash collection prototype.
+Adds properties to the Cash collection prototype.
 
 ```js
 $.fn.extend(object) // => object
@@ -772,7 +772,7 @@ $.each ( array, callback ) // => undefined
 
 #### $.extend ()
 
-Extends target object with properties from the source object. If no target is provided, cash itself will be extended.
+Extends target object with properties from the source object.
 
 ```js
 $.extend ( target, source ) // => object
@@ -780,7 +780,7 @@ $.extend ( target, source ) // => object
 
 #### $.hasData ()
 
-Determine whether an element has any cash data associated with it.
+Determine whether an element has any Cash data associated with it.
 
 ```js
 $.hasData ( document.body ) // => boolean
@@ -860,7 +860,7 @@ If you want to make a pull request you should:
 1. Clone the repository: `git clone https://github.com/kenwheeler/cash.git`.
 2. Enter the cloned repository: `cd cash`
 3. Install the dependencies: `npm install`.
-4. Automatically recompile cash whenever a change is made: `npm run dev`.
+4. Automatically recompile Cash whenever a change is made: `npm run dev`.
 5. Automatically rerun the tests whenever a change is made: `npm run test:watch`.
 6. Remember to update the readme, if necessary.
 
