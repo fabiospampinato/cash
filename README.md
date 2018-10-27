@@ -106,6 +106,11 @@ $(element).addClass ( className ) // => collection
 |                              |                                  | [fn.replaceAll ()](#fnreplaceall-)     |                                        | [fn.siblings ()](#fnsiblings-) |
 |                              |                                  | [fn.replaceWith ()](#fnreplacewith-)   |                                        |                                |
 |                              |                                  | [fn.text ()](#fntext-)                 |                                        |                                |
+|                              |                                  | [fn.unwrap ()](#fnunwrap-)             |                                        |                                |
+|                              |                                  | [fn.wrap ()](#fnwrap-)                 |                                        |                                |
+|                              |                                  | [fn.wrapAll ()](#fnwrapall-)           |                                        |                                |
+|                              |                                  | [fn.wrapInner ()](#fnwrapinner-)       |                                        |                                |
+
 
 #### $.fn
 
@@ -756,6 +761,14 @@ $(element).trigger ( eventName, data ) // => collection
 $(element).trigger ( eventObj, data ) // => collection
 ```
 
+#### fn.unwrap ()
+
+Removes the wrapper from all elements.
+
+```js
+$(element).unwrap () // => collection
+```
+
 #### fn.val ()
 
 Returns an inputs value. If value is supplied, sets all inputs in collection's value to the value argument.
@@ -772,6 +785,30 @@ Returns or sets the width of the element.
 ```js
 $(element).width () // => number
 $(element).width ( number ) // => collection
+```
+
+#### fn.wrap ()
+
+Wraps a structure around each element.
+
+```js
+$(element).wrap () // => collection
+```
+
+#### fn.wrapAll ()
+
+Wraps a structure around all elements.
+
+```js
+$(element).wrapAll () // => collection
+```
+
+#### fn.wrapInner ()
+
+Wraps a structure around all children.
+
+```js
+$(element).wrapInner () // => collection
 ```
 
 ### Cash Methods

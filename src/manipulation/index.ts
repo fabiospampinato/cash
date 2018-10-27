@@ -15,3 +15,7 @@
 // @optional ./replace_all.ts
 // @optional ./replace_with.ts
 // @optional ./text.ts
+// @optional ./unwrap.ts
+// @optional ./wrap.ts
+// @optional ./wrap_all.ts
+// @optional ./wrap_inner.ts

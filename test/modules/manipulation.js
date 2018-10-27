@@ -412,4 +412,101 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
   });
 
+  describe ( '$.fn.unwrap', function ( it ) {
+
+    it ( 'unwraps each element', function ( t ) {
+
+      var anchor = $('.anchor');
+
+      anchor.unwrap ();
+
+      t.is ( $('.parent').length, 0 );
+      t.deepEqual ( anchor.parent (), $('#qunit-fixture') );
+
+    });
+
+  });
+
+  describe ( '$.fn.wrap', function ( it ) {
+
+    it ( 'wraps a structure around each element', function ( t ) {
+
+      var eles = $('.uncle, .aunt');
+      var wrapper = '<div class="wrapper"></div>';
+
+      eles.wrap ( wrapper );
+
+      t.is ( eles.parent ().filter ( '.wrapper' ).length, 2 );
+
+    });
+
+    it ( 'supports nested structures', function ( t ) {
+
+      var eles = $('.uncle, .aunt');
+      var wrapper = '<div class="wrapper"><div class="nested"></div></div>';
+
+      eles.wrap ( wrapper );
+
+      t.is ( eles.parent ().filter ( '.nested' ).length, 2 );
+      t.is ( eles.parent ().parent ().filter ( '.wrapper' ).length, 2 );
+
+    });
+
+  });
+
+  describe ( '$.fn.wrapAll', function ( it ) {
+
+    it ( 'wraps a structure around all elements', function ( t ) {
+
+      var eles = $('.uncle, .aunt');
+      var wrapper = '<div class="wrapper"></div>';
+
+      eles.wrapAll ( wrapper );
+
+      t.is ( eles.parent ().filter ( '.wrapper' ).length, 1 );
+
+    });
+
+    it ( 'supports nested structures', function ( t ) {
+
+      var eles = $('.uncle, .aunt');
+      var wrapper = '<div class="wrapper"><div class="nested"></div></div>';
+
+      eles.wrapAll ( wrapper );
+
+      t.is ( eles.parent ().filter ( '.nested' ).length, 1 );
+      t.is ( eles.parent ().parent ().filter ( '.wrapper' ).length, 1 );
+
+    });
+
+  });
+
+  describe ( '$.fn.wrapInner', function ( it ) {
+
+    it ( 'wraps a struncture around all contents', function ( t ) {
+
+      var eles = $('.anchor, .uncle');
+      var wrapper = '<div class="wrapper"></div>';
+
+      eles.wrapInner ( wrapper );
+
+      t.is ( $( eles[0] ).html ().trim (), '<div class="wrapper">content</div>' );
+      t.is ( $( eles[1] ).html (), '<div class="wrapper"></div>' );
+
+    });
+
+    it ( 'supports nested structures', function ( t ) {
+
+      var eles = $('.anchor, .uncle');
+      var wrapper = '<div class="wrapper"><div class="nested"></div></div>';
+
+      eles.wrapInner ( wrapper );
+
+      t.is ( $( eles[0] ).html ().trim (), '<div class="wrapper"><div class="nested">content</div></div>' );
+      t.is ( $( eles[1] ).html (), '<div class="wrapper"><div class="nested"></div></div>' );
+
+    });
+
+  });
+
 });
