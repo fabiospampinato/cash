@@ -1,5 +1,5 @@
 interface Cash {
-    [index: number]: Window & Document & HTMLElement & Element;
+    [index: number]: Window & Document & HTMLElement & Element & Node;
     length: number;
     splice(start: number, deleteCount?: number): any;
     splice(start: number, deleteCount: number, ...items: Ele[]): any;
@@ -11,7 +11,7 @@ declare type plainObject = {
     [index: string]: any;
 };
 declare type falsy = undefined | null | false | 0 | '';
-declare type Ele = Window | Document | HTMLElement | Element;
+declare type Ele = Window | Document | HTMLElement | Element | Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
 declare type Comparator = string | Function | Ele | Cash;
 declare type Context = Document | HTMLElement | Element;
@@ -79,7 +79,7 @@ declare function matches(ele: HTMLElement, selector: string): boolean;
 interface CashStatic {
     matches(ele: HTMLElement, selector: string): boolean;
 }
-declare function pluck(arr: ArrayLike<any>, prop: string): ArrayLike<any>;
+declare function pluck(arr: ArrayLike<any>, prop: string, deep?: boolean): ArrayLike<any>;
 declare function isCash(x: any): x is Cash;
 declare function isFunction(x: any): x is Function;
 declare function isString(x: any): x is string;
@@ -100,6 +100,7 @@ declare function getCompareFunction(comparator: Comparator): Function;
 interface Cash {
     filter(comparator: Comparator): Cash;
 }
+declare function filtered(collection: Cash, comparator?: Comparator): Cash;
 declare const splitValuesRe: RegExp;
 declare function getSplitValues(str: string): RegExpMatchArray;
 interface Cash {
@@ -198,6 +199,18 @@ interface Cash {
     outerWidth(includeMargins?: boolean): number;
     outerHeight(includeMargins?: boolean): number;
 }
+declare const defaultDisplay: {};
+declare function getDefaultDisplay(tagName: string): string;
+declare function isHidden(ele: HTMLElement): boolean;
+interface Cash {
+    toggle(force?: boolean): this;
+}
+interface Cash {
+    hide(): this;
+}
+interface Cash {
+    show(): this;
+}
 declare function hasNamespaces(ns1: string[], ns2: string[]): boolean;
 declare const eventsNamespace = "__cashEvents", eventsNamespacesSeparator = ".";
 declare function getEventsCache(ele: Ele): plainObject;
@@ -241,7 +254,7 @@ interface Cash {
     val(value: any): this;
 }
 declare function val(this: Cash): string | string[];
-declare function val(this: Cash, value: string): Cash;
+declare function val(this: Cash, value: string | string[]): Cash;
 interface Cash {
     clone(): this;
 }
@@ -307,6 +320,18 @@ interface Cash {
 }
 declare function text(this: Cash): string;
 declare function text(this: Cash, text: string): Cash;
+interface Cash {
+    unwrap(): this;
+}
+interface Cash {
+    wrapAll(selector?: Selector): this;
+}
+interface Cash {
+    wrap(selector?: Selector): this;
+}
+interface Cash {
+    wrapInner(selector?: Selector): this;
+}
 declare const docEle: HTMLElement;
 interface Cash {
     offset(): undefined | {
@@ -324,7 +349,7 @@ interface Cash {
     };
 }
 interface Cash {
-    children(selector?: string): Cash;
+    children(comparator?: Comparator): Cash;
 }
 interface Cash {
     contents(): Cash;
@@ -339,27 +364,33 @@ interface Cash {
     is(comparator: Comparator): boolean;
 }
 interface Cash {
-    next(): Cash;
+    next(comparator?: Comparator, all?: boolean): Cash;
+}
+interface Cash {
+    nextAll(comparator?: Comparator): Cash;
 }
 interface Cash {
     not(comparator: Comparator): Cash;
 }
 interface Cash {
-    parent(): Cash;
+    parent(comparator?: Comparator): Cash;
 }
 interface Cash {
     index(selector?: Selector): number;
 }
 interface Cash {
-    closest(selector: string): Cash;
+    closest(comparator: Comparator): Cash;
 }
 interface Cash {
-    parents(selector?: string): Cash;
+    parents(comparator?: Comparator): Cash;
 }
 interface Cash {
-    prev(): Cash;
+    prev(comparator?: Comparator, all?: boolean): Cash;
 }
 interface Cash {
-    siblings(): Cash;
+    prevAll(comparator?: Comparator): Cash;
+}
+interface Cash {
+    siblings(comparator?: Comparator): Cash;
 }
 //# sourceMappingURL=cash.d.ts.map

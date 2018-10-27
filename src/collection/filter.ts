@@ -9,7 +9,7 @@ interface Cash {
   filter ( comparator: Comparator ): Cash;
 }
 
-Cash.prototype.filter = function ( this: Cash, comparator?: Comparator ) {
+Cash.prototype.filter = function ( this: Cash, comparator: Comparator ) {
 
   if ( !comparator ) return cash ();
 

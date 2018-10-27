@@ -1,6 +1,6 @@
 
 interface Cash {
-  [index: number]: Window & Document & HTMLElement & Element; //FIXME: Quick and dirty way of getting rid of most type errors
+  [index: number]: Window & Document & HTMLElement & Element & Node; //FIXME: Quick and dirty way of getting rid of most type errors
   length: number;
   splice ( start: number, deleteCount?: number );
   splice ( start: number, deleteCount: number, ...items: Ele[] );
@@ -13,7 +13,7 @@ interface CashStatic {
 type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
-type Ele = Window | Document | HTMLElement | Element;
+type Ele = Window | Document | HTMLElement | Element | Node;
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
 type Comparator = string | Function | Ele | Cash;
 type Context = Document | HTMLElement | Element;
@@ -289,7 +289,9 @@ cash.guid = guid;
 
 function matches ( ele: HTMLElement, selector: string ): boolean {
 
-  return !!ele && !!ele.matches && ele.matches ( selector );
+  const matches = ele && ( ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector'] );
+
+  return !!matches && matches.call ( ele, selector );
 
 }
 
@@ -302,9 +304,27 @@ cash.matches = matches;
 
 // @require ./variables.ts
 
-function pluck ( arr: ArrayLike<any>, prop: string ): ArrayLike<any> {
+function pluck ( arr: ArrayLike<any>, prop: string, deep?: boolean ): ArrayLike<any> {
 
-  return filter.call ( map.call ( arr, ele => ele[prop] ), ele => ele != null );
+  const plucked = [];
+
+  for ( let i = 0, l = arr.length; i < l; i++ ) {
+
+    let val = arr[i][prop];
+
+    while ( val != null ) {
+
+      plucked.push ( val );
+
+      if ( !deep ) break;
+
+      val = val[prop];
+
+    }
+
+  }
+
+  return plucked;
 
 }
 
@@ -401,7 +421,7 @@ interface Cash {
   filter ( comparator: Comparator ): Cash;
 }
 
-Cash.prototype.filter = function ( this: Cash, comparator?: Comparator ) {
+Cash.prototype.filter = function ( this: Cash, comparator: Comparator ) {
 
   if ( !comparator ) return cash ();
 
@@ -410,6 +430,13 @@ Cash.prototype.filter = function ( this: Cash, comparator?: Comparator ) {
   return cash ( filter.call ( this, ( ele, i ) => compare.call ( ele, i, ele ) ) );
 
 };
+
+
+// @require collection/filter.ts
+
+function filtered ( collection: Cash, comparator?: Comparator ): Cash {
+  return !comparator || !collection.length ? collection : collection.filter ( comparator );
+}
 
 
 // @require ./type_checking.ts
@@ -430,7 +457,7 @@ interface Cash {
 }
 
 Cash.prototype.hasClass = function ( this: Cash, cls: string ) {
-  return some.call ( this, ele => ele.classList.contains ( cls ) );
+  return cls && some.call ( this, ele => ele.classList.contains ( cls ) );
 };
 
 
@@ -1027,6 +1054,99 @@ each ( ['Width', 'Height'], ( index: number, prop: string ) => {
 // @optional ./outer.ts
 
 
+// @require css/helpers/compute_style.ts
+
+const defaultDisplay = {};
+
+function getDefaultDisplay ( tagName: string ): string {
+
+  if ( defaultDisplay[tagName] ) return defaultDisplay[tagName];
+
+  const ele = doc.createElement ( tagName );
+
+  doc.body.appendChild ( ele );
+
+  const display = computeStyle ( ele, 'display' );
+
+  doc.body.removeChild ( ele );
+
+  return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
+
+}
+
+
+// @require css/helpers/compute_style.ts
+
+function isHidden ( ele: HTMLElement ): boolean {
+
+  return computeStyle ( ele, 'display' ) === 'none';
+
+}
+
+
+// @require core/cash.ts
+// @require ./helpers/get_default_display.ts
+
+interface Cash {
+  toggle ( force?: boolean ): this;
+}
+
+Cash.prototype.toggle = function ( this: Cash, force?: boolean ) {
+
+  return this.each ( ( i, ele ) => {
+
+    force = force !== undefined ? force : isHidden ( ele );
+
+    if ( force ) {
+
+      ele.style.display = '';
+
+      if ( isHidden ( ele ) ) {
+
+        ele.style.display = getDefaultDisplay ( ele.tagName );
+
+      }
+
+    } else {
+
+      ele.style.display = 'none';
+
+    }
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require ./toggle.ts
+
+interface Cash {
+  hide (): this;
+}
+
+Cash.prototype.hide = function ( this: Cash ) {
+  return this.toggle ( false );
+};
+
+
+// @require core/cash.ts
+// @require ./toggle.ts
+
+interface Cash {
+  show (): this;
+}
+
+Cash.prototype.show = function ( this: Cash ) {
+  return this.toggle ( true );
+};
+
+
+// @optional ./hide.ts
+// @optional ./show.ts
+// @optional ./toggle.ts
+
+
 function hasNamespaces ( ns1: string[], ns2: string[] ): boolean {
 
   return !ns2 || !some.call ( ns2, ns => ns1.indexOf ( ns ) < 0 );
@@ -1402,17 +1522,16 @@ interface Cash {
 }
 
 function val ( this: Cash ): string | string[];
-function val ( this: Cash, value: string ): Cash;
-function val ( this: Cash, value?: string ): string | string[] | Cash {
+function val ( this: Cash, value: string | string[] ): Cash;
+function val ( this: Cash, value?: string | string[] ): string | string[] | Cash {
 
   if ( value === undefined ) return this[0] && getValue ( this[0] );
 
   return this.each ( ( i, ele ) => {
 
-    const isMultiple = ele.multiple,
-          eleValue = ( value === null ) ? ( isMultiple ? [] : '' ) : value;
+    if ( ele.tagName === 'SELECT' ) {
 
-    if ( isMultiple && isArray ( eleValue ) ) {
+      const eleValue = isArray ( value ) ? value : ( value === null ? [] : [value] );
 
       each ( ele.options, ( i, option ) => {
 
@@ -1422,7 +1541,7 @@ function val ( this: Cash, value?: string ): string | string[] | Cash {
 
     } else {
 
-      ele.value = eleValue;
+      ele.value = value === null ? '' : value;
 
     }
 
@@ -1816,6 +1935,99 @@ function text ( this: Cash, text?: string ): string | Cash {
 Cash.prototype.text = text;
 
 
+// @require core/cash.ts
+
+interface Cash {
+  unwrap (): this;
+}
+
+Cash.prototype.unwrap = function ( this: Cash ) {
+
+  this.parent ().each ( ( i, ele ) => {
+
+    const $ele = cash ( ele );
+
+    $ele.replaceWith ( $ele.children () );
+
+  });
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+
+interface Cash {
+  wrapAll ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
+
+  if ( this[0] ) {
+
+    const structure = cash ( selector );
+
+    this.first ().before ( structure );
+
+    let wrapper = structure[0] as Element;
+
+    while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
+
+    this.appendTo ( wrapper );
+
+  }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./wrap_all.ts
+
+interface Cash {
+  wrap ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrap = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( index, ele ) => {
+
+    const wrapper = cash ( selector )[0];
+
+    cash ( ele ).wrapAll ( !index ? wrapper : wrapper.cloneNode ( true ) );
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+
+interface Cash {
+  wrapInner ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrapInner = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( i, ele ) => {
+
+    const $ele = cash ( ele ),
+          contents = $ele.contents ();
+
+    contents.length ? contents.wrapAll ( selector ) : $ele.append ( selector );
+
+  });
+
+};
+
+
 // @optional ./after.ts
 // @optional ./append.ts
 // @optional ./append_to.ts
@@ -1832,6 +2044,10 @@ Cash.prototype.text = text;
 // @optional ./replace_all.ts
 // @optional ./replace_with.ts
 // @optional ./text.ts
+// @optional ./unwrap.ts
+// @optional ./wrap.ts
+// @optional ./wrap_all.ts
+// @optional ./wrap_inner.ts
 
 
 // @require core/cash.ts
@@ -1902,26 +2118,23 @@ Cash.prototype.position = function ( this: Cash ) {
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/unique.ts
 // @require core/variables.ts
 // @require collection/each.ts
 // @require collection/filter.ts
 
 interface Cash {
-  children ( selector?: string ): Cash;
+  children ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.children = function ( this: Cash, selector?: string ) {
+Cash.prototype.children = function ( this: Cash, comparator?: Comparator ) {
 
   let result: Ele[] | Cash = [];
 
   this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
 
-  result = cash ( unique ( result ) );
-
-  if ( !selector ) return result;
-
-  return result.filter ( selector );
+  return filtered ( cash ( unique ( result ) ), comparator );
 
 };
 
@@ -2021,16 +2234,30 @@ Cash.prototype.is = function ( this: Cash, comparator: Comparator ) {
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/pluck.ts
 // @require core/unique.ts
 
 interface Cash {
-  next (): Cash;
+  next ( comparator?: Comparator, all?: boolean ): Cash;
 }
 
-Cash.prototype.next = function ( this: Cash ) {
+Cash.prototype.next = function ( this: Cash, comparator?: Comparator, all?: boolean ) {
 
-  return cash ( unique ( pluck ( this, 'nextElementSibling' ) ) );
+  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', all ) ) ), comparator );
+
+};
+
+
+// @require ./next.ts
+
+interface Cash {
+  nextAll ( comparator?: Comparator): Cash;
+}
+
+Cash.prototype.nextAll = function ( this: Cash, comparator?: Comparator ) {
+
+  return this.next ( comparator, true );
 
 };
 
@@ -2055,16 +2282,17 @@ Cash.prototype.not = function ( this: Cash, comparator: Comparator ) {
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/pluck.ts
 // @require core/unique.ts
 
 interface Cash {
-  parent (): Cash;
+  parent ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.parent = function ( this: Cash ) {
+Cash.prototype.parent = function ( this: Cash, comparator?: Comparator ) {
 
-  return cash ( unique ( pluck ( this, 'parentNode' ) ) );
+  return filtered ( cash ( unique ( pluck ( this, 'parentNode' ) ) ), comparator );
 
 };
 
@@ -2107,86 +2335,84 @@ Cash.prototype.index = function ( this: Cash, selector?: Selector ) {
 // @require ./parent.ts
 
 interface Cash {
-  closest ( selector: string ): Cash;
+  closest ( comparator: Comparator ): Cash;
 }
 
-Cash.prototype.closest = function ( this: Cash, selector: string ) {
+Cash.prototype.closest = function ( this: Cash, comparator: Comparator ) {
 
-  if ( !selector || !this[0] ) return cash ();
+  if ( !comparator || !this[0] ) return cash ();
 
-  if ( this.is ( selector ) ) return this.filter ( selector );
+  const filtered = this.filter ( comparator );
 
-  return this.parent ().closest ( selector );
+  if ( filtered.length ) return filtered;
+
+  return this.parent ().closest ( comparator );
 
 };
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/matches.ts
 // @require core/unique.ts
 // @require core/variables.ts
 // @require collection/each.ts
 
 interface Cash {
-  parents ( selector?: string ): Cash;
+  parents ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.parents = function ( this: Cash, selector?: string ) {
+Cash.prototype.parents = function ( this: Cash, comparator?: Comparator ) {
 
-  const result: Ele[] = [];
-
-  let last;
-
-  this.each ( ( i, ele ) => {
-
-    last = ele;
-
-    while ( last && last.parentNode && last !== doc.body.parentNode ) {
-
-      last = last.parentNode;
-
-      if ( !selector || ( selector && matches ( last, selector ) ) ) {
-        result.push ( last );
-      }
-
-    }
-
-  });
-
-  return cash ( unique ( result ) );
+  return filtered ( cash ( unique ( pluck ( this, 'parentElement', true ) ) ), comparator );
 
 };
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require core/pluck.ts
 // @require core/unique.ts
 
 interface Cash {
-  prev (): Cash;
+  prev ( comparator?: Comparator, all?: boolean ): Cash;
 }
 
-Cash.prototype.prev = function ( this: Cash ) {
+Cash.prototype.prev = function ( this: Cash, comparator?: Comparator, all?: boolean ) {
 
-  return cash ( unique ( pluck ( this, 'previousElementSibling' ) ) );
+  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', all ) ) ), comparator );
+
+};
+
+
+// @require ./prev.ts
+
+interface Cash {
+  prevAll ( comparator?: Comparator ): Cash;
+}
+
+Cash.prototype.prevAll = function ( this: Cash, comparator?: Comparator ) {
+
+  return this.prev ( comparator, true );
 
 };
 
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require collection/filter.ts
 // @require ./children.ts
 // @require ./parent.ts
 
 interface Cash {
-  siblings (): Cash;
+  siblings ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.siblings = function ( this: Cash ) {
+Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 
   const ele = this[0];
 
-  return this.parent ().children ().filter ( ( i, child ) => child !== ele );
+  return filtered ( this.parent ().children ().filter ( ( i, child ) => child !== ele ), comparator );
 
 };
 
@@ -2210,6 +2436,7 @@ Cash.prototype.siblings = function ( this: Cash ) {
 // @optional css/index.ts
 // @optional data/index.ts
 // @optional dimensions/index.ts
+// @optional effects/index.ts
 // @optional events/index.ts
 // @optional forms/index.ts
 // @optional manipulation/index.ts

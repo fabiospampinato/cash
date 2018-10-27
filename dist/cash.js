@@ -159,17 +159,26 @@ var guid = 1;
 cash.guid = guid; // @require ./cash.ts
 
 function matches(ele, selector) {
-  return !!ele && !!ele.matches && ele.matches(selector);
+  var matches = ele && (ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
+  return !!matches && matches.call(ele, selector);
 }
 
 cash.matches = matches; // @require ./variables.ts
 
-function pluck(arr, prop) {
-  return filter.call(map.call(arr, function (ele) {
-    return ele[prop];
-  }), function (ele) {
-    return ele != null;
-  });
+function pluck(arr, prop, deep) {
+  var plucked = [];
+
+  for (var i = 0, l = arr.length; i < l; i++) {
+    var val_1 = arr[i][prop];
+
+    while (val_1 != null) {
+      plucked.push(val_1);
+      if (!deep) break;
+      val_1 = val_1[prop];
+    }
+  }
+
+  return plucked;
 } // @require ./cash.ts
 
 
@@ -230,7 +239,12 @@ Cash.prototype.filter = function (comparator) {
   return cash(filter.call(this, function (ele, i) {
     return compare.call(ele, i, ele);
   }));
-}; // @require ./type_checking.ts
+}; // @require collection/filter.ts
+
+
+function filtered(collection, comparator) {
+  return !comparator || !collection.length ? collection : collection.filter(comparator);
+} // @require ./type_checking.ts
 
 
 var splitValuesRe = /\S+/g;
@@ -240,7 +254,7 @@ function getSplitValues(str) {
 }
 
 Cash.prototype.hasClass = function (cls) {
-  return some.call(this, function (ele) {
+  return cls && some.call(this, function (ele) {
     return ele.classList.contains(cls);
   });
 };
@@ -557,6 +571,50 @@ each(['Width', 'Height'], function (index, prop) {
 }); // @optional ./inner.ts
 // @optional ./normal.ts
 // @optional ./outer.ts
+// @require css/helpers/compute_style.ts
+
+var defaultDisplay = {};
+
+function getDefaultDisplay(tagName) {
+  if (defaultDisplay[tagName]) return defaultDisplay[tagName];
+  var ele = doc.createElement(tagName);
+  doc.body.appendChild(ele);
+  var display = computeStyle(ele, 'display');
+  doc.body.removeChild(ele);
+  return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
+} // @require css/helpers/compute_style.ts
+
+
+function isHidden(ele) {
+  return computeStyle(ele, 'display') === 'none';
+}
+
+Cash.prototype.toggle = function (force) {
+  return this.each(function (i, ele) {
+    force = force !== undefined ? force : isHidden(ele);
+
+    if (force) {
+      ele.style.display = '';
+
+      if (isHidden(ele)) {
+        ele.style.display = getDefaultDisplay(ele.tagName);
+      }
+    } else {
+      ele.style.display = 'none';
+    }
+  });
+};
+
+Cash.prototype.hide = function () {
+  return this.toggle(false);
+};
+
+Cash.prototype.show = function () {
+  return this.toggle(true);
+}; // @optional ./hide.ts
+// @optional ./show.ts
+// @optional ./toggle.ts
+
 
 function hasNamespaces(ns1, ns2) {
   return !ns2 || !some.call(ns2, function (ns) {
@@ -779,15 +837,13 @@ Cash.prototype.serialize = function () {
 function val(value) {
   if (value === undefined) return this[0] && getValue(this[0]);
   return this.each(function (i, ele) {
-    var isMultiple = ele.multiple,
-        eleValue = value === null ? isMultiple ? [] : '' : value;
-
-    if (isMultiple && isArray(eleValue)) {
+    if (ele.tagName === 'SELECT') {
+      var eleValue_1 = isArray(value) ? value : value === null ? [] : [value];
       each(ele.options, function (i, option) {
-        option.selected = eleValue.indexOf(option.value) >= 0;
+        option.selected = eleValue_1.indexOf(option.value) >= 0;
       });
     } else {
-      ele.value = eleValue;
+      ele.value = value === null ? '' : value;
     }
   });
 }
@@ -981,7 +1037,46 @@ function text(text) {
 }
 
 ;
-Cash.prototype.text = text; // @optional ./after.ts
+Cash.prototype.text = text;
+
+Cash.prototype.unwrap = function () {
+  this.parent().each(function (i, ele) {
+    var $ele = cash(ele);
+    $ele.replaceWith($ele.children());
+  });
+  return this;
+};
+
+Cash.prototype.wrapAll = function (selector) {
+  if (this[0]) {
+    var structure = cash(selector);
+    this.first().before(structure);
+    var wrapper = structure[0];
+
+    while (wrapper.children.length) {
+      wrapper = wrapper.firstElementChild;
+    }
+
+    this.appendTo(wrapper);
+  }
+
+  return this;
+};
+
+Cash.prototype.wrap = function (selector) {
+  return this.each(function (index, ele) {
+    var wrapper = cash(selector)[0];
+    cash(ele).wrapAll(!index ? wrapper : wrapper.cloneNode(true));
+  });
+};
+
+Cash.prototype.wrapInner = function (selector) {
+  return this.each(function (i, ele) {
+    var $ele = cash(ele),
+        contents = $ele.contents();
+    contents.length ? contents.wrapAll(selector) : $ele.append(selector);
+  });
+}; // @optional ./after.ts
 // @optional ./append.ts
 // @optional ./append_to.ts
 // @optional ./before.ts
@@ -997,8 +1092,13 @@ Cash.prototype.text = text; // @optional ./after.ts
 // @optional ./replace_all.ts
 // @optional ./replace_with.ts
 // @optional ./text.ts
+// @optional ./unwrap.ts
+// @optional ./wrap.ts
+// @optional ./wrap_all.ts
+// @optional ./wrap_inner.ts
 // @require core/cash.ts
 // @require core/variables.ts
+
 
 var docEle = doc.documentElement;
 
@@ -1025,14 +1125,12 @@ Cash.prototype.position = function () {
   };
 };
 
-Cash.prototype.children = function (selector) {
+Cash.prototype.children = function (comparator) {
   var result = [];
   this.each(function (i, ele) {
     push.apply(result, ele.children);
   });
-  result = cash(unique(result));
-  if (!selector) return result;
-  return result.filter(selector);
+  return filtered(cash(unique(result)), comparator);
 };
 
 Cash.prototype.contents = function () {
@@ -1077,8 +1175,12 @@ Cash.prototype.is = function (comparator) {
   return check;
 };
 
-Cash.prototype.next = function () {
-  return cash(unique(pluck(this, 'nextElementSibling')));
+Cash.prototype.next = function (comparator, all) {
+  return filtered(cash(unique(pluck(this, 'nextElementSibling', all))), comparator);
+};
+
+Cash.prototype.nextAll = function (comparator) {
+  return this.next(comparator, true);
 };
 
 Cash.prototype.not = function (comparator) {
@@ -1089,8 +1191,8 @@ Cash.prototype.not = function (comparator) {
   });
 };
 
-Cash.prototype.parent = function () {
-  return cash(unique(pluck(this, 'parentNode')));
+Cash.prototype.parent = function (comparator) {
+  return filtered(cash(unique(pluck(this, 'parentNode'))), comparator);
 };
 
 Cash.prototype.index = function (selector) {
@@ -1099,38 +1201,30 @@ Cash.prototype.index = function (selector) {
   return indexOf.call(collection, child);
 };
 
-Cash.prototype.closest = function (selector) {
-  if (!selector || !this[0]) return cash();
-  if (this.is(selector)) return this.filter(selector);
-  return this.parent().closest(selector);
+Cash.prototype.closest = function (comparator) {
+  if (!comparator || !this[0]) return cash();
+  var filtered = this.filter(comparator);
+  if (filtered.length) return filtered;
+  return this.parent().closest(comparator);
 };
 
-Cash.prototype.parents = function (selector) {
-  var result = [];
-  var last;
-  this.each(function (i, ele) {
-    last = ele;
-
-    while (last && last.parentNode && last !== doc.body.parentNode) {
-      last = last.parentNode;
-
-      if (!selector || selector && matches(last, selector)) {
-        result.push(last);
-      }
-    }
-  });
-  return cash(unique(result));
+Cash.prototype.parents = function (comparator) {
+  return filtered(cash(unique(pluck(this, 'parentElement', true))), comparator);
 };
 
-Cash.prototype.prev = function () {
-  return cash(unique(pluck(this, 'previousElementSibling')));
+Cash.prototype.prev = function (comparator, all) {
+  return filtered(cash(unique(pluck(this, 'previousElementSibling', all))), comparator);
 };
 
-Cash.prototype.siblings = function () {
+Cash.prototype.prevAll = function (comparator) {
+  return this.prev(comparator, true);
+};
+
+Cash.prototype.siblings = function (comparator) {
   var ele = this[0];
-  return this.parent().children().filter(function (i, child) {
+  return filtered(this.parent().children().filter(function (i, child) {
     return child !== ele;
-  });
+  }), comparator);
 }; // @optional ./children.ts
 // @optional ./closest.ts
 // @optional ./contents.ts
@@ -1148,6 +1242,7 @@ Cash.prototype.siblings = function () {
 // @optional css/index.ts
 // @optional data/index.ts
 // @optional dimensions/index.ts
+// @optional effects/index.ts
 // @optional events/index.ts
 // @optional forms/index.ts
 // @optional manipulation/index.ts
