@@ -159,7 +159,7 @@ Appends content or elements to each element in the collection.
 ```js
 $(element).append ( element ) // => collection
 $(element).append ( htmlString ) // => collection
-$(element).append ( element [, element] ) // => collection
+$(element).append ( content [, content] ) // => collection
 ```
 
 #### fn.appendTo ()
@@ -172,13 +172,14 @@ $(element).appendTo ( element ) // => collection
 
 #### fn.attr ()
 
-Without attrValue, returns the attribute value of the first element in the collection.
+Without `attrValue`, returns the attribute value of the first element in the collection.
 
-With attrValue, sets the attribute value of each element of the collection.
+With `attrValue`, sets the attribute value of each element of the collection.
 
 ```js
-$(element).attr ( attrName ) // => AttributeValue
+$(element).attr ( attrName ) // value
 $(element).attr ( attrName, attrValue ) // => collection
+$(element).attr ( object ) // => collection
 ```
 
 #### fn.before ()
@@ -207,7 +208,6 @@ $(element).children ( selector ) // => collection
 Returns the closest matching selector up the DOM tree.
 
 ```js
-$(element).closest () // => collection
 $(element).closest ( selector ) // => collection
 ```
 
@@ -223,7 +223,7 @@ $('iframe').contents ().find ( '*' ) // => collection
 
 #### fn.clone ()
 
-Returns a clone of the collection.
+Returns a collection with cloned elements.
 
 ```js
 $(element).clone () // => collection
@@ -297,7 +297,7 @@ $(element).eq ( index ) // => collection
 Adds properties to the Cash collection prototype.
 
 ```js
-$.fn.extend(object) // => object
+$.fn.extend ( object ) // => object
 ```
 
 #### fn.filter ()
@@ -345,7 +345,7 @@ $(element).has ( element ) // => collection
 
 #### fn.hasClass ()
 
-Returns the boolean result of checking if the first element in the collection has the `className` attribute.
+Returns the boolean result of checking if any element in the collection has the `className` attribute.
 
 ```js
 $(element).hasClass ( className ) // => boolean
@@ -444,7 +444,7 @@ $(selector).map ( callback ) // => collection
 
 #### fn.next ()
 
-Returns next sibling.
+Returns the next adjacent elements.
 
 ```js
 $(element).next () // => collection
@@ -473,7 +473,7 @@ $(element).not ( collection ) // => collection
 
 Removes event listener from collection elements.
 
-Accepts space-separated eventName for removing multiple events listeners.
+Accepts space-separated `eventName` for removing multiple events listeners.
 
 Removes all event listeners if called without arguments.
 
@@ -503,7 +503,7 @@ $(element).offsetParent () // => collection
 
 Adds event listener to collection elements.
 
-Accepts space-separated eventName for listening to multiple events.
+Accepts space-separated `eventName` for listening to multiple events.
 
 Event is delegated if delegate is supplied.
 
@@ -516,7 +516,7 @@ $(element).on ( eventName, delegate, eventHandler ) // => collection
 
 Adds event listener to collection elements that only triggers once for each element.
 
-Accepts space-separated eventName for listening to multiple events.
+Accepts space-separated `eventName` for listening to multiple events.
 
 Event is delegated if delegate is supplied.
 
@@ -545,7 +545,7 @@ $(element).outerWidth ( includeMargins ) // => Integer
 
 #### fn.parent ()
 
-Returns parent element.
+Returns collection of elements who are parent of elements.
 
 ```js
 $(element).parent () // => collection
@@ -554,7 +554,7 @@ $(element).parent ( selector ) // => collection
 
 #### fn.parents ()
 
-Returns collection of elements who are parents of element. Optionally filtering by selector.
+Returns collection of elements who are parents of elements. Optionally filtering by selector.
 
 ```js
 $(element).parents () // => collection
@@ -589,7 +589,7 @@ $(element).prependTo ( element ) // => collection
 
 #### fn.prev ()
 
-Returns the previous adjacent element.
+Returns the previous adjacent elements.
 
 ```js
 $(element).prev () // => collection
@@ -635,7 +635,7 @@ $(element).remove () // => collection
 
 #### fn.replaceAll ()
 
-This is similar to [fn.replaceWith()](#fnreplacewith-), but with the source and target reversed.
+This is similar to [fn.replaceWith ()](#fnreplacewith-), but with the source and target reversed.
 
 ```js
 $(element).replaceAll ( content ) // => collection
