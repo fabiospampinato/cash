@@ -7,10 +7,6 @@ addons:
 language: node_js
 node_js: lts/*
 
-cache:
-  directories:
-    - "node_modules"
-
 install:
   - npm install
   - npm run build:prod
