@@ -1,6 +1,10 @@
 
 var fixture = '\
-  <div class="event"></div>\
+  <div class="parent">\
+    <div class="event">\
+      <div class="child"></div>\
+    </div>\
+  </div>\
 ';
 
 describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -45,6 +49,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
     it ( 'stops propagation if false is returned', function ( t ) {
 
       var ele = $('.event');
+      var parent = $('.parent');
       var count = 0;
 
       function handler () {
@@ -52,11 +57,13 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         return false;
       }
 
-      $('html').on ( 'foo', handler );
+      parent.on ( 'foo', handler );
+      parent.on ( 'foo', handler );
       ele.on ( 'foo', handler );
+      ele.on ( 'foo', handler ); // We are not using `stopImmediatePropagation`
       ele.trigger ( 'foo' );
 
-      t.is ( count, 1 );
+      t.is ( count, 2 );
 
     });
 
@@ -80,22 +87,81 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
     it ( 'supports event delegation', function ( t ) {
 
       var ele = $('.event');
+      var parent = $('.parent');
       var count = 0;
 
       function handler () {
         count++;
       };
 
-      $('html').on ( 'click', '.event', handler );
-      $('body').trigger ( 'click' );
+      parent.on ( 'click', '.event', handler );
       ele.trigger ( 'click' );
 
       t.is ( count, 1 );
 
-      $('html').off ( 'click', handler );
+      parent.off ( 'click', handler );
       ele.trigger ( 'click' );
 
       t.is ( count, 1 );
+
+    });
+
+    it.skip ( 'overwrites event.currentTarget when using event delegation', function ( t ) { //URL: https://github.com/kenwheeler/cash/issues/235
+
+      var ele = $('.event');
+      var parent = $('.parent');
+      var count = 0;
+      var currentTargets = [];
+
+      function handler ( event ) {
+        count++;
+        currentTargets.push ( event.currentTarget );
+      };
+
+      parent.on ( 'click', '.event', handler );
+      ele.on ( 'click', handler );
+      ele.trigger ( 'click' );
+
+      t.is ( count, 2 );
+      // t.deepEqual ( currentTargets, [ele[0], ele[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+
+    });
+
+    it.skip ( 'stops propagation if false is returned when using event delegation', function ( t ) { //URL: https://github.com/kenwheeler/cash/issues/235
+
+      var ele = $('.event');
+      var parent = $('.parent');
+      var child = $('.child');
+      var count = 0;
+      var currentTargets = [];
+
+      function handler ( event ) {
+        count++;
+        currentTargets.push ( event.currentTarget );
+        return false;
+      }
+
+      parent.on ( 'foo', handler );
+      parent.on ( 'foo', handler );
+      parent.on ( 'foo', '.event', handler );
+      parent.on ( 'foo', '.event', handler );
+      parent.on ( 'foo', '.child', handler );
+      parent.on ( 'foo', '.child', handler );
+
+      parent.trigger ( 'foo' );
+
+      t.is ( count, 2 );
+      // t.deepEqual ( currentTargets.slice ( 0 ), [parent[0], parent[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+
+      ele.trigger ( 'foo' );
+
+      t.is ( count, 4 );
+      // t.deepEqual ( currentTargets.slice ( 2 ), [ele[0], ele[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+
+      child.trigger ( 'foo' );
+
+      t.is ( count, 6 );
+      // t.deepEqual ( currentTargets.slice ( 4 ), [child[0], child[0]] ); //FIXME: We can't overwrite `event.currentTarget`
 
     });
 

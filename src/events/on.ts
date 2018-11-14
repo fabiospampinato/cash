@@ -68,6 +68,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
         }
 
         event.namespace = ( event.namespace || '' );
+        // event.currentTarget = thisArg; //FIXME: We can't overwrite `event.currentTarget`
 
         const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
 
