@@ -24,6 +24,61 @@ $('#foo').nextAll ( '.bar' );
 $('#foo').next ( '.bar' );
 ```
 
+### Events
+
+Cash's event system relies heavily on the browser's underlying event system so there are some differences when comparing it with jQuery's.
+
+Custom jQuery-provided methods are not available.
+
+```javascript
+// jQuery
+event.isDefaultPrevented ();
+event.isPropagationStopped ();
+event.isImmediatePropagationStopped ();
+// Cash
+event.defaultPrevented;
+event.cancelBubble;
+// No way of knowing if `stopImmediatePropagation` was called
+```
+
+When using event delegation `event.currentTarget` doesn't point to the delegated element, you should use `this` instead.
+
+```javascript
+// jQuery
+$('#foo').on ( 'click', '.bar', event => {
+  event.currentTarget; // .bar
+});
+// Cash
+$('#foo').on ( 'click', '.bar', function ( event ) { // Remember to use normal function in this scenario
+  event.currentTarget; // #foo
+  this; // .bar
+});
+```
+
+When using event delegation calling `event.stopPropagation` or returning `false` stops the propagation from the target element, not the delegate element.
+
+There's no perfect workaround for this unfortunately, but in most practical cases you could call `event.stopImmediatePropagation` instead.
+
+```javascript
+// jQuery
+$('#foo').on ( 'click', '.bar', event => false ); // First function called
+$('#foo').on ( 'click', '.bar', event => {} ); // Second function called
+$('#foo').on ( 'click', event => {} ); // Function never called
+$('.bar').trigger ( 'click' );
+// Cash
+$('#foo').on ( 'click', '.bar', event => false ); // First function called
+$('#foo').on ( 'click', '.bar', event => {} ); // Second function called
+$('#foo').on ( 'click', event => {} ); // Third function called
+$('.bar').trigger ( 'click' );
+// Cash with `stopImmediatePropagation`
+$('#foo').on ( 'click', '.bar', event => { // First function called
+  event.stopImmediatePropagation ();
+});
+$('#foo').on ( 'click', '.bar', event => {} ); // Function never called
+$('#foo').on ( 'click', event => {} ); // Function never called
+$('.bar').trigger ( 'click' );
+```
+
 ### Negative width/height
 
 Negative width/height get automatically converted to `0` by jQuery, both when setting them via `$.fn.width|height` and `$.fn.css`.
