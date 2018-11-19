@@ -4,6 +4,7 @@ var fixture = '\
     <div class="event">\
       <div class="child"></div>\
     </div>\
+    <input class="event-focus">\
   </div>\
 ';
 
@@ -297,6 +298,34 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.trigger ( 'click' );
 
       t.is ( count, 1 );
+
+    });
+
+    ( document.hasFocus () ? it : it.skip )( 'triggers focus/blur natively', function ( t ) { // If the document isn't focused the element won't get the focus either
+
+      var events = ['focus', 'blur'];
+
+      events.forEach ( function ( event ) {
+
+        var ele = $('.event-focus');
+        var count = 0;
+
+        function handler () {
+          count++;
+        }
+
+        var nativeHandler = ele[0][event];
+        ele[0][event] = function () {
+          handler ();
+          nativeHandler.apply ( this, arguments );
+        };
+
+        ele.on ( event, handler );
+        ele.trigger ( event );
+
+        t.is ( count, 2 );
+
+      });
 
     });
 

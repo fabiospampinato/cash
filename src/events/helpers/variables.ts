@@ -1,3 +1,4 @@
 
 const eventsNamespace = '__cashEvents',
-      eventsNamespacesSeparator = '.';
+      eventsNamespacesSeparator = '.',
+      eventsFocus = { focus: 'focusin', blur: 'focusout' };

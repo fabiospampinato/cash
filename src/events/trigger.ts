@@ -26,6 +26,20 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
   evt['data'] = data;
 
-  return this.each ( ( i, ele ) => { ele.dispatchEvent ( evt ) } );
+  const isEventFocus = ( evt['type'] in eventsFocus );
+
+  return this.each ( ( i, ele ) => {
+
+    if ( isEventFocus && isFunction ( ele[evt['type']] ) ) {
+
+      ele[evt['type']]();
+
+    } else {
+
+      ele.dispatchEvent ( evt )
+
+    }
+
+  });
 
 };
