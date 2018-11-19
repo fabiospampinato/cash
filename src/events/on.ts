@@ -7,6 +7,7 @@
 // @require collection/each.ts
 // @require ./helpers/variables.ts
 // @require ./helpers/add_event.ts
+// @require ./helpers/get_event_name_bubbling.ts
 // @require ./helpers/has_namespaces.ts
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
@@ -43,7 +44,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [name, namespaces] = parseEventName ( eventFullName );
+    const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
     this.each ( ( i, ele ) => {
 

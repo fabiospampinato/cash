@@ -68,6 +68,36 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    ( document.hasFocus () ? it : it.skip )( 'supports events that do not bubble', function ( t ) { // If the document isn't focused the element won't get the focus either
+
+      var events = ['focus', 'blur', 'mouseenter', 'mouseleave'],
+          eventsTrigger = ['focus', 'blur', 'mouseover', 'mouseout'];
+
+      events.forEach ( function ( event, index ) {
+
+        var ele = $('.event-focus');
+        var parent = $('.parent');
+        var count = 0;
+        var eventTrigger = eventsTrigger[index];
+
+        function handler () {
+          count++;
+        }
+
+        parent.on ( event, handler );
+        ele.on ( event, handler );
+        ele.trigger ( eventTrigger );
+
+        parent.off ( event );
+        ele.off ( event );
+        ele.trigger ( eventTrigger );
+
+        t.is ( count, 2 );
+
+      });
+
+    });
+
     it ( 'supports namespaces', function ( t ) {
 
       var ele = $('.event');
