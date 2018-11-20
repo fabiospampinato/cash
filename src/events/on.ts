@@ -66,10 +66,9 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           thisArg = target;
 
-        }
+          event = Object.create ( event, { currentTarget: { value: thisArg } } );
 
-        event.namespace = ( event.namespace || '' );
-        // event.currentTarget = thisArg; //FIXME: We can't overwrite `event.currentTarget`
+        }
 
         const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
 

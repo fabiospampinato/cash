@@ -35,24 +35,12 @@ Custom jQuery-provided methods are not available.
 event.isDefaultPrevented ();
 event.isPropagationStopped ();
 event.isImmediatePropagationStopped ();
+event.originalEvent;
 // Cash
 event.defaultPrevented;
 event.cancelBubble;
 // No way of knowing if `stopImmediatePropagation` was called
-```
-
-When using event delegation `event.currentTarget` doesn't point to the delegated element, you should use `this` instead.
-
-```javascript
-// jQuery
-$('#foo').on ( 'click', '.bar', event => {
-  event.currentTarget; // .bar
-});
-// Cash
-$('#foo').on ( 'click', '.bar', function ( event ) { // Remember to use normal function in this scenario
-  event.currentTarget; // #foo
-  this; // .bar
-});
+event;
 ```
 
 When using event delegation calling `event.stopPropagation` or returning `false` stops the propagation from the target element, not the delegate element.

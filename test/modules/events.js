@@ -137,7 +137,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    it.skip ( 'overwrites event.currentTarget when using event delegation', function ( t ) { //URL: https://github.com/kenwheeler/cash/issues/235
+    it ( 'overwrites event.currentTarget when using event delegation', function ( t ) {
 
       var ele = $('.event');
       var parent = $('.parent');
@@ -154,7 +154,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.trigger ( 'click' );
 
       t.is ( count, 2 );
-      // t.deepEqual ( currentTargets, [ele[0], ele[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+      t.deepEqual ( currentTargets, [ele[0], ele[0]] );
 
     });
 
@@ -182,17 +182,17 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       parent.trigger ( 'foo' );
 
       t.is ( count, 2 );
-      // t.deepEqual ( currentTargets.slice ( 0 ), [parent[0], parent[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+      t.deepEqual ( currentTargets.slice ( 0 ), [parent[0], parent[0]] );
 
       ele.trigger ( 'foo' );
 
       t.is ( count, 4 );
-      // t.deepEqual ( currentTargets.slice ( 2 ), [ele[0], ele[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+      t.deepEqual ( currentTargets.slice ( 2 ), [ele[0], ele[0]] );
 
       child.trigger ( 'foo' );
 
       t.is ( count, 6 );
-      // t.deepEqual ( currentTargets.slice ( 4 ), [child[0], child[0]] ); //FIXME: We can't overwrite `event.currentTarget`
+      t.deepEqual ( currentTargets.slice ( 4 ), [child[0], child[0]] );
 
     });
 
