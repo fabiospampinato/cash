@@ -7,7 +7,28 @@ var fixture = '\
   <div class="aunt"></div>\
 ';
 
-describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function () {
+describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
+
+  it ( 'inserted script tags get executed', function ( t ) {
+
+    var scripts = [
+      ['<script>window.__script_test__ = 1</script>', 1],
+      ['<script type="">window.__script_test__ = 2</script>', 2],
+      ['<script type="text/javascript">window.__script_test__ = 3</script>', 3],
+      ['<script type="text/ecmascript">window.__script_test__ = 4</script>', 4],
+      ['<script type="module">window.__script_test__ = 5</script>', 5],
+      ['<div class="nested"><script>window.__script_test__ = 6</script></div>', 6]
+    ];
+
+    scripts.forEach ( function ( test ) {
+
+      $(test[0]).appendTo ( '.anchor' );
+
+      t.is ( window.__script_test__, test[1] );
+
+    });
+
+  });
 
   describe ( '$.fn.after', function ( it ) {
 

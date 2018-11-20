@@ -102,25 +102,9 @@ $('#foo').css ({ width: myWidth });
 
 ### Parsing `<script>` tags
 
-Cash can parse `<script>` tags, but when you attach them to the DOM their code don't get executed.
+Cash can parse `<script>` tags and execute their code when they are attached to the page.
 
-This is a tricky thing to do as you may also attach tags like: `<script src="/foo.js" >` which require the actual code to be fetched.
-
-If you need basic support (no support for iframes, files to fetch etc.) for this you could use the following `eval` plugin:
-
-```javascript
-$.fn.eval = function () {
-  const selector = 'script:not([type]), script[type$="ecmascript"], script[type$="javascript"]';
-  const nodes = this.filter ( selector ).add ( this.find ( selector ) );
-  nodes.map ( function () {
-    const script = this.textContent.replace ( /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g, '' );
-    if ( script ) eval ( script );
-  });
-  return this;
-};
-
-$(document).append ( myHTML ).eval ();
-```
+However we do not support script tags inside iframes or script tags with a `src` attribute. If you need support for those you'll have to code some custom logic on your own.
 
 ### Relative CSS values
 
