@@ -146,6 +146,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       function handler ( event ) {
         count++;
+        event.bubbles; // Ensuring the event object hasn't been corrupted
         currentTargets.push ( event.currentTarget );
       };
 

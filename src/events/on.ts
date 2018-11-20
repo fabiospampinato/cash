@@ -66,7 +66,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           thisArg = target;
 
-          event = Object.create ( event, { currentTarget: { value: thisArg } } );
+          Object.defineProperty ( event, 'currentTarget', { value: thisArg } );
 
         }
 

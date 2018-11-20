@@ -36,7 +36,7 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
     } else {
 
-      ele.dispatchEvent ( evt )
+      ele.dispatchEvent ( evt );
 
     }
 
