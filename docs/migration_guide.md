@@ -100,6 +100,28 @@ $('#foo').css ( width, myWidth );
 $('#foo').css ({ width: myWidth });
 ```
 
+### Parsing `<script>` tags
+
+Cash can parse `<script>` tags, but when you attach them to the DOM their code don't get executed.
+
+This is a tricky thing to do as you may also attach tags like: `<script src="/foo.js" >` which require the actual code to be fetched.
+
+If you need basic support (no support for iframes, files to fetch etc.) for this you could use the following `eval` plugin:
+
+```javascript
+$.fn.eval = function () {
+  const selector = 'script:not([type]), script[type$="ecmascript"], script[type$="javascript"]';
+  const nodes = this.filter ( selector ).add ( this.find ( selector ) );
+  nodes.map ( function () {
+    const script = this.textContent.replace ( /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g, '' );
+    if ( script ) eval ( script );
+  });
+  return this;
+};
+
+$(document).append ( myHTML ).eval ();
+```
+
 ### Relative CSS values
 
 jQuery supports relative CSS values.
