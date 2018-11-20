@@ -198,7 +198,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   });
 
-  describe ( 'one', function ( it ) {
+  describe ( '$.fn.one', function ( it ) {
 
     it ( 'removes the handler after the first call', function ( t ) {
 
@@ -222,7 +222,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   });
 
-  describe ( 'off', function ( it ) {
+  describe ( '$.fn.off', function ( it ) {
 
     it ( 'removes single event', function ( t ) {
 
