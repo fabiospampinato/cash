@@ -1,13 +1,13 @@
 
-function insertElement ( ele: Node, child: Node, prepend?: boolean ): void {
+function insertElement ( anchor: Node, child: Node, prepend?: boolean, prependTarget?: Node ): void {
 
   if ( prepend ) {
 
-    ele.insertBefore ( child, ele.childNodes[0] );
+    anchor.insertBefore ( child, prependTarget );
 
   } else {
 
-    ele.appendChild ( child );
+    anchor.appendChild ( child );
 
   }
 

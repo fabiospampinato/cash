@@ -1,6 +1,7 @@
 
 // @require core/cash.ts
 // @require collection/each.ts
+// @require ./helpers/insert_element.ts
 
 interface Cash {
   insertBefore ( selector: Selector ): this;
@@ -14,7 +15,7 @@ Cash.prototype.insertBefore = function ( this: Cash, selector: Selector ) {
 
     if ( parent ) {
       this.each ( ( i, e ) => {
-        parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele );
+        insertElement ( parent, !index ? e : e.cloneNode ( true ), true, ele );
       });
     }
 
