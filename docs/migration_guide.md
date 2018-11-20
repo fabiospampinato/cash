@@ -67,6 +67,21 @@ $('#foo').on ( 'click', event => {} ); // Function never called
 $('.bar').trigger ( 'click' );
 ```
 
+### Width/height of hidden element
+
+If you're trying to retrieve the width/height of an hidden element jQuery will briefly try to render it in order to compute it's dimension, this is unreliable and should be avoided, Cash doesn't implement such functionality.
+
+If you need this anyway you'll have to show/hide the element on your own.
+
+```javascript
+// jQuery
+$('#foo').width ();
+// Cash
+$('#foo').show ();
+$('#foo').width ();
+$('#foo').hide ();
+```
+
 ### Negative width/height
 
 Negative width/height get automatically converted to `0` by jQuery, both when setting them via `$.fn.width|height` and `$.fn.css`.
