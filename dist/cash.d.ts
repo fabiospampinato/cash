@@ -23,7 +23,7 @@ declare const doc: Document, win: Window, div: HTMLDivElement, filter: {
     (start: number, deleteCount: number, ...items: any[]): any[];
 };
 declare const idRe: RegExp, classRe: RegExp, htmlRe: RegExp, tagRe: RegExp;
-declare function find(selector: string, context?: Context): HTMLCollectionOf<Element> | NodeListOf<Element>;
+declare function find(selector: string, context?: Context): any[] | HTMLCollectionOf<Element> | NodeListOf<Element>;
 declare class Cash {
     constructor(selector?: Selector, context?: Context | Cash);
     init(selector?: Selector, context?: Context | Cash): Cash;
@@ -212,7 +212,14 @@ interface Cash {
     show(): this;
 }
 declare function hasNamespaces(ns1: string[], ns2: string[]): boolean;
-declare const eventsNamespace = "__cashEvents", eventsNamespacesSeparator = ".";
+declare const eventsNamespace = "__cashEvents", eventsNamespacesSeparator = ".", eventsFocus: {
+    focus: string;
+    blur: string;
+}, eventsHover: {
+    mouseenter: string;
+    mouseleave: string;
+}, eventsMouseRe: RegExp;
+declare function getEventNameBubbling(name: string): any;
 declare function getEventsCache(ele: Ele): plainObject;
 declare function addEvent(ele: Ele, name: string, namespaces: string[], callback: Function): void;
 declare function parseEventName(eventName: string): [string, string[]];
@@ -273,14 +280,6 @@ interface CashStatic {
 interface Cash {
     empty(): this;
 }
-declare function insertElement(ele: Node, child: Node, prepend?: boolean): void;
-declare function insertContent(parent: Cash, child: Cash, prepend?: boolean): void;
-interface Cash {
-    append(...selectors: Selector[]): this;
-}
-interface Cash {
-    appendTo(selector: Selector): this;
-}
 interface Cash {
     html(): string;
     html(html: string): this;
@@ -288,31 +287,7 @@ interface Cash {
 declare function html(this: Cash): string;
 declare function html(this: Cash, html: string): Cash;
 interface Cash {
-    insertAfter(selector: Selector): this;
-}
-interface Cash {
-    after(...selectors: Selector[]): this;
-}
-interface Cash {
-    insertBefore(selector: Selector): this;
-}
-interface Cash {
-    before(...selectors: Selector[]): this;
-}
-interface Cash {
-    prepend(...selectors: Selector[]): this;
-}
-interface Cash {
-    prependTo(selector: Selector): this;
-}
-interface Cash {
     remove(): this;
-}
-interface Cash {
-    replaceWith(selector: Selector): this;
-}
-interface Cash {
-    replaceAll(selector: Selector): this;
 }
 interface Cash {
     text(): string;
@@ -322,15 +297,6 @@ declare function text(this: Cash): string;
 declare function text(this: Cash, text: string): Cash;
 interface Cash {
     unwrap(): this;
-}
-interface Cash {
-    wrapAll(selector?: Selector): this;
-}
-interface Cash {
-    wrap(selector?: Selector): this;
-}
-interface Cash {
-    wrapInner(selector?: Selector): this;
 }
 declare const docEle: HTMLElement;
 interface Cash {
@@ -357,6 +323,49 @@ interface Cash {
 interface Cash {
     find(selector: string): Cash;
 }
+declare const scriptTypeRe: RegExp, HTMLCDATARe: RegExp;
+declare function evalScripts(node: Node): void;
+declare function insertElement(anchor: Node, child: Node, prepend?: boolean, prependTarget?: Node): void;
+declare function insertContent(parent: Cash, child: Cash, prepend?: boolean): void;
+interface Cash {
+    append(...selectors: Selector[]): this;
+}
+interface Cash {
+    appendTo(selector: Selector): this;
+}
+interface Cash {
+    insertAfter(selector: Selector): this;
+}
+interface Cash {
+    after(...selectors: Selector[]): this;
+}
+interface Cash {
+    insertBefore(selector: Selector): this;
+}
+interface Cash {
+    before(...selectors: Selector[]): this;
+}
+interface Cash {
+    prepend(...selectors: Selector[]): this;
+}
+interface Cash {
+    prependTo(selector: Selector): this;
+}
+interface Cash {
+    replaceWith(selector: Selector): this;
+}
+interface Cash {
+    replaceAll(selector: Selector): this;
+}
+interface Cash {
+    wrapAll(selector?: Selector): this;
+}
+interface Cash {
+    wrap(selector?: Selector): this;
+}
+interface Cash {
+    wrapInner(selector?: Selector): this;
+}
 interface Cash {
     has(selector: string | HTMLElement): Cash;
 }
@@ -364,7 +373,7 @@ interface Cash {
     is(comparator: Comparator): boolean;
 }
 interface Cash {
-    next(comparator?: Comparator, all?: boolean): Cash;
+    next(comparator?: Comparator, _all?: boolean): Cash;
 }
 interface Cash {
     nextAll(comparator?: Comparator): Cash;
@@ -385,7 +394,7 @@ interface Cash {
     parents(comparator?: Comparator): Cash;
 }
 interface Cash {
-    prev(comparator?: Comparator, all?: boolean): Cash;
+    prev(comparator?: Comparator, _all?: boolean): Cash;
 }
 interface Cash {
     prevAll(comparator?: Comparator): Cash;

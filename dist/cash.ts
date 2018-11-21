@@ -34,11 +34,13 @@ const idRe = /^#[\w-]*$/,
 
 function find ( selector: string, context: Context = doc ) {
 
-  return classRe.test ( selector )
-           ? context.getElementsByClassName ( selector.slice ( 1 ) )
-           : tagRe.test ( selector )
-             ? context.getElementsByTagName ( selector )
-             : context.querySelectorAll ( selector );
+  return context !== doc && context.nodeType !== 1
+           ? []
+           : classRe.test ( selector )
+             ? context.getElementsByClassName ( selector.slice ( 1 ) )
+             : tagRe.test ( selector )
+               ? context.getElementsByTagName ( selector )
+               : context.querySelectorAll ( selector );
 
 }
 
@@ -184,11 +186,11 @@ Cash.prototype.slice = function ( this: Cash ) {
 const dashAlphaRe = /-([a-z])/g;
 
 function camelCaseReplace ( all, letter ) {
-	return letter.toUpperCase ();
+  return letter.toUpperCase ();
 }
 
 function camelCase ( str: string ) {
-	return str.replace ( dashAlphaRe, camelCaseReplace );
+  return str.replace ( dashAlphaRe, camelCaseReplace );
 }
 
 interface CashStatic {
@@ -1155,7 +1157,19 @@ function hasNamespaces ( ns1: string[], ns2: string[] ): boolean {
 
 
 const eventsNamespace = '__cashEvents',
-      eventsNamespacesSeparator = '.';
+      eventsNamespacesSeparator = '.',
+      eventsFocus = { focus: 'focusin', blur: 'focusout' },
+      eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
+      eventsMouseRe = /^(?:mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
+
+
+// @require ./variables.ts
+
+function getEventNameBubbling ( name: string ) {
+
+  return eventsHover[name] || eventsFocus[name] || name;
+
+}
 
 
 // @require ./variables.ts
@@ -1231,6 +1245,7 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 // @require core/cash.ts
 // @require core/each.ts
 // @require collection/each.ts
+// @require ./helpers/get_event_name_bubbling.ts
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
 
@@ -1248,7 +1263,7 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: F
 
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-      const [name, namespaces] = parseEventName ( eventFullName );
+      const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
       this.each ( ( i, ele ) => removeEvent ( ele, name, namespaces, callback ) );
 
@@ -1269,6 +1284,7 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: F
 // @require collection/each.ts
 // @require ./helpers/variables.ts
 // @require ./helpers/add_event.ts
+// @require ./helpers/get_event_name_bubbling.ts
 // @require ./helpers/has_namespaces.ts
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
@@ -1305,7 +1321,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [name, namespaces] = parseEventName ( eventFullName );
+    const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
     this.each ( ( i, ele ) => {
 
@@ -1327,9 +1343,20 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           thisArg = target;
 
+          event.__delegate = true;
+
         }
 
-        event.namespace = ( event.namespace || '' );
+        if ( event.__delegate ) {
+
+          Object.defineProperty ( event, 'currentTarget', {
+            configurable: true,
+            get () { // We need to set a getter for IE10 to work
+              return thisArg;
+            }
+          });
+
+        }
 
         const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
 
@@ -1425,9 +1452,10 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
   if ( isString ( eventFullName ) ) {
 
-    const [name, namespaces] = parseEventName ( eventFullName );
+    const [name, namespaces] = parseEventName ( eventFullName ),
+          type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
 
-    evt = doc.createEvent ( 'HTMLEvents' );
+    evt = doc.createEvent ( type );
     evt.initEvent ( name, true, true );
     evt['namespace'] = namespaces.join ( eventsNamespacesSeparator );
 
@@ -1435,7 +1463,21 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
   evt['data'] = data;
 
-  return this.each ( ( i, ele ) => { ele.dispatchEvent ( evt ) } );
+  const isEventFocus = ( evt['type'] in eventsFocus );
+
+  return this.each ( ( i, ele ) => {
+
+    if ( isEventFocus && isFunction ( ele[evt['type']] ) ) {
+
+      ele[evt['type']]();
+
+    } else {
+
+      ele.dispatchEvent ( evt );
+
+    }
+
+  });
 
 };
 
@@ -1678,65 +1720,6 @@ Cash.prototype.empty = function ( this: Cash ) {
 };
 
 
-function insertElement ( ele: Node, child: Node, prepend?: boolean ): void {
-
-  if ( prepend ) {
-
-    ele.insertBefore ( child, ele.childNodes[0] );
-
-  } else {
-
-    ele.appendChild ( child );
-
-  }
-
-}
-
-
-// @require core/each.ts
-// @require core/type_checking.ts
-// @require ./insert_element.ts
-
-function insertContent ( parent: Cash, child: Cash, prepend?: boolean ): void {
-
-  each ( parent, ( index: number, parentEle: HTMLElement ) => {
-    each ( child, ( i, childEle: HTMLElement ) => {
-      insertElement ( parentEle, !index ? childEle : childEle.cloneNode ( true ), prepend );
-    });
-  });
-
-}
-
-
-// @require core/cash.ts
-// @require core/each.ts
-// @require ./helpers/insert_content.ts
-
-interface Cash {
-  append ( ...selectors: Selector[] ): this;
-}
-
-Cash.prototype.append = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    insertContent ( this, cash ( selector ) );
-  });
-  return this;
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_content.ts
-
-interface Cash {
-  appendTo ( selector: Selector ): this;
-}
-
-Cash.prototype.appendTo = function ( this: Cash, selector: Selector ) {
-  insertContent ( cash ( selector ), this );
-  return this;
-};
-
-
 // @require core/cash.ts
 // @require collection/each.ts
 
@@ -1759,123 +1742,6 @@ Cash.prototype.html = html;
 
 
 // @require core/cash.ts
-// @require collection/each.ts
-
-interface Cash {
-  insertAfter ( selector: Selector ): this;
-}
-
-Cash.prototype.insertAfter = function ( this: Cash, selector: Selector ) {
-
-  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
-
-    const parent = ele.parentNode;
-
-    if ( parent ) {
-      this.each ( ( i, e ) => {
-        parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele.nextSibling );
-      });
-    }
-
-  });
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require core/each.ts
-// @require core/variables.ts
-// @require collection/slice.ts
-// @require ./insert_after.ts
-
-interface Cash {
-  after ( ...selectors: Selector[] ): this;
-}
-
-Cash.prototype.after = function ( this: Cash ) {
-  each ( reverse.apply ( arguments ), ( i, selector: Selector ) => {
-    reverse.apply ( cash ( selector ).slice () ).insertAfter ( this );
-  });
-  return this;
-};
-
-
-// @require core/cash.ts
-// @require collection/each.ts
-
-interface Cash {
-  insertBefore ( selector: Selector ): this;
-}
-
-Cash.prototype.insertBefore = function ( this: Cash, selector: Selector ) {
-
-  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
-
-    const parent = ele.parentNode;
-
-    if ( parent ) {
-      this.each ( ( i, e ) => {
-        parent.insertBefore ( !index ? e : e.cloneNode ( true ), ele );
-      });
-    }
-
-  });
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require core/each.ts
-// @require ./insert_before.ts
-
-interface Cash {
-  before ( ...selectors: Selector[] ): this;
-}
-
-Cash.prototype.before = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    cash ( selector ).insertBefore ( this );
-  });
-  return this;
-};
-
-
-// @require core/cash.ts
-// @require core/each.ts
-// @require ./helpers/insert_content.ts
-
-interface Cash {
-  prepend ( ...selectors: Selector[] ): this;
-}
-
-Cash.prototype.prepend = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    insertContent ( this, cash ( selector ), true );
-  });
-  return this;
-};
-
-
-// @require core/cash.ts
-// @require core/variables.ts
-// @require collection/slice.ts
-// @require ./helpers/insert_content.ts
-
-interface Cash {
-  prependTo ( selector: Selector ): this;
-}
-
-Cash.prototype.prependTo = function ( this: Cash, selector: Selector ) {
-  insertContent ( cash ( selector ), reverse.apply ( this.slice () ), true );
-  return this;
-};
-
-
-// @require core/cash.ts
 // @require events/off.ts
 // @require ./detach.ts
 
@@ -1885,32 +1751,6 @@ interface Cash {
 
 Cash.prototype.remove = function ( this: Cash ) {
   return this.detach ().off ();
-};
-
-
-// @require core/cash.ts
-// @require ./before.ts
-// @require ./remove.ts
-
-interface Cash {
-  replaceWith ( selector: Selector ): this;
-}
-
-Cash.prototype.replaceWith = function ( this: Cash, selector: Selector ) {
-  return this.before ( selector ).remove ();
-};
-
-
-// @require core/cash.ts
-// @require ./replace_with.ts
-
-interface Cash {
-  replaceAll ( selector: Selector ): this;
-}
-
-Cash.prototype.replaceAll = function ( this: Cash, selector: Selector ) {
-  cash ( selector ).replaceWith ( this );
-  return this;
 };
 
 
@@ -1954,100 +1794,6 @@ Cash.prototype.unwrap = function ( this: Cash ) {
   return this;
 
 };
-
-
-// @require core/cash.ts
-// @require collection/first.ts
-// @require manipulation/append_to.ts
-
-interface Cash {
-  wrapAll ( selector?: Selector ): this;
-}
-
-Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
-
-  if ( this[0] ) {
-
-    const structure = cash ( selector );
-
-    this.first ().before ( structure );
-
-    let wrapper = structure[0] as Element;
-
-    while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
-
-    this.appendTo ( wrapper );
-
-  }
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require collection/each.ts
-// @require ./wrap_all.ts
-
-interface Cash {
-  wrap ( selector?: Selector ): this;
-}
-
-Cash.prototype.wrap = function ( this: Cash, selector?: Selector ) {
-
-  return this.each ( ( index, ele ) => {
-
-    const wrapper = cash ( selector )[0];
-
-    cash ( ele ).wrapAll ( !index ? wrapper : wrapper.cloneNode ( true ) );
-
-  });
-
-};
-
-
-// @require core/cash.ts
-// @require collection/first.ts
-// @require manipulation/append_to.ts
-
-interface Cash {
-  wrapInner ( selector?: Selector ): this;
-}
-
-Cash.prototype.wrapInner = function ( this: Cash, selector?: Selector ) {
-
-  return this.each ( ( i, ele ) => {
-
-    const $ele = cash ( ele ),
-          contents = $ele.contents ();
-
-    contents.length ? contents.wrapAll ( selector ) : $ele.append ( selector );
-
-  });
-
-};
-
-
-// @optional ./after.ts
-// @optional ./append.ts
-// @optional ./append_to.ts
-// @optional ./before.ts
-// @optional ./clone.ts
-// @optional ./detach.ts
-// @optional ./empty.ts
-// @optional ./html.ts
-// @optional ./insert_after.ts
-// @optional ./insert_before.ts
-// @optional ./prepend.ts
-// @optional ./prepend_to.ts
-// @optional ./remove.ts
-// @optional ./replace_all.ts
-// @optional ./replace_with.ts
-// @optional ./text.ts
-// @optional ./unwrap.ts
-// @optional ./wrap.ts
-// @optional ./wrap_all.ts
-// @optional ./wrap_inner.ts
 
 
 // @require core/cash.ts
@@ -2187,6 +1933,330 @@ Cash.prototype.find = function ( this: Cash, selector: string ) {
 };
 
 
+// @require collection/filter.ts
+// @require collection/filter.ts
+// @require traversal/find.ts
+
+const scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i,
+      HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+
+function evalScripts ( node: Node ) {
+
+  const collection = cash ( node );
+
+  collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele ) => {
+    if ( !ele.src && scriptTypeRe.test ( ele.type ) ) { // The script type is supported
+      if ( ele.ownerDocument.documentElement.contains ( ele ) ) { // The element is attached to the DOM // Using `documentElement` for broader browser support
+        eval ( ele.textContent.replace ( HTMLCDATARe, '' ) );
+      }
+    }
+  });
+
+}
+
+
+// @require ./eval_scripts.ts
+
+function insertElement ( anchor: Node, child: Node, prepend?: boolean, prependTarget?: Node ): void {
+
+  if ( prepend ) {
+
+    anchor.insertBefore ( child, prependTarget );
+
+  } else {
+
+    anchor.appendChild ( child );
+
+  }
+
+  evalScripts ( child );
+
+}
+
+
+// @require core/each.ts
+// @require core/type_checking.ts
+// @require ./insert_element.ts
+
+function insertContent ( parent: Cash, child: Cash, prepend?: boolean ): void {
+
+  each ( parent, ( index: number, parentEle: HTMLElement ) => {
+    each ( child, ( i, childEle: HTMLElement ) => {
+      insertElement ( parentEle, !index ? childEle : childEle.cloneNode ( true ), prepend, prepend && parentEle.firstChild );
+    });
+  });
+
+}
+
+
+// @require core/cash.ts
+// @require core/each.ts
+// @require ./helpers/insert_content.ts
+
+interface Cash {
+  append ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.append = function ( this: Cash ) {
+  each ( arguments, ( i, selector: Selector ) => {
+    insertContent ( this, cash ( selector ) );
+  });
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_content.ts
+
+interface Cash {
+  appendTo ( selector: Selector ): this;
+}
+
+Cash.prototype.appendTo = function ( this: Cash, selector: Selector ) {
+  insertContent ( cash ( selector ), this );
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./helpers/insert_element.ts
+
+interface Cash {
+  insertAfter ( selector: Selector ): this;
+}
+
+Cash.prototype.insertAfter = function ( this: Cash, selector: Selector ) {
+
+  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
+
+    const parent = ele.parentNode;
+
+    if ( parent ) {
+      this.each ( ( i, e ) => {
+        insertElement ( parent, !index ? e : e.cloneNode ( true ), true, ele.nextSibling );
+      });
+    }
+
+  });
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require core/each.ts
+// @require core/variables.ts
+// @require collection/slice.ts
+// @require ./insert_after.ts
+
+interface Cash {
+  after ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.after = function ( this: Cash ) {
+  each ( reverse.apply ( arguments ), ( i, selector: Selector ) => {
+    reverse.apply ( cash ( selector ).slice () ).insertAfter ( this );
+  });
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./helpers/insert_element.ts
+
+interface Cash {
+  insertBefore ( selector: Selector ): this;
+}
+
+Cash.prototype.insertBefore = function ( this: Cash, selector: Selector ) {
+
+  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
+
+    const parent = ele.parentNode;
+
+    if ( parent ) {
+      this.each ( ( i, e ) => {
+        insertElement ( parent, !index ? e : e.cloneNode ( true ), true, ele );
+      });
+    }
+
+  });
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require core/each.ts
+// @require ./insert_before.ts
+
+interface Cash {
+  before ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.before = function ( this: Cash ) {
+  each ( arguments, ( i, selector: Selector ) => {
+    cash ( selector ).insertBefore ( this );
+  });
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require core/each.ts
+// @require ./helpers/insert_content.ts
+
+interface Cash {
+  prepend ( ...selectors: Selector[] ): this;
+}
+
+Cash.prototype.prepend = function ( this: Cash ) {
+  each ( arguments, ( i, selector: Selector ) => {
+    insertContent ( this, cash ( selector ), true );
+  });
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+// @require collection/slice.ts
+// @require ./helpers/insert_content.ts
+
+interface Cash {
+  prependTo ( selector: Selector ): this;
+}
+
+Cash.prototype.prependTo = function ( this: Cash, selector: Selector ) {
+  insertContent ( cash ( selector ), reverse.apply ( this.slice () ), true );
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require ./before.ts
+// @require ./remove.ts
+
+interface Cash {
+  replaceWith ( selector: Selector ): this;
+}
+
+Cash.prototype.replaceWith = function ( this: Cash, selector: Selector ) {
+  return this.before ( selector ).remove ();
+};
+
+
+// @require core/cash.ts
+// @require ./replace_with.ts
+
+interface Cash {
+  replaceAll ( selector: Selector ): this;
+}
+
+Cash.prototype.replaceAll = function ( this: Cash, selector: Selector ) {
+  cash ( selector ).replaceWith ( this );
+  return this;
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+
+interface Cash {
+  wrapAll ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
+
+  if ( this[0] ) {
+
+    const structure = cash ( selector );
+
+    this.first ().before ( structure );
+
+    let wrapper = structure[0] as Element;
+
+    while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
+
+    this.appendTo ( wrapper );
+
+  }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./wrap_all.ts
+
+interface Cash {
+  wrap ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrap = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( index, ele ) => {
+
+    const wrapper = cash ( selector )[0];
+
+    cash ( ele ).wrapAll ( !index ? wrapper : wrapper.cloneNode ( true ) );
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+
+interface Cash {
+  wrapInner ( selector?: Selector ): this;
+}
+
+Cash.prototype.wrapInner = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( i, ele ) => {
+
+    const $ele = cash ( ele ),
+          contents = $ele.contents ();
+
+    contents.length ? contents.wrapAll ( selector ) : $ele.append ( selector );
+
+  });
+
+};
+
+
+// @optional ./after.ts
+// @optional ./append.ts
+// @optional ./append_to.ts
+// @optional ./before.ts
+// @optional ./clone.ts
+// @optional ./detach.ts
+// @optional ./empty.ts
+// @optional ./html.ts
+// @optional ./insert_after.ts
+// @optional ./insert_before.ts
+// @optional ./prepend.ts
+// @optional ./prepend_to.ts
+// @optional ./remove.ts
+// @optional ./replace_all.ts
+// @optional ./replace_with.ts
+// @optional ./text.ts
+// @optional ./unwrap.ts
+// @optional ./wrap.ts
+// @optional ./wrap_all.ts
+// @optional ./wrap_inner.ts
+
+
 // @require core/cash.ts
 // @require core/find.ts
 // @require core/type_checking.ts
@@ -2239,12 +2309,12 @@ Cash.prototype.is = function ( this: Cash, comparator: Comparator ) {
 // @require core/unique.ts
 
 interface Cash {
-  next ( comparator?: Comparator, all?: boolean ): Cash;
+  next ( comparator?: Comparator, _all?: boolean ): Cash;
 }
 
-Cash.prototype.next = function ( this: Cash, comparator?: Comparator, all?: boolean ) {
+Cash.prototype.next = function ( this: Cash, comparator?: Comparator, _all?: boolean ) {
 
-  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', all ) ) ), comparator );
+  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', _all ) ) ), comparator );
 
 };
 
@@ -2375,12 +2445,12 @@ Cash.prototype.parents = function ( this: Cash, comparator?: Comparator ) {
 // @require core/unique.ts
 
 interface Cash {
-  prev ( comparator?: Comparator, all?: boolean ): Cash;
+  prev ( comparator?: Comparator, _all?: boolean ): Cash;
 }
 
-Cash.prototype.prev = function ( this: Cash, comparator?: Comparator, all?: boolean ) {
+Cash.prototype.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean ) {
 
-  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', all ) ) ), comparator );
+  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all ) ) ), comparator );
 
 };
 

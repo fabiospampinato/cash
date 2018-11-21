@@ -24,7 +24,7 @@ function find(selector, context) {
     context = doc;
   }
 
-  return classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
+  return context !== doc && context.nodeType !== 1 ? [] : classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
 } // @require ./find.ts
 // @require ./variables.ts
 
@@ -623,7 +623,21 @@ function hasNamespaces(ns1, ns2) {
 }
 
 var eventsNamespace = '__cashEvents',
-    eventsNamespacesSeparator = '.'; // @require ./variables.ts
+    eventsNamespacesSeparator = '.',
+    eventsFocus = {
+  focus: 'focusin',
+  blur: 'focusout'
+},
+    eventsHover = {
+  mouseenter: 'mouseover',
+  mouseleave: 'mouseout'
+},
+    eventsMouseRe = /^(?:mouse|pointer|contextmenu|drag|drop|click|dblclick)/i; // @require ./variables.ts
+
+function getEventNameBubbling(name) {
+  return eventsHover[name] || eventsFocus[name] || name;
+} // @require ./variables.ts
+
 
 function getEventsCache(ele) {
   return ele[eventsNamespace] = ele[eventsNamespace] || {};
@@ -676,7 +690,7 @@ Cash.prototype.off = function (eventFullName, callback) {
     });
   } else {
     each(getSplitValues(eventFullName), function (i, eventFullName) {
-      var _a = parseEventName(eventFullName),
+      var _a = parseEventName(getEventNameBubbling(eventFullName)),
           name = _a[0],
           namespaces = _a[1];
 
@@ -706,7 +720,7 @@ function on(eventFullName, selector, callback, _one) {
   }
 
   each(getSplitValues(eventFullName), function (i, eventFullName) {
-    var _a = parseEventName(eventFullName),
+    var _a = parseEventName(getEventNameBubbling(eventFullName)),
         name = _a[0],
         namespaces = _a[1];
 
@@ -726,9 +740,18 @@ function on(eventFullName, selector, callback, _one) {
           }
 
           thisArg = target;
+          event.__delegate = true;
         }
 
-        event.namespace = event.namespace || '';
+        if (event.__delegate) {
+          Object.defineProperty(event, 'currentTarget', {
+            configurable: true,
+            get: function get() {
+              return thisArg;
+            }
+          });
+        }
+
         var returnValue = callback.call(thisArg, event, event.data); //TSC
 
         if (_one) {
@@ -777,16 +800,22 @@ Cash.prototype.trigger = function (eventFullName, data) {
   if (isString(eventFullName)) {
     var _a = parseEventName(eventFullName),
         name_1 = _a[0],
-        namespaces = _a[1];
+        namespaces = _a[1],
+        type = eventsMouseRe.test(name_1) ? 'MouseEvents' : 'HTMLEvents';
 
-    evt = doc.createEvent('HTMLEvents');
+    evt = doc.createEvent(type);
     evt.initEvent(name_1, true, true);
     evt['namespace'] = namespaces.join(eventsNamespacesSeparator);
   }
 
   evt['data'] = data;
+  var isEventFocus = evt['type'] in eventsFocus;
   return this.each(function (i, ele) {
-    ele.dispatchEvent(evt);
+    if (isEventFocus && isFunction(ele[evt['type']])) {
+      ele[evt['type']]();
+    } else {
+      ele.dispatchEvent(evt);
+    }
   });
 }; // @optional ./off.ts
 // @optional ./on.ts
@@ -912,39 +941,6 @@ Cash.prototype.empty = function () {
   return this;
 };
 
-function insertElement(ele, child, prepend) {
-  if (prepend) {
-    ele.insertBefore(child, ele.childNodes[0]);
-  } else {
-    ele.appendChild(child);
-  }
-} // @require core/each.ts
-// @require core/type_checking.ts
-// @require ./insert_element.ts
-
-
-function insertContent(parent, child, prepend) {
-  each(parent, function (index, parentEle) {
-    each(child, function (i, childEle) {
-      insertElement(parentEle, !index ? childEle : childEle.cloneNode(true), prepend);
-    });
-  });
-}
-
-Cash.prototype.append = function () {
-  var _this = this;
-
-  each(arguments, function (i, selector) {
-    insertContent(_this, cash(selector));
-  });
-  return this;
-};
-
-Cash.prototype.appendTo = function (selector) {
-  insertContent(cash(selector), this);
-  return this;
-};
-
 function html(html) {
   if (html === undefined) return this[0] && this[0].innerHTML;
   return this.each(function (i, ele) {
@@ -954,79 +950,8 @@ function html(html) {
 
 Cash.prototype.html = html;
 
-Cash.prototype.insertAfter = function (selector) {
-  var _this = this;
-
-  cash(selector).each(function (index, ele) {
-    var parent = ele.parentNode;
-
-    if (parent) {
-      _this.each(function (i, e) {
-        parent.insertBefore(!index ? e : e.cloneNode(true), ele.nextSibling);
-      });
-    }
-  });
-  return this;
-};
-
-Cash.prototype.after = function () {
-  var _this = this;
-
-  each(reverse.apply(arguments), function (i, selector) {
-    reverse.apply(cash(selector).slice()).insertAfter(_this);
-  });
-  return this;
-};
-
-Cash.prototype.insertBefore = function (selector) {
-  var _this = this;
-
-  cash(selector).each(function (index, ele) {
-    var parent = ele.parentNode;
-
-    if (parent) {
-      _this.each(function (i, e) {
-        parent.insertBefore(!index ? e : e.cloneNode(true), ele);
-      });
-    }
-  });
-  return this;
-};
-
-Cash.prototype.before = function () {
-  var _this = this;
-
-  each(arguments, function (i, selector) {
-    cash(selector).insertBefore(_this);
-  });
-  return this;
-};
-
-Cash.prototype.prepend = function () {
-  var _this = this;
-
-  each(arguments, function (i, selector) {
-    insertContent(_this, cash(selector), true);
-  });
-  return this;
-};
-
-Cash.prototype.prependTo = function (selector) {
-  insertContent(cash(selector), reverse.apply(this.slice()), true);
-  return this;
-};
-
 Cash.prototype.remove = function () {
   return this.detach().off();
-};
-
-Cash.prototype.replaceWith = function (selector) {
-  return this.before(selector).remove();
-};
-
-Cash.prototype.replaceAll = function (selector) {
-  cash(selector).replaceWith(this);
-  return this;
 };
 
 function text(text) {
@@ -1045,58 +970,7 @@ Cash.prototype.unwrap = function () {
     $ele.replaceWith($ele.children());
   });
   return this;
-};
-
-Cash.prototype.wrapAll = function (selector) {
-  if (this[0]) {
-    var structure = cash(selector);
-    this.first().before(structure);
-    var wrapper = structure[0];
-
-    while (wrapper.children.length) {
-      wrapper = wrapper.firstElementChild;
-    }
-
-    this.appendTo(wrapper);
-  }
-
-  return this;
-};
-
-Cash.prototype.wrap = function (selector) {
-  return this.each(function (index, ele) {
-    var wrapper = cash(selector)[0];
-    cash(ele).wrapAll(!index ? wrapper : wrapper.cloneNode(true));
-  });
-};
-
-Cash.prototype.wrapInner = function (selector) {
-  return this.each(function (i, ele) {
-    var $ele = cash(ele),
-        contents = $ele.contents();
-    contents.length ? contents.wrapAll(selector) : $ele.append(selector);
-  });
-}; // @optional ./after.ts
-// @optional ./append.ts
-// @optional ./append_to.ts
-// @optional ./before.ts
-// @optional ./clone.ts
-// @optional ./detach.ts
-// @optional ./empty.ts
-// @optional ./html.ts
-// @optional ./insert_after.ts
-// @optional ./insert_before.ts
-// @optional ./prepend.ts
-// @optional ./prepend_to.ts
-// @optional ./remove.ts
-// @optional ./replace_all.ts
-// @optional ./replace_with.ts
-// @optional ./text.ts
-// @optional ./unwrap.ts
-// @optional ./wrap.ts
-// @optional ./wrap_all.ts
-// @optional ./wrap_inner.ts
-// @require core/cash.ts
+}; // @require core/cash.ts
 // @require core/variables.ts
 
 
@@ -1153,6 +1027,163 @@ Cash.prototype.find = function (selector) {
   }
 
   return cash(unique(result));
+}; // @require collection/filter.ts
+// @require collection/filter.ts
+// @require traversal/find.ts
+
+
+var scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i,
+    HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+
+function evalScripts(node) {
+  var collection = cash(node);
+  collection.filter('script').add(collection.find('script')).each(function (i, ele) {
+    if (!ele.src && scriptTypeRe.test(ele.type)) {
+      // The script type is supported
+      if (ele.ownerDocument.documentElement.contains(ele)) {
+        // The element is attached to the DOM // Using `documentElement` for broader browser support
+        eval(ele.textContent.replace(HTMLCDATARe, ''));
+      }
+    }
+  });
+} // @require ./eval_scripts.ts
+
+
+function insertElement(anchor, child, prepend, prependTarget) {
+  if (prepend) {
+    anchor.insertBefore(child, prependTarget);
+  } else {
+    anchor.appendChild(child);
+  }
+
+  evalScripts(child);
+} // @require core/each.ts
+// @require core/type_checking.ts
+// @require ./insert_element.ts
+
+
+function insertContent(parent, child, prepend) {
+  each(parent, function (index, parentEle) {
+    each(child, function (i, childEle) {
+      insertElement(parentEle, !index ? childEle : childEle.cloneNode(true), prepend, prepend && parentEle.firstChild);
+    });
+  });
+}
+
+Cash.prototype.append = function () {
+  var _this = this;
+
+  each(arguments, function (i, selector) {
+    insertContent(_this, cash(selector));
+  });
+  return this;
+};
+
+Cash.prototype.appendTo = function (selector) {
+  insertContent(cash(selector), this);
+  return this;
+};
+
+Cash.prototype.insertAfter = function (selector) {
+  var _this = this;
+
+  cash(selector).each(function (index, ele) {
+    var parent = ele.parentNode;
+
+    if (parent) {
+      _this.each(function (i, e) {
+        insertElement(parent, !index ? e : e.cloneNode(true), true, ele.nextSibling);
+      });
+    }
+  });
+  return this;
+};
+
+Cash.prototype.after = function () {
+  var _this = this;
+
+  each(reverse.apply(arguments), function (i, selector) {
+    reverse.apply(cash(selector).slice()).insertAfter(_this);
+  });
+  return this;
+};
+
+Cash.prototype.insertBefore = function (selector) {
+  var _this = this;
+
+  cash(selector).each(function (index, ele) {
+    var parent = ele.parentNode;
+
+    if (parent) {
+      _this.each(function (i, e) {
+        insertElement(parent, !index ? e : e.cloneNode(true), true, ele);
+      });
+    }
+  });
+  return this;
+};
+
+Cash.prototype.before = function () {
+  var _this = this;
+
+  each(arguments, function (i, selector) {
+    cash(selector).insertBefore(_this);
+  });
+  return this;
+};
+
+Cash.prototype.prepend = function () {
+  var _this = this;
+
+  each(arguments, function (i, selector) {
+    insertContent(_this, cash(selector), true);
+  });
+  return this;
+};
+
+Cash.prototype.prependTo = function (selector) {
+  insertContent(cash(selector), reverse.apply(this.slice()), true);
+  return this;
+};
+
+Cash.prototype.replaceWith = function (selector) {
+  return this.before(selector).remove();
+};
+
+Cash.prototype.replaceAll = function (selector) {
+  cash(selector).replaceWith(this);
+  return this;
+};
+
+Cash.prototype.wrapAll = function (selector) {
+  if (this[0]) {
+    var structure = cash(selector);
+    this.first().before(structure);
+    var wrapper = structure[0];
+
+    while (wrapper.children.length) {
+      wrapper = wrapper.firstElementChild;
+    }
+
+    this.appendTo(wrapper);
+  }
+
+  return this;
+};
+
+Cash.prototype.wrap = function (selector) {
+  return this.each(function (index, ele) {
+    var wrapper = cash(selector)[0];
+    cash(ele).wrapAll(!index ? wrapper : wrapper.cloneNode(true));
+  });
+};
+
+Cash.prototype.wrapInner = function (selector) {
+  return this.each(function (i, ele) {
+    var $ele = cash(ele),
+        contents = $ele.contents();
+    contents.length ? contents.wrapAll(selector) : $ele.append(selector);
+  });
 };
 
 Cash.prototype.has = function (selector) {
@@ -1175,8 +1206,8 @@ Cash.prototype.is = function (comparator) {
   return check;
 };
 
-Cash.prototype.next = function (comparator, all) {
-  return filtered(cash(unique(pluck(this, 'nextElementSibling', all))), comparator);
+Cash.prototype.next = function (comparator, _all) {
+  return filtered(cash(unique(pluck(this, 'nextElementSibling', _all))), comparator);
 };
 
 Cash.prototype.nextAll = function (comparator) {
@@ -1212,8 +1243,8 @@ Cash.prototype.parents = function (comparator) {
   return filtered(cash(unique(pluck(this, 'parentElement', true))), comparator);
 };
 
-Cash.prototype.prev = function (comparator, all) {
-  return filtered(cash(unique(pluck(this, 'previousElementSibling', all))), comparator);
+Cash.prototype.prev = function (comparator, _all) {
+  return filtered(cash(unique(pluck(this, 'previousElementSibling', _all))), comparator);
 };
 
 Cash.prototype.prevAll = function (comparator) {
