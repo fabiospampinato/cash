@@ -16,9 +16,10 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
   if ( isString ( eventFullName ) ) {
 
-    const [name, namespaces] = parseEventName ( eventFullName );
+    const [name, namespaces] = parseEventName ( eventFullName ),
+          type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
 
-    evt = doc.createEvent ( 'HTMLEvents' );
+    evt = doc.createEvent ( type );
     evt.initEvent ( name, true, true );
     evt['namespace'] = namespaces.join ( eventsNamespacesSeparator );
 
