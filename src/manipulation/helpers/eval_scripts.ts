@@ -12,7 +12,7 @@ function evalScripts ( node: Node ) {
 
   collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele ) => {
     if ( !ele.src && scriptTypeRe.test ( ele.type ) ) { // The script type is supported
-      if ( ele.ownerDocument.contains ( ele ) ) { // The element is attached to the DOM
+      if ( ele.ownerDocument.documentElement.contains ( ele ) ) { // The element is attached to the DOM // Using `documentElement` for broader browser support
         eval ( ele.textContent.replace ( HTMLCDATARe, '' ) );
       }
     }
