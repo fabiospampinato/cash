@@ -141,6 +141,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var ele = $('.event');
       var parent = $('.parent');
+      var html = $('html');
       var count = 0;
       var currentTargets = [];
 
@@ -150,12 +151,13 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         currentTargets.push ( event.currentTarget );
       };
 
-      parent.on ( 'click', '.event', handler );
       ele.on ( 'click', handler );
+      parent.on ( 'click', '.event', handler );
+      html.on ( 'click', handler );
       ele.trigger ( 'click' );
 
-      t.is ( count, 2 );
-      t.deepEqual ( currentTargets, [ele[0], ele[0]] );
+      t.is ( count, 3 );
+      t.deepEqual ( currentTargets, [ele[0], ele[0], html[0]] );
 
     });
 

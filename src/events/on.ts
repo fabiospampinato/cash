@@ -66,7 +66,18 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           thisArg = target;
 
-          Object.defineProperty ( event, 'currentTarget', { value: thisArg } );
+          event.__delegate = true;
+
+        }
+
+        if ( event.__delegate ) {
+
+          Object.defineProperty ( event, 'currentTarget', {
+            configurable: true,
+            get () { // We need to set a getter for IE10 to work
+              return thisArg;
+            }
+          });
 
         }
 
