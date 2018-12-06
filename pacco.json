@@ -1,8 +1,5 @@
 {
   "browsers": ["ie >= 10"],
-  "components": {
-    "core/export_esm": false
-  },
   "paths": {
     "tokens": {
       "bundle": "cash"
@@ -31,8 +28,7 @@
   "environments": {
     "esm": {
       "components": {
-        "core/export": false,
-        "core/export_esm": true
+        "core/export": false
       },
       "paths": {
         "output": {
@@ -46,7 +42,7 @@
         "wrapper": {
           "options": {
             "templates": {
-              "unminified": "/* MIT https://github.com/kenwheeler/cash */\n[content]\n"
+              "unminified": "/* MIT https://github.com/kenwheeler/cash */\n[content]\nexport default cash;\n"
             }
           }
         }

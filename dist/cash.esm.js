@@ -1,7 +1,6 @@
 /* MIT https://github.com/kenwheeler/cash */
 "use strict";
 
-exports.__esModule = true;
 var doc = document,
     win = window,
     div = doc.createElement('div'),
@@ -1280,8 +1279,4 @@ Cash.prototype.siblings = function (comparator) {
 // @optional offset/index.ts
 // @optional traversal/index.ts
 // @require core/index.ts
-// @priority -100
-// @require ./cash.ts
-
-
-exports["default"] = cash;
+export default cash;
