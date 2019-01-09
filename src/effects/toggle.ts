@@ -10,9 +10,9 @@ Cash.prototype.toggle = function ( this: Cash, force?: boolean ) {
 
   return this.each ( ( i, ele ) => {
 
-    force = force !== undefined ? force : isHidden ( ele );
+    const _force = force !== undefined ? force : isHidden ( ele );
 
-    if ( force ) {
+    if ( _force ) {
 
       ele.style.display = '';
 
