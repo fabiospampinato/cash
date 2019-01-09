@@ -1,6 +1,7 @@
 
 // @require core/cash.ts
 // @require ./helpers/get_default_display.ts
+// @require ./helpers/is_hidden.ts
 
 interface Cash {
   toggle ( force?: boolean ): this;
