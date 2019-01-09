@@ -1,11 +1,20 @@
 
 // @require core/cash.ts
-// @require ./helpers/get_default_display.ts
 // @require ./helpers/is_hidden.ts
 
 interface Cash {
   toggle ( force?: boolean ): this;
 }
+
+const CASH_HIDDEN_CLASS = 'cash-hidden';
+
+
+const styleElement = document.createElement('style');
+
+styleElement.sheet.insertRule(`.${CASH_HIDDEN_CLASS} { display: none !important; }`);
+
+document.head.appendChild(styleElement);
+
 
 Cash.prototype.toggle = function ( this: Cash, force?: boolean ) {
 
@@ -13,21 +22,7 @@ Cash.prototype.toggle = function ( this: Cash, force?: boolean ) {
 
     const _force = force !== undefined ? force : isHidden ( ele );
 
-    if ( _force ) {
-
-      ele.style.display = '';
-
-      if ( isHidden ( ele ) ) {
-
-        ele.style.display = getDefaultDisplay ( ele.tagName );
-
-      }
-
-    } else {
-
-      ele.style.display = 'none';
-
-    }
+    ele.classList.toggle(CASH_HIDDEN_CLASS, _force);
 
   });
 
