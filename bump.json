@@ -1,0 +1,23 @@
+{
+  "files": {
+    "README.md": [
+      ["cash/([^/]+)/cash.min.js", "cash/[version]/cash.min.js"],
+      ["@([^/]+)/dist/cash.min.js", "@[version]/dist/cash.min.js"]
+    ]
+  },
+  "tag": {
+    "name": "[version]"
+  },
+  "release": {
+    "github": {
+      "enabled": true,
+      "files": [
+        "dist/**"
+      ]
+    }
+  },
+  "scripts": {
+    "prerelease": "npm run prepublishOnly",
+    "postrelease": "npm publish"
+  }
+}
