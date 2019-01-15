@@ -1,11 +1,12 @@
 {
   "files": {
     "README.md": [
-      ["cash/([^/]+)/cash.min.js", "cash/[version]/cash.min.js"],
-      ["@([^/]+)/dist/cash.min.js", "@[version]/dist/cash.min.js"]
+      ["cash/([^/]+?)/cash.min.js", "cash/[version]/cash.min.js"],
+      ["@([^/]+?)/dist/cash.min.js", "@[version]/dist/cash.min.js"]
     ]
   },
   "tag": {
+    "enabled": false,
     "name": "[version]"
   },
   "release": {
