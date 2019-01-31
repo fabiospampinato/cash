@@ -50,7 +50,7 @@
     "karma-sauce-launcher": "^1.2.0",
     "karma-spec-reporter": "0.0.32",
     "opn-cli": "^3.1.0",
-    "pacco": "^2.0.6",
+    "pacco": "^2.1.4",
     "qunit": "^2.7.1"
   }
 }
