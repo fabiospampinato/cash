@@ -20,6 +20,14 @@ class Cash {
          eles = ( ctx as Document ).getElementById ( selector.slice ( 1 ) );
       } else if ( htmlRe.test ( selector ) ) {
          eles = parseHTML ( selector );
+         if (context instanceof HTMLDocument) {
+             // TODO: jQuery( html [, ownerDocument ] )
+         } else if ( eles.length === 1 ) {
+             const elt: Element = eles[0];
+             for ( const [ key, value ] of Object.entries(context) ) {
+                 elt.setAttribute(key, value);
+             }
+         }
       } else {
          eles = find ( selector, ctx );
       }

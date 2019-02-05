@@ -2,7 +2,8 @@
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "noUnusedParameters": false,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "target": "es2017"
   },
   "include": [
     "src"
