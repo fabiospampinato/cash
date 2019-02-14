@@ -154,6 +154,7 @@ declare const numericProps: {
     orphans: boolean;
     widows: boolean;
     zIndex: boolean;
+    zoom: boolean;
 };
 declare function getSuffixedValue(prop: string, value: number | string, isVariable?: boolean): number | string;
 interface Cash {
@@ -402,4 +403,3 @@ interface Cash {
 interface Cash {
     siblings(comparator?: Comparator): Cash;
 }
-//# sourceMappingURL=cash.d.ts.map

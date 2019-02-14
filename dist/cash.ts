@@ -714,7 +714,8 @@ const numericProps = {
   order: true,
   orphans: true,
   widows: true,
-  zIndex: true
+  zIndex: true,
+  zoom: true
 };
 
 function getSuffixedValue ( prop: string, value: number | string, isVariable: boolean = isCSSVariable ( prop ) ): number | string {

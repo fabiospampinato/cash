@@ -403,7 +403,8 @@ var numericProps = {
   order: true,
   orphans: true,
   widows: true,
-  zIndex: true
+  zIndex: true,
+  zoom: true
 };
 
 function getSuffixedValue(prop, value, isVariable) {
