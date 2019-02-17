@@ -123,6 +123,17 @@ function loadScript ( url ) {
 }
 ```
 
+### No CSS auto-suffixing support for `zoom`
+
+CSS values are auto-suffixed when appropriate, same as in jQuery, so for instance the two following calls are equivalent:
+
+```javascript
+$('#foo').css ( height, 10 );
+$('#foo').css ( height, '10px' );
+```
+
+But we don't suppor the [`zoom`](https://developer.mozilla.org/en-US/docs/Web/CSS/zoom) property, which is not standard and should never be used.
+
 ### Relative CSS values
 
 jQuery supports relative CSS values.
