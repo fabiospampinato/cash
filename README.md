@@ -59,7 +59,8 @@ This is the main selector method for Cash. It returns an actionable collection o
 If a function is provided, the function will be run once the DOM is ready.
 
 ```js
-$( selector [, context] ) // => collection
+$( selector [, element] ) // => collection, using `element` as the context
+$( selector [, collection] ) // => collection, using `collection` as the context
 $(node) // => collection
 $(nodeList) // => collection
 $(htmlString) // => collection
