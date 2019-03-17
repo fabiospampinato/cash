@@ -18,6 +18,7 @@
     }
   },
   "scripts": {
+    "prebump": "npm run prepublishOnly",
     "prerelease": "npm run prepublishOnly",
     "postrelease": "npm publish"
   }
