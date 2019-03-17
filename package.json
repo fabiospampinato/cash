@@ -11,7 +11,7 @@
     "clean": "pacco clean",
     "build:esm": "pacco build-javascript -e esm",
     "build:prod": "pacco build-javascript",
-    "build:deploy": "npm run build:esm && npm run build:prod",
+    "build:deploy": "npm run build:prod && npm run build:esm",
     "build:dev": "pacco build-javascript -e development",
     "watch:prod": "pacco watch-javascript",
     "watch:dev": "pacco watch-javascript -e development",
