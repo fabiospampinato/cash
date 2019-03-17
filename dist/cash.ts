@@ -2517,14 +2517,5 @@ Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 
 // @priority -100
 // @require ./cash.ts
-// @require ./variables.ts
 
-if ( typeof exports !== 'undefined' ) { // Node.js
-
-  module.exports = cash;
-
-} else { // Browser
-
-  win['cash'] = win['$'] = cash;
-
-}
+export default cash;

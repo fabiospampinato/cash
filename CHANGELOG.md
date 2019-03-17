@@ -1,3 +1,10 @@
+### Version 3.0.0
+- Added a changelog
+- Migration guide: mentioning the `zoom` property
+- Readme: improved description of the optional context argument (origin/master, origin/HEAD)
+- Ensuring valid typescript types are generated
+- Ensuring build files are updated when bumping the version
+
 ### Version 3.0.0-beta.3
 - Fixed export on the ESM build
 
