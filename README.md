@@ -30,7 +30,7 @@ If you're migrating from jQuery be sure to read our [migration guide](https://gi
 
 ## Usage
 
-Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3.0.0/dist/cash.min.js) and use it like this:
+Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@3/dist/cash.min.js) and use it like this:
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/3.0.0/cash.min.js"></script>
