@@ -2,6 +2,7 @@
   "browsers": ["ie >= 10"],
   "components": {
     "core/export_esm": false,
+    "extra/get_script": false,
     "extra/shorthands": false
   },
   "paths": {

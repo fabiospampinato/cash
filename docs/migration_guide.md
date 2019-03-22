@@ -106,22 +106,7 @@ Cash can parse `<script>` tags and execute their code when they are attached to 
 
 However we do not support script tags inside iframes or script tags with a `src` attribute.
 
-If you need to load arbitrary JavaScript files you could use something like this:
-
-```javascript
-function loadScript ( url ) {
-  return new Promise ( ( resolve, reject ) => {
-    const script = document.createElement ( 'script' );
-    const head = document.getElementsByTagName ( 'head' )[0];
-    const anchor = document.getElementsByTagName ( 'script' )[0];
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = reject;
-    script.src = url;
-    head.insertBefore ( script, anchor );
-  });
-}
-```
+If you need to load arbitrary JavaScript files you can find a reference implementation for `$.getScript` [here](https://github.com/kenwheeler/cash/blob/master/src/extra/get_script.ts).
 
 ### No CSS auto-suffixing support for `zoom`
 
