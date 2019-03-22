@@ -168,6 +168,28 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
+    it ( 'supports a document', function ( t ) {
+
+      var doc = document.implementation.createDocument ( 'http://www.w3.org/1999/xhtml', 'html', null ),
+          ele = $('<p id="foo">')[0];
+
+      $(doc.documentElement).append ( ele );
+
+      t.is ( $('#foo', doc)[0], ele );
+
+    });
+
+    it ( 'supports a document fragment', function ( t ) {
+
+      var doc = document.createDocumentFragment (),
+          ele = $('<p id="foo">')[0];
+
+      $(doc).append ( ele );
+
+      t.is ( $('#foo', doc)[0], ele );
+
+    });
+
   });
 
 });
