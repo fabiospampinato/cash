@@ -34,7 +34,7 @@ const idRe = /^#[\w-]*$/,
 
 function find ( selector: string, context: Context = doc ) {
 
-  return context !== doc && context.nodeType !== 1
+  return context !== doc && context.nodeType !== 1 && context.nodeType !== 9
            ? []
            : classRe.test ( selector )
              ? context.getElementsByClassName ( selector.slice ( 1 ) )
@@ -102,6 +102,10 @@ cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof 
 
 Cash.prototype.length = 0;
 Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+
+if ( typeof Symbol === 'function' ) {
+  Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+}
 
 
 // @require core/cash.ts

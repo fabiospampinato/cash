@@ -3,7 +3,7 @@ const doc = document, win = window, div = doc.createElement('div'), { filter, in
 const idRe = /^#[\w-]*$/, classRe = /^\.[\w-]*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
 // @require ./variables.ts
 function find(selector, context = doc) {
-    return context !== doc && context.nodeType !== 1
+    return context !== doc && context.nodeType !== 1 && context.nodeType !== 9
         ? []
         : classRe.test(selector)
             ? context.getElementsByClassName(selector.slice(1))
@@ -48,6 +48,9 @@ const cash = Cash.prototype.init;
 cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 Cash.prototype.length = 0;
 Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+if (typeof Symbol === 'function') {
+    Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+}
 Cash.prototype.get = function (index) {
     if (index === undefined)
         return slice.call(this);

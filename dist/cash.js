@@ -24,7 +24,7 @@ function find(selector, context) {
     context = doc;
   }
 
-  return context !== doc && context.nodeType !== 1 ? [] : classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
+  return context !== doc && context.nodeType !== 1 && context.nodeType !== 9 ? [] : classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
 } // @require ./find.ts
 // @require ./variables.ts
 
@@ -69,6 +69,10 @@ cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof 
 
 Cash.prototype.length = 0;
 Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+
+if (typeof Symbol === 'function') {
+  Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+}
 
 Cash.prototype.get = function (index) {
   if (index === undefined) return slice.call(this);

@@ -1,3 +1,10 @@
+### Version 3.1.0
+- Improved support for running selectors inside documents
+- Ensuring Cash collections are iterable
+- Added an extra reference implementation for shorthand event methods
+- Added an extra reference implementation for `$.getScript`
+- Readme: mentioning the extra methods
+
 ### Version 3.0.0
 - Added a changelog
 - Migration guide: mentioning the `zoom` property
