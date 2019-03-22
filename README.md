@@ -76,6 +76,8 @@ These methods from the collection prototype ([$.fn](#fn)) are available once you
 $(element).addClass ( className ) // => collection
 ```
 
+Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
+
 | Attributes                           | Collection                 | CSS                  | Data                               | Dimensions                           | Effects                    |
 | ------------------------------------ | -------------------------- | -------------------- | ---------------------------------- | ------------------------------------ | -------------------------- |
 | [fn.addClass ()](#fnaddclass-)       | [fn.add ()](#fnadd-)       | [fn.css ()](#fncss-) | [fn.data ()](#fndata-)             | [fn.height ()](#fnheight-)           | [fn.hide ()](#fnhide-)     |
@@ -819,6 +821,8 @@ These methods are exported from the global `$` object, and are called like so:
 ```js
 $.isString ( str ) // => boolean
 ```
+
+Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
 
 | Type Checking                   | Utilities                           |
 | ------------------------------- | ----------------------------------- |
