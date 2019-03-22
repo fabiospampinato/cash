@@ -17,6 +17,18 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
   });
 
+  describe ( 'Collections', function ( it ) {
+
+    ( typeof Symbol === 'function' ? it : it.skip )( 'are iterable', function ( t ) { // It only works on browsers with support for Symbol
+
+      var $eles = $('.multiple');
+
+      t.true ( $eles[Symbol.iterator] === Array.prototype[Symbol.iterator] );
+
+    });
+
+  });
+
   describe ( 'Plugins', function ( it ) {
 
     it ( '$.fn is prototype', function ( t ) {

@@ -56,3 +56,7 @@ cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof 
 
 Cash.prototype.length = 0;
 Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+
+if ( typeof Symbol === 'function' ) {
+  Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+}
