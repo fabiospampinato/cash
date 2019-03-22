@@ -191,17 +191,6 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
-    it ( 'supports a document fragment', function ( t ) {
-
-      var doc = document.createDocumentFragment (),
-          ele = $('<p id="foo">')[0];
-
-      $(doc).append ( ele );
-
-      t.is ( $('#foo', doc)[0], ele );
-
-    });
-
   });
 
 });
