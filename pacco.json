@@ -48,11 +48,6 @@
         "babel": {
           "enabled": false
         },
-        "typescript": {
-          "options": {
-            "target": "ES6"
-          }
-        },
         "uglify": {
           "enabled": false
         },
