@@ -51,6 +51,7 @@
     "karma-spec-reporter": "0.0.32",
     "opn-cli": "^3.1.0",
     "pacco": "^2.1.4",
-    "qunit": "^2.7.1"
+    "qunit": "^2.7.1",
+    "qunit-ava-spec": "^1.0.0"
   }
 }
