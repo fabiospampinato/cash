@@ -85,7 +85,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
         if ( _one ) {
 
-          removeEvent ( ele, name, namespaces, finalCallback );
+          removeEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
         }
 
@@ -100,7 +100,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
       finalCallback['guid'] = callback['guid'] = ( callback['guid'] || guid++ );
 
-      addEvent ( ele, name, namespaces, finalCallback );
+      addEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
     });
 

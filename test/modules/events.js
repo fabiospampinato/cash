@@ -314,6 +314,31 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports event delegation', function ( t ) {
+
+      var ele = $('.event');
+      var parent = $('.parent');
+      var countChild = 0;
+      var countDelegate = 0;
+
+      function handlerChild () {
+        countChild++;
+      };
+
+      function handlerDelegate () {
+        countDelegate++;
+      };
+
+      ele.on ( 'click', handlerChild );
+      parent.on ( 'click', '.event', handlerDelegate );
+      parent.off ( 'click', '.event', handlerDelegate );
+      ele.trigger ( 'click' );
+
+      t.is ( countChild, 1 );
+      t.is ( countDelegate, 0 );
+
+    });
+
   });
 
   describe ( '$.fn.trigger', function ( it ) {

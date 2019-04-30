@@ -3,7 +3,7 @@
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
 
-function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?: Function ): void {
+function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?: string, callback?: Function ): void {
 
   const cache = getEventsCache ( ele );
 
@@ -11,7 +11,7 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 
     for ( name in cache ) {
 
-      removeEvent ( ele, name, namespaces, callback );
+      removeEvent ( ele, name, namespaces, selector, callback );
 
     }
 
@@ -19,9 +19,9 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 
   } else if ( cache[name] ) {
 
-    cache[name] = cache[name].filter ( ([ ns, cb ]) => {
+    cache[name] = cache[name].filter ( ([ ns, sel, cb ]) => {
 
-      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) ) return true;
+      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) || ( selector && selector !== sel ) ) return true;
 
       ele.removeEventListener ( name, cb );
 
