@@ -103,6 +103,7 @@ function config ( config ) {
       'karma-spec-reporter'
     ],
     files: [
+      'node_modules/qunit-ava-spec/dist/index.js',
       'dist/cash.js',
       'test/helpers.js',
       'test/modules/attributes.js',
