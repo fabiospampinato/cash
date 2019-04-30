@@ -649,11 +649,11 @@ function getEventsCache(ele) {
 // @require events/helpers/get_events_cache.ts
 
 
-function addEvent(ele, name, namespaces, callback) {
+function addEvent(ele, name, namespaces, selector, callback) {
   callback['guid'] = callback['guid'] || guid++;
   var eventCache = getEventsCache(ele);
   eventCache[name] = eventCache[name] || [];
-  eventCache[name].push([namespaces, callback]);
+  eventCache[name].push([namespaces, selector, callback]);
   ele.addEventListener(name, callback); //TSC
 } // @require ./variables.ts
 
@@ -666,26 +666,27 @@ function parseEventName(eventName) {
 // @require ./parse_event_name.ts
 
 
-function removeEvent(ele, name, namespaces, callback) {
+function removeEvent(ele, name, namespaces, selector, callback) {
   var cache = getEventsCache(ele);
 
   if (!name) {
     for (name in cache) {
-      removeEvent(ele, name, namespaces, callback);
+      removeEvent(ele, name, namespaces, selector, callback);
     }
 
     delete ele[eventsNamespace];
   } else if (cache[name]) {
     cache[name] = cache[name].filter(function (_a) {
       var ns = _a[0],
-          cb = _a[1];
-      if (callback && cb['guid'] !== callback['guid'] || !hasNamespaces(ns, namespaces)) return true;
+          sel = _a[1],
+          cb = _a[2];
+      if (callback && cb['guid'] !== callback['guid'] || !hasNamespaces(ns, namespaces) || selector && selector !== sel) return true;
       ele.removeEventListener(name, cb);
     });
   }
 }
 
-Cash.prototype.off = function (eventFullName, callback) {
+Cash.prototype.off = function (eventFullName, selector, callback) {
   var _this = this;
 
   if (eventFullName === undefined) {
@@ -693,14 +694,20 @@ Cash.prototype.off = function (eventFullName, callback) {
       return removeEvent(ele);
     });
   } else {
+    if (isFunction(selector)) {
+      callback = selector;
+      selector = '';
+    }
+
     each(getSplitValues(eventFullName), function (i, eventFullName) {
       var _a = parseEventName(getEventNameBubbling(eventFullName)),
           name = _a[0],
           namespaces = _a[1];
 
       _this.each(function (i, ele) {
-        return removeEvent(ele, name, namespaces, callback);
-      });
+        return removeEvent(ele, name, namespaces, selector, callback);
+      }); //TSC
+
     });
   }
 
@@ -759,7 +766,7 @@ function on(eventFullName, selector, callback, _one) {
         var returnValue = callback.call(thisArg, event, event.data); //TSC
 
         if (_one) {
-          removeEvent(ele, name, namespaces, finalCallback);
+          removeEvent(ele, name, namespaces, selector, finalCallback); //TSC
         }
 
         if (returnValue === false) {
@@ -769,7 +776,7 @@ function on(eventFullName, selector, callback, _one) {
       };
 
       finalCallback['guid'] = callback['guid'] = callback['guid'] || guid++;
-      addEvent(ele, name, namespaces, finalCallback);
+      addEvent(ele, name, namespaces, selector, finalCallback); //TSC
     });
   });
   return this;

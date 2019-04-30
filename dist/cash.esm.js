@@ -511,11 +511,11 @@ function getEventsCache(ele) {
 }
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
-function addEvent(ele, name, namespaces, callback) {
+function addEvent(ele, name, namespaces, selector, callback) {
     callback['guid'] = (callback['guid'] || guid++);
     const eventCache = getEventsCache(ele);
     eventCache[name] = (eventCache[name] || []);
-    eventCache[name].push([namespaces, callback]);
+    eventCache[name].push([namespaces, selector, callback]);
     ele.addEventListener(name, callback); //TSC
 }
 // @require ./variables.ts
@@ -526,30 +526,34 @@ function parseEventName(eventName) {
 // @require ./get_events_cache.ts
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
-function removeEvent(ele, name, namespaces, callback) {
+function removeEvent(ele, name, namespaces, selector, callback) {
     const cache = getEventsCache(ele);
     if (!name) {
         for (name in cache) {
-            removeEvent(ele, name, namespaces, callback);
+            removeEvent(ele, name, namespaces, selector, callback);
         }
         delete ele[eventsNamespace];
     }
     else if (cache[name]) {
-        cache[name] = cache[name].filter(([ns, cb]) => {
-            if ((callback && cb['guid'] !== callback['guid']) || !hasNamespaces(ns, namespaces))
+        cache[name] = cache[name].filter(([ns, sel, cb]) => {
+            if ((callback && cb['guid'] !== callback['guid']) || !hasNamespaces(ns, namespaces) || (selector && selector !== sel))
                 return true;
             ele.removeEventListener(name, cb);
         });
     }
 }
-Cash.prototype.off = function (eventFullName, callback) {
+Cash.prototype.off = function (eventFullName, selector, callback) {
     if (eventFullName === undefined) {
         this.each((i, ele) => removeEvent(ele));
     }
     else {
+        if (isFunction(selector)) {
+            callback = selector;
+            selector = '';
+        }
         each(getSplitValues(eventFullName), (i, eventFullName) => {
             const [name, namespaces] = parseEventName(getEventNameBubbling(eventFullName));
-            this.each((i, ele) => removeEvent(ele, name, namespaces, callback));
+            this.each((i, ele) => removeEvent(ele, name, namespaces, selector, callback)); //TSC
         });
     }
     return this;
@@ -594,7 +598,7 @@ function on(eventFullName, selector, callback, _one) {
                 }
                 const returnValue = callback.call(thisArg, event, event.data); //TSC
                 if (_one) {
-                    removeEvent(ele, name, namespaces, finalCallback);
+                    removeEvent(ele, name, namespaces, selector, finalCallback); //TSC
                 }
                 if (returnValue === false) {
                     event.preventDefault();
@@ -602,7 +606,7 @@ function on(eventFullName, selector, callback, _one) {
                 }
             };
             finalCallback['guid'] = callback['guid'] = (callback['guid'] || guid++);
-            addEvent(ele, name, namespaces, finalCallback);
+            addEvent(ele, name, namespaces, selector, finalCallback); //TSC
         });
     });
     return this;

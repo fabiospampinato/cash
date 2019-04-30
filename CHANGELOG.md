@@ -1,3 +1,7 @@
+### Version 3.2.0
+- Readme: updated sizes
+- $.fn.off: added support for removing delegated handlers
+
 ### Version 3.1.0
 - Improved support for running selectors inside documents
 - Ensuring Cash collections are iterable

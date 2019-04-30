@@ -1188,14 +1188,14 @@ function getEventsCache ( ele: Ele ): plainObject {
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
 
-function addEvent ( ele: Ele, name: string, namespaces: string[], callback: Function ): void {
+function addEvent ( ele: Ele, name: string, namespaces: string[], selector: string, callback: Function ): void {
 
   callback['guid'] = ( callback['guid'] || guid++ );
 
   const eventCache = getEventsCache ( ele );
 
   eventCache[name] = ( eventCache[name] || [] );
-  eventCache[name].push ([ namespaces, callback ]);
+  eventCache[name].push ([ namespaces, selector, callback ]);
 
   ele.addEventListener ( name, callback as EventListener ); //TSC
 
@@ -1217,7 +1217,7 @@ function parseEventName ( eventName: string ): [string, string[]] {
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
 
-function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?: Function ): void {
+function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?: string, callback?: Function ): void {
 
   const cache = getEventsCache ( ele );
 
@@ -1225,7 +1225,7 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 
     for ( name in cache ) {
 
-      removeEvent ( ele, name, namespaces, callback );
+      removeEvent ( ele, name, namespaces, selector, callback );
 
     }
 
@@ -1233,9 +1233,9 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 
   } else if ( cache[name] ) {
 
-    cache[name] = cache[name].filter ( ([ ns, cb ]) => {
+    cache[name] = cache[name].filter ( ([ ns, sel, cb ]) => {
 
-      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) ) return true;
+      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) || ( selector && selector !== sel ) ) return true;
 
       ele.removeEventListener ( name, cb );
 
@@ -1248,16 +1248,20 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], callback?
 
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require collection/each.ts
 // @require ./helpers/get_event_name_bubbling.ts
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/remove_event.ts
 
 interface Cash {
-  off ( events?: string, callback?: Function ): this;
+  off (): this;
+  off ( events: string ): this;
+  off ( events: string, callback: Function ): this;
+  off ( events: string, selector: string, callback: Function ): this;
 }
 
-Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: Function ) {
+Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | Function, callback?: Function ) {
 
   if ( eventFullName === undefined ) {
 
@@ -1265,11 +1269,18 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, callback?: F
 
   } else {
 
+    if ( isFunction ( selector ) ) {
+
+      callback = selector;
+      selector = '';
+
+    }
+
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
       const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
-      this.each ( ( i, ele ) => removeEvent ( ele, name, namespaces, callback ) );
+      this.each ( ( i, ele ) => removeEvent ( ele, name, namespaces, selector as string, callback ) ); //TSC
 
     });
 
@@ -1366,7 +1377,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
         if ( _one ) {
 
-          removeEvent ( ele, name, namespaces, finalCallback );
+          removeEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
         }
 
@@ -1381,7 +1392,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
       finalCallback['guid'] = callback['guid'] = ( callback['guid'] || guid++ );
 
-      addEvent ( ele, name, namespaces, finalCallback );
+      addEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
     });
 

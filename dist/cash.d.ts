@@ -146,7 +146,10 @@ interface Cash {
     show(): this;
 }
 interface Cash {
-    off(events?: string, callback?: Function): this;
+    off(): this;
+    off(events: string): this;
+    off(events: string, callback: Function): this;
+    off(events: string, selector: string, callback: Function): this;
 }
 interface Cash {
     on(events: plainObject): this;
