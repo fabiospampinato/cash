@@ -67,34 +67,4 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   });
 
-  describe ( '$.fn.removeData', function ( it ) {
-
-    it ( 'removes data', function ( t ) {
-
-      var ele = $('.data');
-
-      ele.data ( 'one', 'uno' );
-      ele.removeData ( 'one' );
-
-      t.is ( ele.data ( 'one' ), 'one' );
-
-    });
-
-    it ( 'removes all data', function ( t ) {
-
-      var ele = $('.data');
-
-      ele.data ( 'one', 'uno' );
-      ele.data ( 'two', 'due' );
-      ele.data ( 'three', 3 );
-      ele.removeData ();
-
-      t.is ( ele.data ( 'one' ), 'one' );
-      t.is ( ele.data ( 'two' ), 'two' );
-      t.is ( ele.data ( 'three' ), undefined );
-
-    });
-
-  });
-
 });

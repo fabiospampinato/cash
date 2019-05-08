@@ -675,15 +675,6 @@ $(element).removeClass () // => collection
 $(element).removeClass ( className ) // => collection
 ```
 
-#### fn.removeData ()
-
-Removes linked data and data-attributes from collection elements.
-
-```js
-$(element).removeData ( name ) // => collection
-$(element).removeData () // => collection
-```
-
 #### fn.removeProp ()
 
 Removes property from collection elements.
