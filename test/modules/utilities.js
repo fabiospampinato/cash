@@ -70,22 +70,6 @@ describe ( 'Utilities', function () {
 
   });
 
-  describe ( '$.hasData', function ( it ) {
-
-    it ( 'determines whether an element has any cash data associated with it', function ( t ) {
-
-      var ele = $('<div data-foo="content">');
-
-      t.false ( $.hasData ( ele[0] ) );
-
-      t.is ( ele.data ( 'foo' ), 'content' );
-
-      t.true ( $.hasData ( ele[0] ) );
-
-    });
-
-  });
-
   describe ( '$.isArray', function ( it ) {
 
     it ( 'checks if the passed variable is an array', function ( t ) {

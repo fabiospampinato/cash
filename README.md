@@ -821,7 +821,6 @@ Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) a
 | [$.isFunction ()](#isfunction-) | [$.camelCase ()](#camelcase-)       |
 | [$.isNumeric ()](#isnumeric-)   | [$.each ()](#each-)                 |
 | [$.isString ()](#isstring-)     | [$.extend ()](#extend-)             |
-|                                 | [$.hasData ()](#hasdata-)             |
 |                                 | [$.matches ()](#matches-)           |
 |                                 | [$.parseHTML ()](#parsehtml-)       |
 |                                 | [$.prefixedProp ()](#prefixedprop-) |
@@ -857,14 +856,6 @@ Extends target object with properties from the source object.
 
 ```js
 $.extend ( target, source ) // => object
-```
-
-#### $.hasData ()
-
-Determine whether an element has any Cash data associated with it.
-
-```js
-$.hasData ( document.body ) // => boolean
 ```
 
 #### $.isArray ()
