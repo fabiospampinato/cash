@@ -111,16 +111,11 @@ interface Cash {
     css(prop: string, value: any): this;
     css(props: plainObject): this;
 }
-interface CashStatic {
-    hasData(ele: HTMLElement): boolean;
-}
 interface Cash {
+    data(): plainObject | undefined;
     data(name: string): any;
     data(name: string, value: any): this;
     data(datas: plainObject): this;
-}
-interface Cash {
-    removeData(key: string): this;
 }
 interface Cash {
     innerWidth(): number;

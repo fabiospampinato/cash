@@ -445,72 +445,45 @@ function css(prop, value) {
 
 ;
 Cash.prototype.css = css; // @optional ./css.ts
-
-var dataNamespace = '__cashData',
-    dataAttributeRe = /^data-(.*)/; // @require core/cash.ts
-// @require ./helpers/variables.ts
-
-function hasData(ele) {
-  return dataNamespace in ele;
-}
-
-cash.hasData = hasData; // @require ./variables.ts
-
-function getDataCache(ele) {
-  return ele[dataNamespace] = ele[dataNamespace] || {};
-} // @require attributes/attr.ts
-// @require ./get_data_cache.ts
-
+// @require core/camel_case.ts
 
 function getData(ele, key) {
-  var cache = getDataCache(ele);
+  var value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : ele.getAttribute("data-" + key);
 
-  if (key) {
-    if (!(key in cache)) {
-      var value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : cash(ele).attr("data-" + key);
+  try {
+    return JSON.parse(value);
+  } catch (_a) {}
 
-      if (value !== undefined) {
-        try {
-          value = JSON.parse(value);
-        } catch (e) {}
-
-        cache[key] = value;
-      }
-    }
-
-    return cache[key];
-  }
-
-  return cache;
-} // @require ./variables.ts
-// @require ./get_data_cache.ts
-
-
-function removeData(ele, key) {
-  if (key === undefined) {
-    delete ele[dataNamespace];
-  } else {
-    delete getDataCache(ele)[key];
-  }
-} // @require ./get_data_cache.ts
+  return value;
+} // @require core/camel_case.ts
 
 
 function setData(ele, key, value) {
-  getDataCache(ele)[key] = value;
+  try {
+    value = JSON.stringify(value);
+  } catch (_a) {}
+
+  if (ele.dataset) {
+    ele.dataset[camelCase(key)] = value;
+  } else {
+    ele.setAttribute("data-" + key, value);
+  }
 }
+
+var dataAttributeRe = /^data-(.+)/;
 
 function data(name, value) {
   var _this = this;
 
   if (!name) {
     if (!this[0]) return;
+    var datas_1 = {};
     each(this[0].attributes, function (i, attr) {
       var match = attr.name.match(dataAttributeRe);
       if (!match) return;
-
-      _this.data(match[1]);
+      datas_1[match[1]] = _this.data(match[1]);
     });
-    return getData(this[0]);
+    return datas_1;
   }
 
   if (isString(name)) {
@@ -527,16 +500,8 @@ function data(name, value) {
   return this;
 }
 
-Cash.prototype.data = data;
-
-Cash.prototype.removeData = function (key) {
-  return this.each(function (i, ele) {
-    return removeData(ele, key);
-  });
-}; // @optional ./data.ts
-// @optional ./remove_data.ts
+Cash.prototype.data = data; // @optional ./data.ts
 // @require css/helpers/compute_style_int.ts
-
 
 function getExtraSpace(ele, xAxis) {
   return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top') + "Width") + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom') + "Width");

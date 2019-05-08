@@ -793,90 +793,43 @@ Cash.prototype.css = css;
 // @optional ./css.ts
 
 
-const dataNamespace = '__cashData',
-      dataAttributeRe = /^data-(.*)/;
+// @require core/camel_case.ts
 
+function getData ( ele: HTMLElement, key: string ) {
 
-// @require core/cash.ts
-// @require ./helpers/variables.ts
+  const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
 
-function hasData ( ele: HTMLElement ): boolean {
-  return dataNamespace in ele;
-}
+  try {
+    return JSON.parse ( value );
+  } catch {}
 
-interface CashStatic {
-  hasData ( ele: HTMLElement ): boolean;
-}
-
-cash.hasData = hasData;
-
-
-// @require ./variables.ts
-
-function getDataCache ( ele: HTMLElement ): plainObject {
-
-  return ele[dataNamespace] = ( ele[dataNamespace] || {} );
+  return value;
 
 }
 
 
-// @require attributes/attr.ts
-// @require ./get_data_cache.ts
+// @require core/camel_case.ts
 
-function getData ( ele: HTMLElement, key?: string ): plainObject {
+function setData ( ele: HTMLElement, key: string, value ): void {
 
-  const cache = getDataCache ( ele );
+  try {
+    value = JSON.stringify ( value );
+  } catch {}
 
-  if ( key ) {
+  if ( ele.dataset ) {
 
-    if ( !( key in cache ) ) {
-
-      let value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
-
-      if ( value !== undefined ) {
-
-        try {
-          value = JSON.parse ( value );
-        } catch ( e ) {}
-
-        cache[key] = value;
-
-      }
-
-    }
-
-    return cache[key];
-
-  }
-
-  return cache;
-
-}
-
-
-// @require ./variables.ts
-// @require ./get_data_cache.ts
-
-function removeData ( ele: HTMLElement, key: string ): void {
-
-  if ( key === undefined ) {
-
-    delete ele[dataNamespace];
+    ele.dataset[camelCase ( key )] = value;
 
   } else {
 
-    delete getDataCache ( ele )[key];
+    ele.setAttribute ( `data-${key}`, value );
 
   }
 
 }
 
 
-// @require ./get_data_cache.ts
-
-function setData ( ele: HTMLElement, key: string, value ): void {
-  getDataCache ( ele )[key] = value;
-}
+const dataAttributeRe = /^data-(.+)/;
 
 
 // @require core/cash.ts
@@ -887,19 +840,23 @@ function setData ( ele: HTMLElement, key: string, value ): void {
 // @require ./helpers/variables.ts
 
 interface Cash {
+  data (): plainObject | undefined;
   data ( name: string );
   data ( name: string, value ): this;
   data ( datas: plainObject ): this;
 }
 
+function data ( this: Cash ): plainObject | undefined;
 function data ( this: Cash, name: string );
 function data ( this: Cash, name: string, value ): Cash;
 function data ( this: Cash, name: plainObject ): Cash;
-function data ( this: Cash, name: string | plainObject, value? ) {
+function data ( this: Cash, name?: string | plainObject, value? ) {
 
   if ( !name ) {
 
     if ( !this[0] ) return;
+
+    const datas = {};
 
     each ( this[0].attributes, ( i, attr ) => {
 
@@ -907,11 +864,11 @@ function data ( this: Cash, name: string | plainObject, value? ) {
 
       if ( !match ) return;
 
-      this.data ( match[1] );
+      datas[match[1]] = this.data ( match[1] );
 
     });
 
-    return getData ( this[0] );
+    return datas;
 
   }
 
@@ -936,21 +893,7 @@ function data ( this: Cash, name: string | plainObject, value? ) {
 Cash.prototype.data = data;
 
 
-// @require core/cash.ts
-// @require collection/each.ts
-// @require ./helpers/remove_data.ts
-
-interface Cash {
-  removeData ( key: string ): this;
-}
-
-Cash.prototype.removeData = function ( this: Cash, key: string ) {
-  return this.each ( ( i, ele ) => removeData ( ele, key ) );
-};
-
-
 // @optional ./data.ts
-// @optional ./remove_data.ts
 
 
 // @require css/helpers/compute_style_int.ts

@@ -1,3 +1,9 @@
+### Version 4.0.0
+- Removed `$.fn.removeData`
+- Removed `$.hasData`
+- `$.fn.data`: removed caching mechanism
+- `$.fn.data`: added a missing TypeScript method overload
+
 ### Version 3.2.0
 - Readme: updated sizes
 - $.fn.off: added support for removing delegated handlers

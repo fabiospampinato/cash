@@ -344,61 +344,41 @@ function css(prop, value) {
 ;
 Cash.prototype.css = css;
 // @optional ./css.ts
-const dataNamespace = '__cashData', dataAttributeRe = /^data-(.*)/;
-// @require core/cash.ts
-// @require ./helpers/variables.ts
-function hasData(ele) {
-    return dataNamespace in ele;
-}
-cash.hasData = hasData;
-// @require ./variables.ts
-function getDataCache(ele) {
-    return ele[dataNamespace] = (ele[dataNamespace] || {});
-}
-// @require attributes/attr.ts
-// @require ./get_data_cache.ts
+// @require core/camel_case.ts
 function getData(ele, key) {
-    const cache = getDataCache(ele);
-    if (key) {
-        if (!(key in cache)) {
-            let value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : cash(ele).attr(`data-${key}`);
-            if (value !== undefined) {
-                try {
-                    value = JSON.parse(value);
-                }
-                catch (e) { }
-                cache[key] = value;
-            }
-        }
-        return cache[key];
+    const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : ele.getAttribute(`data-${key}`);
+    try {
+        return JSON.parse(value);
     }
-    return cache;
+    catch (_a) { }
+    return value;
 }
-// @require ./variables.ts
-// @require ./get_data_cache.ts
-function removeData(ele, key) {
-    if (key === undefined) {
-        delete ele[dataNamespace];
+// @require core/camel_case.ts
+function setData(ele, key, value) {
+    try {
+        value = JSON.stringify(value);
+    }
+    catch (_a) { }
+    if (ele.dataset) {
+        ele.dataset[camelCase(key)] = value;
     }
     else {
-        delete getDataCache(ele)[key];
+        ele.setAttribute(`data-${key}`, value);
     }
 }
-// @require ./get_data_cache.ts
-function setData(ele, key, value) {
-    getDataCache(ele)[key] = value;
-}
+const dataAttributeRe = /^data-(.+)/;
 function data(name, value) {
     if (!name) {
         if (!this[0])
             return;
+        const datas = {};
         each(this[0].attributes, (i, attr) => {
             const match = attr.name.match(dataAttributeRe);
             if (!match)
                 return;
-            this.data(match[1]);
+            datas[match[1]] = this.data(match[1]);
         });
-        return getData(this[0]);
+        return datas;
     }
     if (isString(name)) {
         if (value === undefined)
@@ -411,11 +391,7 @@ function data(name, value) {
     return this;
 }
 Cash.prototype.data = data;
-Cash.prototype.removeData = function (key) {
-    return this.each((i, ele) => removeData(ele, key));
-};
 // @optional ./data.ts
-// @optional ./remove_data.ts
 // @require css/helpers/compute_style_int.ts
 function getExtraSpace(ele, xAxis) {
     return computeStyleInt(ele, `border${xAxis ? 'Left' : 'Top'}Width`) + computeStyleInt(ele, `padding${xAxis ? 'Left' : 'Top'}`) + computeStyleInt(ele, `padding${xAxis ? 'Right' : 'Bottom'}`) + computeStyleInt(ele, `border${xAxis ? 'Right' : 'Bottom'}Width`);
