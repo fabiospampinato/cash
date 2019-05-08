@@ -7,15 +7,17 @@
 // @require ./helpers/variables.ts
 
 interface Cash {
+  data (): plainObject | undefined;
   data ( name: string );
   data ( name: string, value ): this;
   data ( datas: plainObject ): this;
 }
 
+function data ( this: Cash ): plainObject | undefined;
 function data ( this: Cash, name: string );
 function data ( this: Cash, name: string, value ): Cash;
 function data ( this: Cash, name: plainObject ): Cash;
-function data ( this: Cash, name: string | plainObject, value? ) {
+function data ( this: Cash, name?: string | plainObject, value? ) {
 
   if ( !name ) {
 
