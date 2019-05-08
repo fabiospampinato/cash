@@ -78,18 +78,18 @@ $(element).addClass ( className ) // => collection
 
 Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
 
-| Attributes                           | Collection                 | CSS                  | Data                               | Dimensions                           | Effects                    |
-| ------------------------------------ | -------------------------- | -------------------- | ---------------------------------- | ------------------------------------ | -------------------------- |
-| [fn.addClass ()](#fnaddclass-)       | [fn.add ()](#fnadd-)       | [fn.css ()](#fncss-) | [fn.data ()](#fndata-)             | [fn.height ()](#fnheight-)           | [fn.hide ()](#fnhide-)     |
-| [fn.attr ()](#fnattr-)               | [fn.each ()](#fneach-)     |                      | [fn.removeData ()](#fnremovedata-) | [fn.innerHeight ()](#fninnerheight-) | [fn.show ()](#fnshow-)     |
-| [fn.hasClass ()](#fnhasclass-)       | [fn.eq ()](#fneq-)         |                      |                                    | [fn.innerWidth ()](#fninnerwidth-)   | [fn.toggle ()](#fntoggle-) |
-| [fn.prop ()](#fnprop-)               | [fn.filter ()](#fnfilter-) |                      |                                    | [fn.outerHeight ()](#fnouterheight-) |                            |
-| [fn.removeAttr ()](#fnremoveattr-)   | [fn.first ()](#fnfirst-)   |                      |                                    | [fn.outerWidth ()](#fnouterwidth-)   |                            |
-| [fn.removeClass ()](#fnremoveclass-) | [fn.get ()](#fnget-)       |                      |                                    | [fn.width ()](#fnwidth-)             |                            |
-| [fn.removeProp ()](#fnremoveprop-)   | [fn.index ()](#fnindex-)   |                      |                                    |                                      |                            |
-| [fn.toggleClass ()](#fntoggleclass-) | [fn.last ()](#fnlast-)     |                      |                                    |                                      |                            |
-|                                      | [fn.map ()](#fnmap-)       |                      |                                    |                                      |                            |
-|                                      | [fn.slice ()](#fnslice-)   |                      |                                    |                                      |                            |
+| Attributes                           | Collection                 | CSS                  | Data                   | Dimensions                           | Effects                    |
+| ------------------------------------ | -------------------------- | -------------------- | ---------------------- | ------------------------------------ | -------------------------- |
+| [fn.addClass ()](#fnaddclass-)       | [fn.add ()](#fnadd-)       | [fn.css ()](#fncss-) | [fn.data ()](#fndata-) | [fn.height ()](#fnheight-)           | [fn.hide ()](#fnhide-)     |
+| [fn.attr ()](#fnattr-)               | [fn.each ()](#fneach-)     |                      |                        | [fn.innerHeight ()](#fninnerheight-) | [fn.show ()](#fnshow-)     |
+| [fn.hasClass ()](#fnhasclass-)       | [fn.eq ()](#fneq-)         |                      |                        | [fn.innerWidth ()](#fninnerwidth-)   | [fn.toggle ()](#fntoggle-) |
+| [fn.prop ()](#fnprop-)               | [fn.filter ()](#fnfilter-) |                      |                        | [fn.outerHeight ()](#fnouterheight-) |                            |
+| [fn.removeAttr ()](#fnremoveattr-)   | [fn.first ()](#fnfirst-)   |                      |                        | [fn.outerWidth ()](#fnouterwidth-)   |                            |
+| [fn.removeClass ()](#fnremoveclass-) | [fn.get ()](#fnget-)       |                      |                        | [fn.width ()](#fnwidth-)             |                            |
+| [fn.removeProp ()](#fnremoveprop-)   | [fn.index ()](#fnindex-)   |                      |                        |                                      |                            |
+| [fn.toggleClass ()](#fntoggleclass-) | [fn.last ()](#fnlast-)     |                      |                        |                                      |                            |
+|                                      | [fn.map ()](#fnmap-)       |                      |                        |                                      |                            |
+|                                      | [fn.slice ()](#fnslice-)   |                      |                        |                                      |                            |
 
 | Events                       | Forms                            | Manipulation                           | Offset                                 | Traversal                      |
 | ---------------------------- | -------------------------------- | -------------------------------------- | -------------------------------------- | ------------------------------ |
@@ -258,9 +258,11 @@ $(element).css ( object ) // => collection
 
 #### fn.data ()
 
-Link some data (string, object, array, etc.) to an element when both key and value are supplied.
+Without arguments, returns an object mapping all the `data-*` attributes to their values.
 
-If only a key is supplied, returns the linked data and falls back to data attribute value if no data is already linked.
+With a `key`, return the value of the corresponding `data-*` attribute.
+
+With both a `key` and `value`, sets the value of the corresponding `data-*` attribute to `value`.
 
 Multiple data can be set when an object is supplied.
 

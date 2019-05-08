@@ -1,33 +1,14 @@
 
-// @require attributes/attr.ts
-// @require ./get_data_cache.ts
+// @require core/camel_case.ts
 
-function getData ( ele: HTMLElement, key?: string ): plainObject {
+function getData ( ele: HTMLElement, key: string ) {
 
-  const cache = getDataCache ( ele );
+  const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
 
-  if ( key ) {
+  try {
+    return JSON.parse ( value );
+  } catch {}
 
-    if ( !( key in cache ) ) {
-
-      let value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : cash ( ele ).attr ( `data-${key}` );
-
-      if ( value !== undefined ) {
-
-        try {
-          value = JSON.parse ( value );
-        } catch ( e ) {}
-
-        cache[key] = value;
-
-      }
-
-    }
-
-    return cache[key];
-
-  }
-
-  return cache;
+  return value;
 
 }

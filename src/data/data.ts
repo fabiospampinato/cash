@@ -21,17 +21,19 @@ function data ( this: Cash, name: string | plainObject, value? ) {
 
     if ( !this[0] ) return;
 
+    const datas = {};
+
     each ( this[0].attributes, ( i, attr ) => {
 
       const match = attr.name.match ( dataAttributeRe );
 
       if ( !match ) return;
 
-      this.data ( match[1] );
+      datas[match[1]] = this.data ( match[1] );
 
     });
 
-    return getData ( this[0] );
+    return datas;
 
   }
 

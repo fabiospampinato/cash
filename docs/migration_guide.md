@@ -24,6 +24,10 @@ $('#foo').nextAll ( '.bar' );
 $('#foo').next ( '.bar' );
 ```
 
+### Data caching
+
+In jQuery the `$.fn.data` function caches retrieved values, and doesn't refresh them when they are updated outside of jQuery (e.g. via the `dataset` API), this makes jQuery's `$.fn.data` function unusable with libraries like React. Cash doesn't implement such caching functionality and doesn't have this problem, the retrieved values are always fresh.
+
 ### Events
 
 Cash's event system relies heavily on the browser's underlying event system so there are some differences when comparing it with jQuery's.

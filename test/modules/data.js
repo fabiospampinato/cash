@@ -1,7 +1,6 @@
 
 var fixture = '\
   <div class="data" data-one="one" data-two="two"></div>\
-  <div class="types" data-true="true" data-false="false" data-null="null" data-int="3" data-float="3.14" data-string="foo" data-object=\'{"json": true}\' data-array="[1,2,3]"></div>\
 ';
 
 describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -19,7 +18,16 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     it ( 'supports various data types', function ( t ) {
 
-      var ele = $('.types');
+      var ele = $('.data');
+
+      ele.data ( 'true', true );
+      ele.data ( 'false', false );
+      ele.data ( 'null', null );
+      ele.data ( 'int', 3 );
+      ele.data ( 'float', 3.14 );
+      ele.data ( 'string', 'foo' );
+      ele.data ( 'object', { json: true } );
+      ele.data ( 'array', [1, 2, 3] );
 
       t.is ( ele.data ( 'true' ), true );
       t.is ( ele.data ( 'false' ), false );
@@ -29,6 +37,16 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       t.is ( ele.data ( 'string' ), 'foo' );
       t.deepEqual ( ele.data ( 'object' ), { json: true } );
       t.deepEqual ( ele.data ( 'array' ), [1, 2, 3] );
+
+    });
+
+    it ( 'doesn\'t cache the values', function ( t ) {
+
+      var ele = $('.data');
+
+      t.is ( ele.data ( 'one' ), 'one' );
+      ele[0].dataset.one = 'uno';
+      t.is ( ele.data ( 'one' ), 'uno' );
 
     });
 
