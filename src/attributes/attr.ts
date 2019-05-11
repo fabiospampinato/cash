@@ -35,7 +35,7 @@ function attr ( this: Cash, attr: string | plainObject, value? ) {
 
   }
 
-  for ( let key in attr ) {
+  for ( const key in attr ) {
 
     this.attr ( key, attr[key] );
 

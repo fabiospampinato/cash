@@ -48,7 +48,7 @@ function css ( this: Cash, prop: string | plainObject, value? ) {
 
   }
 
-  for ( let key in prop ) {
+  for ( const key in prop ) {
 
     this.css ( key, prop[key] );
 

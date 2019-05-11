@@ -9,7 +9,7 @@ interface Cash {
 
 Cash.prototype.contents = function ( this: Cash ) {
 
-  let result: Ele[] = [];
+  const result: Ele[] = [];
 
   this.each ( ( i, ele ) => {
 

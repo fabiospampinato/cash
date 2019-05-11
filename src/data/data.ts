@@ -47,7 +47,7 @@ function data ( this: Cash, name?: string | plainObject, value? ) {
 
   }
 
-  for ( let key in name ) {
+  for ( const key in name ) {
 
     this.data ( key, name[key] );
 

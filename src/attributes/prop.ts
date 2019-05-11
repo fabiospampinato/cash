@@ -21,7 +21,7 @@ Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? 
 
   }
 
-  for ( let key in prop ) {
+  for ( const key in prop ) {
 
     this.prop ( key, prop[key] );
 

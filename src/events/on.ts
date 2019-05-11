@@ -25,7 +25,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
   if ( !isString ( eventFullName ) ) {
 
-    for ( let key in eventFullName ) {
+    for ( const key in eventFullName ) {
 
       this.on ( key, selector, eventFullName[key] );
 
