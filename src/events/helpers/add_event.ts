@@ -4,7 +4,7 @@
 
 function addEvent ( ele: Ele, name: string, namespaces: string[], selector: string, callback: Function ): void {
 
-  callback['guid'] = ( callback['guid'] || guid++ );
+  callback['guid'] = ( callback['guid'] || cash.guid++ );
 
   const eventCache = getEventsCache ( ele );
 

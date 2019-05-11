@@ -98,7 +98,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
       };
 
-      finalCallback['guid'] = callback['guid'] = ( callback['guid'] || guid++ );
+      finalCallback['guid'] = callback['guid'] = ( callback['guid'] || cash.guid++ );
 
       addEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
