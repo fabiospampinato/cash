@@ -52,7 +52,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
-        let thisArg = ele;
+        let thisArg: EventTarget = ele;
 
         if ( selector ) {
 

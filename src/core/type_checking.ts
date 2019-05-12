@@ -10,11 +10,11 @@ function isWindow ( x: any ): x is Window {
 }
 
 function isDocument ( x: any ): x is Document {
-  return x.nodeType === 9;
+  return !!x && x.nodeType === 9;
 }
 
 function isElement ( x: any ): x is HTMLElement {
-  return x.nodeType === 1;
+  return !!x && x.nodeType === 1;
 }
 
 function isFunction ( x: any ): x is Function {

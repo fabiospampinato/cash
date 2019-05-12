@@ -1,7 +1,7 @@
 
 // @require ./cash.ts
 
-function matches ( ele: Ele, selector: string ): boolean {
+function matches ( ele: any, selector: string ): boolean {
 
   const matches = ele && ( ele['matches'] || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector'] );
 
@@ -10,7 +10,7 @@ function matches ( ele: Ele, selector: string ): boolean {
 }
 
 interface CashStatic {
-  matches ( ele: Ele, selector: string ): boolean;
+  matches ( ele: any, selector: string ): boolean;
 }
 
 cash.matches = matches;

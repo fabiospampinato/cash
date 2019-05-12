@@ -13,7 +13,7 @@ interface CashStatic {
 type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
-type Ele = Window | Document | HTMLElement | Element | Node | EventTarget;
+type Ele = Window | Document | HTMLElement | Element | Node;
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
 type Context = Document | HTMLElement | Element;
