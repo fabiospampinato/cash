@@ -1,7 +1,9 @@
 
 // @require core/cash.ts
 // @require core/filtered.ts
-// @require collection/filter.ts
+// @require core/unique.ts
+// @require core/variables.ts
+// @require collection/each.ts
 // @require ./children.ts
 // @require ./parent.ts
 
@@ -11,8 +13,14 @@ interface Cash {
 
 Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 
-  const ele = this[0];
+  const result: Ele[] = [];
 
-  return filtered ( this.parent ().children ().filter ( ( i, child ) => child !== ele ), comparator );
+  this.each ( ( i, ele ) => {
+
+    push.apply ( result, cash ( ele ).parent ().children ( ( ci, child ) => child !== ele ) );
+
+  });
+
+  return filtered ( cash ( unique ( result ) ), comparator );
 
 };

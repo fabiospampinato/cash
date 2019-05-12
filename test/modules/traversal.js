@@ -316,6 +316,16 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports multiple elements in the collection', function ( t ) {
+
+      var eles = $('.child, .next');
+      var siblings = $('.parent').children ();
+
+      t.is ( eles.siblings ().length, siblings.length );
+      t.is ( eles.siblings ().not ( siblings ).length, 0 ); // The returned nodes aren't ordered
+
+    });
+
     it ( 'supports selector', function ( t ) {
 
       var child = $('.child');
