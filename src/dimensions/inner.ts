@@ -1,6 +1,7 @@
 
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 
 interface Cash {
@@ -14,7 +15,7 @@ each ( ['Width', 'Height'], ( i, prop: 'Width' | 'Height' ) => {
 
     if ( !this[0] ) return;
 
-    if ( this[0] === win ) return win[`inner${prop}`];
+    if ( isWindow ( this[0] ) ) return win[`inner${prop}`];
 
     return this[0][`client${prop}`];
 

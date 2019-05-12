@@ -132,6 +132,22 @@ describe ( 'Utilities', function () {
 
   });
 
+  describe ( '$.isWindow', function ( it ) {
+
+    it ( 'checks if the passed variable is a window', function ( t ) {
+
+      t.true ( $.isWindow ( window ) );
+      t.false ( $.isWindow ( document ) );
+      t.false ( $.isWindow ( 'foo' ) );
+      t.false ( $.isWindow ( true ) );
+      t.false ( $.isWindow ( 123 ) );
+      t.false ( $.isWindow ([ 1, 2, 3 ]) );
+      t.false ( $.isWindow ( function () {} ) );
+
+    });
+
+  });
+
   describe ( '$.matches', function ( it ) {
 
     it ( 'checks if the passed element matches the passed selector', function ( t ) {

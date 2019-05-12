@@ -23,7 +23,7 @@ each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
     if ( !arguments.length ) {
 
-      if ( this[0] === win ) return this[0][ camelCase ( `outer-${prop}` )];
+      if ( isWindow ( this[0] ) ) return this[0][ camelCase ( `outer-${prop}` )];
 
       return this[0].getBoundingClientRect ()[prop] - getExtraSpace ( this[0], !index );
 

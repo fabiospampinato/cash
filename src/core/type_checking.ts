@@ -5,6 +5,10 @@ function isCash ( x: any ): x is Cash {
   return x instanceof Cash;
 }
 
+function isWindow ( x: any ): x is Window {
+  return !!x && x === x.window;
+}
+
 function isDocument ( x: any ): x is Document {
   return x.nodeType === 9;
 }
@@ -28,12 +32,14 @@ function isNumeric ( x: any ): boolean {
 const {isArray} = Array;
 
 interface CashStatic {
+  isWindow ( x: any ): x is Window;
   isFunction ( x: any ): x is Function;
   isString ( x: any ): x is string;
   isNumeric ( x: any ): boolean;
   isArray ( x: any ): x is Array<any>;
 }
 
+cash.isWindow = isWindow;
 cash.isFunction = isFunction;
 cash.isString = isString;
 cash.isNumeric = isNumeric;
