@@ -7,9 +7,7 @@ interface Cash {
 
 Cash.prototype.empty = function ( this: Cash ) {
 
-  const ele = this[0];
-
-  if ( ele ) {
+  return this.each ( ( i, ele ) => {
 
     while ( ele.firstChild ) {
 
@@ -17,8 +15,6 @@ Cash.prototype.empty = function ( this: Cash ) {
 
     }
 
-  }
-
-  return this;
+  });
 
 };

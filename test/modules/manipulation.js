@@ -4,7 +4,9 @@ var fixture = '\
     <div class="anchor">content</div>\
   </div>\
   <div class="uncle"></div>\
-  <div class="aunt"></div>\
+  <div class="aunt">\
+    <div class="cousin">content</div>\
+  </div>\
 ';
 
 describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
@@ -180,7 +182,20 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       parent.empty ();
 
-      t.is ( parent.contents ().length,  0 );
+      t.is ( parent.contents ().length, 0 );
+
+    });
+
+    it ( 'supports multiple elements in the collection', function ( t ) {
+
+      var parent = $('.parent');
+      var aunt = $('.aunt');
+      var parents = parent.add ( aunt );
+
+      parents.empty ();
+
+      t.is ( parent.contents ().length, 0 );
+      t.is ( aunt.contents ().length, 0 );
 
     });
 
