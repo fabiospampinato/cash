@@ -10,11 +10,11 @@
 interface Cash {
   off (): this;
   off ( events: string ): this;
-  off ( events: string, callback: Function ): this;
-  off ( events: string, selector: string, callback: Function ): this;
+  off ( events: string, callback: EventCallback ): this;
+  off ( events: string, selector: string, callback: EventCallback ): this;
 }
 
-Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | Function, callback?: Function ) {
+Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | EventCallback, callback?: EventCallback ) {
 
   if ( eventFullName === undefined ) {
 

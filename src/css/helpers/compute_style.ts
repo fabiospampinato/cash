@@ -1,9 +1,10 @@
 
+// @require core/type_checking.ts
 // @require core/variables.ts
 
-function computeStyle ( ele: HTMLElement, prop: string, isVariable?: boolean ): undefined | string {
+function computeStyle ( ele: Ele, prop: string, isVariable?: boolean ): string | undefined {
 
-  if ( ele.nodeType !== 1 || !prop ) return;
+  if ( !isElement ( ele ) || !prop ) return;
 
   const style = win.getComputedStyle ( ele, null );
 

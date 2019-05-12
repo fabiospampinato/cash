@@ -5,7 +5,7 @@
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-const prefixedProps: plainObject = {},
+const prefixedProps: { [prop: string]: string } = {},
       {style} = div,
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 

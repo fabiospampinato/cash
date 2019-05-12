@@ -55,7 +55,7 @@ const cash = Cash.prototype.init as typeof Cash.prototype.init & CashStatic;
 cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 
 Cash.prototype.length = 0;
-Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 
 if ( typeof Symbol === 'function' ) {
   Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];

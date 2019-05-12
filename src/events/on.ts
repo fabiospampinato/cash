@@ -14,14 +14,14 @@
 
 interface Cash {
   on ( events: plainObject ): this;
-  on ( events: string, callback: Function, _one?: boolean ): this;
-  on ( events: string, selector: string | Function, callback: Function, _one?: boolean ): this;
+  on ( events: string, callback: EventCallback, _one?: boolean ): this;
+  on ( events: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): this;
 }
 
 function on ( this: Cash, eventFullName: plainObject ): Cash;
-function on ( this: Cash, eventFullName: string, callback: Function, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string, selector: string | Function, callback: Function, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string | plainObject, selector?: string | Function, callback?: boolean | Function, _one?: boolean ) {
+function on ( this: Cash, eventFullName: string, callback: EventCallback, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string | plainObject, selector?: string | EventCallback, callback?: boolean | EventCallback, _one?: boolean ) {
 
   if ( !isString ( eventFullName ) ) {
 
@@ -48,7 +48,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
     this.each ( ( i, ele ) => {
 
-      const finalCallback = function ( event ) {
+      const finalCallback = function ( event: EventObj ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -60,7 +60,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           while ( !matches ( target, selector as string ) ) { //TSC
             if ( target === ele ) return;
-            target = target.parentNode;
+            target = target['parentNode'];
             if ( !target ) return;
           }
 
@@ -81,7 +81,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
         }
 
-        const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
+        const returnValue = ( callback as EventCallback ).call ( thisArg, event, event.data ); //TSC
 
         if ( _one ) {
 
@@ -98,7 +98,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
       };
 
-      finalCallback['guid'] = callback['guid'] = ( callback['guid'] || cash.guid++ );
+      finalCallback.guid = callback['guid'] = ( callback['guid'] || cash.guid++ ); //TSC
 
       addEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 

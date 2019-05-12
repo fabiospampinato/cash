@@ -15,7 +15,7 @@ Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
 
     this.first ().before ( structure );
 
-    let wrapper = structure[0] as Element;
+    let wrapper = structure[0];
 
     while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
 

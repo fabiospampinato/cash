@@ -1,7 +1,7 @@
 
 // @require ./eval_scripts.ts
 
-function insertElement ( anchor: Node, child: Node, prepend?: boolean, prependTarget?: Node ): void {
+function insertElement ( anchor: Ele, child: Ele, prepend?: boolean, prependTarget?: Element ): void {
 
   if ( prepend ) {
 

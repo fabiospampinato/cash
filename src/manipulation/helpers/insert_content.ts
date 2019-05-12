@@ -5,8 +5,8 @@
 
 function insertContent ( parent: Cash, child: Cash, prepend?: boolean ): void {
 
-  each ( parent, ( index: number, parentEle: HTMLElement ) => {
-    each ( child, ( i, childEle: HTMLElement ) => {
+  each ( parent, ( index: number, parentEle: Ele ) => {
+    each ( child, ( i, childEle: Ele ) => {
       insertElement ( parentEle, !index ? childEle : childEle.cloneNode ( true ), prepend, prepend && parentEle.firstChild );
     });
   });

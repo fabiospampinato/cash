@@ -1,7 +1,7 @@
 
 // @require css/helpers/compute_style.ts
 
-const defaultDisplay = {};
+const defaultDisplay: { [tagName: string]: string } = {};
 
 function getDefaultDisplay ( tagName: string ): string {
 

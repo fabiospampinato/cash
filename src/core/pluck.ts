@@ -1,9 +1,9 @@
 
 // @require ./variables.ts
 
-function pluck ( arr: ArrayLike<any>, prop: string, deep?: boolean ): ArrayLike<any> {
+function pluck<T> ( arr: ArrayLike<T>, prop: string, deep?: boolean ): Array<T> {
 
-  const plucked = [];
+  const plucked: Array<T> = [];
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 

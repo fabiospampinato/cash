@@ -5,15 +5,17 @@
 // @require ./remove_attr.ts
 
 interface Cash {
-  attr ( attrs: string );
-  attr ( attrs: string, value ): this;
+  attr (): undefined;
+  attr ( attrs: string ): string | null;
+  attr ( attrs: string, value: string ): this;
   attr ( attrs: plainObject ): this;
 }
 
-function attr ( this: Cash, attr: string );
-function attr ( this: Cash, attr: string, value ): Cash;
+function attr ( this: Cash ): undefined;
+function attr ( this: Cash, attr: string ): string | null;
+function attr ( this: Cash, attr: string, value: string ): Cash;
 function attr ( this: Cash, attr: plainObject ): Cash;
-function attr ( this: Cash, attr: string | plainObject, value? ) {
+function attr ( this: Cash, attr?: string | plainObject, value?: string ) {
 
   if ( !attr ) return;
 

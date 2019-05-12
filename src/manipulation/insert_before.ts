@@ -9,7 +9,7 @@ interface Cash {
 
 Cash.prototype.insertBefore = function ( this: Cash, selector: Selector ) {
 
-  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
+  cash ( selector ).each ( ( index: number, ele: Ele ) => {
 
     const parent = ele.parentNode;
 

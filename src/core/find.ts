@@ -1,9 +1,9 @@
 
 // @require ./variables.ts
 
-function find ( selector: string, context: Context = doc ) {
+function find ( selector: string, context: Ele = doc ): ArrayLike<Element> {
 
-  return context !== doc && context.nodeType !== 1 && context.nodeType !== 9
+  return !isDocument ( context ) && !isElement ( context )
            ? []
            : classRe.test ( selector )
              ? context.getElementsByClassName ( selector.slice ( 1 ) )

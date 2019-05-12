@@ -3,11 +3,11 @@
 
 const dashAlphaRe = /-([a-z])/g;
 
-function camelCaseReplace ( all, letter ) {
+function camelCaseReplace ( match: string, letter: string ): string {
   return letter.toUpperCase ();
 }
 
-function camelCase ( str: string ) {
+function camelCase ( str: string ): string {
   return str.replace ( dashAlphaRe, camelCaseReplace );
 }
 

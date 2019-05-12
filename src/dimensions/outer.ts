@@ -11,7 +11,7 @@ interface Cash {
 
 each ( ['Width', 'Height'], ( index: number, prop: string ) => {
 
-  Cash.prototype[`outer${prop}`] = function ( includeMargins?: boolean ) {
+  Cash.prototype[`outer${prop}`] = function ( this: Cash, includeMargins?: boolean ) {
 
     if ( !this[0] ) return;
 

@@ -8,22 +8,22 @@
 
 interface Cash {
   data (): plainObject | undefined;
-  data ( name: string );
-  data ( name: string, value ): this;
+  data ( name: string ): any;
+  data ( name: string, value: any ): this;
   data ( datas: plainObject ): this;
 }
 
 function data ( this: Cash ): plainObject | undefined;
-function data ( this: Cash, name: string );
-function data ( this: Cash, name: string, value ): Cash;
+function data ( this: Cash, name: string ): any;
+function data ( this: Cash, name: string, value: any ): Cash;
 function data ( this: Cash, name: plainObject ): Cash;
-function data ( this: Cash, name?: string | plainObject, value? ) {
+function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
   if ( !name ) {
 
     if ( !this[0] ) return;
 
-    const datas = {};
+    const datas: { [data: string]: any } = {};
 
     each ( this[0].attributes, ( i, attr ) => {
 

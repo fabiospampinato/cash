@@ -4,7 +4,6 @@
 // @require core/unique.ts
 // @require core/variables.ts
 // @require collection/each.ts
-// @require collection/filter.ts
 
 interface Cash {
   children ( comparator?: Comparator ): Cash;
@@ -12,9 +11,13 @@ interface Cash {
 
 Cash.prototype.children = function ( this: Cash, comparator?: Comparator ) {
 
-  let result: Ele[] | Cash = [];
+  const result: Ele[] = [];
 
-  this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
+  this.each ( ( i, ele ) => {
+
+    push.apply ( result, ele.children );
+
+  });
 
   return filtered ( cash ( unique ( result ) ), comparator );
 

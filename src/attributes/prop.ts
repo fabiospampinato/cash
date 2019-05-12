@@ -4,12 +4,12 @@
 // @require collection/each.ts
 
 interface Cash {
-  prop ( prop: string );
-  prop ( prop: string, value ): this;
+  prop ( prop: string ): any;
+  prop ( prop: string, value: any ): this;
   prop ( props: plainObject ): this;
 }
 
-Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? ) {
+Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value?: any ) {
 
   if ( !prop ) return;
 

@@ -5,11 +5,11 @@
 function getCompareFunction ( comparator: Comparator ): Function {
 
   return isString ( comparator )
-           ? ( i, ele ) => matches ( ele, comparator )
+           ? ( i: number, ele: Ele ) => matches ( ele, comparator )
            : isFunction ( comparator )
              ? comparator
              : isCash ( comparator )
-               ? ( i, ele ) => comparator.is ( ele )
-               : ( i, ele ) => ele === comparator;
+               ? ( i: number, ele: Ele ) => comparator.is ( ele )
+               : ( i: number, ele: Ele ) => ele === comparator;
 
 }

@@ -4,13 +4,13 @@
 // @require core/variables.ts
 
 interface Cash {
-  innerWidth (): number;
-  innerHeight (): number;
+  innerWidth (): number | undefined;
+  innerHeight (): number | undefined;
 }
 
-each ( ['Width', 'Height'], ( i, prop: string ) => {
+each ( ['Width', 'Height'], ( i, prop: 'Width' | 'Height' ) => {
 
-  Cash.prototype[`inner${prop}`] = function () {
+  Cash.prototype[`inner${prop}`] = function ( this: Cash ) {
 
     if ( !this[0] ) return;
 

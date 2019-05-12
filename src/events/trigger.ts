@@ -7,12 +7,12 @@
 // @require ./helpers/variables.ts
 
 interface Cash {
-  trigger ( event: string | Event, data? ): this;
+  trigger ( event: Event | string, data?: any ): this;
 }
 
-Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, data? ) {
+Cash.prototype.trigger = function ( this: Cash, eventFullName: Event | string, data?: any ) {
 
-  let evt: string | Event = eventFullName;
+  let evt: EventObj;
 
   if ( isString ( eventFullName ) ) {
 
@@ -21,19 +21,23 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
     evt = doc.createEvent ( type );
     evt.initEvent ( name, true, true );
-    evt['namespace'] = namespaces.join ( eventsNamespacesSeparator );
+    evt.namespace = namespaces.join ( eventsNamespacesSeparator );
+
+  } else {
+
+    evt = eventFullName;
 
   }
 
-  evt['data'] = data;
+  evt.data = data;
 
-  const isEventFocus = ( evt['type'] in eventsFocus );
+  const isEventFocus = ( evt.type in eventsFocus );
 
   return this.each ( ( i, ele ) => {
 
-    if ( isEventFocus && isFunction ( ele[evt['type']] ) ) {
+    if ( isEventFocus && isFunction ( ele[evt.type] ) ) {
 
-      ele[evt['type']]();
+      ele[evt.type]();
 
     } else {
 

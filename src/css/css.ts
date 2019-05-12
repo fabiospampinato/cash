@@ -8,15 +8,15 @@
 // @require ./helpers/is_css_variable.ts
 
 interface Cash {
-  css ( prop: string );
-  css ( prop: string, value ): this;
+  css ( prop: string ): string | undefined;
+  css ( prop: string, value: string ): this;
   css ( props: plainObject ): this;
 }
 
-function css ( this: Cash, prop: string );
-function css ( this: Cash, prop: string, value ): Cash;
+function css ( this: Cash, prop: string ): string | undefined;
+function css ( this: Cash, prop: string, value: string ): Cash;
 function css ( this: Cash, prop: plainObject ): Cash;
-function css ( this: Cash, prop: string | plainObject, value? ) {
+function css ( this: Cash, prop: string | plainObject, value?: string ) {
 
   if ( isString ( prop ) ) {
 
@@ -32,11 +32,11 @@ function css ( this: Cash, prop: string | plainObject, value? ) {
 
     return this.each ( ( i, ele ) => {
 
-      if ( ele.nodeType !== 1 ) return;
+      if ( !isElement ( ele ) ) return;
 
       if ( isVariable ) {
 
-        ele.style.setProperty ( prop, value );
+        ele.style.setProperty ( prop as string, value ); //TSC
 
       } else {
 

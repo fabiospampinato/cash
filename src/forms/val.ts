@@ -7,7 +7,7 @@
 
 interface Cash {
   val (): string | string[];
-  val ( value ): this;
+  val ( value: string | string[] ): this;
 }
 
 function val ( this: Cash ): string | string[];

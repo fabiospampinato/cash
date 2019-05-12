@@ -2,6 +2,7 @@
 // @require core/camel_case.ts
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 // @require css/helpers/compute_style.ts
 // @require css/helpers/get_suffixed_value.ts
@@ -14,9 +15,9 @@ interface Cash {
   height ( value: number | string ): this;
 }
 
-each ( ['width', 'height'], ( index: number, prop: string ) => {
+each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
-  Cash.prototype[prop] = function ( value?: number | string ) {
+  Cash.prototype[prop] = function ( this: Cash, value?: number | string ) {
 
     if ( !this[0] ) return value === undefined ? undefined : this;
 
@@ -28,11 +29,11 @@ each ( ['width', 'height'], ( index: number, prop: string ) => {
 
     }
 
-    const valueNumber = parseInt ( value as string, 10 );
+    const valueNumber = parseInt ( value as string, 10 ); //TSC
 
     return this.each ( ( i, ele ) => {
 
-      if ( ele.nodeType !== 1 ) return;
+      if ( !isElement ( ele ) ) return;
 
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 

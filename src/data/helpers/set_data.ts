@@ -1,7 +1,7 @@
 
 // @require core/camel_case.ts
 
-function setData ( ele: HTMLElement, key: string, value ): void {
+function setData ( ele: Ele, key: string, value: any ): void {
 
   try {
     value = JSON.stringify ( value );
