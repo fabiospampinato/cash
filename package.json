@@ -36,9 +36,7 @@
     "type": "git",
     "url": "https://github.com/kenwheeler/cash.git"
   },
-  "dependencies": {
-    "@types/node": "^10.12.8"
-  },
+  "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.26.3",
     "bundlesize": "^0.17.0",
