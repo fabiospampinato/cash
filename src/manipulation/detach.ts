@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require collection/each.ts
 
 interface Cash {
@@ -8,7 +9,7 @@ interface Cash {
 
 Cash.prototype.detach = function ( this: Cash ) {
   return this.each ( ( i, ele ) => {
-    if ( ele.parentNode ) {
+    if ( isElement ( ele ) && ele.parentNode ) {
       ele.parentNode.removeChild ( ele )
     }
   });

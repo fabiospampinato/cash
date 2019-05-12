@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 
 const docEle = doc.documentElement;
@@ -15,7 +16,7 @@ Cash.prototype.offset = function ( this: Cash ) {
 
   const ele = this[0];
 
-  if ( !ele ) return;
+  if ( !isElement ( ele ) ) return;
 
   const rect = ele.getBoundingClientRect ();
 

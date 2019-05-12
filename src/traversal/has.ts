@@ -12,7 +12,7 @@ Cash.prototype.has = function ( this: Cash, selector: string | HTMLElement ) {
 
   const comparator = isString ( selector )
                        ? ( i: number, ele: Ele ) => !!find ( selector, ele ).length
-                       : ( i: number, ele: Ele ) => ele.contains ( selector );
+                       : ( i: number, ele: Ele ) => !isWindow ( ele ) && ele.contains ( selector );
 
   return this.filter ( comparator );
 

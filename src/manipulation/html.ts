@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require collection/each.ts
 
 interface Cash {
@@ -13,7 +14,13 @@ function html ( this: Cash, html?: string ): string | Cash {
 
   if ( html === undefined ) return this[0] && this[0].innerHTML;
 
-  return this.each ( ( i, ele ) => { ele.innerHTML = html } );
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    ele.innerHTML = html;
+
+  });
 
 }
 
