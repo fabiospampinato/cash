@@ -31,6 +31,8 @@ function attr ( this: Cash, attr?: string | plainObject, value?: string ) {
 
     }
 
+    if ( value === undefined ) return this;
+
     if ( value === null ) return this.removeAttr ( attr );
 
     return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
