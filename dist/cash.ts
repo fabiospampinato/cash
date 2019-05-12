@@ -1,9 +1,9 @@
 
 interface Cash {
-  [index: number]: Window & Document & HTMLElement & Element & Node; //FIXME: Quick and dirty way of getting rid of most type errors
+  [index: number]: Ele;
   length: number;
-  splice ( start: number, deleteCount?: number );
-  splice ( start: number, deleteCount: number, ...items: Ele[] );
+  splice ( start: number, deleteCount?: number ): Ele[];
+  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[];
 }
 
 interface CashStatic {
@@ -14,9 +14,20 @@ type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
 type Ele = Window | Document | HTMLElement | Element | Node;
-type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
-type Comparator = string | Function | Ele | Cash;
+type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
+type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
 type Context = Document | HTMLElement | Element;
+
+type EventObj = Event & {
+  __delegate?: boolean,
+  namespace?: string,
+  data?: any
+};
+
+type EventCallback = {
+  ( event: EventObj, data?: any ): any,
+  guid?: number
+};
 
 
 const doc = document,
@@ -32,9 +43,9 @@ const idRe = /^#[\w-]*$/,
 
 // @require ./variables.ts
 
-function find ( selector: string, context: Context = doc ) {
+function find ( selector: string, context: Ele = doc ): ArrayLike<Element> {
 
-  return context !== doc && context.nodeType !== 1 && context.nodeType !== 9
+  return !isDocument ( context ) && !isElement ( context )
            ? []
            : classRe.test ( selector )
              ? context.getElementsByClassName ( selector.slice ( 1 ) )
@@ -101,7 +112,7 @@ const cash = Cash.prototype.init as typeof Cash.prototype.init & CashStatic;
 cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 
 Cash.prototype.length = 0;
-Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 
 if ( typeof Symbol === 'function' ) {
   Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
@@ -164,12 +175,14 @@ Cash.prototype.last = function ( this: Cash ) {
 // @require core/cash.ts
 // @require core/variables.ts
 
+type MapCallback<T> = ( this: T, index: number, ele: T ) => Ele;
+
 interface Cash {
-  map ( callback: Function ): Cash;
+  map ( callback: MapCallback<Ele> ): Cash;
 }
 
-Cash.prototype.map = function ( this: Cash, callback: Function ) {
-  return cash ( map.call ( this, ( ele, i ) => callback.call ( ele, i, ele ) ) );
+Cash.prototype.map = function ( this: Cash, callback: MapCallback<Ele> ) {
+  return cash ( map.call ( this, ( ele: Ele, i: number ) => callback.call ( ele, i, ele ) ) );
 };
 
 
@@ -189,11 +202,11 @@ Cash.prototype.slice = function ( this: Cash ) {
 
 const dashAlphaRe = /-([a-z])/g;
 
-function camelCaseReplace ( all, letter ) {
+function camelCaseReplace ( match: string, letter: string ): string {
   return letter.toUpperCase ();
 }
 
-function camelCase ( str: string ) {
+function camelCase ( str: string ): string {
   return str.replace ( dashAlphaRe, camelCaseReplace );
 }
 
@@ -206,7 +219,9 @@ cash.camelCase = camelCase;
 
 // @require ./cash.ts
 
-function each ( arr: ArrayLike<any>, callback: Function ): void {
+type EachCallback<T> = ( this: T, index: number, ele: T ) => any;
+
+function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void {
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
@@ -217,7 +232,7 @@ function each ( arr: ArrayLike<any>, callback: Function ): void {
 }
 
 interface CashStatic {
-  each ( arr: ArrayLike<any>, callback: Function ): void;
+  each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void;
 }
 
 cash.each = each;
@@ -227,10 +242,10 @@ cash.each = each;
 // @require core/each.ts
 
 interface Cash {
-  each ( callback: Function ): this;
+  each ( callback: EachCallback<Ele> ): this;
 }
 
-Cash.prototype.each = function ( this: Cash, callback: Function ) {
+Cash.prototype.each = function ( this: Cash, callback: EachCallback<Ele> ) {
   each ( this, callback );
   return this;
 };
@@ -250,13 +265,13 @@ Cash.prototype.removeProp = function ( this: Cash, prop: string ) {
 
 // @require ./cash.ts
 
-function extend ( target, ...objs: any[] ) {
+function extend ( target: any, ...objs: any[] ) {
 
-  let args = arguments,
-      length = args.length;
+  const args = arguments,
+        length = args.length;
 
   for ( let i = ( length < 2 ? 0 : 1 ); i < length; i++ ) {
-    for ( let key in args[i] ) {
+    for ( const key in args[i] ) {
       target[key] = args[i][key];
     }
   }
@@ -274,7 +289,7 @@ Cash.prototype.extend = function ( plugins: plainObject ) {
 };
 
 interface CashStatic {
-  extend ( target, ...objs: any[] );
+  extend ( target: any, ...objs: any[] ): any;
 }
 
 cash.extend = extend;
@@ -282,27 +297,25 @@ cash.extend = extend;
 
 // @require ./cash.ts
 
-let guid = 1;
-
 interface CashStatic {
   guid: number;
 }
 
-cash.guid = guid;
+cash.guid = 1;
 
 
 // @require ./cash.ts
 
-function matches ( ele: HTMLElement, selector: string ): boolean {
+function matches ( ele: any, selector: string ): boolean {
 
-  const matches = ele && ( ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector'] );
+  const matches = ele && ( ele['matches'] || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector'] );
 
   return !!matches && matches.call ( ele, selector );
 
 }
 
 interface CashStatic {
-  matches ( ele: HTMLElement, selector: string ): boolean;
+  matches ( ele: any, selector: string ): boolean;
 }
 
 cash.matches = matches;
@@ -310,9 +323,9 @@ cash.matches = matches;
 
 // @require ./variables.ts
 
-function pluck ( arr: ArrayLike<any>, prop: string, deep?: boolean ): ArrayLike<any> {
+function pluck<T> ( arr: ArrayLike<T>, prop: string, deep?: boolean ): Array<T> {
 
-  const plucked = [];
+  const plucked: Array<T> = [];
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
@@ -337,31 +350,45 @@ function pluck ( arr: ArrayLike<any>, prop: string, deep?: boolean ): ArrayLike<
 
 // @require ./cash.ts
 
-function isCash ( x ): x is Cash {
+function isCash ( x: any ): x is Cash {
   return x instanceof Cash;
 }
 
-function isFunction ( x ): x is Function {
+function isWindow ( x: any ): x is Window {
+  return !!x && x === x.window;
+}
+
+function isDocument ( x: any ): x is Document {
+  return !!x && x.nodeType === 9;
+}
+
+function isElement ( x: any ): x is HTMLElement {
+  return !!x && x.nodeType === 1;
+}
+
+function isFunction ( x: any ): x is Function {
   return typeof x === 'function';
 }
 
-function isString ( x ): x is string {
+function isString ( x: any ): x is string {
   return typeof x === 'string';
 }
 
-function isNumeric ( x ): boolean {
+function isNumeric ( x: any ): boolean {
   return !isNaN ( parseFloat ( x ) ) && isFinite ( x );
 }
 
 const {isArray} = Array;
 
 interface CashStatic {
-  isFunction ( x ): x is Function;
-  isString ( x ): x is string;
-  isNumeric ( x ): boolean;
-  isArray ( x ): x is Array<any>;
+  isWindow ( x: any ): x is Window;
+  isFunction ( x: any ): x is Function;
+  isString ( x: any ): x is string;
+  isNumeric ( x: any ): boolean;
+  isArray ( x: any ): x is Array<any>;
 }
 
+cash.isWindow = isWindow;
 cash.isFunction = isFunction;
 cash.isString = isString;
 cash.isNumeric = isNumeric;
@@ -373,12 +400,12 @@ cash.isArray = isArray;
 // @require collection/each.ts
 
 interface Cash {
-  prop ( prop: string );
-  prop ( prop: string, value ): this;
+  prop ( prop: string ): any;
+  prop ( prop: string, value: any ): this;
   prop ( props: plainObject ): this;
 }
 
-Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? ) {
+Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value?: any ) {
 
   if ( !prop ) return;
 
@@ -390,7 +417,7 @@ Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? 
 
   }
 
-  for ( let key in prop ) {
+  for ( const key in prop ) {
 
     this.prop ( key, prop[key] );
 
@@ -407,12 +434,12 @@ Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value? 
 function getCompareFunction ( comparator: Comparator ): Function {
 
   return isString ( comparator )
-           ? ( i, ele ) => matches ( ele, comparator )
+           ? ( i: number, ele: Ele ) => matches ( ele, comparator )
            : isFunction ( comparator )
              ? comparator
              : isCash ( comparator )
-               ? ( i, ele ) => comparator.is ( ele )
-               : ( i, ele ) => ele === comparator;
+               ? ( i: number, ele: Ele ) => comparator.is ( ele )
+               : ( i: number, ele: Ele ) => ele === comparator;
 
 }
 
@@ -433,7 +460,7 @@ Cash.prototype.filter = function ( this: Cash, comparator: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 
-  return cash ( filter.call ( this, ( ele, i ) => compare.call ( ele, i, ele ) ) );
+  return cash ( filter.call ( this, ( ele: Ele, i: number ) => compare.call ( ele, i, ele ) ) );
 
 };
 
@@ -463,7 +490,7 @@ interface Cash {
 }
 
 Cash.prototype.hasClass = function ( this: Cash, cls: string ) {
-  return cls && some.call ( this, ele => ele.classList.contains ( cls ) );
+  return cls && some.call ( this, ( ele: Ele ) => ele.classList.contains ( cls ) );
 };
 
 
@@ -496,15 +523,17 @@ Cash.prototype.removeAttr = function ( this: Cash, attr: string ) {
 // @require ./remove_attr.ts
 
 interface Cash {
-  attr ( attrs: string );
-  attr ( attrs: string, value ): this;
+  attr (): undefined;
+  attr ( attrs: string ): string | null;
+  attr ( attrs: string, value: string ): this;
   attr ( attrs: plainObject ): this;
 }
 
-function attr ( this: Cash, attr: string );
-function attr ( this: Cash, attr: string, value ): Cash;
+function attr ( this: Cash ): undefined;
+function attr ( this: Cash, attr: string ): string | null;
+function attr ( this: Cash, attr: string, value: string ): Cash;
 function attr ( this: Cash, attr: plainObject ): Cash;
-function attr ( this: Cash, attr: string | plainObject, value? ) {
+function attr ( this: Cash, attr?: string | plainObject, value?: string ) {
 
   if ( !attr ) return;
 
@@ -520,13 +549,15 @@ function attr ( this: Cash, attr: string | plainObject, value? ) {
 
     }
 
+    if ( value === undefined ) return this;
+
     if ( value === null ) return this.removeAttr ( attr );
 
     return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
 
   }
 
-  for ( let key in attr ) {
+  for ( const key in attr ) {
 
     this.attr ( key, attr[key] );
 
@@ -589,7 +620,7 @@ interface Cash {
 }
 
 Cash.prototype.removeClass = function ( this: Cash, cls?: string ) {
-  return !arguments.length ? this.attr ( 'class', '' ) : this.toggleClass ( cls as string, false );
+  return !arguments.length ? this.attr ( 'class', '' ) : this.toggleClass ( cls, false );
 };
 
 
@@ -606,12 +637,12 @@ Cash.prototype.removeClass = function ( this: Cash, cls?: string ) {
 // @require ./cash.ts
 // @require ./variables
 
-function unique ( arr: ArrayLike<any> ): ArrayLike<any> {
-  return arr.length > 1 ? filter.call ( arr, ( item, index, self ) => indexOf.call ( self, item ) === index ) : arr;
+function unique<T> ( arr: ArrayLike<T> ): ArrayLike<T> {
+  return arr.length > 1 ? filter.call ( arr, ( item: T, index: number, self: ArrayLike<T> ) => indexOf.call ( self, item ) === index ) : arr;
 }
 
 interface CashStatic {
-  unique ( arr: ArrayLike<any> ): ArrayLike<any>;
+  unique<T> ( arr: ArrayLike<T> ): ArrayLike<T>;
 }
 
 cash.unique = unique;
@@ -630,11 +661,12 @@ Cash.prototype.add = function ( this: Cash, selector: Selector, context?: Contex
 };
 
 
+// @require core/type_checking.ts
 // @require core/variables.ts
 
-function computeStyle ( ele: HTMLElement, prop: string, isVariable?: boolean ): undefined | string {
+function computeStyle ( ele: Ele, prop: string, isVariable?: boolean ): string | undefined {
 
-  if ( ele.nodeType !== 1 || !prop ) return;
+  if ( !isElement ( ele ) || !prop ) return;
 
   const style = win.getComputedStyle ( ele, null );
 
@@ -645,7 +677,7 @@ function computeStyle ( ele: HTMLElement, prop: string, isVariable?: boolean ): 
 
 // @require ./compute_style.ts
 
-function computeStyleInt ( ele: HTMLElement, prop: string ): number {
+function computeStyleInt ( ele: Ele, prop: string ): number {
 
   return parseInt ( computeStyle ( ele, prop ), 10 ) || 0;
 
@@ -670,7 +702,7 @@ function isCSSVariable ( prop: string ): boolean {
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-const prefixedProps: plainObject = {},
+const prefixedProps: { [prop: string]: string } = {},
       {style} = div,
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
 
@@ -707,7 +739,7 @@ cash.prefixedProp = getPrefixedProp;
 // @require core/type_checking.ts
 // @require ./is_css_variable.ts
 
-const numericProps = {
+const numericProps: { [prop: string]: true | undefined } = {
   animationIterationCount: true,
   columnCount: true,
   flexGrow: true,
@@ -721,7 +753,7 @@ const numericProps = {
   zIndex: true
 };
 
-function getSuffixedValue ( prop: string, value: number | string, isVariable: boolean = isCSSVariable ( prop ) ): number | string {
+function getSuffixedValue ( prop: string, value: string, isVariable: boolean = isCSSVariable ( prop ) ): string {
 
   return !isVariable && !numericProps[prop] && isNumeric ( value ) ? `${value}px` : value;
 
@@ -737,15 +769,15 @@ function getSuffixedValue ( prop: string, value: number | string, isVariable: bo
 // @require ./helpers/is_css_variable.ts
 
 interface Cash {
-  css ( prop: string );
-  css ( prop: string, value ): this;
+  css ( prop: string ): string | undefined;
+  css ( prop: string, value: string ): this;
   css ( props: plainObject ): this;
 }
 
-function css ( this: Cash, prop: string );
-function css ( this: Cash, prop: string, value ): Cash;
+function css ( this: Cash, prop: string ): string | undefined;
+function css ( this: Cash, prop: string, value: string ): Cash;
 function css ( this: Cash, prop: plainObject ): Cash;
-function css ( this: Cash, prop: string | plainObject, value? ) {
+function css ( this: Cash, prop: string | plainObject, value?: string ) {
 
   if ( isString ( prop ) ) {
 
@@ -761,11 +793,11 @@ function css ( this: Cash, prop: string | plainObject, value? ) {
 
     return this.each ( ( i, ele ) => {
 
-      if ( ele.nodeType !== 1 ) return;
+      if ( !isElement ( ele ) ) return;
 
       if ( isVariable ) {
 
-        ele.style.setProperty ( prop, value );
+        ele.style.setProperty ( prop as string, value ); //TSC
 
       } else {
 
@@ -777,7 +809,7 @@ function css ( this: Cash, prop: string | plainObject, value? ) {
 
   }
 
-  for ( let key in prop ) {
+  for ( const key in prop ) {
 
     this.css ( key, prop[key] );
 
@@ -795,7 +827,7 @@ Cash.prototype.css = css;
 
 // @require core/camel_case.ts
 
-function getData ( ele: HTMLElement, key: string ) {
+function getData ( ele: Ele, key: string ): any {
 
   const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
 
@@ -810,7 +842,7 @@ function getData ( ele: HTMLElement, key: string ) {
 
 // @require core/camel_case.ts
 
-function setData ( ele: HTMLElement, key: string, value ): void {
+function setData ( ele: Ele, key: string, value: any ): void {
 
   try {
     value = JSON.stringify ( value );
@@ -841,22 +873,22 @@ const dataAttributeRe = /^data-(.+)/;
 
 interface Cash {
   data (): plainObject | undefined;
-  data ( name: string );
-  data ( name: string, value ): this;
+  data ( name: string ): any;
+  data ( name: string, value: any ): this;
   data ( datas: plainObject ): this;
 }
 
 function data ( this: Cash ): plainObject | undefined;
-function data ( this: Cash, name: string );
-function data ( this: Cash, name: string, value ): Cash;
+function data ( this: Cash, name: string ): any;
+function data ( this: Cash, name: string, value: any ): Cash;
 function data ( this: Cash, name: plainObject ): Cash;
-function data ( this: Cash, name?: string | plainObject, value? ) {
+function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
   if ( !name ) {
 
     if ( !this[0] ) return;
 
-    const datas = {};
+    const datas: { [data: string]: any } = {};
 
     each ( this[0].attributes, ( i, attr ) => {
 
@@ -880,7 +912,7 @@ function data ( this: Cash, name?: string | plainObject, value? ) {
 
   }
 
-  for ( let key in name ) {
+  for ( const key in name ) {
 
     this.data ( key, name[key] );
 
@@ -898,27 +930,28 @@ Cash.prototype.data = data;
 
 // @require css/helpers/compute_style_int.ts
 
-function getExtraSpace ( ele: HTMLElement, xAxis?: boolean ): number {
+function getExtraSpace ( ele: Element, xAxis?: boolean ): number {
   return computeStyleInt ( ele, `border${ xAxis ? 'Left' : 'Top' }Width` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Left' : 'Top' }` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Right' : 'Bottom' }` ) + computeStyleInt ( ele, `border${ xAxis ? 'Right' : 'Bottom' }Width` );
 }
 
 
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 
 interface Cash {
-  innerWidth (): number;
-  innerHeight (): number;
+  innerWidth (): number | undefined;
+  innerHeight (): number | undefined;
 }
 
-each ( ['Width', 'Height'], ( i, prop: string ) => {
+each ( ['Width', 'Height'], ( i, prop: 'Width' | 'Height' ) => {
 
-  Cash.prototype[`inner${prop}`] = function () {
+  Cash.prototype[`inner${prop}`] = function ( this: Cash ) {
 
     if ( !this[0] ) return;
 
-    if ( this[0] === win ) return win[`inner${prop}`];
+    if ( isWindow ( this[0] ) ) return win[`inner${prop}`];
 
     return this[0][`client${prop}`];
 
@@ -930,6 +963,7 @@ each ( ['Width', 'Height'], ( i, prop: string ) => {
 // @require core/camel_case.ts
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 // @require css/helpers/compute_style.ts
 // @require css/helpers/get_suffixed_value.ts
@@ -942,25 +976,25 @@ interface Cash {
   height ( value: number | string ): this;
 }
 
-each ( ['width', 'height'], ( index: number, prop: string ) => {
+each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
-  Cash.prototype[prop] = function ( value?: number | string ) {
+  Cash.prototype[prop] = function ( this: Cash, value?: number | string ) {
 
     if ( !this[0] ) return value === undefined ? undefined : this;
 
     if ( !arguments.length ) {
 
-      if ( this[0] === win ) return this[0][ camelCase ( `outer-${prop}` )];
+      if ( isWindow ( this[0] ) ) return this[0][ camelCase ( `outer-${prop}` )];
 
       return this[0].getBoundingClientRect ()[prop] - getExtraSpace ( this[0], !index );
 
     }
 
-    const valueNumber = parseInt ( value as string, 10 );
+    const valueNumber = parseInt ( value as string, 10 ); //TSC
 
     return this.each ( ( i, ele ) => {
 
-      if ( ele.nodeType !== 1 ) return;
+      if ( !isElement ( ele ) ) return;
 
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 
@@ -975,6 +1009,7 @@ each ( ['width', 'height'], ( index: number, prop: string ) => {
 
 // @require core/cash.ts
 // @require core/each.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 // @require css/helpers/compute_style_int.ts
 
@@ -985,11 +1020,11 @@ interface Cash {
 
 each ( ['Width', 'Height'], ( index: number, prop: string ) => {
 
-  Cash.prototype[`outer${prop}`] = function ( includeMargins?: boolean ) {
+  Cash.prototype[`outer${prop}`] = function ( this: Cash, includeMargins?: boolean ) {
 
     if ( !this[0] ) return;
 
-    if ( this[0] === win ) return win[`outer${prop}`];
+    if ( isWindow ( this[0] ) ) return win[`outer${prop}`];
 
     return this[0][`offset${prop}`] + ( includeMargins ? computeStyleInt ( this[0], `margin${ !index ? 'Left' : 'Top' }` ) + computeStyleInt ( this[0], `margin${ !index ? 'Right' : 'Bottom' }` ) : 0 );
 
@@ -1005,7 +1040,7 @@ each ( ['Width', 'Height'], ( index: number, prop: string ) => {
 
 // @require css/helpers/compute_style.ts
 
-const defaultDisplay = {};
+const defaultDisplay: { [tagName: string]: string } = {};
 
 function getDefaultDisplay ( tagName: string ): string {
 
@@ -1026,7 +1061,7 @@ function getDefaultDisplay ( tagName: string ): string {
 
 // @require css/helpers/compute_style.ts
 
-function isHidden ( ele: HTMLElement ): boolean {
+function isHidden ( ele: Element ): boolean {
 
   return computeStyle ( ele, 'display' ) === 'none';
 
@@ -1098,21 +1133,21 @@ Cash.prototype.show = function ( this: Cash ) {
 
 function hasNamespaces ( ns1: string[], ns2: string[] ): boolean {
 
-  return !ns2 || !some.call ( ns2, ns => ns1.indexOf ( ns ) < 0 );
+  return !ns2 || !some.call ( ns2, ( ns: string ) => ns1.indexOf ( ns ) < 0 );
 
 }
 
 
 const eventsNamespace = '__cashEvents',
       eventsNamespacesSeparator = '.',
-      eventsFocus = { focus: 'focusin', blur: 'focusout' },
-      eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
+      eventsFocus: { [event: string]: string | undefined } = { focus: 'focusin', blur: 'focusout' },
+      eventsHover: { [event: string]: string | undefined } = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
       eventsMouseRe = /^(?:mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
 
 
 // @require ./variables.ts
 
-function getEventNameBubbling ( name: string ) {
+function getEventNameBubbling ( name: string ): string {
 
   return eventsHover[name] || eventsFocus[name] || name;
 
@@ -1121,7 +1156,7 @@ function getEventNameBubbling ( name: string ) {
 
 // @require ./variables.ts
 
-function getEventsCache ( ele: Ele ): plainObject {
+function getEventsCache ( ele: Ele ): { [event: string]: [string[], string, EventCallback][] } {
 
   return ele[eventsNamespace] = ( ele[eventsNamespace] || {} );
 
@@ -1131,16 +1166,16 @@ function getEventsCache ( ele: Ele ): plainObject {
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
 
-function addEvent ( ele: Ele, name: string, namespaces: string[], selector: string, callback: Function ): void {
+function addEvent ( ele: Ele, name: string, namespaces: string[], selector: string, callback: EventCallback ): void {
 
-  callback['guid'] = ( callback['guid'] || guid++ );
+  callback.guid = callback.guid || cash.guid++;
 
   const eventCache = getEventsCache ( ele );
 
   eventCache[name] = ( eventCache[name] || [] );
   eventCache[name].push ([ namespaces, selector, callback ]);
 
-  ele.addEventListener ( name, callback as EventListener ); //TSC
+  ele.addEventListener ( name, callback );
 
 }
 
@@ -1160,7 +1195,7 @@ function parseEventName ( eventName: string ): [string, string[]] {
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
 
-function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?: string, callback?: Function ): void {
+function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?: string, callback?: EventCallback ): void {
 
   const cache = getEventsCache ( ele );
 
@@ -1178,7 +1213,7 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?
 
     cache[name] = cache[name].filter ( ([ ns, sel, cb ]) => {
 
-      if ( ( callback && cb['guid'] !== callback['guid'] ) || !hasNamespaces ( ns, namespaces ) || ( selector && selector !== sel ) ) return true;
+      if ( ( callback && cb.guid !== callback.guid ) || !hasNamespaces ( ns, namespaces ) || ( selector && selector !== sel ) ) return true;
 
       ele.removeEventListener ( name, cb );
 
@@ -1200,11 +1235,11 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?
 interface Cash {
   off (): this;
   off ( events: string ): this;
-  off ( events: string, callback: Function ): this;
-  off ( events: string, selector: string, callback: Function ): this;
+  off ( events: string, callback: EventCallback ): this;
+  off ( events: string, selector: string, callback: EventCallback ): this;
 }
 
-Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | Function, callback?: Function ) {
+Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | EventCallback, callback?: EventCallback ) {
 
   if ( eventFullName === undefined ) {
 
@@ -1249,18 +1284,18 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: s
 
 interface Cash {
   on ( events: plainObject ): this;
-  on ( events: string, callback: Function, _one?: boolean ): this;
-  on ( events: string, selector: string | Function, callback: Function, _one?: boolean ): this;
+  on ( events: string, callback: EventCallback, _one?: boolean ): this;
+  on ( events: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): this;
 }
 
 function on ( this: Cash, eventFullName: plainObject ): Cash;
-function on ( this: Cash, eventFullName: string, callback: Function, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string, selector: string | Function, callback: Function, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string | plainObject, selector?: string | Function, callback?: boolean | Function, _one?: boolean ) {
+function on ( this: Cash, eventFullName: string, callback: EventCallback, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: string | plainObject, selector?: string | EventCallback, callback?: boolean | EventCallback, _one?: boolean ) {
 
   if ( !isString ( eventFullName ) ) {
 
-    for ( let key in eventFullName ) {
+    for ( const key in eventFullName ) {
 
       this.on ( key, selector, eventFullName[key] );
 
@@ -1283,11 +1318,11 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
     this.each ( ( i, ele ) => {
 
-      const finalCallback = function ( event ) {
+      const finalCallback = function ( event: EventObj ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
-        let thisArg = ele;
+        let thisArg: EventTarget = ele;
 
         if ( selector ) {
 
@@ -1295,7 +1330,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           while ( !matches ( target, selector as string ) ) { //TSC
             if ( target === ele ) return;
-            target = target.parentNode;
+            target = target['parentNode'];
             if ( !target ) return;
           }
 
@@ -1316,7 +1351,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
         }
 
-        const returnValue = ( callback as Function ).call ( thisArg, event, event.data ); //TSC
+        const returnValue = ( callback as EventCallback ).call ( thisArg, event, event.data ); //TSC
 
         if ( _one ) {
 
@@ -1333,7 +1368,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
       };
 
-      finalCallback['guid'] = callback['guid'] = ( callback['guid'] || guid++ );
+      finalCallback.guid = callback['guid'] = ( callback['guid'] || cash.guid++ ); //TSC
 
       addEvent ( ele, name, namespaces, selector as string, finalCallback ); //TSC
 
@@ -1353,15 +1388,15 @@ Cash.prototype.on = on;
 
 interface Cash {
   one ( events: plainObject ): this;
-  one ( events: string, callback: Function ): this;
-  one ( events: string, selector: string | Function, callback: Function ): this;
+  one ( events: string, callback: EventCallback ): this;
+  one ( events: string, selector: string | EventCallback, callback: EventCallback ): this;
 }
 
 function one ( this: Cash, eventFullName: plainObject ): Cash;
-function one ( this: Cash, eventFullName: string, callback: Function ): Cash;
-function one ( this: Cash, eventFullName: string, selector: string | Function, callback: Function ): Cash;
-function one ( this: Cash, eventFullName: string | plainObject, selector?: string | Function, callback?: Function ) {
-  return this.on ( ( eventFullName as string ), selector, callback, true ); //TSC
+function one ( this: Cash, eventFullName: string, callback: EventCallback ): Cash;
+function one ( this: Cash, eventFullName: string, selector: string | EventCallback, callback: EventCallback ): Cash;
+function one ( this: Cash, eventFullName: string | plainObject, selector?: string | EventCallback, callback?: EventCallback ) {
+  return this.on ( eventFullName as string, selector, callback, true ); //TSC
 };
 
 Cash.prototype.one = one;
@@ -1401,12 +1436,12 @@ Cash.prototype.ready = function ( this: Cash, callback: Function ) {
 // @require ./helpers/variables.ts
 
 interface Cash {
-  trigger ( event: string | Event, data? ): this;
+  trigger ( event: Event | string, data?: any ): this;
 }
 
-Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, data? ) {
+Cash.prototype.trigger = function ( this: Cash, eventFullName: Event | string, data?: any ) {
 
-  let evt: string | Event = eventFullName;
+  let evt: EventObj;
 
   if ( isString ( eventFullName ) ) {
 
@@ -1415,19 +1450,23 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 
     evt = doc.createEvent ( type );
     evt.initEvent ( name, true, true );
-    evt['namespace'] = namespaces.join ( eventsNamespacesSeparator );
+    evt.namespace = namespaces.join ( eventsNamespacesSeparator );
+
+  } else {
+
+    evt = eventFullName;
 
   }
 
-  evt['data'] = data;
+  evt.data = data;
 
-  const isEventFocus = ( evt['type'] in eventsFocus );
+  const isEventFocus = ( evt.type in eventsFocus );
 
   return this.each ( ( i, ele ) => {
 
-    if ( isEventFocus && isFunction ( ele[evt['type']] ) ) {
+    if ( isEventFocus && isFunction ( ele[evt.type] ) ) {
 
-      ele[evt['type']]();
+      ele[evt.type]();
 
     } else {
 
@@ -1450,9 +1489,9 @@ Cash.prototype.trigger = function ( this: Cash, eventFullName: string | Event, d
 // @require core/pluck.ts
 // @require core/variables.ts
 
-function getValue ( ele ): string | string[] {
+function getValue ( ele: Ele ): string | string[] {
 
-  if ( ele.multiple ) return pluck ( filter.call ( ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled ), 'value' ) as string[];
+  if ( ele.multiple ) return pluck ( filter.call ( ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled ), 'value' );
 
   return ele.value || '';
 
@@ -1518,7 +1557,7 @@ Cash.prototype.serialize = function ( this: Cash ) {
 
 interface Cash {
   val (): string | string[];
-  val ( value ): this;
+  val ( value: string | string[] ): this;
 }
 
 function val ( this: Cash ): string | string[];
@@ -1661,9 +1700,7 @@ interface Cash {
 
 Cash.prototype.empty = function ( this: Cash ) {
 
-  const ele = this[0];
-
-  if ( ele ) {
+  return this.each ( ( i, ele ) => {
 
     while ( ele.firstChild ) {
 
@@ -1671,9 +1708,7 @@ Cash.prototype.empty = function ( this: Cash ) {
 
     }
 
-  }
-
-  return this;
+  });
 
 };
 
@@ -1826,7 +1861,6 @@ Cash.prototype.position = function ( this: Cash ) {
 // @require core/unique.ts
 // @require core/variables.ts
 // @require collection/each.ts
-// @require collection/filter.ts
 
 interface Cash {
   children ( comparator?: Comparator ): Cash;
@@ -1834,9 +1868,13 @@ interface Cash {
 
 Cash.prototype.children = function ( this: Cash, comparator?: Comparator ) {
 
-  let result: Ele[] | Cash = [];
+  const result: Ele[] = [];
 
-  this.each ( ( i, ele ) => { push.apply ( result, ele.children ) } );
+  this.each ( ( i, ele ) => {
+
+    push.apply ( result, ele.children );
+
+  });
 
   return filtered ( cash ( unique ( result ) ), comparator );
 
@@ -1853,7 +1891,7 @@ interface Cash {
 
 Cash.prototype.contents = function ( this: Cash ) {
 
-  let result: Ele[] = [];
+  const result: Ele[] = [];
 
   this.each ( ( i, ele ) => {
 
@@ -1892,17 +1930,16 @@ Cash.prototype.find = function ( this: Cash, selector: string ) {
 
 
 // @require collection/filter.ts
-// @require collection/filter.ts
 // @require traversal/find.ts
 
 const scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i,
       HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
 
-function evalScripts ( node: Node ) {
+function evalScripts ( node: Node ): void {
 
   const collection = cash ( node );
 
-  collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele ) => {
+  collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele: HTMLScriptElement ) => {
     if ( !ele.src && scriptTypeRe.test ( ele.type ) ) { // The script type is supported
       if ( ele.ownerDocument.documentElement.contains ( ele ) ) { // The element is attached to the DOM // Using `documentElement` for broader browser support
         eval ( ele.textContent.replace ( HTMLCDATARe, '' ) );
@@ -1915,7 +1952,7 @@ function evalScripts ( node: Node ) {
 
 // @require ./eval_scripts.ts
 
-function insertElement ( anchor: Node, child: Node, prepend?: boolean, prependTarget?: Node ): void {
+function insertElement ( anchor: Ele, child: Ele, prepend?: boolean, prependTarget?: Element ): void {
 
   if ( prepend ) {
 
@@ -1938,8 +1975,8 @@ function insertElement ( anchor: Node, child: Node, prepend?: boolean, prependTa
 
 function insertContent ( parent: Cash, child: Cash, prepend?: boolean ): void {
 
-  each ( parent, ( index: number, parentEle: HTMLElement ) => {
-    each ( child, ( i, childEle: HTMLElement ) => {
+  each ( parent, ( index: number, parentEle: Ele ) => {
+    each ( child, ( i, childEle: Ele ) => {
       insertElement ( parentEle, !index ? childEle : childEle.cloneNode ( true ), prepend, prepend && parentEle.firstChild );
     });
   });
@@ -1986,7 +2023,7 @@ interface Cash {
 
 Cash.prototype.insertAfter = function ( this: Cash, selector: Selector ) {
 
-  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
+  cash ( selector ).each ( ( index: number, ele: Ele ) => {
 
     const parent = ele.parentNode;
 
@@ -2031,7 +2068,7 @@ interface Cash {
 
 Cash.prototype.insertBefore = function ( this: Cash, selector: Selector ) {
 
-  cash ( selector ).each ( ( index: number, ele: HTMLElement ) => {
+  cash ( selector ).each ( ( index: number, ele: Ele ) => {
 
     const parent = ele.parentNode;
 
@@ -2137,7 +2174,7 @@ Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
 
     this.first ().before ( structure );
 
-    let wrapper = structure[0] as Element;
+    let wrapper = structure[0];
 
     while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
 
@@ -2227,8 +2264,8 @@ interface Cash {
 Cash.prototype.has = function ( this: Cash, selector: string | HTMLElement ) {
 
   const comparator = isString ( selector )
-                       ? ( i, ele ) => !!find ( selector, ele ).length
-                       : ( i, ele ) => ele.contains ( selector );
+                       ? ( i: number, ele: Ele ) => !!find ( selector, ele ).length
+                       : ( i: number, ele: Ele ) => ele.contains ( selector );
 
   return this.filter ( comparator );
 
@@ -2428,7 +2465,9 @@ Cash.prototype.prevAll = function ( this: Cash, comparator?: Comparator ) {
 
 // @require core/cash.ts
 // @require core/filtered.ts
-// @require collection/filter.ts
+// @require core/unique.ts
+// @require core/variables.ts
+// @require collection/each.ts
 // @require ./children.ts
 // @require ./parent.ts
 
@@ -2438,9 +2477,15 @@ interface Cash {
 
 Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 
-  const ele = this[0];
+  const result: Ele[] = [];
 
-  return filtered ( this.parent ().children ().filter ( ( i, child ) => child !== ele ), comparator );
+  this.each ( ( i, ele ) => {
+
+    push.apply ( result, cash ( ele ).parent ().children ( ( ci, child ) => child !== ele ) );
+
+  });
+
+  return filtered ( cash ( unique ( result ) ), comparator );
 
 };
 

@@ -3,7 +3,7 @@ const doc = document, win = window, div = doc.createElement('div'), { filter, in
 const idRe = /^#[\w-]*$/, classRe = /^\.[\w-]*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
 // @require ./variables.ts
 function find(selector, context = doc) {
-    return context !== doc && context.nodeType !== 1 && context.nodeType !== 9
+    return !isDocument(context) && !isElement(context)
         ? []
         : classRe.test(selector)
             ? context.getElementsByClassName(selector.slice(1))
@@ -47,7 +47,7 @@ class Cash {
 const cash = Cash.prototype.init;
 cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
 Cash.prototype.length = 0;
-Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome
+Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 if (typeof Symbol === 'function') {
     Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
 }
@@ -73,14 +73,13 @@ Cash.prototype.slice = function () {
 };
 // @require ./cash.ts
 const dashAlphaRe = /-([a-z])/g;
-function camelCaseReplace(all, letter) {
+function camelCaseReplace(match, letter) {
     return letter.toUpperCase();
 }
 function camelCase(str) {
     return str.replace(dashAlphaRe, camelCaseReplace);
 }
 cash.camelCase = camelCase;
-// @require ./cash.ts
 function each(arr, callback) {
     for (let i = 0, l = arr.length; i < l; i++) {
         if (callback.call(arr[i], i, arr[i]) === false)
@@ -97,9 +96,9 @@ Cash.prototype.removeProp = function (prop) {
 };
 // @require ./cash.ts
 function extend(target, ...objs) {
-    let args = arguments, length = args.length;
+    const args = arguments, length = args.length;
     for (let i = (length < 2 ? 0 : 1); i < length; i++) {
-        for (let key in args[i]) {
+        for (const key in args[i]) {
             target[key] = args[i][key];
         }
     }
@@ -109,12 +108,10 @@ Cash.prototype.extend = function (plugins) {
     return extend(cash.fn, plugins);
 };
 cash.extend = extend;
-// @require ./cash.ts
-let guid = 1;
-cash.guid = guid;
+cash.guid = 1;
 // @require ./cash.ts
 function matches(ele, selector) {
-    const matches = ele && (ele.matches || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
+    const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
     return !!matches && matches.call(ele, selector);
 }
 cash.matches = matches;
@@ -136,6 +133,15 @@ function pluck(arr, prop, deep) {
 function isCash(x) {
     return x instanceof Cash;
 }
+function isWindow(x) {
+    return !!x && x === x.window;
+}
+function isDocument(x) {
+    return !!x && x.nodeType === 9;
+}
+function isElement(x) {
+    return !!x && x.nodeType === 1;
+}
 function isFunction(x) {
     return typeof x === 'function';
 }
@@ -146,6 +152,7 @@ function isNumeric(x) {
     return !isNaN(parseFloat(x)) && isFinite(x);
 }
 const { isArray } = Array;
+cash.isWindow = isWindow;
 cash.isFunction = isFunction;
 cash.isString = isString;
 cash.isNumeric = isNumeric;
@@ -158,7 +165,7 @@ Cash.prototype.prop = function (prop, value) {
             return this[0] && this[0][prop];
         return this.each((i, ele) => { ele[prop] = value; });
     }
-    for (let key in prop) {
+    for (const key in prop) {
         this.prop(key, prop[key]);
     }
     return this;
@@ -190,7 +197,7 @@ function getSplitValues(str) {
     return isString(str) ? str.match(splitValuesRe) || [] : [];
 }
 Cash.prototype.hasClass = function (cls) {
-    return cls && some.call(this, ele => ele.classList.contains(cls));
+    return cls && some.call(this, (ele) => ele.classList.contains(cls));
 };
 Cash.prototype.removeAttr = function (attr) {
     const attrs = getSplitValues(attr);
@@ -212,11 +219,13 @@ function attr(attr, value) {
             const value = this[0].getAttribute(attr);
             return value === null ? undefined : value;
         }
+        if (value === undefined)
+            return this;
         if (value === null)
             return this.removeAttr(attr);
         return this.each((i, ele) => { ele.setAttribute(attr, value); });
     }
-    for (let key in attr) {
+    for (const key in attr) {
         this.attr(key, attr[key]);
     }
     return this;
@@ -260,9 +269,10 @@ cash.unique = unique;
 Cash.prototype.add = function (selector, context) {
     return cash(unique(this.get().concat(cash(selector, context).get())));
 };
+// @require core/type_checking.ts
 // @require core/variables.ts
 function computeStyle(ele, prop, isVariable) {
-    if (ele.nodeType !== 1 || !prop)
+    if (!isElement(ele) || !prop)
         return;
     const style = win.getComputedStyle(ele, null);
     return prop ? (isVariable ? style.getPropertyValue(prop) || undefined : style[prop]) : style;
@@ -326,17 +336,17 @@ function css(prop, value) {
             return this;
         value = getSuffixedValue(prop, value, isVariable);
         return this.each((i, ele) => {
-            if (ele.nodeType !== 1)
+            if (!isElement(ele))
                 return;
             if (isVariable) {
-                ele.style.setProperty(prop, value);
+                ele.style.setProperty(prop, value); //TSC
             }
             else {
                 ele.style[prop] = value; //TSC
             }
         });
     }
-    for (let key in prop) {
+    for (const key in prop) {
         this.css(key, prop[key]);
     }
     return this;
@@ -385,7 +395,7 @@ function data(name, value) {
             return this[0] && getData(this[0], name);
         return this.each((i, ele) => setData(ele, name, value));
     }
-    for (let key in name) {
+    for (const key in name) {
         this.data(key, name[key]);
     }
     return this;
@@ -400,7 +410,7 @@ each(['Width', 'Height'], (i, prop) => {
     Cash.prototype[`inner${prop}`] = function () {
         if (!this[0])
             return;
-        if (this[0] === win)
+        if (isWindow(this[0]))
             return win[`inner${prop}`];
         return this[0][`client${prop}`];
     };
@@ -410,13 +420,13 @@ each(['width', 'height'], (index, prop) => {
         if (!this[0])
             return value === undefined ? undefined : this;
         if (!arguments.length) {
-            if (this[0] === win)
+            if (isWindow(this[0]))
                 return this[0][camelCase(`outer-${prop}`)];
             return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
         }
-        const valueNumber = parseInt(value, 10);
+        const valueNumber = parseInt(value, 10); //TSC
         return this.each((i, ele) => {
-            if (ele.nodeType !== 1)
+            if (!isElement(ele))
                 return;
             const boxSizing = computeStyle(ele, 'boxSizing');
             ele.style[prop] = getSuffixedValue(prop, valueNumber + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
@@ -427,7 +437,7 @@ each(['Width', 'Height'], (index, prop) => {
     Cash.prototype[`outer${prop}`] = function (includeMargins) {
         if (!this[0])
             return;
-        if (this[0] === win)
+        if (isWindow(this[0]))
             return win[`outer${prop}`];
         return this[0][`offset${prop}`] + (includeMargins ? computeStyleInt(this[0], `margin${!index ? 'Left' : 'Top'}`) + computeStyleInt(this[0], `margin${!index ? 'Right' : 'Bottom'}`) : 0);
     };
@@ -474,7 +484,7 @@ Cash.prototype.show = function () {
 // @optional ./show.ts
 // @optional ./toggle.ts
 function hasNamespaces(ns1, ns2) {
-    return !ns2 || !some.call(ns2, ns => ns1.indexOf(ns) < 0);
+    return !ns2 || !some.call(ns2, (ns) => ns1.indexOf(ns) < 0);
 }
 const eventsNamespace = '__cashEvents', eventsNamespacesSeparator = '.', eventsFocus = { focus: 'focusin', blur: 'focusout' }, eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }, eventsMouseRe = /^(?:mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
 // @require ./variables.ts
@@ -488,11 +498,11 @@ function getEventsCache(ele) {
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
 function addEvent(ele, name, namespaces, selector, callback) {
-    callback['guid'] = (callback['guid'] || guid++);
+    callback.guid = callback.guid || cash.guid++;
     const eventCache = getEventsCache(ele);
     eventCache[name] = (eventCache[name] || []);
     eventCache[name].push([namespaces, selector, callback]);
-    ele.addEventListener(name, callback); //TSC
+    ele.addEventListener(name, callback);
 }
 // @require ./variables.ts
 function parseEventName(eventName) {
@@ -512,7 +522,7 @@ function removeEvent(ele, name, namespaces, selector, callback) {
     }
     else if (cache[name]) {
         cache[name] = cache[name].filter(([ns, sel, cb]) => {
-            if ((callback && cb['guid'] !== callback['guid']) || !hasNamespaces(ns, namespaces) || (selector && selector !== sel))
+            if ((callback && cb.guid !== callback.guid) || !hasNamespaces(ns, namespaces) || (selector && selector !== sel))
                 return true;
             ele.removeEventListener(name, cb);
         });
@@ -536,7 +546,7 @@ Cash.prototype.off = function (eventFullName, selector, callback) {
 };
 function on(eventFullName, selector, callback, _one) {
     if (!isString(eventFullName)) {
-        for (let key in eventFullName) {
+        for (const key in eventFullName) {
             this.on(key, selector, eventFullName[key]);
         }
         return this;
@@ -557,7 +567,7 @@ function on(eventFullName, selector, callback, _one) {
                     while (!matches(target, selector)) { //TSC
                         if (target === ele)
                             return;
-                        target = target.parentNode;
+                        target = target['parentNode'];
                         if (!target)
                             return;
                     }
@@ -581,7 +591,7 @@ function on(eventFullName, selector, callback, _one) {
                     event.stopPropagation();
                 }
             };
-            finalCallback['guid'] = callback['guid'] = (callback['guid'] || guid++);
+            finalCallback.guid = callback['guid'] = (callback['guid'] || cash.guid++); //TSC
             addEvent(ele, name, namespaces, selector, finalCallback); //TSC
         });
     });
@@ -604,18 +614,21 @@ Cash.prototype.ready = function (callback) {
     return this;
 };
 Cash.prototype.trigger = function (eventFullName, data) {
-    let evt = eventFullName;
+    let evt;
     if (isString(eventFullName)) {
         const [name, namespaces] = parseEventName(eventFullName), type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
         evt = doc.createEvent(type);
         evt.initEvent(name, true, true);
-        evt['namespace'] = namespaces.join(eventsNamespacesSeparator);
+        evt.namespace = namespaces.join(eventsNamespacesSeparator);
     }
-    evt['data'] = data;
-    const isEventFocus = (evt['type'] in eventsFocus);
+    else {
+        evt = eventFullName;
+    }
+    evt.data = data;
+    const isEventFocus = (evt.type in eventsFocus);
     return this.each((i, ele) => {
-        if (isEventFocus && isFunction(ele[evt['type']])) {
-            ele[evt['type']]();
+        if (isEventFocus && isFunction(ele[evt.type])) {
+            ele[evt.type]();
         }
         else {
             ele.dispatchEvent(evt);
@@ -720,13 +733,11 @@ function parseHTML(html) {
 }
 cash.parseHTML = parseHTML;
 Cash.prototype.empty = function () {
-    const ele = this[0];
-    if (ele) {
+    return this.each((i, ele) => {
         while (ele.firstChild) {
             ele.removeChild(ele.firstChild);
         }
-    }
-    return this;
+    });
 };
 function html(html) {
     if (html === undefined)
@@ -777,12 +788,14 @@ Cash.prototype.position = function () {
     };
 };
 Cash.prototype.children = function (comparator) {
-    let result = [];
-    this.each((i, ele) => { push.apply(result, ele.children); });
+    const result = [];
+    this.each((i, ele) => {
+        push.apply(result, ele.children);
+    });
     return filtered(cash(unique(result)), comparator);
 };
 Cash.prototype.contents = function () {
-    let result = [];
+    const result = [];
     this.each((i, ele) => {
         push.apply(result, ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes);
     });
@@ -798,7 +811,6 @@ Cash.prototype.find = function (selector) {
     }
     return cash(unique(result));
 };
-// @require collection/filter.ts
 // @require collection/filter.ts
 // @require traversal/find.ts
 const scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i, HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
@@ -970,8 +982,11 @@ Cash.prototype.prevAll = function (comparator) {
     return this.prev(comparator, true);
 };
 Cash.prototype.siblings = function (comparator) {
-    const ele = this[0];
-    return filtered(this.parent().children().filter((i, child) => child !== ele), comparator);
+    const result = [];
+    this.each((i, ele) => {
+        push.apply(result, cash(ele).parent().children((ci, child) => child !== ele));
+    });
+    return filtered(cash(unique(result)), comparator);
 };
 // @optional ./children.ts
 // @optional ./closest.ts

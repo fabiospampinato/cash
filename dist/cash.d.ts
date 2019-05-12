@@ -1,8 +1,8 @@
 interface Cash {
-    [index: number]: Window & Document & HTMLElement & Element & Node;
+    [index: number]: Ele;
     length: number;
-    splice(start: number, deleteCount?: number): any;
-    splice(start: number, deleteCount: number, ...items: Ele[]): any;
+    splice(start: number, deleteCount?: number): Ele[];
+    splice(start: number, deleteCount: number, ...items: Ele[]): Ele[];
 }
 interface CashStatic {
     fn: Cash;
@@ -12,9 +12,18 @@ declare type plainObject = {
 };
 declare type falsy = undefined | null | false | 0 | '';
 declare type Ele = Window | Document | HTMLElement | Element | Node;
-declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<any> | Cash;
-declare type Comparator = string | Function | Ele | Cash;
+declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
+declare type Comparator = string | Ele | Cash | ((this: Ele, index: number, ele: Ele) => boolean);
 declare type Context = Document | HTMLElement | Element;
+declare type EventObj = Event & {
+    __delegate?: boolean;
+    namespace?: string;
+    data?: any;
+};
+declare type EventCallback = {
+    (event: EventObj, data?: any): any;
+    guid?: number;
+};
 declare class Cash {
     constructor(selector?: Selector, context?: Context | Cash);
     init(selector?: Selector, context?: Context | Cash): Cash;
@@ -33,8 +42,9 @@ interface Cash {
 interface Cash {
     last(): Cash;
 }
+declare type MapCallback<T> = (this: T, index: number, ele: T) => Ele;
 interface Cash {
-    map(callback: Function): Cash;
+    map(callback: MapCallback<Ele>): Cash;
 }
 interface Cash {
     slice(start?: number, end?: number): Cash;
@@ -42,11 +52,12 @@ interface Cash {
 interface CashStatic {
     camelCase(str: string): string;
 }
+declare type EachCallback<T> = (this: T, index: number, ele: T) => any;
 interface CashStatic {
-    each(arr: ArrayLike<any>, callback: Function): void;
+    each<T>(arr: ArrayLike<T>, callback: EachCallback<T>): void;
 }
 interface Cash {
-    each(callback: Function): this;
+    each(callback: EachCallback<Ele>): this;
 }
 interface Cash {
     removeProp(prop: string): this;
@@ -61,9 +72,10 @@ interface CashStatic {
     guid: number;
 }
 interface CashStatic {
-    matches(ele: HTMLElement, selector: string): boolean;
+    matches(ele: any, selector: string): boolean;
 }
 interface CashStatic {
+    isWindow(x: any): x is Window;
     isFunction(x: any): x is Function;
     isString(x: any): x is string;
     isNumeric(x: any): boolean;
@@ -84,8 +96,9 @@ interface Cash {
     removeAttr(attrs: string): this;
 }
 interface Cash {
-    attr(attrs: string): any;
-    attr(attrs: string, value: any): this;
+    attr(): undefined;
+    attr(attrs: string): string | null;
+    attr(attrs: string, value: string): this;
     attr(attrs: plainObject): this;
 }
 interface Cash {
@@ -98,7 +111,7 @@ interface Cash {
     removeClass(classes?: string): this;
 }
 interface CashStatic {
-    unique(arr: ArrayLike<any>): ArrayLike<any>;
+    unique<T>(arr: ArrayLike<T>): ArrayLike<T>;
 }
 interface Cash {
     add(selector: Selector, context?: Context): Cash;
@@ -107,8 +120,8 @@ interface CashStatic {
     prefixedProp(prop: string, isVariable?: boolean): string;
 }
 interface Cash {
-    css(prop: string): any;
-    css(prop: string, value: any): this;
+    css(prop: string): string | undefined;
+    css(prop: string, value: string): this;
     css(props: plainObject): this;
 }
 interface Cash {
@@ -118,8 +131,8 @@ interface Cash {
     data(datas: plainObject): this;
 }
 interface Cash {
-    innerWidth(): number;
-    innerHeight(): number;
+    innerWidth(): number | undefined;
+    innerHeight(): number | undefined;
 }
 interface Cash {
     width(): number;
@@ -143,31 +156,31 @@ interface Cash {
 interface Cash {
     off(): this;
     off(events: string): this;
-    off(events: string, callback: Function): this;
-    off(events: string, selector: string, callback: Function): this;
+    off(events: string, callback: EventCallback): this;
+    off(events: string, selector: string, callback: EventCallback): this;
 }
 interface Cash {
     on(events: plainObject): this;
-    on(events: string, callback: Function, _one?: boolean): this;
-    on(events: string, selector: string | Function, callback: Function, _one?: boolean): this;
+    on(events: string, callback: EventCallback, _one?: boolean): this;
+    on(events: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean): this;
 }
 interface Cash {
     one(events: plainObject): this;
-    one(events: string, callback: Function): this;
-    one(events: string, selector: string | Function, callback: Function): this;
+    one(events: string, callback: EventCallback): this;
+    one(events: string, selector: string | EventCallback, callback: EventCallback): this;
 }
 interface Cash {
     ready(callback: Function): this;
 }
 interface Cash {
-    trigger(event: string | Event, data?: any): this;
+    trigger(event: Event | string, data?: any): this;
 }
 interface Cash {
     serialize(): string;
 }
 interface Cash {
     val(): string | string[];
-    val(value: any): this;
+    val(value: string | string[]): this;
 }
 interface Cash {
     clone(): this;

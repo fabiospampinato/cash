@@ -1,3 +1,11 @@
+### Version 4.1.0
+- Added $.isWindow
+- Made the TypeScript type system stricter
+- $.guid: ensuring it’s properly exported
+- $.fn.siblings: ensuring it supports multi-element collections
+- $.fn.empty: ensuring it supports multi-element collections
+- $.fn.attr: doing nothing when the value equals undefined
+
 ### Version 4.0.0
 - Removed `$.fn.removeData`
 - Removed `$.hasData`
