@@ -12,7 +12,7 @@ interface Cash {
 
 Cash.prototype.trigger = function ( this: Cash, eventFullName: Event | string, data?: any ) {
 
-  let evt: EventObj;
+  let evt;
 
   if ( isString ( eventFullName ) ) {
 

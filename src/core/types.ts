@@ -18,13 +18,7 @@ type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | El
 type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
 type Context = Document | HTMLElement | Element;
 
-type EventObj = Event & {
-  __delegate?: boolean,
-  namespace?: string,
-  data?: any
-};
-
 type EventCallback = {
-  ( event: EventObj, data?: any ): any,
+  ( event: any, data?: any ): any,
   guid?: number
 };

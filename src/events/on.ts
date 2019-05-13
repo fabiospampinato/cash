@@ -48,7 +48,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
     this.each ( ( i, ele ) => {
 
-      const finalCallback = function ( event: EventObj ) {
+      const finalCallback = function ( event ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -60,7 +60,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           while ( !matches ( target, selector as string ) ) { //TSC
             if ( target === ele ) return;
-            target = target['parentNode'];
+            target = target.parentNode;
             if ( !target ) return;
           }
 
