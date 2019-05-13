@@ -45,7 +45,7 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var ele = $('.data');
 
       t.is ( ele.data ( 'one' ), 'one' );
-      ele[0].dataset.one = 'uno';
+      ele[0].setAttribute( 'data-one', 'uno' );
       t.is ( ele.data ( 'one' ), 'uno' );
 
     });
