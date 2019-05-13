@@ -77,6 +77,27 @@ $('#foo').on ( 'click', event => {} ); // Function never called
 $('.bar').trigger ( 'click' );
 ```
 
+### Inserting plain text
+
+jQuery supports inserting plain text via different methods (`$.fn.after`, `$.fn.append` etc.):
+
+```javascript
+$('.foo').append ( 'something' );
+```
+
+Cash doesn't support that because it instead supports receiving a selector as an argument, and that can be ambigous when also supporting plain text:
+
+```javascript
+$('.foo').append ( '.foo' ); // Is that a target or do we actually wanto to append ".foo"?
+```
+
+You should generally wrap your plain texts in a `<span>` element, or create a `textNode` node manually:
+
+```javascript
+$('.foo').append ( '<span>something</span>' );
+$('.foo').append ( document.createTextNode ( 'something' ) );
+```
+
 ### Width/height of hidden element
 
 If you're trying to retrieve the width/height of an hidden element jQuery will briefly try to render it in order to compute it's dimension, this is unreliable and should be avoided, Cash doesn't implement such functionality.
