@@ -64,11 +64,11 @@ const SauceLabsLaunchers = {
     version: 'latest',
     platform: 'macOS 10.13'
   },
-  ios_10: {
+  ios_11: {
     base: 'SauceLabs',
     deviceName: 'iPhone 6 Simulator',
     browserName: 'Safari',
-    platformVersion: '10.3',
+    platformVersion: '11.0',
     platformName: 'iOS'
   },
   ios_12: {
