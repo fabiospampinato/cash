@@ -567,7 +567,7 @@ function on(eventFullName, selector, callback, _one) {
                     while (!matches(target, selector)) { //TSC
                         if (target === ele)
                             return;
-                        target = target['parentNode'];
+                        target = target.parentNode;
                         if (!target)
                             return;
                     }

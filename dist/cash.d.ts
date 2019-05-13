@@ -1,5 +1,5 @@
 interface Cash {
-    [index: number]: Ele;
+    [index: number]: EleAll;
     length: number;
     splice(start: number, deleteCount?: number): Ele[];
     splice(start: number, deleteCount: number, ...items: Ele[]): Ele[];
@@ -12,16 +12,12 @@ declare type plainObject = {
 };
 declare type falsy = undefined | null | false | 0 | '';
 declare type Ele = Window | Document | HTMLElement | Element | Node;
+declare type EleAll = Window & Document & HTMLElement & Element & Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 declare type Comparator = string | Ele | Cash | ((this: Ele, index: number, ele: Ele) => boolean);
 declare type Context = Document | HTMLElement | Element;
-declare type EventObj = Event & {
-    __delegate?: boolean;
-    namespace?: string;
-    data?: any;
-};
 declare type EventCallback = {
-    (event: EventObj, data?: any): any;
+    (event: any, data?: any): any;
     guid?: number;
 };
 declare class Cash {

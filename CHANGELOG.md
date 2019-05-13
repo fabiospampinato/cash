@@ -1,3 +1,12 @@
+### Version 4.1.1
+- Raising bundle size limit to 5.5kB
+- Test: replaced iOS 9.3 with iOS 11.0
+- Test: using setAttribute instead of the dataset API
+- Migration guide: mentioning the `:scope` CSS pseudo-class
+- Migration guide: mentioning inserting plain text
+- TypeScript: typing events more loosely
+- TypeScript: typing collection elements more loosely
+
 ### Version 4.1.0
 - Added $.isWindow
 - Made the TypeScript type system stricter

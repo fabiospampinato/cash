@@ -1,6 +1,6 @@
 
 interface Cash {
-  [index: number]: Ele;
+  [index: number]: EleAll;
   length: number;
   splice ( start: number, deleteCount?: number ): Ele[];
   splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[];
@@ -14,18 +14,13 @@ type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
 type Ele = Window | Document | HTMLElement | Element | Node;
+type EleAll = Window & Document & HTMLElement & Element & Node; //UGLY: Trick to remove some kind-of useless type errors //URL: https://github.com/kenwheeler/cash/issues/278
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
 type Context = Document | HTMLElement | Element;
 
-type EventObj = Event & {
-  __delegate?: boolean,
-  namespace?: string,
-  data?: any
-};
-
 type EventCallback = {
-  ( event: EventObj, data?: any ): any,
+  ( event: any, data?: any ): any,
   guid?: number
 };
 
@@ -1318,7 +1313,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
     this.each ( ( i, ele ) => {
 
-      const finalCallback = function ( event: EventObj ) {
+      const finalCallback = function ( event ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -1330,7 +1325,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           while ( !matches ( target, selector as string ) ) { //TSC
             if ( target === ele ) return;
-            target = target['parentNode'];
+            target = target.parentNode;
             if ( !target ) return;
           }
 
@@ -1441,7 +1436,7 @@ interface Cash {
 
 Cash.prototype.trigger = function ( this: Cash, eventFullName: Event | string, data?: any ) {
 
-  let evt: EventObj;
+  let evt;
 
   if ( isString ( eventFullName ) ) {
 
