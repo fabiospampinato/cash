@@ -13,6 +13,8 @@ Some CSS operators are binary, they operate on something before and after them: 
 
 Cash only supports selectors the browser recognizes as valid, so you can't use `> .bar` like you sometimes can with jQuery.
 
+If you only target modern browsers you could use the [`:scope`](https://developer.mozilla.org/en-US/docs/Web/CSS/:scope) CSS pseudo-class.
+
 ```javascript
 // jQuery
 $('#foo').find ( '> .bar' );
@@ -22,6 +24,10 @@ $('#foo').find ( '+ .bar' );
 $('#foo').children ( '.bar' );
 $('#foo').nextAll ( '.bar' );
 $('#foo').next ( '.bar' );
+// :scope
+$('#foo').find ( ':scope > .bar' );
+$('#foo').find ( ':scope ~ .bar' );
+$('#foo').find ( ':scope + .bar' );
 ```
 
 ### Data caching
