@@ -1,3 +1,6 @@
+### Version 4.1.2
+- Avoiding publishing unnecessary files to NPM
+
 ### Version 4.1.1
 - Raising bundle size limit to 5.5kB
 - Test: replaced iOS 9.3 with iOS 11.0
