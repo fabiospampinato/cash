@@ -6,6 +6,9 @@
   "main": "./dist/cash.js",
   "module": "./dist/cash.esm.js",
   "jsnext:main": "./dist/cash.esm.js",
+  "files": [
+    "dist"
+  ],
   "types": "dist/cash.d.ts",
   "scripts": {
     "clean": "pacco clean",
