@@ -3,6 +3,7 @@
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "version": "4.1.2",
   "license": "MIT",
+  "browser": "./dist/cash.js",
   "main": "./dist/cash.js",
   "module": "./dist/cash.esm.js",
   "jsnext:main": "./dist/cash.esm.js",
