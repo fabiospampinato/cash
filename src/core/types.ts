@@ -1,13 +1,13 @@
 
 interface Cash {
-  [index: number]: EleAll;
-  length: number;
-  splice ( start: number, deleteCount?: number ): Ele[];
-  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[];
+  [index: number]: EleAll,
+  length: number,
+  splice ( start: number, deleteCount?: number ): Ele[],
+  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[]
 }
 
 interface CashStatic {
-  fn: Cash;
+  fn: Cash
 }
 
 type plainObject = { [index: string]: any };
