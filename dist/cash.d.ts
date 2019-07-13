@@ -1,5 +1,5 @@
 interface Cash {
-    [index: number]: EleAll;
+    [index: number]: EleLoose;
     length: number;
     splice(start: number, deleteCount?: number): Ele[];
     splice(start: number, deleteCount: number, ...items: Ele[]): Ele[];
@@ -12,7 +12,7 @@ declare type plainObject = {
 };
 declare type falsy = undefined | null | false | 0 | '';
 declare type Ele = Window | Document | HTMLElement | Element | Node;
-declare type EleAll = Window & Document & HTMLElement & Element & Node;
+declare type EleLoose = Window & Document & HTMLElement & Element & Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 declare type Comparator = string | Ele | Cash | ((this: Ele, index: number, ele: Ele) => boolean);
 declare type Context = Document | HTMLElement | Element;
@@ -40,7 +40,7 @@ interface Cash {
 }
 declare type MapCallback<T> = (this: T, index: number, ele: T) => Ele;
 interface Cash {
-    map(callback: MapCallback<Ele>): Cash;
+    map(callback: MapCallback<EleLoose>): Cash;
 }
 interface Cash {
     slice(start?: number, end?: number): Cash;
@@ -53,7 +53,7 @@ interface CashStatic {
     each<T>(arr: ArrayLike<T>, callback: EachCallback<T>): void;
 }
 interface Cash {
-    each(callback: EachCallback<Ele>): this;
+    each(callback: EachCallback<EleLoose>): this;
 }
 interface Cash {
     removeProp(prop: string): this;
@@ -304,3 +304,4 @@ interface Cash {
     siblings(comparator?: Comparator): Cash;
 }
 export default cash;
+export { Cash, Ele as Element, Selector, Comparator, Context };

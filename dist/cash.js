@@ -574,9 +574,9 @@ function isHidden(ele) {
 
 Cash.prototype.toggle = function (force) {
   return this.each(function (i, ele) {
-    force = force !== undefined ? force : isHidden(ele);
+    var show = force !== undefined ? force : isHidden(ele);
 
-    if (force) {
+    if (show) {
       ele.style.display = '';
 
       if (isHidden(ele)) {

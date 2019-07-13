@@ -1,20 +1,20 @@
 
 interface Cash {
-  [index: number]: EleAll;
-  length: number;
-  splice ( start: number, deleteCount?: number ): Ele[];
-  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[];
+  [index: number]: EleLoose,
+  length: number,
+  splice ( start: number, deleteCount?: number ): Ele[],
+  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[]
 }
 
 interface CashStatic {
-  fn: Cash;
+  fn: Cash
 }
 
 type plainObject = { [index: string]: any };
 type falsy = undefined | null | false | 0 | '';
 
 type Ele = Window | Document | HTMLElement | Element | Node;
-type EleAll = Window & Document & HTMLElement & Element & Node; //UGLY: Trick to remove some kind-of useless type errors //URL: https://github.com/kenwheeler/cash/issues/278
+type EleLoose = Window & Document & HTMLElement & Element & Node; //UGLY: Trick to remove some kind-of useless type errors //URL: https://github.com/kenwheeler/cash/issues/278
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
 type Context = Document | HTMLElement | Element;
@@ -173,10 +173,10 @@ Cash.prototype.last = function ( this: Cash ) {
 type MapCallback<T> = ( this: T, index: number, ele: T ) => Ele;
 
 interface Cash {
-  map ( callback: MapCallback<Ele> ): Cash;
+  map ( callback: MapCallback<EleLoose> ): Cash;
 }
 
-Cash.prototype.map = function ( this: Cash, callback: MapCallback<Ele> ) {
+Cash.prototype.map = function ( this: Cash, callback: MapCallback<EleLoose> ) {
   return cash ( map.call ( this, ( ele: Ele, i: number ) => callback.call ( ele, i, ele ) ) );
 };
 
@@ -237,10 +237,10 @@ cash.each = each;
 // @require core/each.ts
 
 interface Cash {
-  each ( callback: EachCallback<Ele> ): this;
+  each ( callback: EachCallback<EleLoose> ): this;
 }
 
-Cash.prototype.each = function ( this: Cash, callback: EachCallback<Ele> ) {
+Cash.prototype.each = function ( this: Cash, callback: EachCallback<EleLoose> ) {
   each ( this, callback );
   return this;
 };
@@ -1074,9 +1074,9 @@ Cash.prototype.toggle = function ( this: Cash, force?: boolean ) {
 
   return this.each ( ( i, ele ) => {
 
-    force = force !== undefined ? force : isHidden ( ele );
+    const show = force !== undefined ? force : isHidden ( ele );
 
-    if ( force ) {
+    if ( show ) {
 
       ele.style.display = '';
 
@@ -2517,3 +2517,4 @@ Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 // @require ./cash.ts
 
 export default cash;
+export { Cash, Ele as Element, Selector, Comparator, Context };

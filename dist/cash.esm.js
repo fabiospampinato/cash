@@ -462,8 +462,8 @@ function isHidden(ele) {
 }
 Cash.prototype.toggle = function (force) {
     return this.each((i, ele) => {
-        force = force !== undefined ? force : isHidden(ele);
-        if (force) {
+        const show = force !== undefined ? force : isHidden(ele);
+        if (show) {
             ele.style.display = '';
             if (isHidden(ele)) {
                 ele.style.display = getDefaultDisplay(ele.tagName);
@@ -1015,4 +1015,5 @@ Cash.prototype.siblings = function (comparator) {
 // @priority -100
 // @require ./cash.ts
 export default cash;
+export { Cash };
 

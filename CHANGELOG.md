@@ -1,3 +1,9 @@
+### Version 4.1.3
+- Ensuring Cash can be bundled correctly via WebPack
+- $.fn.toggle: ensuring each element is toggled independently
+- TypeScript: ensuring some useful internal types are exported
+- TypeScript: made types a little more forgiving
+
 ### Version 4.1.2
 - Avoiding publishing unnecessary files to NPM
 
