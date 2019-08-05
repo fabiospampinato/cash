@@ -4,7 +4,7 @@
 
 interface Cash {
   get (): Ele[];
-  get ( index: number ): Ele;
+  get ( index: number ): Ele | undefined;
 }
 
 Cash.prototype.get = function ( this: Cash, index?: number ) {
