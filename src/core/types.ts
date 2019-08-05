@@ -2,8 +2,8 @@
 interface Cash {
   [index: number]: EleLoose,
   length: number,
-  splice ( start: number, deleteCount?: number ): Ele[],
-  splice ( start: number, deleteCount: number, ...items: Ele[] ): Ele[]
+  splice ( start: number, deleteCount?: number ): EleLoose[],
+  splice ( start: number, deleteCount: number, ...items: Ele[] ): EleLoose[]
 }
 
 interface CashStatic {

@@ -3,8 +3,8 @@
 // @require core/variables.ts
 
 interface Cash {
-  get (): Ele[];
-  get ( index: number ): Ele | undefined;
+  get (): EleLoose[];
+  get ( index: number ): EleLoose | undefined;
 }
 
 Cash.prototype.get = function ( this: Cash, index?: number ) {
