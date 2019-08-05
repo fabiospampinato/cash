@@ -1,6 +1,6 @@
 
 interface Cash {
-  [index: number]: EleLoose,
+  [index: number]: EleLoose | undefined,
   length: number,
   splice ( start: number, deleteCount?: number ): EleLoose[],
   splice ( start: number, deleteCount: number, ...items: Ele[] ): EleLoose[]
