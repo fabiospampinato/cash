@@ -3,4 +3,4 @@
 // @require ./cash.ts
 
 export default cash;
-export { Cash, Ele as Element, Selector, Comparator, Context };
+export {Cash, CashStatic, Ele as Element, Selector, Comparator, Context};

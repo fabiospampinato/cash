@@ -50,7 +50,7 @@ npm install cash-dom --save-dev
 
 ## Documentation
 
-Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery.
+Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/kenwheeler/cash/blob/master/docs/extending_cash.md).
 
 ### $()
 
