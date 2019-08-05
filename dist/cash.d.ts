@@ -1,8 +1,8 @@
 interface Cash {
-    [index: number]: EleLoose;
+    [index: number]: EleLoose | undefined;
     length: number;
-    splice(start: number, deleteCount?: number): Ele[];
-    splice(start: number, deleteCount: number, ...items: Ele[]): Ele[];
+    splice(start: number, deleteCount?: number): EleLoose[];
+    splice(start: number, deleteCount: number, ...items: Ele[]): EleLoose[];
 }
 interface CashStatic {
     fn: Cash;
@@ -11,8 +11,10 @@ declare type plainObject = {
     [index: string]: any;
 };
 declare type falsy = undefined | null | false | 0 | '';
-declare type Ele = Window | Document | HTMLElement | Element | Node;
-declare type EleLoose = Window & Document & HTMLElement & Element & Node;
+declare type EleHTML = HTMLElement | HTMLAnchorElement | HTMLAppletElement | HTMLAreaElement | HTMLAudioElement | HTMLBRElement | HTMLBaseElement | HTMLBaseFontElement | HTMLBodyElement | HTMLButtonElement | HTMLCanvasElement | HTMLDListElement | HTMLDataElement | HTMLDataListElement | HTMLDetailsElement | HTMLDialogElement | HTMLDirectoryElement | HTMLDivElement | HTMLEmbedElement | HTMLFieldSetElement | HTMLFontElement | HTMLFormElement | HTMLFrameElement | HTMLFrameSetElement | HTMLHRElement | HTMLHeadElement | HTMLHeadingElement | HTMLHtmlElement | HTMLIFrameElement | HTMLImageElement | HTMLInputElement | HTMLLIElement | HTMLLabelElement | HTMLLegendElement | HTMLLinkElement | HTMLMapElement | HTMLMarqueeElement | HTMLMediaElement | HTMLMenuElement | HTMLMetaElement | HTMLMeterElement | HTMLModElement | HTMLOListElement | HTMLObjectElement | HTMLOptGroupElement | HTMLOptionElement | HTMLOrSVGElement | HTMLOutputElement | HTMLParagraphElement | HTMLParamElement | HTMLPictureElement | HTMLPreElement | HTMLProgressElement | HTMLQuoteElement | HTMLScriptElement | HTMLSelectElement | HTMLSlotElement | HTMLSourceElement | HTMLSpanElement | HTMLStyleElement | HTMLTableCaptionElement | HTMLTableCellElement | HTMLTableColElement | HTMLTableDataCellElement | HTMLTableElement | HTMLTableHeaderCellElement | HTMLTableRowElement | HTMLTableSectionElement | HTMLTemplateElement | HTMLTextAreaElement | HTMLTimeElement | HTMLTitleElement | HTMLTrackElement | HTMLUListElement | HTMLUnknownElement | HTMLVideoElement;
+declare type EleHTMLLoose = HTMLElement & HTMLAnchorElement & HTMLAppletElement & HTMLAreaElement & HTMLAudioElement & HTMLBRElement & HTMLBaseElement & HTMLBaseFontElement & HTMLBodyElement & HTMLButtonElement & HTMLCanvasElement & HTMLDListElement & HTMLDataElement & HTMLDataListElement & HTMLDetailsElement & HTMLDialogElement & HTMLDirectoryElement & HTMLDivElement & HTMLEmbedElement & HTMLFieldSetElement & HTMLFontElement & HTMLFormElement & HTMLFrameElement & HTMLFrameSetElement & HTMLHRElement & HTMLHeadElement & HTMLHeadingElement & HTMLHtmlElement & HTMLIFrameElement & HTMLImageElement & HTMLInputElement & HTMLLIElement & HTMLLabelElement & HTMLLegendElement & HTMLLinkElement & HTMLMapElement & HTMLMarqueeElement & HTMLMediaElement & HTMLMenuElement & HTMLMetaElement & HTMLMeterElement & HTMLModElement & HTMLOListElement & HTMLObjectElement & HTMLOptGroupElement & HTMLOptionElement & HTMLOrSVGElement & HTMLOutputElement & HTMLParagraphElement & HTMLParamElement & HTMLPictureElement & HTMLPreElement & HTMLProgressElement & HTMLQuoteElement & HTMLScriptElement & HTMLSelectElement & HTMLSlotElement & HTMLSourceElement & HTMLSpanElement & HTMLStyleElement & HTMLTableCaptionElement & HTMLTableCellElement & HTMLTableColElement & HTMLTableDataCellElement & HTMLTableElement & HTMLTableHeaderCellElement & HTMLTableRowElement & HTMLTableSectionElement & HTMLTemplateElement & HTMLTextAreaElement & HTMLTimeElement & HTMLTitleElement & HTMLTrackElement & HTMLUListElement & HTMLUnknownElement & HTMLVideoElement;
+declare type Ele = Window | Document | EleHTML | Element | Node;
+declare type EleLoose = Window & Document & EleHTMLLoose & Element & Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 declare type Comparator = string | Ele | Cash | ((this: Ele, index: number, ele: Ele) => boolean);
 declare type Context = Document | HTMLElement | Element;
@@ -26,8 +28,8 @@ declare class Cash {
 }
 declare const cash: ((selector?: Selector, context?: Element | HTMLElement | Document | Cash) => Cash) & CashStatic;
 interface Cash {
-    get(): Ele[];
-    get(index: number): Ele;
+    get(): EleLoose[];
+    get(index: number): EleLoose | undefined;
 }
 interface Cash {
     eq(index: number): Cash;
@@ -304,4 +306,4 @@ interface Cash {
     siblings(comparator?: Comparator): Cash;
 }
 export default cash;
-export { Cash, Ele as Element, Selector, Comparator, Context };
+export { Cash, CashStatic, Ele as Element, Selector, Comparator, Context };

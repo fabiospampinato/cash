@@ -1,3 +1,10 @@
+### Version 4.1.4
+- $.fn.get: improved types
+- TypeScript: made types a little more forgiving
+- TypeScript: improved collections index signature
+- TypeScript: improved support for props/methods available only in specific HTML nodes
+- Added a guide for extending Cash
+
 ### Version 4.1.3
 - Ensuring Cash can be bundled correctly via WebPack
 - $.fn.toggle: ensuring each element is toggled independently
