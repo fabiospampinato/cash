@@ -148,7 +148,7 @@ $('#foo').css ( height, 10 );
 $('#foo').css ( height, '10px' );
 ```
 
-But we don't suppor the [`zoom`](https://developer.mozilla.org/en-US/docs/Web/CSS/zoom) property, which is not standard and should never be used.
+But we don't support the [`zoom`](https://developer.mozilla.org/en-US/docs/Web/CSS/zoom) property, which is not standard and should never be used.
 
 ### Relative CSS values
 
