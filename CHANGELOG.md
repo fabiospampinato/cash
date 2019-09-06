@@ -1,3 +1,7 @@
+### Version 4.1.5
+- $.fn.val: ensuring it works with “input[type=file][multiple]” elements
+- Migration guide: mentioning how $.fn.data stores values
+
 ### Version 4.1.4
 - $.fn.get: improved types
 - TypeScript: made types a little more forgiving

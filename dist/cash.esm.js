@@ -643,7 +643,7 @@ Cash.prototype.trigger = function (eventFullName, data) {
 // @require core/pluck.ts
 // @require core/variables.ts
 function getValue(ele) {
-    if (ele.multiple)
+    if (ele.multiple && ele.options)
         return pluck(filter.call(ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled), 'value');
     return ele.value || '';
 }
