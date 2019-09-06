@@ -17,6 +17,7 @@ var fixture = '\
       <option value="option-2" selected>Selected</option>\
     </select>\
     <input type="file" name="file" />\
+    <input type="file" name="file-multiple" multiple />\
     <input type="submit" value="submit" name="submit" />\
   </form>\
 ';
@@ -58,6 +59,14 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var val = $('.form input[type=text]').val ();
 
       t.is ( val, 'text' );
+
+    });
+
+    it ( 'gets the value of input file multiple', function ( t ) {
+
+      var val = $('.form input[type=file][multiple]').val ();
+
+      t.is ( val, '' );
 
     });
 
