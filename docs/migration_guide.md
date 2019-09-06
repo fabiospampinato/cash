@@ -34,6 +34,8 @@ $('#foo').find ( ':scope + .bar' );
 
 In jQuery the `$.fn.data` function caches retrieved values, and doesn't refresh them when they are updated outside of jQuery (e.g. via the `dataset` API), this makes jQuery's `$.fn.data` function unusable with libraries like React. Cash doesn't implement such caching functionality and doesn't have this problem, the retrieved values are always fresh.
 
+Also values set via `$.fn.data` are stored as JSON values in `data-*` attributes set on the DOM nodes, so for instance calling `$('#foo').data ( 'test', 123 )` will add a `data-test="123"` attribute to the `#foo` node.
+
 ### Events
 
 Cash's event system relies heavily on the browser's underlying event system so there are some differences when comparing it with jQuery's.
