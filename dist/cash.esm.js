@@ -358,21 +358,21 @@ Cash.prototype.css = css;
 function getData(ele, key) {
     const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : ele.getAttribute(`data-${key}`);
     try {
-        return JSON.parse(value);
+        return ele.dataset ? value : JSON.parse(value);
     }
     catch (_a) { }
     return value;
 }
 // @require core/camel_case.ts
 function setData(ele, key, value) {
-    try {
-        value = JSON.stringify(value);
-    }
-    catch (_a) { }
     if (ele.dataset) {
         ele.dataset[camelCase(key)] = value;
     }
     else {
+        try {
+            value = JSON.stringify(value);
+        }
+        catch (_a) { }
         ele.setAttribute(`data-${key}`, value);
     }
 }

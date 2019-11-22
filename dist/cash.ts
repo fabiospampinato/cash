@@ -829,7 +829,7 @@ function getData ( ele: Ele, key: string ): any {
   const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
 
   try {
-    return JSON.parse ( value );
+    return ele.dataset ? value : JSON.parse ( value );
   } catch {}
 
   return value;
@@ -841,15 +841,15 @@ function getData ( ele: Ele, key: string ): any {
 
 function setData ( ele: Ele, key: string, value: any ): void {
 
-  try {
-    value = JSON.stringify ( value );
-  } catch {}
-
   if ( ele.dataset ) {
 
     ele.dataset[camelCase ( key )] = value;
 
   } else {
+
+    try {
+      value = JSON.stringify ( value );
+    } catch {}
 
     ele.setAttribute ( `data-${key}`, value );
 
@@ -2517,6 +2517,14 @@ Cash.prototype.siblings = function ( this: Cash, comparator?: Comparator ) {
 
 // @priority -100
 // @require ./cash.ts
+// @require ./variables.ts
 
-export default cash;
-export {Cash, CashStatic, Ele as Element, Selector, Comparator, Context};
+if ( typeof exports !== 'undefined' ) { // Node.js
+
+  module.exports = cash;
+
+} else { // Browser
+
+  win['cash'] = win['$'] = cash;
+
+}
