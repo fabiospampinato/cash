@@ -19,6 +19,8 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
     it ( 'supports various data types', function ( t ) {
 
       var ele = $('.data');
+      var obj = { first: 1 };
+      var ar = [1, 2, 3];
 
       ele.data ( 'true', true );
       ele.data ( 'false', false );
@@ -26,8 +28,8 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.data ( 'int', 3 );
       ele.data ( 'float', 3.14 );
       ele.data ( 'string', 'foo' );
-      ele.data ( 'object', { json: true } );
-      ele.data ( 'array', [1, 2, 3] );
+      ele.data ( 'object', obj );
+      ele.data ( 'array', ar );
 
       t.is ( ele.data ( 'true' ), true );
       t.is ( ele.data ( 'false' ), false );
@@ -35,8 +37,14 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       t.is ( ele.data ( 'int' ), 3 );
       t.is ( ele.data ( 'float' ), 3.14 );
       t.is ( ele.data ( 'string' ), 'foo' );
-      t.deepEqual ( ele.data ( 'object' ), { json: true } );
-      t.deepEqual ( ele.data ( 'array' ), [1, 2, 3] );
+      t.deepEqual ( ele.data ( 'object' ), obj );
+      t.deepEqual ( ele.data ( 'array' ), ar );
+
+      // change those objects stored by reference (see #306)
+      obj.second = 2;
+      ar.push(4);
+      t.deepEqual ( ele.data ( 'object' ), obj );
+      t.deepEqual ( ele.data ( 'array' ), ar );
 
     });
 

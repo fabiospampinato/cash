@@ -461,10 +461,15 @@ Cash.prototype.css = css; // @optional ./css.ts
 // @require core/camel_case.ts
 
 function getData(ele, key) {
+  // see if we have a cache (used for Obj) first
+  if (ele[key] !== undefined) {
+    return ele[key];
+  }
+
   var value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : ele.getAttribute("data-" + key);
 
   try {
-    return ele.dataset ? value : JSON.parse(value);
+    return JSON.parse(value);
   } catch (_a) {}
 
   return value;
@@ -472,13 +477,24 @@ function getData(ele, key) {
 
 
 function setData(ele, key, value) {
+  // cash actual Obj like jquery instead of storing a string version
+  if (typeof value === 'object' && (value !== null || ele[key] !== undefined)) {
+    if (value === null) {
+      delete ele[key];
+    } else {
+      ele[key] = value;
+    }
+
+    return;
+  }
+
+  try {
+    value = JSON.stringify(value);
+  } catch (_a) {}
+
   if (ele.dataset) {
     ele.dataset[camelCase(key)] = value;
   } else {
-    try {
-      value = JSON.stringify(value);
-    } catch (_a) {}
-
     ele.setAttribute("data-" + key, value);
   }
 }

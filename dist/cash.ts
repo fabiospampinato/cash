@@ -826,10 +826,15 @@ Cash.prototype.css = css;
 
 function getData ( ele: Ele, key: string ): any {
 
+  // see if we have a cache (used for Obj) first
+  if (ele[key] !== undefined) {
+    return ele[key];
+  }
+
   const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
 
   try {
-    return ele.dataset ? value : JSON.parse ( value );
+    return JSON.parse ( value );
   } catch {}
 
   return value;
@@ -841,15 +846,25 @@ function getData ( ele: Ele, key: string ): any {
 
 function setData ( ele: Ele, key: string, value: any ): void {
 
+  // cash actual Obj like jquery instead of storing a string version
+  if (typeof value === 'object' && (value !== null || ele[key] !== undefined)) {
+    if (value === null) {
+      delete ele[key];
+    } else {
+      ele[key] = value;
+    }
+    return;
+  }
+
+  try {
+    value = JSON.stringify ( value );
+  } catch {}
+
   if ( ele.dataset ) {
 
     ele.dataset[camelCase ( key )] = value;
 
   } else {
-
-    try {
-      value = JSON.stringify ( value );
-    } catch {}
 
     ele.setAttribute ( `data-${key}`, value );
 
