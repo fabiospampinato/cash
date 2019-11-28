@@ -8,8 +8,8 @@ interface Cash {
 }
 
 Cash.prototype.prepend = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    insertContent ( this, cash ( selector ), true );
+  each ( reverse.apply( arguments ), ( i, selector: Selector ) => {
+    insertContent ( this, reverse.apply( cash ( selector ) ), true );
   });
   return this;
 };
