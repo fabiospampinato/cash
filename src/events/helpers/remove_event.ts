@@ -15,8 +15,6 @@ function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?
 
     }
 
-    delete ele[eventsNamespace];
-
   } else if ( cache[name] ) {
 
     cache[name] = cache[name].filter ( ([ ns, sel, cb ]) => {

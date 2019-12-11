@@ -262,6 +262,21 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'removes namespaced events, preserving regular ones', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+
+      function handler () {
+        count++;
+      }
+
+      ele.on ( 'foo foo.ns1', handler ).off ( '.ns1' ).trigger ( 'foo' ).off ( 'foo' ).trigger ( 'foo' );
+
+      t.is ( count, 1 );
+
+    });
+
     it ( 'removes all events', function ( t ) {
 
       var ele = $('.event');
