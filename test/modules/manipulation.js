@@ -11,22 +11,40 @@ var fixture = '\
 
 describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
-  it ( 'inserted script tags get executed', function ( t ) {
+  QUnit.test ( 'inserted script tags get executed', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
 
-    var scripts = [
-      ['<script>window.__script_test__ = 1</script>', 1],
-      ['<script type="">window.__script_test__ = 2</script>', 2],
-      ['<script type="text/javascript">window.__script_test__ = 3</script>', 3],
-      ['<script type="text/ecmascript">window.__script_test__ = 4</script>', 4],
-      ['<script type="module">window.__script_test__ = 5</script>', 5],
-      ['<div class="nested"><script>window.__script_test__ = 6</script></div>', 6]
+    var sync = [
+      ['<script>if ( window.__script_test__ === 1 ) throw new Error (); window.__script_test__ = 1</script>', '__script_test__', 1],
+      ['<script type="">if ( window.__script_test__ === 2 ) throw new Error (); window.__script_test__ = 2</script>', '__script_test__', 2],
+      ['<script type="text/javascript">if ( window.__script_test__ === 3 ) throw new Error (); window.__script_test__ = 3</script>', '__script_test__', 3],
+      ['<script type="text/ecmascript">if ( window.__script_test__ === 4 ) throw new Error (); window.__script_test__ = 4</script>', '__script_test__', 4],
+      ['<div class="nested"><script>if ( window.__script_test__ === 5 ) throw new Error (); window.__script_test__ = 5</script></div>', '__script_test__', 5],
+      ['<script><![CDATA[if ( window.__script_test__ === 6 ) throw new Error (); window.__script_test__ = 6</script>', '__script_test__', 6]
     ];
 
-    scripts.forEach ( function ( test ) {
+    sync.forEach ( function ( test ) {
 
       $(test[0]).appendTo ( '.anchor' );
 
-      t.is ( window.__script_test__, test[1] );
+      assert.is ( window[test[1]], test[2] );
+
+    });
+
+    var async = [
+      ['<script type="module">if ( window.__script_test_async1__ === 1 ) throw new Error (); window.__script_test_async1__ = 1</script>', '__script_test_async1__', 1],
+      ['<script type="text/javascript" src="data:text/javascript,if ( window.__script_test_async2__ === 2 ) throw new Error (); window.__script_test_async2__ = 2"></script>', '__script_test_async2__', 2]
+    ];
+
+    async.forEach ( function ( test ) {
+
+      var done = assert.async ();
+
+      $(test[0]).appendTo ( '.anchor' );
+
+      setTimeout ( function () {
+        assert.is ( window[test[1]], test[2] );
+        done ();
+      }, 100 );
 
     });
 

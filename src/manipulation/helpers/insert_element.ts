@@ -13,6 +13,6 @@ function insertElement ( anchor: Ele, child: Ele, prepend?: boolean, prependTarg
 
   }
 
-  evalScripts ( child );
+  evalScripts ( child, anchor.ownerDocument );
 
 }
