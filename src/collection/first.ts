@@ -6,6 +6,8 @@ interface Cash {
   first (): Cash;
 }
 
-Cash.prototype.first = function ( this: Cash ) {
+fn.first = function ( this: Cash ) {
+
   return this.eq ( 0 );
+
 };

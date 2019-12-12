@@ -1,15 +1,13 @@
 
 // @require core/cash.ts
-// @require core/each.ts
-// @require ./helpers/insert_content.ts
+// @require ./helpers/insert_selectors.ts
 
 interface Cash {
   prepend ( ...selectors: Selector[] ): this;
 }
 
-Cash.prototype.prepend = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    insertContent ( this, cash ( selector ), true );
-  });
-  return this;
+fn.prepend = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, true, true );
+
 };

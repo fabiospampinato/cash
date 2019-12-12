@@ -1,31 +1,34 @@
 
 // @require ./cash.ts
 
-function extend ( target: any, ...objs: any[] ) {
-
-  const args = arguments,
-        length = args.length;
-
-  for ( let i = ( length < 2 ? 0 : 1 ); i < length; i++ ) {
-    for ( const key in args[i] ) {
-      target[key] = args[i][key];
-    }
-  }
-
-  return target;
-
+interface CashStatic {
+  extend ( target: any, ...objs: any[] ): any;
 }
 
 interface Cash {
   extend ( plugins: plainObject ): this;
 }
 
-Cash.prototype.extend = function ( plugins: plainObject ) {
-  return extend ( cash.fn, plugins );
+cash.extend = function ( target: any, ...objs: any[] ) {
+
+  const length = arguments.length;
+
+  for ( let i = ( length < 2 ? 0 : 1 ); i < length; i++ ) {
+
+    for ( const key in arguments[i] ) {
+
+      target[key] = arguments[i][key];
+
+    }
+
+  }
+
+  return target;
+
 };
 
-interface CashStatic {
-  extend ( target: any, ...objs: any[] ): any;
-}
+fn.extend = function ( plugins: plainObject ) {
 
-cash.extend = extend;
+  return cash.extend ( fn, plugins );
+
+};

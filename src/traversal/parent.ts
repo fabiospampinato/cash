@@ -8,7 +8,7 @@ interface Cash {
   parent ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.parent = function ( this: Cash, comparator?: Comparator ) {
+fn.parent = function ( this: Cash, comparator?: Comparator ) {
 
   return filtered ( cash ( unique ( pluck ( this, 'parentNode' ) ) ), comparator );
 

@@ -6,6 +6,8 @@ interface Cash {
   clone (): this;
 }
 
-Cash.prototype.clone = function ( this: Cash ) {
+fn.clone = function ( this: Cash ) {
+
   return this.map ( ( i, ele ) => ele.cloneNode ( true ) );
+
 };

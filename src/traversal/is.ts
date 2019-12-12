@@ -1,25 +1,17 @@
 
 // @require core/cash.ts
 // @require core/get_compare_function.ts
+// @require core/variables.ts
 // @require collection/each.ts
 
 interface Cash {
-  is ( comparator: Comparator ): boolean;
+  is ( comparator?: Comparator ): boolean;
 }
 
-Cash.prototype.is = function ( this: Cash, comparator: Comparator ) {
-
-  if ( !comparator || !this[0] ) return false;
+fn.is = function ( this: Cash, comparator?: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 
-  let check = false;
-
-  this.each ( ( i, ele ) => {
-    check = compare.call ( ele, i, ele );
-    return !check;
-  });
-
-  return check;
+  return some.call ( this, ( ele: Ele, i: number ) => compare.call ( ele, i, ele ) );
 
 };

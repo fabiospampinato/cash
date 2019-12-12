@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require collection/each.ts
 
 interface Cash {
@@ -9,12 +10,12 @@ interface Cash {
 
 function text ( this: Cash ): string;
 function text ( this: Cash, text: string ): Cash;
-function text ( this: Cash, text?: string ): string | Cash {
+function text ( this: Cash, text?: string ) {
 
-  if ( text === undefined ) return this[0] ? this[0].textContent : '';
+  if ( isUndefined ( text ) ) return this[0] ? this[0].textContent : '';
 
   return this.each ( ( i, ele ) => { ele.textContent = text } );
 
 };
 
-Cash.prototype.text = text;
+fn.text = text;

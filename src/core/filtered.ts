@@ -2,5 +2,7 @@
 // @require collection/filter.ts
 
 function filtered ( collection: Cash, comparator?: Comparator ): Cash {
-  return !comparator || !collection.length ? collection : collection.filter ( comparator );
+
+  return !comparator ? collection : collection.filter ( comparator );
+
 }

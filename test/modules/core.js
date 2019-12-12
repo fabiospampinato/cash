@@ -130,22 +130,18 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
-    QUnit.test ( 'supports function', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+    it ( 'supports function', function ( t ) {
 
-      var done = assert.async ();
       var count = 0;
       var handler = function () {
         count++;
       };
 
+      t.is ( count, 0 );
+
       $(handler);
 
-      assert.equal ( count, 0 );
-
-      setTimeout ( function () {
-        assert.equal ( count, 1 );
-        done ();
-      }, 100 );
+      t.is ( count, 1 );
 
     });
 

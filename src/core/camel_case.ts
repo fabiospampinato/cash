@@ -1,18 +1,16 @@
 
 // @require ./cash.ts
 
-const dashAlphaRe = /-([a-z])/g;
-
-function camelCaseReplace ( match: string, letter: string ): string {
-  return letter.toUpperCase ();
-}
-
-function camelCase ( str: string ): string {
-  return str.replace ( dashAlphaRe, camelCaseReplace );
-}
-
 interface CashStatic {
   camelCase ( str: string ): string;
+}
+
+const dashAlphaRe = /-([a-z])/g;
+
+function camelCase ( str: string ): string {
+
+  return str.replace ( dashAlphaRe, ( match: string, letter: string ) => letter.toUpperCase () );
+
 }
 
 cash.camelCase = camelCase;

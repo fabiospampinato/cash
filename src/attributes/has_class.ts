@@ -7,6 +7,8 @@ interface Cash {
   hasClass ( cls: string ): boolean;
 }
 
-Cash.prototype.hasClass = function ( this: Cash, cls: string ) {
+fn.hasClass = function ( this: Cash, cls: string ) {
+
   return some.call ( this, ( ele: Ele ) => ele.classList.contains ( cls ) );
+
 };

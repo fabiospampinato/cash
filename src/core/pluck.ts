@@ -1,21 +1,37 @@
 
+// @require ./type_checking.ts
 // @require ./variables.ts
 
-function pluck<T> ( arr: ArrayLike<T>, prop: string, deep?: boolean ): Array<T> {
+type PluckCallback<T> = ( ele: T ) => ArrayLike<T>;
 
-  const plucked: Array<T> = [];
+function pluck<T> ( arr: ArrayLike<T>, prop: PluckCallback<T> ): Array<T>;
+function pluck<T> ( arr: ArrayLike<T>, prop: string, deep?: boolean ): Array<T>;
+function pluck<T> ( arr: ArrayLike<T>, prop: string | PluckCallback<T>, deep?: boolean ): Array<T> {
+
+  const plucked: Array<T> = [],
+        isCallback = isFunction ( prop );
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
-    let val = arr[i][prop];
+    if ( isCallback ) {
 
-    while ( val != null ) {
+      const val = prop ( arr[i] );
 
-      plucked.push ( val );
+      if ( val.length ) push.apply ( plucked, val );
 
-      if ( !deep ) break;
+    } else {
 
-      val = val[prop];
+      let val = arr[i][prop];
+
+      while ( val != null ) {
+
+        plucked.push ( val );
+
+        if ( !deep ) break;
+
+        val = val[prop];
+
+      }
 
     }
 

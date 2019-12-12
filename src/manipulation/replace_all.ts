@@ -6,7 +6,10 @@ interface Cash {
   replaceAll ( selector: Selector ): this;
 }
 
-Cash.prototype.replaceAll = function ( this: Cash, selector: Selector ) {
+fn.replaceAll = function ( this: Cash, selector: Selector ) {
+
   cash ( selector ).replaceWith ( this );
+
   return this;
+
 };

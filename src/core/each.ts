@@ -3,7 +3,11 @@
 
 type EachCallback<T> = ( this: T, index: number, ele: T ) => any;
 
-function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void {
+interface CashStatic {
+  each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void;
+}
+
+function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): ArrayLike<T> { //TODO: Maybe add a flag for looping in reverse
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
@@ -11,10 +15,8 @@ function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void {
 
   }
 
-}
+  return arr;
 
-interface CashStatic {
-  each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void;
 }
 
 cash.each = each;

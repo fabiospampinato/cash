@@ -1,11 +1,12 @@
 
 // @require core/cash.ts
+// @require collection/each.ts
 
 interface Cash {
   empty (): this;
 }
 
-Cash.prototype.empty = function ( this: Cash ) {
+fn.empty = function ( this: Cash ) {
 
   return this.each ( ( i, ele ) => {
 

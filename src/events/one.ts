@@ -12,7 +12,9 @@ function one ( this: Cash, eventFullName: plainObject ): Cash;
 function one ( this: Cash, eventFullName: string, callback: EventCallback ): Cash;
 function one ( this: Cash, eventFullName: string, selector: string | EventCallback, callback: EventCallback ): Cash;
 function one ( this: Cash, eventFullName: string | plainObject, selector?: string | EventCallback, callback?: EventCallback ) {
+
   return this.on ( eventFullName as string, selector, callback, true ); //TSC
+
 };
 
-Cash.prototype.one = one;
+fn.one = one;

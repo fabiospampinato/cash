@@ -1,12 +1,13 @@
 
 // @require core/cash.ts
-// @require ./helpers/insert_content.ts
+// @require ./helpers/insert_selectors.ts
 
 interface Cash {
   appendTo ( selector: Selector ): this;
 }
 
-Cash.prototype.appendTo = function ( this: Cash, selector: Selector ) {
-  insertContent ( cash ( selector ), this );
-  return this;
+fn.appendTo = function ( this: Cash, selector: Selector ) {
+
+  return insertSelectors ( arguments, this, true, false, true );
+
 };

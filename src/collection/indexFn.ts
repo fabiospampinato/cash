@@ -9,7 +9,7 @@ interface Cash {
   index ( selector?: Selector ): number;
 }
 
-Cash.prototype.index = function ( this: Cash, selector?: Selector ) {
+fn.index = function ( this: Cash, selector?: Selector ) {
 
   const child = selector ? cash ( selector )[0] : this[0],
         collection = selector ? this : cash ( child ).parent ().children ();

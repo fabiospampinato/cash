@@ -6,6 +6,8 @@ interface Cash {
   addClass ( classes: string ): this;
 }
 
-Cash.prototype.addClass = function ( this: Cash, cls: string ) {
+fn.addClass = function ( this: Cash, cls: string ) {
+
   return this.toggleClass ( cls, true );
+
 };

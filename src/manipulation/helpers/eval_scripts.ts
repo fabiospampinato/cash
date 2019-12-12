@@ -1,4 +1,5 @@
 
+// @require core/variables.ts
 // @require collection/filter.ts
 // @require traversal/find.ts
 
@@ -11,16 +12,23 @@ function evalScripts ( node: Node, doc: Document ): void {
   const collection = cash ( node );
 
   collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele: HTMLScriptElement ) => {
-    if ( scriptTypeRe.test ( ele.type ) ) { // The script type is supported
-      if ( doc.documentElement.contains ( ele ) ) { // The element is attached to the DOM // Using `documentElement` for broader browser support
-        const script = doc.createElement ( 'script' );
-        script.text = ele.textContent.replace ( HTMLCDATARe, '' );
-        each ( scriptAttributes, ( i, attr ) => {
-          if ( ele[attr] ) script[attr] = ele[attr];
-        });
-        doc.head.appendChild ( script ).parentNode.removeChild ( script );
-      }
+
+    if ( scriptTypeRe.test ( ele.type ) && docEle.contains ( ele ) ) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
+
+      const script = createElement ( 'script' );
+
+      script.text = ele.textContent.replace ( HTMLCDATARe, '' );
+
+      each ( scriptAttributes, ( i, attr ) => {
+
+        if ( ele[attr] ) script[attr] = ele[attr];
+
+      });
+
+      doc.head.appendChild ( script ).parentNode.removeChild ( script );
+
     }
+
   });
 
 }

@@ -1,18 +1,18 @@
 
 // @require ./eval_scripts.ts
 
-function insertElement ( anchor: Ele, child: Ele, prepend?: boolean, prependTarget?: Element ): void {
+function insertElement ( anchor: Ele, target: Ele, left?: boolean, inside?: boolean ): void {
 
-  if ( prepend ) {
+  if ( inside ) { // prepend/append
 
-    anchor.insertBefore ( child, prependTarget );
+    anchor.insertBefore ( target, left ? anchor.firstElementChild : null );
 
-  } else {
+  } else { // before/after
 
-    anchor.appendChild ( child );
+    anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextElementSibling );
 
   }
 
-  evalScripts ( child, anchor.ownerDocument );
+  evalScripts ( target, anchor.ownerDocument );
 
 }

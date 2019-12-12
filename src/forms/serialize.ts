@@ -5,14 +5,14 @@
 // @require ./helpers/get_value.ts
 // @require ./helpers/query_encode.ts
 
-const skippableRe = /file|reset|submit|button|image/i,
-      checkableRe = /radio|checkbox/i;
-
 interface Cash {
   serialize (): string;
 }
 
-Cash.prototype.serialize = function ( this: Cash ) {
+const skippableRe = /file|reset|submit|button|image/i,
+      checkableRe = /radio|checkbox/i;
+
+fn.serialize = function ( this: Cash ) {
 
   let query = '';
 
@@ -24,18 +24,22 @@ Cash.prototype.serialize = function ( this: Cash ) {
 
       const value = getValue ( ele );
 
-      if ( value === undefined ) return;
+      if ( !isUndefined ( value ) ) {
 
-      const values = isArray ( value ) ? value : [value];
+        const values = isArray ( value ) ? value : [value];
 
-      each ( values, ( i, value ) => {
-        query += queryEncode ( ele.name, value );
-      });
+        each ( values, ( i, value ) => {
+
+          query += queryEncode ( ele.name, value );
+
+        });
+
+      }
 
     });
 
   });
 
-  return query.substr ( 1 );
+  return query.slice ( 1 );
 
 };

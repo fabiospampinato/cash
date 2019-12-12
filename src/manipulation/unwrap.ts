@@ -5,7 +5,7 @@ interface Cash {
   unwrap (): this;
 }
 
-Cash.prototype.unwrap = function ( this: Cash ) {
+fn.unwrap = function ( this: Cash ) {
 
   this.parent ().each ( ( i, ele ) => {
 

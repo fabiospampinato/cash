@@ -1,17 +1,13 @@
 
 // @require core/cash.ts
-// @require core/each.ts
-// @require core/variables.ts
-// @require collection/slice.ts
-// @require ./insert_after.ts
+// @require ./helpers/insert_selectors.ts
 
 interface Cash {
   after ( ...selectors: Selector[] ): this;
 }
 
-Cash.prototype.after = function ( this: Cash ) {
-  each ( reverse.apply ( arguments ), ( i, selector: Selector ) => {
-    reverse.apply ( cash ( selector ).slice () ).insertAfter ( this );
-  });
-  return this;
+fn.after = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this );
+
 };

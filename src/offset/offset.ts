@@ -2,8 +2,6 @@
 // @require core/cash.ts
 // @require core/variables.ts
 
-const docEle = doc.documentElement;
-
 interface Cash {
   offset (): undefined | {
     top: number,
@@ -11,7 +9,7 @@ interface Cash {
   };
 }
 
-Cash.prototype.offset = function ( this: Cash ) {
+fn.offset = function ( this: Cash ) {
 
   const ele = this[0];
 

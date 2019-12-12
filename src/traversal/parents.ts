@@ -10,7 +10,7 @@ interface Cash {
   parents ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.parents = function ( this: Cash, comparator?: Comparator ) {
+fn.parents = function ( this: Cash, comparator?: Comparator ) {
 
   return filtered ( cash ( unique ( pluck ( this, 'parentElement', true ) ) ), comparator );
 

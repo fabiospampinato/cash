@@ -6,6 +6,8 @@ interface Cash {
   hide (): this;
 }
 
-Cash.prototype.hide = function ( this: Cash ) {
+fn.hide = function ( this: Cash ) {
+
   return this.toggle ( false );
+
 };

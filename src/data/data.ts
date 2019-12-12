@@ -29,9 +29,11 @@ function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
       const match = attr.name.match ( dataAttributeRe );
 
-      if ( !match ) return;
+      if ( match ) {
 
-      datas[match[1]] = this.data ( match[1] );
+        datas[match[1]] = this.data ( match[1] );
+
+      }
 
     });
 
@@ -41,9 +43,9 @@ function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
   if ( isString ( name ) ) {
 
-    if ( value === undefined ) return this[0] && getData ( this[0], name );
+    if ( arguments.length < 2 ) return this[0] && getData ( this[0], name );
 
-    return this.each ( ( i, ele ) => setData ( ele, name, value ) );
+    return this.each ( ( i, ele ) => { setData ( ele, name, value ) } );
 
   }
 
@@ -57,4 +59,4 @@ function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
 }
 
-Cash.prototype.data = data;
+fn.data = data;

@@ -7,7 +7,7 @@ interface Cash {
   wrapInner ( selector?: Selector ): this;
 }
 
-Cash.prototype.wrapInner = function ( this: Cash, selector?: Selector ) {
+fn.wrapInner = function ( this: Cash, selector?: Selector ) {
 
   return this.each ( ( i, ele ) => {
 

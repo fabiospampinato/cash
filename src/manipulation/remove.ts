@@ -7,6 +7,8 @@ interface Cash {
   remove (): this;
 }
 
-Cash.prototype.remove = function ( this: Cash ) {
+fn.remove = function ( this: Cash ) {
+
   return this.detach ().off ();
+
 };

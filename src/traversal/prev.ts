@@ -8,7 +8,7 @@ interface Cash {
   prev ( comparator?: Comparator, _all?: boolean ): Cash;
 }
 
-Cash.prototype.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean ) {
+fn.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean ) {
 
   return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all ) ) ), comparator );
 

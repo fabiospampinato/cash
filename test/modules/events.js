@@ -303,19 +303,19 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         count++;
       }
 
-      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo' ).trigger( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
+      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo' ).trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
 
       t.is ( count, 0 );
 
-      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns1' ).trigger( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
+      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns1' ).trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
 
       t.is ( count, 0 );
 
-      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns2' ).trigger( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
+      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns2' ).trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
 
       t.is ( count, 0 );
 
-      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns1.ns2' ).trigger( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
+      ele.on ( 'foo.ns1.ns2', handler ).off ( 'foo.ns1.ns2' ).trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' );
 
       t.is ( count, 0 );
 

@@ -9,7 +9,7 @@ interface Cash {
   prop ( props: plainObject ): this;
 }
 
-Cash.prototype.prop = function ( this: Cash, prop: string | plainObject, value?: any ) {
+fn.prop = function ( this: Cash, prop: string | plainObject, value?: any ) {
 
   if ( !prop ) return;
 

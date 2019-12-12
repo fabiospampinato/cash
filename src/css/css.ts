@@ -58,4 +58,4 @@ function css ( this: Cash, prop: string | plainObject, value?: string ) {
 
 };
 
-Cash.prototype.css = css;
+fn.css = css;

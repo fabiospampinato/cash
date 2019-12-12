@@ -6,17 +6,15 @@ interface Cash {
   ready ( callback: Function ): this;
 }
 
-Cash.prototype.ready = function ( this: Cash, callback: Function ) {
-
-  const finalCallback = () => callback ( cash );
+fn.ready = function ( this: Cash, callback: Function ) {
 
   if ( doc.readyState !== 'loading' ) {
 
-    setTimeout ( finalCallback );
+    callback ( cash );
 
   } else {
 
-    doc.addEventListener ( 'DOMContentLoaded', finalCallback );
+    doc.addEventListener ( 'DOMContentLoaded', () => { callback ( cash ) } );
 
   }
 

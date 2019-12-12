@@ -14,11 +14,11 @@ interface Cash {
   off ( events: string, selector: string, callback: EventCallback ): this;
 }
 
-Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: string | EventCallback, callback?: EventCallback ) {
+fn.off = function ( this: Cash, eventFullName?: string, selector?: string | EventCallback, callback?: EventCallback ) {
 
-  if ( eventFullName === undefined ) {
+  if ( isUndefined ( eventFullName ) ) {
 
-    this.each ( ( i, ele ) => removeEvent ( ele ) );
+    this.each ( ( i, ele ) => { removeEvent ( ele ) } );
 
   } else {
 
@@ -33,7 +33,7 @@ Cash.prototype.off = function ( this: Cash, eventFullName?: string, selector?: s
 
       const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
-      this.each ( ( i, ele ) => removeEvent ( ele, name, namespaces, selector as string, callback ) ); //TSC
+      this.each ( ( i, ele ) => { removeEvent ( ele, name, namespaces, selector as string, callback ) } ); //TSC
 
     });
 

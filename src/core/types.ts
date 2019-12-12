@@ -19,7 +19,7 @@ type Ele = Window | Document | EleHTML | Element | Node;
 type EleLoose = Window & Document & EleHTMLLoose & Element & Node; //UGLY: Trick to remove some kind-of useless type errors //URL: https://github.com/kenwheeler/cash/issues/278
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 type Comparator = string | Ele | Cash | (( this: Ele, index: number, ele: Ele ) => boolean);
-type Context = Document | HTMLElement | Element;
+type Context = Document | EleHTML | Element;
 
 type EventCallback = {
   ( event: any, data?: any ): any,

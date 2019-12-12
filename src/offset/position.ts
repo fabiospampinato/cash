@@ -8,7 +8,7 @@ interface Cash {
   };
 }
 
-Cash.prototype.position = function ( this: Cash ) {
+fn.position = function ( this: Cash ) {
 
   const ele = this[0];
 

@@ -12,15 +12,15 @@ interface Cash {
 
 function val ( this: Cash ): string | string[];
 function val ( this: Cash, value: string | string[] ): Cash;
-function val ( this: Cash, value?: string | string[] ): string | string[] | Cash {
+function val ( this: Cash, value?: string | string[] ) {
 
-  if ( value === undefined ) return this[0] && getValue ( this[0] );
+  if ( isUndefined ( value ) ) return this[0] && getValue ( this[0] );
 
   return this.each ( ( i, ele ) => {
 
     if ( ele.tagName === 'SELECT' ) {
 
-      const eleValue = isArray ( value ) ? value : ( value === null ? [] : [value] );
+      const eleValue = isArray ( value ) ? value : ( isNull ( value ) ? [] : [value] );
 
       each ( ele.options, ( i, option ) => {
 
@@ -30,7 +30,7 @@ function val ( this: Cash, value?: string | string[] ): string | string[] | Cash
 
     } else {
 
-      ele.value = value === null ? '' : value;
+      ele.value = isNull ( value ) ? '' : value;
 
     }
 
@@ -38,4 +38,4 @@ function val ( this: Cash, value?: string | string[] ): string | string[] | Cash
 
 }
 
-Cash.prototype.val = val;
+fn.val = val;

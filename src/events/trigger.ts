@@ -10,38 +10,32 @@ interface Cash {
   trigger ( event: Event | string, data?: any ): this;
 }
 
-Cash.prototype.trigger = function ( this: Cash, eventFullName: Event | string, data?: any ) {
+fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
-  let evt;
+  if ( isString ( event ) ) {
 
-  if ( isString ( eventFullName ) ) {
-
-    const [name, namespaces] = parseEventName ( eventFullName ),
+    const [name, namespaces] = parseEventName ( event ),
           type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
 
-    evt = doc.createEvent ( type );
-    evt.initEvent ( name, true, true );
-    evt.namespace = namespaces.join ( eventsNamespacesSeparator );
-
-  } else {
-
-    evt = eventFullName;
+    event = doc.createEvent ( type );
+    event.initEvent ( name, true, true );
+    event.namespace = namespaces.join ( eventsNamespacesSeparator );
 
   }
 
-  evt.data = data;
+  event.data = data;
 
-  const isEventFocus = ( evt.type in eventsFocus );
+  const isEventFocus = ( event.type in eventsFocus );
 
   return this.each ( ( i, ele ) => {
 
-    if ( isEventFocus && isFunction ( ele[evt.type] ) ) {
+    if ( isEventFocus && isFunction ( ele[event.type] ) ) {
 
-      ele[evt.type]();
+      ele[event.type]();
 
     } else {
 
-      ele.dispatchEvent ( evt );
+      ele.dispatchEvent ( event );
 
     }
 

@@ -6,12 +6,10 @@
 // @require collection/get.ts
 
 interface Cash {
-  filter ( comparator: Comparator ): Cash;
+  filter ( comparator?: Comparator ): Cash;
 }
 
-Cash.prototype.filter = function ( this: Cash, comparator: Comparator ) {
-
-  if ( !comparator ) return cash ();
+fn.filter = function ( this: Cash, comparator?: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 

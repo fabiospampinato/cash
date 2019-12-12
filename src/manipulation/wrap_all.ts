@@ -2,27 +2,21 @@
 // @require core/cash.ts
 // @require collection/first.ts
 // @require manipulation/append_to.ts
+// @require manipulation/before.ts
 
 interface Cash {
   wrapAll ( selector?: Selector ): this;
 }
 
-Cash.prototype.wrapAll = function ( this: Cash, selector?: Selector ) {
+fn.wrapAll = function ( this: Cash, selector?: Selector ) {
 
-  if ( this[0] ) {
+  let structure = cash ( selector ),
+      wrapper = structure[0];
 
-    const structure = cash ( selector );
+  while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
 
-    this.first ().before ( structure );
+  this.first ().before ( structure );
 
-    let wrapper = structure[0];
-
-    while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
-
-    this.appendTo ( wrapper );
-
-  }
-
-  return this;
+  return this.appendTo ( wrapper );
 
 };

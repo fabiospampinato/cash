@@ -6,6 +6,8 @@ interface Cash {
   slice ( start?: number, end?: number ): Cash;
 }
 
-Cash.prototype.slice = function ( this: Cash ) {
+fn.slice = function ( this: Cash ) {
+
   return cash ( slice.apply ( this, arguments ) );
+
 };

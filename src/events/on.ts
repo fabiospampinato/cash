@@ -59,9 +59,13 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
           let target = event.target;
 
           while ( !matches ( target, selector as string ) ) { //TSC
+
             if ( target === ele ) return;
+
             target = target.parentNode;
+
             if ( !target ) return;
+
           }
 
           thisArg = target;
@@ -110,4 +114,4 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
 }
 
-Cash.prototype.on = on;
+fn.on = on;

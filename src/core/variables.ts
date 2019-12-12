@@ -1,7 +1,13 @@
 
 const doc = document,
       win = window,
-      div = doc.createElement ( 'div' ),
+      docEle = doc.documentElement,
+      createElement = doc.createElement.bind ( doc ),
+      div = createElement ( 'div' ),
+      table = createElement ( 'table' ),
+      tbody = createElement ( 'tbody' ),
+      tr = createElement ( 'tr' ),
+      {isArray} = Array,
       {filter, indexOf, map, push, reverse, slice, some, splice} = Array.prototype;
 
 const idRe = /^#[\w-]*$/,

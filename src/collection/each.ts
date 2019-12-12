@@ -6,7 +6,8 @@ interface Cash {
   each ( callback: EachCallback<EleLoose> ): this;
 }
 
-Cash.prototype.each = function ( this: Cash, callback: EachCallback<EleLoose> ) {
-  each ( this, callback );
-  return this;
+fn.each = function ( this: Cash, callback: EachCallback<EleLoose> ) {
+
+  return each ( this, callback );
+
 };

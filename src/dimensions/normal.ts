@@ -17,9 +17,9 @@ interface Cash {
 
 each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
-  Cash.prototype[prop] = function ( this: Cash, value?: number | string ) {
+  fn[prop] = function ( this: Cash, value?: number | string ) {
 
-    if ( !this[0] ) return value === undefined ? undefined : this;
+    if ( !this[0] ) return isUndefined ( value ) ? undefined : this;
 
     if ( !arguments.length ) {
 

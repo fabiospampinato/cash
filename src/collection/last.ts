@@ -6,6 +6,8 @@ interface Cash {
   last (): Cash;
 }
 
-Cash.prototype.last = function ( this: Cash ) {
+fn.last = function ( this: Cash ) {
+
   return this.eq ( -1 );
+
 };

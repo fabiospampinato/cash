@@ -7,6 +7,8 @@ interface Cash {
   replaceWith ( selector: Selector ): this;
 }
 
-Cash.prototype.replaceWith = function ( this: Cash, selector: Selector ) {
+fn.replaceWith = function ( this: Cash, selector: Selector ) {
+
   return this.before ( selector ).remove ();
+
 };

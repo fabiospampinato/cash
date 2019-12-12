@@ -7,13 +7,13 @@ interface Cash {
   wrap ( selector?: Selector ): this;
 }
 
-Cash.prototype.wrap = function ( this: Cash, selector?: Selector ) {
+fn.wrap = function ( this: Cash, selector?: Selector ) {
 
-  return this.each ( ( index, ele ) => {
+  return this.each ( ( i, ele ) => {
 
     const wrapper = cash ( selector )[0];
 
-    cash ( ele ).wrapAll ( !index ? wrapper : wrapper.cloneNode ( true ) );
+    cash ( ele ).wrapAll ( !i ? wrapper : wrapper.cloneNode ( true ) );
 
   });
 

@@ -5,6 +5,10 @@
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
+interface CashStatic {
+  prefixedProp ( prop: string, isVariable?: boolean ): string;
+}
+
 const prefixedProps: { [prop: string]: string } = {},
       {style} = div,
       vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
@@ -20,10 +24,15 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
           props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
     each ( props, ( i, p ) => {
+
       if ( p in style ) {
+
         prefixedProps[prop] = p;
+
         return false;
+
       }
+
     });
 
   }
@@ -31,9 +40,5 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
   return prefixedProps[prop];
 
 };
-
-interface CashStatic {
-  prefixedProp ( prop: string, isVariable?: boolean ): string;
-}
 
 cash.prefixedProp = getPrefixedProp;

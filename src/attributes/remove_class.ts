@@ -7,6 +7,10 @@ interface Cash {
   removeClass ( classes?: string ): this;
 }
 
-Cash.prototype.removeClass = function ( this: Cash, cls?: string ) {
-  return !arguments.length ? this.attr ( 'class', '' ) : this.toggleClass ( cls, false );
+fn.removeClass = function ( this: Cash, cls?: string ) {
+
+  if ( arguments.length ) return this.toggleClass ( cls, false );
+
+  return this.attr ( 'class', '' );
+
 };

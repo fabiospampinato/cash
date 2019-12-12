@@ -4,7 +4,9 @@
 function setData ( ele: Ele, key: string, value: any ): void {
 
   try {
+
     value = JSON.stringify ( value );
+
   } catch {}
 
   if ( ele.dataset ) {

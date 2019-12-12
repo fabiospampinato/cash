@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
 
 interface Cash {
@@ -7,9 +8,9 @@ interface Cash {
   get ( index: number ): EleLoose | undefined;
 }
 
-Cash.prototype.get = function ( this: Cash, index?: number ) {
+fn.get = function ( this: Cash, index?: number ) {
 
-  if ( index === undefined ) return slice.call ( this );
+  if ( isUndefined ( index ) ) return slice.call ( this );
 
   return this[index < 0 ? index + this.length : index];
 

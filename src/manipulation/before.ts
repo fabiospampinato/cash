@@ -1,15 +1,13 @@
 
 // @require core/cash.ts
-// @require core/each.ts
-// @require ./insert_before.ts
+// @require ./helpers/insert_selectors.ts
 
 interface Cash {
   before ( ...selectors: Selector[] ): this;
 }
 
-Cash.prototype.before = function ( this: Cash ) {
-  each ( arguments, ( i, selector: Selector ) => {
-    cash ( selector ).insertBefore ( this );
-  });
-  return this;
+fn.before = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, true );
+
 };

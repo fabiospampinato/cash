@@ -50,13 +50,14 @@ class Cash {
 
 }
 
-const cash = Cash.prototype.init as typeof Cash.prototype.init & CashStatic;
+const fn = Cash.prototype,
+      cash = fn.init as typeof Cash.prototype.init & CashStatic;
 
-cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
+cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
 
-Cash.prototype.length = 0;
-Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
+fn.length = 0;
+fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 
-if ( typeof Symbol === 'function' ) {
-  Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+if ( typeof Symbol === 'function' ) { // Ensuring a cash collection is iterable
+  fn[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
 }

@@ -27,13 +27,13 @@ function attr ( this: Cash, attr?: string | plainObject, value?: string ) {
 
       const value = this[0].getAttribute ( attr );
 
-      return value === null ? undefined : value;
+      return isNull ( value ) ? undefined : value;
 
     }
 
-    if ( value === undefined ) return this;
+    if ( isUndefined ( value ) ) return this;
 
-    if ( value === null ) return this.removeAttr ( attr );
+    if ( isNull ( value ) ) return this.removeAttr ( attr );
 
     return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
 
@@ -49,4 +49,4 @@ function attr ( this: Cash, attr?: string | plainObject, value?: string ) {
 
 }
 
-Cash.prototype.attr = attr;
+fn.attr = attr;

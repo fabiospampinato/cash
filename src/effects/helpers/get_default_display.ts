@@ -7,7 +7,7 @@ function getDefaultDisplay ( tagName: string ): string {
 
   if ( defaultDisplay[tagName] ) return defaultDisplay[tagName];
 
-  const ele = doc.createElement ( tagName );
+  const ele = createElement ( tagName );
 
   doc.body.appendChild ( ele );
 
