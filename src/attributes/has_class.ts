@@ -8,5 +8,5 @@ interface Cash {
 }
 
 Cash.prototype.hasClass = function ( this: Cash, cls: string ) {
-  return cls && some.call ( this, ( ele: Ele ) => ele.classList.contains ( cls ) );
+  return some.call ( this, ( ele: Ele ) => ele.classList.contains ( cls ) );
 };
