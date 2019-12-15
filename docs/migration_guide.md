@@ -133,14 +133,6 @@ $('#foo').css ( width, myWidth );
 $('#foo').css ({ width: myWidth });
 ```
 
-### Parsing `<script>` tags
-
-Cash can parse `<script>` tags and execute their code when they are attached to the page.
-
-However we do not support script tags inside iframes or script tags with a `src` attribute.
-
-If you need to load arbitrary JavaScript files you can find a reference implementation for `$.getScript` [here](https://github.com/kenwheeler/cash/blob/master/src/extra/get_script.ts).
-
 ### No CSS auto-suffixing support for `zoom`
 
 CSS values are auto-suffixed when appropriate, same as in jQuery, so for instance the two following calls are equivalent:
