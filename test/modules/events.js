@@ -137,6 +137,29 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'ignores the order of namespaces', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+      var namespaces = [];
+
+      function handler ( event ) {
+        count++;
+        namespaces.push ( event.namespace );
+      }
+
+      ele.on ( 'foo.ns1.ns2', handler ).on ( 'foo.ns2.ns1', handler );
+
+      ele.trigger ( 'foo.ns1.ns2' );
+      ele.trigger ( 'foo.ns2.ns1' );
+
+      ele.off ( 'foo.ns1.ns2' ).trigger ( 'foo.ns1.ns2' );
+
+      t.is ( count, 4 );
+      t.deepEqual ( namespaces, ['ns1.ns2', 'ns1.ns2', 'ns1.ns2', 'ns1.ns2'] );
+
+    });
+
     it ( 'overwrites event.currentTarget when using event delegation', function ( t ) {
 
       var ele = $('.event');
