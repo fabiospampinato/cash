@@ -8,6 +8,6 @@ interface Cash {
 
 fn.prepend = function ( this: Cash ) {
 
-  return insertSelectors ( arguments, this, false, true, true );
+  return insertSelectors ( arguments, this, false, true, true, true, true );
 
 };

@@ -8,6 +8,6 @@ interface Cash {
 
 fn.prependTo = function ( this: Cash, selector: Selector ) {
 
-  return insertSelectors ( arguments, this, true, true, true );
+  return insertSelectors ( arguments, this, true, true, true, false, false, true );
 
 };

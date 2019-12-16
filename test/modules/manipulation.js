@@ -54,25 +54,27 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'inserts a selector after', function ( t ) {
 
-      $('.anchor').after ( '<div>' );
+      $('.anchor').after ( '<a></a><b></b><c></c>' );
 
-      var prev = $('.anchor').prev ();
-      var next = $('.anchor').next ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
       t.is ( prev.length, 0 );
-      t.is ( next.length, 1 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
     it ( 'inserts multiple selectors after', function ( t ) {
 
-      $('.anchor').after ( '<div>', '<div>', '<div>' );
+      $('.anchor').after ( '<a></a>', '<b></b><c></c>' );
 
-      var prev = $('.anchor').prev ();
-      var siblings = $('.anchor').siblings ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
       t.is ( prev.length, 0 );
-      t.is ( siblings.length, 3 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -82,21 +84,27 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'appends a selector', function ( t ) {
 
-      $('.parent').append ( '<div>' );
+      $('.parent').append ( '<a></a><b></b><c></c>' );
 
-      var next = $('.anchor').next ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( next.length, 1 );
+      t.is ( prev.length, 0 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
     it ( 'appends multiple selectors', function ( t ) {
 
-      $('.parent').append ( '<div>', '<div>', '<div>' );
+      $('.parent').append ( '<a></a>', '<b></b><c></c>' );
 
-      var siblings = $('.anchor').siblings ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( siblings.length, 3 );
+      t.is ( prev.length, 0 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -114,11 +122,14 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'appends this to a selector', function ( t ) {
 
-      $('<div>').appendTo ( '.parent' );
+      $( '<a></a><b></b><c></c>' ).appendTo ( '.parent' );
 
-      var next = $('.anchor').next ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( next.length, 1 );
+      t.is ( prev.length, 0 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -128,25 +139,27 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'inserts a selector before', function ( t ) {
 
-      $('.anchor').before ( '<div>' );
+      $('.anchor').before ( '<a></a><b></b><c></c>' );
 
-      var prev = $('.anchor').prev ();
-      var next = $('.anchor').next ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( prev.length, 1 );
+      t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
     it ( 'inserts multiple selectors after', function ( t ) {
 
-      $('.anchor').before ( '<div>', '<div>', '<div>' );
+      $('.anchor').before ( '<a></a>', '<b></b><c></c>' );
 
-      var next = $('.anchor').next ();
-      var siblings = $('.anchor').siblings ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
+      t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.is ( siblings.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -268,12 +281,14 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'inserts this after a selector', function ( t ) {
 
-      $('<div>').insertAfter ( '.anchor' );
+      $('<a></a><b></b><c></c>').insertAfter ( '.anchor' );
 
-      var anchor = $('.anchor');
-      var next = anchor.next ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( next.length, 1 );
+      t.is ( prev.length, 0 );
+      t.is ( next.length, 3 );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -283,12 +298,14 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'inserts this before a selector', function ( t ) {
 
-      $('<div>').insertBefore ( '.anchor' );
+      $('<a></a><b></b><c></c>').insertBefore ( '.anchor' );
 
-      var anchor = $('.anchor');
-      var prev = anchor.prev ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( prev.length, 1 );
+      t.is ( prev.length, 3 );
+      t.is ( next.length, 0 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -298,21 +315,27 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'prepends a selector', function ( t ) {
 
-      $('.parent').prepend ( '<div>' );
+      $('.parent').prepend ( '<a></a><b></b><c></c>' );
 
-      var prev = $('.anchor').prev ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( prev.length, 1 );
+      t.is ( prev.length, 3 );
+      t.is ( next.length, 0 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
     it ( 'prepends multiple selectors', function ( t ) {
 
-      $('.parent').prepend ( '<div>', '<div>', '<div>' );
+      $('.parent').prepend ( '<a></a>', '<b></b><c></c>' );
 
-      var siblings = $('.anchor').siblings ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( siblings.length, 3 );
+      t.is ( prev.length, 3 );
+      t.is ( next.length, 0 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 
@@ -330,11 +353,14 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'prepends this to a selector', function ( t ) {
 
-      $('<div>').prependTo ( '.parent' );
+      $('<a></a><b></b><c></c>').prependTo ( '.parent' );
 
-      var prev = $('.anchor').prev ();
+      var prev = $('.anchor').prevAll ();
+      var next = $('.anchor').nextAll ();
 
-      t.is ( prev.length, 1 );
+      t.is ( prev.length, 3 );
+      t.is ( next.length, 0 );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
 
     });
 

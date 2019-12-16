@@ -8,6 +8,6 @@ interface Cash {
 
 fn.after = function ( this: Cash ) {
 
-  return insertSelectors ( arguments, this );
+  return insertSelectors ( arguments, this, false, false, false, true, true );
 
 };
