@@ -4,12 +4,6 @@
 const isSauceLabs = process.argv.includes ( '--sauce' );
 
 const SauceLabsLaunchers = {
-  win_ie_10: {
-    base: 'SauceLabs',
-    browserName: 'internet explorer',
-    version: '10.0',
-    platform: 'Windows 7'
-  },
   win_ie_11: {
     base: 'SauceLabs',
     browserName: 'internet explorer',

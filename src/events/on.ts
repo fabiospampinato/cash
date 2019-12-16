@@ -78,9 +78,7 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           Object.defineProperty ( event, 'currentTarget', {
             configurable: true,
-            get () { // We need to set a getter for IE10 to work
-              return thisArg;
-            }
+            value: thisArg
           });
 
         }

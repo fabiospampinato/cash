@@ -9,14 +9,6 @@ function setData ( ele: Ele, key: string, value: any ): void {
 
   } catch {}
 
-  if ( ele.dataset ) {
-
-    ele.dataset[camelCase ( key )] = value;
-
-  } else {
-
-    ele.setAttribute ( `data-${key}`, value );
-
-  }
+  ele.dataset[camelCase ( key )] = value;
 
 }

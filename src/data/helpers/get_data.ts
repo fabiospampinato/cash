@@ -3,7 +3,7 @@
 
 function getData ( ele: Ele, key: string ): any {
 
-  const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase ( key )] : ele.getAttribute ( `data-${key}` );
+  const value = ele.dataset[key] || ele.dataset[camelCase ( key )];
 
   try {
 

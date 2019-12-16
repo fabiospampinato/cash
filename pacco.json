@@ -1,5 +1,5 @@
 {
-  "browsers": ["ie >= 10"],
+  "browsers": ["ie >= 11"],
   "components": {
     "core/export_esm": false,
     "extra/get_script": false,
