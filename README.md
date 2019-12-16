@@ -496,6 +496,7 @@ Removes all event listeners if called without arguments.
 ```js
 $(element).off ( eventName, eventHandler ) // => collection
 $(element).off ( eventName ) // => collection
+$(element).off ( eventsMap ) // => collection
 $(element).off () // => collection
 ```
 
@@ -524,6 +525,7 @@ Accepts space-separated `eventName` for listening to multiple events.
 Event is delegated if delegate is supplied.
 
 ```js
+$(element).on ( eventsMap ) // => collection
 $(element).on ( eventName, eventHandler ) // => collection
 $(element).on ( eventName, delegate, eventHandler ) // => collection
 ```

@@ -12,7 +12,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   describe ( '$.fn.on', function ( it ) {
 
-    it ( 'attaches to single event', function ( t ) {
+    it ( 'attaches a single event', function ( t ) {
 
       var ele = $('.event');
       var count = 0;
@@ -31,7 +31,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    it ( 'attaches to multiple events', function ( t ) {
+    it ( 'attaches multiple events', function ( t ) {
 
       var ele = $('.event');
       var count = 0;
@@ -41,6 +41,26 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       }
 
       ele.on ( 'foo bar', handler );
+      ele.trigger ( 'foo' ).trigger ( 'bar' );
+
+      t.is ( count, 2 );
+
+    });
+
+    it ( 'attaches multiple events via a map', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+
+      function handler () {
+        count++;
+      }
+
+      ele.on ({
+        foo: handler,
+        bar: handler
+      });
+
       ele.trigger ( 'foo' ).trigger ( 'bar' );
 
       t.is ( count, 2 );
@@ -250,7 +270,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   describe ( '$.fn.off', function ( it ) {
 
-    it ( 'removes single event', function ( t ) {
+    it ( 'removes a single event', function ( t ) {
 
       var ele = $('.event');
       var count = 0;
@@ -282,6 +302,27 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.trigger ( 'foo' ).trigger ( 'bar' ).trigger ( 'baz' );
 
       t.is ( count, 1 );
+
+    });
+
+    it ( 'removes multiple events via a map', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+
+      function handler () {
+        count++;
+      }
+
+      var events = {
+        foo: handler,
+        bar: handler
+      };
+
+      ele.on ( events ).off ( events );
+      ele.trigger ( 'foo' ).trigger ( 'bar' );
+
+      t.is ( count, 0 );
 
     });
 

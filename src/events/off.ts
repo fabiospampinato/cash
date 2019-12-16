@@ -10,15 +10,24 @@
 interface Cash {
   off (): this;
   off ( events: string ): this;
+  off ( events: plainObject ): this;
   off ( events: string, callback: EventCallback ): this;
   off ( events: string, selector: string, callback: EventCallback ): this;
 }
 
-fn.off = function ( this: Cash, eventFullName?: string, selector?: string | EventCallback, callback?: EventCallback ) {
+fn.off = function ( this: Cash, eventFullName?: string | plainObject, selector?: string | EventCallback, callback?: EventCallback ) {
 
   if ( isUndefined ( eventFullName ) ) {
 
     this.each ( ( i, ele ) => { removeEvent ( ele ) } );
+
+  } else if ( !isString ( eventFullName ) ) {
+
+    for ( const key in eventFullName ) {
+
+      this.off ( key, eventFullName[key] );
+
+    }
 
   } else {
 
