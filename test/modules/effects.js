@@ -1,6 +1,6 @@
 
 var fixture = '\
-  <style>.show-flex { display: flex }</style>\
+  <style>.show-custom { display: inline-block }</style>\
   <style>.show-cls { display: block }</style>\
   <style>.hide-cls { display: none }</style>\
   <div class="toggleable shown"></div>\
@@ -9,7 +9,7 @@ var fixture = '\
   <div class="toggleable hidden hide-cls"></div>\
   <div class="toggleable hidden" style="display: none"></div>\
   <span class="toggleable hide-cls"></span>\
-  <span class="show-flex"></span>\
+  <span class="show-custom"></span>\
 ';
 
 function isShown ( collection ) {
@@ -54,11 +54,11 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     it ( 'uses the previous display value', function ( t ) {
 
-      var ele = $('.show-flex');
+      var ele = $('.show-custom');
 
       ele.hide ().show ();
 
-      t.is ( ele[0].style.display, 'flex' );
+      t.is ( ele[0].style.display, 'inline-block' );
 
     });
 

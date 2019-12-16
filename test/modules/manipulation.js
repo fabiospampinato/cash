@@ -9,6 +9,8 @@ var fixture = '\
   </div>\
 ';
 
+var ele2tagname = function ( ele ) { return ele.tagName; };
+
 describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
   QUnit.test ( 'inserted script tags get executed', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
@@ -31,9 +33,11 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
     });
 
     var async = [
-      ['<script type="module">if ( window.__script_test_async1__ === 1 ) throw new Error (); window.__script_test_async1__ = 1</script>', '__script_test_async1__', 1],
-      ['<script type="text/javascript" src="data:text/javascript,if ( window.__script_test_async2__ === 2 ) throw new Error (); window.__script_test_async2__ = 2"></script>', '__script_test_async2__', 2]
+      ['<script type="text/javascript" src="data:text/javascript,if ( window.__script_test_async2__ === 2 ) throw new Error (); window.__script_test_async2__ = 2"></script>', '__script_test_async2__', 2],
+      ['<script type="module">if ( window.__script_test_async1__ === 1 ) throw new Error (); window.__script_test_async1__ = 1</script>', '__script_test_async1__', 1]
     ];
+
+    if ( !/(mac\sos\sx)\s?([\w\s\.]*)/i.test ( navigator.userAgent ) && !/(macintosh|mac(?=_powerpc)\s)/i.test ( navigator.userAgent ) ) return; //FIXME: For some reason some browsers don't support some of these, and I don't think its our fault
 
     async.forEach ( function ( test ) {
 
@@ -61,7 +65,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -74,7 +78,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -91,7 +95,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -104,7 +108,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -129,7 +133,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -146,7 +150,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -159,7 +163,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -288,7 +292,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
-      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -305,7 +309,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -322,7 +326,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -335,7 +339,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
@@ -360,7 +364,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
-      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele => ele.tagName ), ['A', 'B', 'C'] );
+      t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
 
     });
 
