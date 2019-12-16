@@ -1,7 +1,9 @@
 
 // @require core/cash.ts
 // @require core/type_checking.ts
+// @require css/helpers/compute_style.ts
 // @require ./helpers/get_default_display.ts
+// @require ./helpers/variables.ts
 
 interface Cash {
   toggle ( force?: boolean ): this;
@@ -15,7 +17,7 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
 
     if ( show ) {
 
-      ele.style.display = '';
+      ele.style.display = ele[displayProperty] || '';
 
       if ( isHidden ( ele ) ) {
 
@@ -24,6 +26,8 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
       }
 
     } else {
+
+      ele[displayProperty] = computeStyle ( ele, 'display' );
 
       ele.style.display = 'none';
 

@@ -1,0 +1,2 @@
+
+const displayProperty = '__cashDisplay';
