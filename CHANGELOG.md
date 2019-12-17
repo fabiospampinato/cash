@@ -1,3 +1,15 @@
+### Version 5.0.0
+- Dropped support for IE10
+- $.fn.hasClass: ensuring it always returns a boolean
+- $.fn.off: accepting also an events map as its only argument
+- $.fn.show|toggle: restoring custom display values
+- $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring multiple nodes are inserted in the correct order
+- Ensuring attached events never get forgotten
+- Ensuring script tags are executed even if they have a “src” attribute, and without using `eval`
+- Ensuring the order of event namespaces doesn’t matter
+- Squeezed some more bytes out of the bundle (~4%) and improved code style consistency
+- Squeezed some more bytes out of the bundle (~1.5%), bringing back the minified and gzipped size below 5kb
+
 ### Version 4.1.5
 - $.fn.val: ensuring it works with “input[type=file][multiple]” elements
 - Migration guide: mentioning how $.fn.data stores values

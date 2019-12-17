@@ -1,7 +1,7 @@
 {
   "name": "cash-dom",
   "description": "An absurdly small jQuery alternative for modern browsers.",
-  "version": "4.1.5",
+  "version": "5.0.0",
   "license": "MIT",
   "browser": "./dist/cash.js",
   "main": "./dist/cash.js",

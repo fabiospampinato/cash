@@ -1,5 +1,5 @@
 /* MIT https://github.com/kenwheeler/cash */
-const doc = document, win = window, div = doc.createElement('div'), { filter, indexOf, map, push, reverse, slice, some, splice } = Array.prototype;
+const doc = document, win = window, docEle = doc.documentElement, createElement = doc.createElement.bind(doc), div = createElement('div'), table = createElement('table'), tbody = createElement('tbody'), tr = createElement('tr'), { isArray, prototype: ArrayProtoType } = Array, { filter, indexOf, map, push, slice, some, splice } = ArrayProtoType;
 const idRe = /^#[\w-]*$/, classRe = /^\.[\w-]*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
 // @require ./variables.ts
 function find(selector, context = doc) {
@@ -44,92 +44,65 @@ class Cash {
         return new Cash(selector, context);
     }
 }
-const cash = Cash.prototype.init;
-cash.fn = cash.prototype = Cash.prototype; // Ensuring that `cash () instanceof cash`
-Cash.prototype.length = 0;
-Cash.prototype.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
-if (typeof Symbol === 'function') {
-    Cash.prototype[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+const fn = Cash.prototype, cash = fn.init;
+cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
+fn.length = 0;
+fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
+if (typeof Symbol === 'function') { // Ensuring a cash collection is iterable
+    fn[Symbol['iterator']] = ArrayProtoType[Symbol['iterator']];
 }
-Cash.prototype.get = function (index) {
-    if (index === undefined)
-        return slice.call(this);
-    return this[index < 0 ? index + this.length : index];
-};
-Cash.prototype.eq = function (index) {
-    return cash(this.get(index));
-};
-Cash.prototype.first = function () {
-    return this.eq(0);
-};
-Cash.prototype.last = function () {
-    return this.eq(-1);
-};
-Cash.prototype.map = function (callback) {
+fn.map = function (callback) {
     return cash(map.call(this, (ele, i) => callback.call(ele, i, ele)));
 };
-Cash.prototype.slice = function () {
-    return cash(slice.apply(this, arguments));
+fn.slice = function (start, end) {
+    return cash(slice.call(this, start, end));
 };
-// @require ./cash.ts
 const dashAlphaRe = /-([a-z])/g;
-function camelCaseReplace(match, letter) {
-    return letter.toUpperCase();
-}
 function camelCase(str) {
-    return str.replace(dashAlphaRe, camelCaseReplace);
+    return str.replace(dashAlphaRe, (match, letter) => letter.toUpperCase());
 }
 cash.camelCase = camelCase;
-function each(arr, callback) {
-    for (let i = 0, l = arr.length; i < l; i++) {
-        if (callback.call(arr[i], i, arr[i]) === false)
-            break;
+function each(arr, callback, reverse) {
+    if (reverse) {
+        let i = arr.length;
+        while (i--) {
+            if (callback.call(arr[i], i, arr[i]) === false)
+                return arr;
+        }
     }
+    else {
+        for (let i = 0, l = arr.length; i < l; i++) {
+            if (callback.call(arr[i], i, arr[i]) === false)
+                return arr;
+        }
+    }
+    return arr;
 }
 cash.each = each;
-Cash.prototype.each = function (callback) {
-    each(this, callback);
-    return this;
+fn.each = function (callback) {
+    return each(this, callback);
 };
-Cash.prototype.removeProp = function (prop) {
+fn.removeProp = function (prop) {
     return this.each((i, ele) => { delete ele[prop]; });
 };
-// @require ./cash.ts
-function extend(target, ...objs) {
-    const args = arguments, length = args.length;
+cash.extend = function (target, ...objs) {
+    const length = arguments.length;
     for (let i = (length < 2 ? 0 : 1); i < length; i++) {
-        for (const key in args[i]) {
-            target[key] = args[i][key];
+        for (const key in arguments[i]) {
+            target[key] = arguments[i][key];
         }
     }
     return target;
-}
-Cash.prototype.extend = function (plugins) {
-    return extend(cash.fn, plugins);
 };
-cash.extend = extend;
+fn.extend = function (plugins) {
+    return cash.extend(fn, plugins);
+};
 cash.guid = 1;
-// @require ./cash.ts
 function matches(ele, selector) {
-    const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['mozMatchesSelector'] || ele['msMatchesSelector'] || ele['oMatchesSelector']);
+    const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector']);
     return !!matches && matches.call(ele, selector);
 }
 cash.matches = matches;
-// @require ./variables.ts
-function pluck(arr, prop, deep) {
-    const plucked = [];
-    for (let i = 0, l = arr.length; i < l; i++) {
-        let val = arr[i][prop];
-        while (val != null) {
-            plucked.push(val);
-            if (!deep)
-                break;
-            val = val[prop];
-        }
-    }
-    return plucked;
-}
-// @require ./cash.ts
 function isCash(x) {
     return x instanceof Cash;
 }
@@ -148,16 +121,21 @@ function isFunction(x) {
 function isString(x) {
     return typeof x === 'string';
 }
+function isUndefined(x) {
+    return x === undefined;
+}
+function isNull(x) {
+    return x === null;
+}
 function isNumeric(x) {
     return !isNaN(parseFloat(x)) && isFinite(x);
 }
-const { isArray } = Array;
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
 cash.isString = isString;
 cash.isNumeric = isNumeric;
 cash.isArray = isArray;
-Cash.prototype.prop = function (prop, value) {
+fn.prop = function (prop, value) {
     if (!prop)
         return;
     if (isString(prop)) {
@@ -170,6 +148,20 @@ Cash.prototype.prop = function (prop, value) {
     }
     return this;
 };
+fn.get = function (index) {
+    if (isUndefined(index))
+        return slice.call(this);
+    return this[index < 0 ? index + this.length : index];
+};
+fn.eq = function (index) {
+    return cash(this.get(index));
+};
+fn.first = function () {
+    return this.eq(0);
+};
+fn.last = function () {
+    return this.eq(-1);
+};
 // @require ./matches.ts
 // @require ./type_checking.ts
 function getCompareFunction(comparator) {
@@ -179,30 +171,28 @@ function getCompareFunction(comparator) {
             ? comparator
             : isCash(comparator)
                 ? (i, ele) => comparator.is(ele)
-                : (i, ele) => ele === comparator;
+                : !comparator
+                    ? () => false
+                    : (i, ele) => ele === comparator;
 }
-Cash.prototype.filter = function (comparator) {
-    if (!comparator)
-        return cash();
+fn.filter = function (comparator) {
     const compare = getCompareFunction(comparator);
     return cash(filter.call(this, (ele, i) => compare.call(ele, i, ele)));
 };
 // @require collection/filter.ts
 function filtered(collection, comparator) {
-    return !comparator || !collection.length ? collection : collection.filter(comparator);
+    return !comparator ? collection : collection.filter(comparator);
 }
 // @require ./type_checking.ts
 const splitValuesRe = /\S+/g;
 function getSplitValues(str) {
     return isString(str) ? str.match(splitValuesRe) || [] : [];
 }
-Cash.prototype.hasClass = function (cls) {
-    return cls && some.call(this, (ele) => ele.classList.contains(cls));
+fn.hasClass = function (cls) {
+    return !!cls && some.call(this, (ele) => ele.classList.contains(cls));
 };
-Cash.prototype.removeAttr = function (attr) {
+fn.removeAttr = function (attr) {
     const attrs = getSplitValues(attr);
-    if (!attrs.length)
-        return this;
     return this.each((i, ele) => {
         each(attrs, (i, a) => {
             ele.removeAttribute(a);
@@ -217,11 +207,11 @@ function attr(attr, value) {
             if (!this[0])
                 return;
             const value = this[0].getAttribute(attr);
-            return value === null ? undefined : value;
+            return isNull(value) ? undefined : value;
         }
-        if (value === undefined)
+        if (isUndefined(value))
             return this;
-        if (value === null)
+        if (isNull(value))
             return this.removeAttr(attr);
         return this.each((i, ele) => { ele.setAttribute(attr, value); });
     }
@@ -230,11 +220,9 @@ function attr(attr, value) {
     }
     return this;
 }
-Cash.prototype.attr = attr;
-Cash.prototype.toggleClass = function (cls, force) {
-    const classes = getSplitValues(cls), isForce = (force !== undefined);
-    if (!classes.length)
-        return this;
+fn.attr = attr;
+fn.toggleClass = function (cls, force) {
+    const classes = getSplitValues(cls), isForce = !isUndefined(force);
     return this.each((i, ele) => {
         each(classes, (i, c) => {
             if (isForce) {
@@ -246,27 +234,37 @@ Cash.prototype.toggleClass = function (cls, force) {
         });
     });
 };
-Cash.prototype.addClass = function (cls) {
+fn.addClass = function (cls) {
     return this.toggleClass(cls, true);
 };
-Cash.prototype.removeClass = function (cls) {
-    return !arguments.length ? this.attr('class', '') : this.toggleClass(cls, false);
+fn.removeClass = function (cls) {
+    if (arguments.length)
+        return this.toggleClass(cls, false);
+    return this.attr('class', '');
 };
-// @optional ./add_class.ts
-// @optional ./attr.ts
-// @optional ./has_class.ts
-// @optional ./prop.ts
-// @optional ./remove_attr.ts
-// @optional ./remove_class.ts
-// @optional ./remove_prop.ts
-// @optional ./toggle_class.ts
-// @require ./cash.ts
-// @require ./variables
+function pluck(arr, prop, deep) {
+    const plucked = [], isCallback = isFunction(prop);
+    for (let i = 0, l = arr.length; i < l; i++) {
+        if (isCallback) {
+            const val = prop(arr[i]);
+            if (val.length)
+                push.apply(plucked, val);
+        }
+        else {
+            let val = arr[i][prop];
+            while (val != null) {
+                plucked.push(val);
+                val = deep ? val[prop] : null;
+            }
+        }
+    }
+    return plucked;
+}
 function unique(arr) {
     return arr.length > 1 ? filter.call(arr, (item, index, self) => indexOf.call(self, item) === index) : arr;
 }
 cash.unique = unique;
-Cash.prototype.add = function (selector, context) {
+fn.add = function (selector, context) {
     return cash(unique(this.get().concat(cash(selector, context).get())));
 };
 // @require core/type_checking.ts
@@ -286,17 +284,12 @@ const cssVariableRe = /^--/;
 function isCSSVariable(prop) {
     return cssVariableRe.test(prop);
 }
-// @require core/camel_case.ts
-// @require core/cash.ts
-// @require core/each.ts
-// @require core/variables.ts
-// @require ./is_css_variable.ts
-const prefixedProps = {}, { style } = div, vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
+const prefixedProps = {}, { style } = div, vendorsPrefixes = ['webkit', 'moz', 'ms'];
 function getPrefixedProp(prop, isVariable = isCSSVariable(prop)) {
     if (isVariable)
         return prop;
     if (!prefixedProps[prop]) {
-        const propCC = camelCase(prop), propUC = `${propCC.charAt(0).toUpperCase()}${propCC.slice(1)}`, props = (`${propCC} ${vendorsPrefixes.join(`${propUC} `)}${propUC}`).split(' ');
+        const propCC = camelCase(prop), propUC = `${propCC[0].toUpperCase()}${propCC.slice(1)}`, props = (`${propCC} ${vendorsPrefixes.join(`${propUC} `)}${propUC}`).split(' ');
         each(props, (i, p) => {
             if (p in style) {
                 prefixedProps[prop] = p;
@@ -339,10 +332,10 @@ function css(prop, value) {
             if (!isElement(ele))
                 return;
             if (isVariable) {
-                ele.style.setProperty(prop, value); //TSC
+                ele.style.setProperty(prop, value);
             }
             else {
-                ele.style[prop] = value; //TSC
+                ele.style[prop] = value;
             }
         });
     }
@@ -352,11 +345,11 @@ function css(prop, value) {
     return this;
 }
 ;
-Cash.prototype.css = css;
+fn.css = css;
 // @optional ./css.ts
 // @require core/camel_case.ts
 function getData(ele, key) {
-    const value = ele.dataset ? ele.dataset[key] || ele.dataset[camelCase(key)] : ele.getAttribute(`data-${key}`);
+    const value = ele.dataset[key] || ele.dataset[camelCase(key)];
     try {
         return JSON.parse(value);
     }
@@ -369,62 +362,56 @@ function setData(ele, key, value) {
         value = JSON.stringify(value);
     }
     catch (_a) { }
-    if (ele.dataset) {
-        ele.dataset[camelCase(key)] = value;
-    }
-    else {
-        ele.setAttribute(`data-${key}`, value);
-    }
+    ele.dataset[camelCase(key)] = value;
 }
-const dataAttributeRe = /^data-(.+)/;
 function data(name, value) {
     if (!name) {
         if (!this[0])
             return;
         const datas = {};
-        each(this[0].attributes, (i, attr) => {
-            const match = attr.name.match(dataAttributeRe);
-            if (!match)
-                return;
-            datas[match[1]] = this.data(match[1]);
-        });
+        for (const key in this[0].dataset) {
+            datas[key] = getData(this[0], key);
+        }
         return datas;
     }
     if (isString(name)) {
-        if (value === undefined)
+        if (arguments.length < 2)
             return this[0] && getData(this[0], name);
-        return this.each((i, ele) => setData(ele, name, value));
+        return this.each((i, ele) => { setData(ele, name, value); });
     }
     for (const key in name) {
         this.data(key, name[key]);
     }
     return this;
 }
-Cash.prototype.data = data;
+fn.data = data;
 // @optional ./data.ts
 // @require css/helpers/compute_style_int.ts
 function getExtraSpace(ele, xAxis) {
     return computeStyleInt(ele, `border${xAxis ? 'Left' : 'Top'}Width`) + computeStyleInt(ele, `padding${xAxis ? 'Left' : 'Top'}`) + computeStyleInt(ele, `padding${xAxis ? 'Right' : 'Bottom'}`) + computeStyleInt(ele, `border${xAxis ? 'Right' : 'Bottom'}Width`);
 }
-each(['Width', 'Height'], (i, prop) => {
-    Cash.prototype[`inner${prop}`] = function () {
-        if (!this[0])
-            return;
-        if (isWindow(this[0]))
-            return win[`inner${prop}`];
-        return this[0][`client${prop}`];
-    };
+each([true, false], (i, outer) => {
+    each(['Width', 'Height'], (i, prop) => {
+        const name = `${outer ? 'outer' : 'inner'}${prop}`;
+        fn[name] = function (includeMargins) {
+            if (!this[0])
+                return;
+            if (isWindow(this[0]))
+                return win[name];
+            return this[0][`${outer ? 'offset' : 'client'}${prop}`] + (includeMargins && outer ? computeStyleInt(this[0], `margin${i ? 'Top' : 'Left'}`) + computeStyleInt(this[0], `margin${i ? 'Bottom' : 'Right'}`) : 0);
+        };
+    });
 });
 each(['width', 'height'], (index, prop) => {
-    Cash.prototype[prop] = function (value) {
+    fn[prop] = function (value) {
         if (!this[0])
-            return value === undefined ? undefined : this;
+            return isUndefined(value) ? undefined : this;
         if (!arguments.length) {
             if (isWindow(this[0]))
                 return this[0][camelCase(`outer-${prop}`)];
             return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
         }
-        const valueNumber = parseInt(value, 10); //TSC
+        const valueNumber = parseInt(value, 10);
         return this.each((i, ele) => {
             if (!isElement(ele))
                 return;
@@ -433,25 +420,15 @@ each(['width', 'height'], (index, prop) => {
         });
     };
 });
-each(['Width', 'Height'], (index, prop) => {
-    Cash.prototype[`outer${prop}`] = function (includeMargins) {
-        if (!this[0])
-            return;
-        if (isWindow(this[0]))
-            return win[`outer${prop}`];
-        return this[0][`offset${prop}`] + (includeMargins ? computeStyleInt(this[0], `margin${!index ? 'Left' : 'Top'}`) + computeStyleInt(this[0], `margin${!index ? 'Right' : 'Bottom'}`) : 0);
-    };
-});
-// @optional ./inner.ts
+// @optional ./inner_outer.ts
 // @optional ./normal.ts
-// @optional ./outer.ts
 // @require css/helpers/compute_style.ts
 const defaultDisplay = {};
 function getDefaultDisplay(tagName) {
     if (defaultDisplay[tagName])
         return defaultDisplay[tagName];
-    const ele = doc.createElement(tagName);
-    doc.body.appendChild(ele);
+    const ele = createElement(tagName);
+    doc.body.insertBefore(ele, null);
     const display = computeStyle(ele, 'display');
     doc.body.removeChild(ele);
     return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
@@ -460,24 +437,26 @@ function getDefaultDisplay(tagName) {
 function isHidden(ele) {
     return computeStyle(ele, 'display') === 'none';
 }
-Cash.prototype.toggle = function (force) {
+const displayProperty = '___cd';
+fn.toggle = function (force) {
     return this.each((i, ele) => {
-        const show = force !== undefined ? force : isHidden(ele);
+        const show = isUndefined(force) ? isHidden(ele) : force;
         if (show) {
-            ele.style.display = '';
+            ele.style.display = ele[displayProperty] || '';
             if (isHidden(ele)) {
                 ele.style.display = getDefaultDisplay(ele.tagName);
             }
         }
         else {
+            ele[displayProperty] = computeStyle(ele, 'display');
             ele.style.display = 'none';
         }
     });
 };
-Cash.prototype.hide = function () {
+fn.hide = function () {
     return this.toggle(false);
 };
-Cash.prototype.show = function () {
+fn.show = function () {
     return this.toggle(true);
 };
 // @optional ./hide.ts
@@ -486,7 +465,7 @@ Cash.prototype.show = function () {
 function hasNamespaces(ns1, ns2) {
     return !ns2 || !some.call(ns2, (ns) => ns1.indexOf(ns) < 0);
 }
-const eventsNamespace = '__cashEvents', eventsNamespacesSeparator = '.', eventsFocus = { focus: 'focusin', blur: 'focusout' }, eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }, eventsMouseRe = /^(?:mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
+const eventsNamespace = '___ce', eventsNamespacesSeparator = '.', eventsFocus = { focus: 'focusin', blur: 'focusout' }, eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }, eventsMouseRe = /^(mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
 // @require ./variables.ts
 function getEventNameBubbling(name) {
     return eventsHover[name] || eventsFocus[name] || name;
@@ -518,7 +497,6 @@ function removeEvent(ele, name, namespaces, selector, callback) {
         for (name in cache) {
             removeEvent(ele, name, namespaces, selector, callback);
         }
-        delete ele[eventsNamespace];
     }
     else if (cache[name]) {
         cache[name] = cache[name].filter(([ns, sel, cb]) => {
@@ -528,9 +506,14 @@ function removeEvent(ele, name, namespaces, selector, callback) {
         });
     }
 }
-Cash.prototype.off = function (eventFullName, selector, callback) {
-    if (eventFullName === undefined) {
-        this.each((i, ele) => removeEvent(ele));
+fn.off = function (eventFullName, selector, callback) {
+    if (isUndefined(eventFullName)) {
+        this.each((i, ele) => { removeEvent(ele); });
+    }
+    else if (!isString(eventFullName)) {
+        for (const key in eventFullName) {
+            this.off(key, eventFullName[key]);
+        }
     }
     else {
         if (isFunction(selector)) {
@@ -539,7 +522,7 @@ Cash.prototype.off = function (eventFullName, selector, callback) {
         }
         each(getSplitValues(eventFullName), (i, eventFullName) => {
             const [name, namespaces] = parseEventName(getEventNameBubbling(eventFullName));
-            this.each((i, ele) => removeEvent(ele, name, namespaces, selector, callback)); //TSC
+            this.each((i, ele) => { removeEvent(ele, name, namespaces, selector, callback); });
         });
     }
     return this;
@@ -564,7 +547,7 @@ function on(eventFullName, selector, callback, _one) {
                 let thisArg = ele;
                 if (selector) {
                     let target = event.target;
-                    while (!matches(target, selector)) { //TSC
+                    while (!matches(target, selector)) {
                         if (target === ele)
                             return;
                         target = target.parentNode;
@@ -572,9 +555,9 @@ function on(eventFullName, selector, callback, _one) {
                             return;
                     }
                     thisArg = target;
-                    event.__delegate = true;
+                    event.___cd = true; // Delegate
                 }
-                if (event.__delegate) {
+                if (event.___cd) {
                     Object.defineProperty(event, 'currentTarget', {
                         configurable: true,
                         get() {
@@ -582,56 +565,51 @@ function on(eventFullName, selector, callback, _one) {
                         }
                     });
                 }
-                const returnValue = callback.call(thisArg, event, event.data); //TSC
+                const returnValue = callback.call(thisArg, event, event.data);
                 if (_one) {
-                    removeEvent(ele, name, namespaces, selector, finalCallback); //TSC
+                    removeEvent(ele, name, namespaces, selector, finalCallback);
                 }
                 if (returnValue === false) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
             };
-            finalCallback.guid = callback['guid'] = (callback['guid'] || cash.guid++); //TSC
-            addEvent(ele, name, namespaces, selector, finalCallback); //TSC
+            finalCallback.guid = callback.guid = (callback.guid || cash.guid++);
+            addEvent(ele, name, namespaces, selector, finalCallback);
         });
     });
     return this;
 }
-Cash.prototype.on = on;
+fn.on = on;
 function one(eventFullName, selector, callback) {
-    return this.on(eventFullName, selector, callback, true); //TSC
+    return this.on(eventFullName, selector, callback, true);
 }
 ;
-Cash.prototype.one = one;
-Cash.prototype.ready = function (callback) {
-    const finalCallback = () => callback(cash);
+fn.one = one;
+fn.ready = function (callback) {
     if (doc.readyState !== 'loading') {
-        setTimeout(finalCallback);
+        callback(cash);
     }
     else {
-        doc.addEventListener('DOMContentLoaded', finalCallback);
+        doc.addEventListener('DOMContentLoaded', () => { callback(cash); });
     }
     return this;
 };
-Cash.prototype.trigger = function (eventFullName, data) {
-    let evt;
-    if (isString(eventFullName)) {
-        const [name, namespaces] = parseEventName(eventFullName), type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
-        evt = doc.createEvent(type);
-        evt.initEvent(name, true, true);
-        evt.namespace = namespaces.join(eventsNamespacesSeparator);
+fn.trigger = function (event, data) {
+    if (isString(event)) {
+        const [name, namespaces] = parseEventName(event), type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
+        event = doc.createEvent(type);
+        event.initEvent(name, true, true);
+        event.namespace = namespaces.join(eventsNamespacesSeparator);
     }
-    else {
-        evt = eventFullName;
-    }
-    evt.data = data;
-    const isEventFocus = (evt.type in eventsFocus);
+    event.data = data;
+    const isEventFocus = (event.type in eventsFocus);
     return this.each((i, ele) => {
-        if (isEventFocus && isFunction(ele[evt.type])) {
-            ele[evt.type]();
+        if (isEventFocus && isFunction(ele[event.type])) {
+            ele[event.type]();
         }
         else {
-            ele.dispatchEvent(evt);
+            ele.dispatchEvent(event);
         }
     });
 };
@@ -651,88 +629,71 @@ const queryEncodeSpaceRe = /%20/g;
 function queryEncode(prop, value) {
     return `&${encodeURIComponent(prop)}=${encodeURIComponent(value).replace(queryEncodeSpaceRe, '+')}`;
 }
-// @require core/cash.ts
-// @require core/each.ts
-// @require core/type_checking.ts
-// @require ./helpers/get_value.ts
-// @require ./helpers/query_encode.ts
 const skippableRe = /file|reset|submit|button|image/i, checkableRe = /radio|checkbox/i;
-Cash.prototype.serialize = function () {
+fn.serialize = function () {
     let query = '';
     this.each((i, ele) => {
         each(ele.elements || [ele], (i, ele) => {
             if (ele.disabled || !ele.name || ele.tagName === 'FIELDSET' || skippableRe.test(ele.type) || (checkableRe.test(ele.type) && !ele.checked))
                 return;
             const value = getValue(ele);
-            if (value === undefined)
-                return;
-            const values = isArray(value) ? value : [value];
-            each(values, (i, value) => {
-                query += queryEncode(ele.name, value);
-            });
+            if (!isUndefined(value)) {
+                const values = isArray(value) ? value : [value];
+                each(values, (i, value) => {
+                    query += queryEncode(ele.name, value);
+                });
+            }
         });
     });
-    return query.substr(1);
+    return query.slice(1);
 };
 function val(value) {
-    if (value === undefined)
+    if (isUndefined(value))
         return this[0] && getValue(this[0]);
     return this.each((i, ele) => {
         if (ele.tagName === 'SELECT') {
-            const eleValue = isArray(value) ? value : (value === null ? [] : [value]);
+            const eleValue = isArray(value) ? value : (isNull(value) ? [] : [value]);
             each(ele.options, (i, option) => {
                 option.selected = eleValue.indexOf(option.value) >= 0;
             });
         }
         else {
-            ele.value = value === null ? '' : value;
+            ele.value = isNull(value) ? '' : value;
         }
     });
 }
-Cash.prototype.val = val;
-Cash.prototype.clone = function () {
+fn.val = val;
+fn.clone = function () {
     return this.map((i, ele) => ele.cloneNode(true));
 };
-Cash.prototype.detach = function () {
+fn.detach = function () {
     return this.each((i, ele) => {
         if (ele.parentNode) {
             ele.parentNode.removeChild(ele);
         }
     });
 };
-// @require ./cash.ts
-// @require ./variables.ts
-// @require ./type_checking.ts
-// @require collection/get.ts
-// @require manipulation/detach.ts
 const fragmentRe = /^\s*<(\w+)[^>]*>/, singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
-let containers;
-function initContainers() {
-    if (containers)
-        return;
-    const table = doc.createElement('table'), tr = doc.createElement('tr');
-    containers = {
-        '*': div,
-        tr: doc.createElement('tbody'),
-        td: tr,
-        th: tr,
-        thead: table,
-        tbody: table,
-        tfoot: table,
-    };
-}
+const containers = {
+    '*': div,
+    tr: tbody,
+    td: tr,
+    th: tr,
+    thead: table,
+    tbody: table,
+    tfoot: table
+};
 function parseHTML(html) {
-    initContainers();
     if (!isString(html))
         return [];
     if (singleTagRe.test(html))
-        return [doc.createElement(RegExp.$1)];
+        return [createElement(RegExp.$1)];
     const fragment = fragmentRe.test(html) && RegExp.$1, container = containers[fragment] || containers['*'];
     container.innerHTML = html;
     return cash(container.childNodes).detach().get();
 }
 cash.parseHTML = parseHTML;
-Cash.prototype.empty = function () {
+fn.empty = function () {
     return this.each((i, ele) => {
         while (ele.firstChild) {
             ele.removeChild(ele.firstChild);
@@ -740,32 +701,29 @@ Cash.prototype.empty = function () {
     });
 };
 function html(html) {
-    if (html === undefined)
+    if (isUndefined(html))
         return this[0] && this[0].innerHTML;
     return this.each((i, ele) => { ele.innerHTML = html; });
 }
-Cash.prototype.html = html;
-Cash.prototype.remove = function () {
+fn.html = html;
+fn.remove = function () {
     return this.detach().off();
 };
 function text(text) {
-    if (text === undefined)
+    if (isUndefined(text))
         return this[0] ? this[0].textContent : '';
     return this.each((i, ele) => { ele.textContent = text; });
 }
 ;
-Cash.prototype.text = text;
-Cash.prototype.unwrap = function () {
+fn.text = text;
+fn.unwrap = function () {
     this.parent().each((i, ele) => {
         const $ele = cash(ele);
         $ele.replaceWith($ele.children());
     });
     return this;
 };
-// @require core/cash.ts
-// @require core/variables.ts
-const docEle = doc.documentElement;
-Cash.prototype.offset = function () {
+fn.offset = function () {
     const ele = this[0];
     if (!ele)
         return;
@@ -775,10 +733,10 @@ Cash.prototype.offset = function () {
         left: rect.left + win.pageXOffset - docEle.clientLeft
     };
 };
-Cash.prototype.offsetParent = function () {
+fn.offsetParent = function () {
     return cash(this[0] && this[0].offsetParent);
 };
-Cash.prototype.position = function () {
+fn.position = function () {
     const ele = this[0];
     if (!ele)
         return;
@@ -787,206 +745,153 @@ Cash.prototype.position = function () {
         top: ele.offsetTop
     };
 };
-Cash.prototype.children = function (comparator) {
-    const result = [];
-    this.each((i, ele) => {
-        push.apply(result, ele.children);
-    });
-    return filtered(cash(unique(result)), comparator);
+fn.children = function (comparator) {
+    return filtered(cash(unique(pluck(this, ele => ele.children))), comparator);
 };
-Cash.prototype.contents = function () {
-    const result = [];
-    this.each((i, ele) => {
-        push.apply(result, ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes);
-    });
-    return cash(unique(result));
+fn.contents = function () {
+    return cash(unique(pluck(this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes)));
 };
-Cash.prototype.find = function (selector) {
-    const result = [];
-    for (let i = 0, l = this.length; i < l; i++) {
-        const found = find(selector, this[i]);
-        if (found.length) {
-            push.apply(result, found);
-        }
-    }
-    return cash(unique(result));
+fn.find = function (selector) {
+    return cash(unique(pluck(this, ele => find(selector, ele))));
 };
+// @require core/variables.ts
 // @require collection/filter.ts
 // @require traversal/find.ts
-const scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i, HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
-function evalScripts(node) {
+const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g, scriptTypeRe = /^$|^module$|\/(java|ecma)script/i, scriptAttributes = ['type', 'src', 'nonce', 'noModule'];
+function evalScripts(node, doc) {
     const collection = cash(node);
     collection.filter('script').add(collection.find('script')).each((i, ele) => {
-        if (!ele.src && scriptTypeRe.test(ele.type)) { // The script type is supported
-            if (ele.ownerDocument.documentElement.contains(ele)) { // The element is attached to the DOM // Using `documentElement` for broader browser support
-                eval(ele.textContent.replace(HTMLCDATARe, ''));
-            }
+        if (scriptTypeRe.test(ele.type) && docEle.contains(ele)) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
+            const script = createElement('script');
+            script.text = ele.textContent.replace(HTMLCDATARe, '');
+            each(scriptAttributes, (i, attr) => {
+                if (ele[attr])
+                    script[attr] = ele[attr];
+            });
+            doc.head.insertBefore(script, null);
+            doc.head.removeChild(script);
         }
     });
 }
 // @require ./eval_scripts.ts
-function insertElement(anchor, child, prepend, prependTarget) {
-    if (prepend) {
-        anchor.insertBefore(child, prependTarget);
+function insertElement(anchor, target, left, inside) {
+    if (inside) { // prepend/append
+        anchor.insertBefore(target, left ? anchor.firstElementChild : null);
     }
-    else {
-        anchor.appendChild(child);
+    else { // before/after
+        anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextElementSibling);
     }
-    evalScripts(child);
+    evalScripts(target, anchor.ownerDocument);
 }
-// @require core/each.ts
-// @require core/type_checking.ts
 // @require ./insert_element.ts
-function insertContent(parent, child, prepend) {
-    each(parent, (index, parentEle) => {
-        each(child, (i, childEle) => {
-            insertElement(parentEle, !index ? childEle : childEle.cloneNode(true), prepend, prepend && parentEle.firstChild);
-        });
-    });
+function insertSelectors(selectors, anchors, inverse, left, inside, reverseLoop1, reverseLoop2, reverseLoop3) {
+    each(selectors, (si, selector) => {
+        each(cash(selector), (ti, target) => {
+            each(cash(anchors), (ai, anchor) => {
+                const anchorFinal = inverse ? target : anchor, targetFinal = inverse ? anchor : target;
+                insertElement(anchorFinal, !ai ? targetFinal : targetFinal.cloneNode(true), left, inside);
+            }, reverseLoop3);
+        }, reverseLoop2);
+    }, reverseLoop1);
+    return anchors;
 }
-Cash.prototype.append = function () {
-    each(arguments, (i, selector) => {
-        insertContent(this, cash(selector));
-    });
-    return this;
+fn.after = function () {
+    return insertSelectors(arguments, this, false, false, false, true, true);
 };
-Cash.prototype.appendTo = function (selector) {
-    insertContent(cash(selector), this);
-    return this;
+fn.append = function () {
+    return insertSelectors(arguments, this, false, false, true);
 };
-Cash.prototype.insertAfter = function (selector) {
-    cash(selector).each((index, ele) => {
-        const parent = ele.parentNode;
-        if (parent) {
-            this.each((i, e) => {
-                insertElement(parent, !index ? e : e.cloneNode(true), true, ele.nextSibling);
-            });
-        }
-    });
-    return this;
+fn.appendTo = function (selector) {
+    return insertSelectors(arguments, this, true, false, true);
 };
-Cash.prototype.after = function () {
-    each(reverse.apply(arguments), (i, selector) => {
-        reverse.apply(cash(selector).slice()).insertAfter(this);
-    });
-    return this;
+fn.before = function () {
+    return insertSelectors(arguments, this, false, true);
 };
-Cash.prototype.insertBefore = function (selector) {
-    cash(selector).each((index, ele) => {
-        const parent = ele.parentNode;
-        if (parent) {
-            this.each((i, e) => {
-                insertElement(parent, !index ? e : e.cloneNode(true), true, ele);
-            });
-        }
-    });
-    return this;
+fn.insertAfter = function (selector) {
+    return insertSelectors(arguments, this, true, false, false, false, false, true);
 };
-Cash.prototype.before = function () {
-    each(arguments, (i, selector) => {
-        cash(selector).insertBefore(this);
-    });
-    return this;
+fn.insertBefore = function (selector) {
+    return insertSelectors(arguments, this, true, true);
 };
-Cash.prototype.prepend = function () {
-    each(arguments, (i, selector) => {
-        insertContent(this, cash(selector), true);
-    });
-    return this;
+fn.prepend = function () {
+    return insertSelectors(arguments, this, false, true, true, true, true);
 };
-Cash.prototype.prependTo = function (selector) {
-    insertContent(cash(selector), reverse.apply(this.slice()), true);
-    return this;
+fn.prependTo = function (selector) {
+    return insertSelectors(arguments, this, true, true, true, false, false, true);
 };
-Cash.prototype.replaceWith = function (selector) {
+fn.replaceWith = function (selector) {
     return this.before(selector).remove();
 };
-Cash.prototype.replaceAll = function (selector) {
+fn.replaceAll = function (selector) {
     cash(selector).replaceWith(this);
     return this;
 };
-Cash.prototype.wrapAll = function (selector) {
-    if (this[0]) {
-        const structure = cash(selector);
-        this.first().before(structure);
-        let wrapper = structure[0];
-        while (wrapper.children.length)
-            wrapper = wrapper.firstElementChild;
-        this.appendTo(wrapper);
-    }
-    return this;
+fn.wrapAll = function (selector) {
+    let structure = cash(selector), wrapper = structure[0];
+    while (wrapper.children.length)
+        wrapper = wrapper.firstElementChild;
+    this.first().before(structure);
+    return this.appendTo(wrapper);
 };
-Cash.prototype.wrap = function (selector) {
-    return this.each((index, ele) => {
+fn.wrap = function (selector) {
+    return this.each((i, ele) => {
         const wrapper = cash(selector)[0];
-        cash(ele).wrapAll(!index ? wrapper : wrapper.cloneNode(true));
+        cash(ele).wrapAll(!i ? wrapper : wrapper.cloneNode(true));
     });
 };
-Cash.prototype.wrapInner = function (selector) {
+fn.wrapInner = function (selector) {
     return this.each((i, ele) => {
         const $ele = cash(ele), contents = $ele.contents();
         contents.length ? contents.wrapAll(selector) : $ele.append(selector);
     });
 };
-Cash.prototype.has = function (selector) {
+fn.has = function (selector) {
     const comparator = isString(selector)
-        ? (i, ele) => !!find(selector, ele).length
+        ? (i, ele) => find(selector, ele).length
         : (i, ele) => ele.contains(selector);
     return this.filter(comparator);
 };
-Cash.prototype.is = function (comparator) {
-    if (!comparator || !this[0])
-        return false;
+fn.is = function (comparator) {
     const compare = getCompareFunction(comparator);
-    let check = false;
-    this.each((i, ele) => {
-        check = compare.call(ele, i, ele);
-        return !check;
-    });
-    return check;
+    return some.call(this, (ele, i) => compare.call(ele, i, ele));
 };
-Cash.prototype.next = function (comparator, _all) {
+fn.next = function (comparator, _all) {
     return filtered(cash(unique(pluck(this, 'nextElementSibling', _all))), comparator);
 };
-Cash.prototype.nextAll = function (comparator) {
+fn.nextAll = function (comparator) {
     return this.next(comparator, true);
 };
-Cash.prototype.not = function (comparator) {
-    if (!comparator || !this[0])
-        return this;
+fn.not = function (comparator) {
     const compare = getCompareFunction(comparator);
     return this.filter((i, ele) => !compare.call(ele, i, ele));
 };
-Cash.prototype.parent = function (comparator) {
+fn.parent = function (comparator) {
     return filtered(cash(unique(pluck(this, 'parentNode'))), comparator);
 };
-Cash.prototype.index = function (selector) {
+fn.index = function (selector) {
     const child = selector ? cash(selector)[0] : this[0], collection = selector ? this : cash(child).parent().children();
     return indexOf.call(collection, child);
 };
-Cash.prototype.closest = function (comparator) {
-    if (!comparator || !this[0])
-        return cash();
+fn.closest = function (comparator) {
     const filtered = this.filter(comparator);
     if (filtered.length)
         return filtered;
-    return this.parent().closest(comparator);
+    const $parent = this.parent();
+    if (!$parent.length)
+        return filtered;
+    return $parent.closest(comparator);
 };
-Cash.prototype.parents = function (comparator) {
+fn.parents = function (comparator) {
     return filtered(cash(unique(pluck(this, 'parentElement', true))), comparator);
 };
-Cash.prototype.prev = function (comparator, _all) {
+fn.prev = function (comparator, _all) {
     return filtered(cash(unique(pluck(this, 'previousElementSibling', _all))), comparator);
 };
-Cash.prototype.prevAll = function (comparator) {
+fn.prevAll = function (comparator) {
     return this.prev(comparator, true);
 };
-Cash.prototype.siblings = function (comparator) {
-    const result = [];
-    this.each((i, ele) => {
-        push.apply(result, cash(ele).parent().children((ci, child) => child !== ele));
-    });
-    return filtered(cash(unique(result)), comparator);
+fn.siblings = function (comparator) {
+    return filtered(cash(unique(pluck(this, ele => cash(ele).parent().children().not(ele)))), comparator);
 };
 // @optional ./children.ts
 // @optional ./closest.ts
