@@ -11,7 +11,7 @@ interface Cash {
 fn.wrapAll = function ( this: Cash, selector?: Selector ) {
 
   let structure = cash ( selector ),
-      wrapper = structure[0];
+      wrapper: Element = structure[0];
 
   while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
 

@@ -6,10 +6,10 @@
 interface Cash {
   prop ( prop: string ): any;
   prop ( prop: string, value: any ): this;
-  prop ( props: plainObject ): this;
+  prop ( props: Record<string, any> ): this;
 }
 
-fn.prop = function ( this: Cash, prop: string | plainObject, value?: any ) {
+fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any ) {
 
   if ( !prop ) return;
 

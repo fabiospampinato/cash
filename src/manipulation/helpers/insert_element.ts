@@ -1,7 +1,7 @@
 
 // @require ./eval_scripts.ts
 
-function insertElement ( anchor: Ele, target: Ele, left?: boolean, inside?: boolean ): void {
+function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, inside?: boolean ): void {
 
   if ( inside ) { // prepend/append
 

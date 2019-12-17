@@ -11,6 +11,6 @@ fn.not = function ( this: Cash, comparator?: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 
-  return this.filter ( ( i: number, ele: Ele ) => !compare.call ( ele, i, ele ) );
+  return this.filter ( ( i: number, ele: EleLoose ) => !compare.call ( ele, i, ele ) );
 
 };

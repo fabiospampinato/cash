@@ -9,6 +9,6 @@ interface Cash {
 
 fn.hasClass = function ( this: Cash, cls: string ) {
 
-  return !!cls && some.call ( this, ( ele: Ele ) => ele.classList.contains ( cls ) );
+  return !!cls && some.call ( this, ( ele: EleLoose ) => ele.classList.contains ( cls ) );
 
 };

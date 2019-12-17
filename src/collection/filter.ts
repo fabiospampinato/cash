@@ -13,6 +13,6 @@ fn.filter = function ( this: Cash, comparator?: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 
-  return cash ( filter.call ( this, ( ele: Ele, i: number ) => compare.call ( ele, i, ele ) ) );
+  return cash ( filter.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) ) );
 
 };

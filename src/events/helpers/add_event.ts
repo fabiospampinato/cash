@@ -2,7 +2,7 @@
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
 
-function addEvent ( ele: Ele, name: string, namespaces: string[], selector: string, callback: EventCallback ): void {
+function addEvent ( ele: EleLoose, name: string, namespaces: string[], selector: string, callback: EventCallback ): void {
 
   callback.guid = callback.guid || cash.guid++;
 

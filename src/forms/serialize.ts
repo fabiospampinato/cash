@@ -18,7 +18,7 @@ fn.serialize = function ( this: Cash ) {
 
   this.each ( ( i, ele ) => {
 
-    each ( ele.elements || [ele], ( i, ele ) => {
+    each ( ele.elements || [ele], ( i, ele: EleLoose ) => {
 
       if ( ele.disabled || !ele.name || ele.tagName === 'FIELDSET' || skippableRe.test ( ele.type ) || ( checkableRe.test ( ele.type ) && !ele.checked ) ) return;
 

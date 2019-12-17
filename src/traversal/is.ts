@@ -12,6 +12,6 @@ fn.is = function ( this: Cash, comparator?: Comparator ) {
 
   const compare = getCompareFunction ( comparator );
 
-  return some.call ( this, ( ele: Ele, i: number ) => compare.call ( ele, i, ele ) );
+  return some.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) );
 
 };

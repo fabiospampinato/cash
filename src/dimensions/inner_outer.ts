@@ -15,7 +15,7 @@ each ( [true, false], ( i, outer?: boolean ) => {
 
   each ( ['Width', 'Height'], ( i, prop: 'Width' | 'Height' ) => {
 
-    const name = `${outer ? 'outer' : 'inner'}${prop}`;
+    const name: 'outerWidth' | 'innerHeight' = `${outer ? 'outer' : 'inner'}${prop}`;
 
     fn[name] = function ( this: Cash, includeMargins?: boolean ) {
 

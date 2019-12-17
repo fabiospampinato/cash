@@ -6,17 +6,17 @@
 // @require ./helpers/set_data.ts
 
 interface Cash {
-  data (): plainObject | undefined;
+  data (): Record<string, any> | undefined;
   data ( name: string ): any;
   data ( name: string, value: any ): this;
-  data ( datas: plainObject ): this;
+  data ( datas: Record<string, any> ): this;
 }
 
-function data ( this: Cash ): plainObject | undefined;
+function data ( this: Cash ): Record<string, any> | undefined;
 function data ( this: Cash, name: string ): any;
 function data ( this: Cash, name: string, value: any ): Cash;
-function data ( this: Cash, name: plainObject ): Cash;
-function data ( this: Cash, name?: string | plainObject, value?: any ) {
+function data ( this: Cash, name: Record<string, any> ): Cash;
+function data ( this: Cash, name?: string | Record<string, any>, value?: any ) {
 
   if ( !name ) {
 

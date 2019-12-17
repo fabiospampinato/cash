@@ -3,7 +3,7 @@
 // @require ./has_namespaces.ts
 // @require ./parse_event_name.ts
 
-function removeEvent ( ele: Ele, name?: string, namespaces?: string[], selector?: string, callback?: EventCallback ): void {
+function removeEvent ( ele: EleLoose, name?: string, namespaces?: string[], selector?: string, callback?: EventCallback ): void {
 
   const cache = getEventsCache ( ele );
 

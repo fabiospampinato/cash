@@ -5,7 +5,7 @@
 
 const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,
       scriptTypeRe = /^$|^module$|\/(java|ecma)script/i,
-      scriptAttributes = ['type', 'src', 'nonce', 'noModule'];
+      scriptAttributes: ('type' | 'src' | 'nonce' | 'noModule')[] = ['type', 'src', 'nonce', 'noModule'];
 
 function evalScripts ( node: Node, doc: Document ): void {
 

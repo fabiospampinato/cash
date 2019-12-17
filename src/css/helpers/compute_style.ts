@@ -2,7 +2,7 @@
 // @require core/type_checking.ts
 // @require core/variables.ts
 
-function computeStyle ( ele: Ele, prop: string, isVariable?: boolean ): string | undefined {
+function computeStyle ( ele: EleLoose, prop: string, isVariable?: boolean ): string | undefined {
 
   if ( !isElement ( ele ) || !prop ) return;
 

@@ -6,7 +6,7 @@
 // @require manipulation/detach.ts
 
 interface CashStatic {
-  parseHTML ( html: string ): Ele[];
+  parseHTML ( html: string ): EleLoose[];
 }
 
 const fragmentRe = /^\s*<(\w+)[^>]*>/,
@@ -22,7 +22,7 @@ const containers = {
   tfoot: table
 };
 
-function parseHTML ( html: string ): Ele[] {
+function parseHTML ( html: string ): EleLoose[] {
 
   if ( !isString ( html ) ) return [];
 

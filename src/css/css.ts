@@ -9,14 +9,14 @@
 
 interface Cash {
   css ( prop: string ): string | undefined;
-  css ( prop: string, value: string ): this;
-  css ( props: plainObject ): this;
+  css ( prop: string, value: number | string ): this;
+  css ( props: Record<string, number | string> ): this;
 }
 
 function css ( this: Cash, prop: string ): string | undefined;
-function css ( this: Cash, prop: string, value: string ): Cash;
-function css ( this: Cash, prop: plainObject ): Cash;
-function css ( this: Cash, prop: string | plainObject, value?: string ) {
+function css ( this: Cash, prop: string, value: number | string ): Cash;
+function css ( this: Cash, prop: Record<string, number | string> ): Cash;
+function css ( this: Cash, prop: string | Record<string, number | string>, value?: number | string ) {
 
   if ( isString ( prop ) ) {
 
@@ -36,11 +36,11 @@ function css ( this: Cash, prop: string | plainObject, value?: string ) {
 
       if ( isVariable ) {
 
-        ele.style.setProperty ( prop as string, value ); //TSC
+        ele.style.setProperty ( prop, value );
 
       } else {
 
-        ele.style[prop as string] = value; //TSC
+        ele.style[prop] = value;
 
       }
 

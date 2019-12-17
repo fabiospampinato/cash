@@ -29,7 +29,7 @@ each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
     }
 
-    const valueNumber = parseInt ( value as string, 10 ); //TSC
+    const valueNumber = parseInt ( value, 10 );
 
     return this.each ( ( i, ele ) => {
 

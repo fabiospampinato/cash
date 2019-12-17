@@ -1,7 +1,7 @@
 
 // @require core/camel_case.ts
 
-function getData ( ele: Ele, key: string ): any {
+function getData ( ele: EleLoose, key: string ): any {
 
   const value = ele.dataset[key] || ele.dataset[camelCase ( key )];
 

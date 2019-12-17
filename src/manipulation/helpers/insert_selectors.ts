@@ -1,7 +1,7 @@
 
 // @require ./insert_element.ts
 
-function insertSelectors ( selectors: Selector[], anchors: Ele[], inverse?: boolean, left?: boolean, inside?: boolean, reverseLoop1?: boolean, reverseLoop2?: boolean, reverseLoop3?: boolean ): Ele[] {
+function insertSelectors<T extends ArrayLike<EleLoose> = ArrayLike<EleLoose>> ( selectors: ArrayLike<Selector>, anchors: T, inverse?: boolean, left?: boolean, inside?: boolean, reverseLoop1?: boolean, reverseLoop2?: boolean, reverseLoop3?: boolean ): T {
 
   each ( selectors, ( si, selector: Selector ) => {
 

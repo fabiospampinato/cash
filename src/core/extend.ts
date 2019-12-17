@@ -6,7 +6,7 @@ interface CashStatic {
 }
 
 interface Cash {
-  extend ( plugins: plainObject ): this;
+  extend ( plugins: Record<any, any> ): this;
 }
 
 cash.extend = function ( target: any, ...objs: any[] ) {
@@ -27,7 +27,7 @@ cash.extend = function ( target: any, ...objs: any[] ) {
 
 };
 
-fn.extend = function ( plugins: plainObject ) {
+fn.extend = function ( plugins: Record<string, any> ) {
 
   return cash.extend ( fn, plugins );
 

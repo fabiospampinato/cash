@@ -10,12 +10,12 @@
 interface Cash {
   off (): this;
   off ( events: string ): this;
-  off ( events: plainObject ): this;
+  off ( events: Record<string, EventCallback> ): this;
   off ( events: string, callback: EventCallback ): this;
   off ( events: string, selector: string, callback: EventCallback ): this;
 }
 
-fn.off = function ( this: Cash, eventFullName?: string | plainObject, selector?: string | EventCallback, callback?: EventCallback ) {
+fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCallback>, selector?: string | EventCallback, callback?: EventCallback ) {
 
   if ( isUndefined ( eventFullName ) ) {
 
@@ -42,7 +42,7 @@ fn.off = function ( this: Cash, eventFullName?: string | plainObject, selector?:
 
       const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
-      this.each ( ( i, ele ) => { removeEvent ( ele, name, namespaces, selector as string, callback ) } ); //TSC
+      this.each ( ( i, ele ) => { removeEvent ( ele, name, namespaces, selector, callback ) } );
 
     });
 

@@ -1,7 +1,7 @@
 
 // @require core/camel_case.ts
 
-function setData ( ele: Ele, key: string, value: any ): void {
+function setData ( ele: EleLoose, key: string, value: any ): void {
 
   try {
 
