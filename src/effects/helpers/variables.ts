@@ -1,2 +1,2 @@
 
-const displayProperty = '__cashDisplay';
+const displayProperty = '___cd';

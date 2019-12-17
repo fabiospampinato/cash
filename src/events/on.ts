@@ -70,15 +70,17 @@ function on ( this: Cash, eventFullName: string | plainObject, selector?: string
 
           thisArg = target;
 
-          event.__delegate = true;
+          event.___cd = true; // Delegate
 
         }
 
-        if ( event.__delegate ) {
+        if ( event.___cd ) {
 
           Object.defineProperty ( event, 'currentTarget', {
             configurable: true,
-            value: thisArg
+            get () { // We need to define a getter for this to work everywhere
+              return thisArg;
+            }
           });
 
         }

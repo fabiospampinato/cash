@@ -27,9 +27,7 @@ function pluck<T> ( arr: ArrayLike<T>, prop: string | PluckCallback<T>, deep?: b
 
         plucked.push ( val );
 
-        if ( !deep ) break;
-
-        val = val[prop];
+        val = deep ? val[prop] : null;
 
       }
 

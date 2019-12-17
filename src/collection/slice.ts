@@ -6,8 +6,8 @@ interface Cash {
   slice ( start?: number, end?: number ): Cash;
 }
 
-fn.slice = function ( this: Cash ) {
+fn.slice = function ( this: Cash, start?: number, end?: number ) {
 
-  return cash ( slice.apply ( this, arguments ) );
+  return cash ( slice.call ( this, start, end ) );
 
 };

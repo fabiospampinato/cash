@@ -15,7 +15,7 @@ function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T>, reverse?: boole
 
     while ( i-- ) {
 
-      if ( callback.call ( arr[i], i, arr[i] ) === false ) break;
+      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
 
     }
 
@@ -23,7 +23,7 @@ function each<T> ( arr: ArrayLike<T>, callback: EachCallback<T>, reverse?: boole
 
     for ( let i = 0, l = arr.length; i < l; i++ ) {
 
-      if ( callback.call ( arr[i], i, arr[i] ) === false ) break;
+      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
 
     }
 

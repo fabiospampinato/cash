@@ -4,7 +4,6 @@
 // @require collection/each.ts
 // @require ./helpers/get_data.ts
 // @require ./helpers/set_data.ts
-// @require ./helpers/variables.ts
 
 interface Cash {
   data (): plainObject | undefined;
@@ -25,17 +24,11 @@ function data ( this: Cash, name?: string | plainObject, value?: any ) {
 
     const datas: { [data: string]: any } = {};
 
-    each ( this[0].attributes, ( i, attr ) => {
+    for ( const key in this[0].dataset ) {
 
-      const match = attr.name.match ( dataAttributeRe );
+      datas[key] = getData ( this[0], key );
 
-      if ( match ) {
-
-        datas[match[1]] = this.data ( match[1] );
-
-      }
-
-    });
+    }
 
     return datas;
 

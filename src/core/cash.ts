@@ -59,5 +59,5 @@ fn.length = 0;
 fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 
 if ( typeof Symbol === 'function' ) { // Ensuring a cash collection is iterable
-  fn[Symbol['iterator']] = Array.prototype[Symbol['iterator']];
+  fn[Symbol['iterator']] = ArrayProtoType[Symbol['iterator']];
 }

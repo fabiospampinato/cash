@@ -9,7 +9,7 @@ function getDefaultDisplay ( tagName: string ): string {
 
   const ele = createElement ( tagName );
 
-  doc.body.appendChild ( ele );
+  doc.body.insertBefore ( ele, null );
 
   const display = computeStyle ( ele, 'display' );
 

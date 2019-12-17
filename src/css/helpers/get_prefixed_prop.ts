@@ -11,7 +11,7 @@ interface CashStatic {
 
 const prefixedProps: { [prop: string]: string } = {},
       {style} = div,
-      vendorsPrefixes = ['webkit', 'moz', 'ms', 'o'];
+      vendorsPrefixes = ['webkit', 'moz', 'ms'];
 
 function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( prop ) ): string {
 
@@ -20,7 +20,7 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
   if ( !prefixedProps[prop] ) {
 
     const propCC = camelCase ( prop ),
-          propUC = `${propCC.charAt ( 0 ).toUpperCase ()}${propCC.slice ( 1 )}`,
+          propUC = `${propCC[0].toUpperCase ()}${propCC.slice ( 1 )}`,
           props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
     each ( props, ( i, p ) => {

@@ -4,7 +4,7 @@
 // @require traversal/find.ts
 
 const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,
-      scriptTypeRe = /^$|^module$|\/(?:java|ecma)script/i,
+      scriptTypeRe = /^$|^module$|\/(java|ecma)script/i,
       scriptAttributes = ['type', 'src', 'nonce', 'noModule'];
 
 function evalScripts ( node: Node, doc: Document ): void {
@@ -25,7 +25,8 @@ function evalScripts ( node: Node, doc: Document ): void {
 
       });
 
-      doc.head.appendChild ( script ).parentNode.removeChild ( script );
+      doc.head.insertBefore ( script, null );
+      doc.head.removeChild ( script );
 
     }
 
