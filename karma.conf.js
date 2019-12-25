@@ -2,6 +2,7 @@
 /* SAUCE LABS LAUNCHERS */
 
 const isSauceLabs = process.argv.includes ( '--sauce' );
+const generateCoverage = process.argv.includes ( '--generate-coverage' );
 
 const SauceLabsLaunchers = {
   win_ie_11: {
@@ -81,6 +82,22 @@ const SauceLabsLaunchers = {
   }
 };
 
+const plugins = [
+  'karma-qunit',
+  'karma-chrome-launcher',
+  'karma-firefox-launcher',
+  'karma-sauce-launcher',
+  'karma-spec-reporter'
+];
+const preprocessors = {};
+const reporters = ['spec', 'saucelabs'];
+
+if (generateCoverage) {
+  plugins.push('karma-coverage');
+  preprocessors['dist/*.js'] = ['coverage'];
+  reporters.push('coverage');
+}
+
 /* CONFIG */
 
 function config ( config ) {
@@ -89,13 +106,7 @@ function config ( config ) {
     frameworks: [
       'qunit'
     ],
-    plugins: [
-      'karma-qunit',
-      'karma-chrome-launcher',
-      'karma-firefox-launcher',
-      'karma-sauce-launcher',
-      'karma-spec-reporter'
-    ],
+    plugins,
     files: [
       'node_modules/qunit-ava-spec/dist/index.js',
       'dist/cash.js',
@@ -116,10 +127,15 @@ function config ( config ) {
     ],
     browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome', 'Firefox'],
     customLaunchers: SauceLabsLaunchers,
-    reporters: [
-      'spec',
-      'saucelabs'
-    ],
+    preprocessors,
+    reporters,
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'html', subdir: '.' },
+        { type: 'lcov', subdir: '.' }
+      ]
+    },
     captureTimeout: 360000,
     browserNoActivityTimeout: 360000
   });

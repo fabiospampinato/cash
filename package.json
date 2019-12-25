@@ -43,9 +43,11 @@
   "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.26.3",
+    "coveralls": "^3.0.9",
     "jquery": "^3.3.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^2.0.1",
     "karma-firefox-launcher": "^1.1.0",
     "karma-qunit": "^2.1.0",
     "karma-sauce-launcher": "^1.2.0",

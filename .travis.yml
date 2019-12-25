@@ -13,10 +13,13 @@ install:
 
 script:
   # xvfb-run is needed for headless testing with real browsers
-  - xvfb-run karma start --single-run
+  - xvfb-run karma start --single-run --generate-coverage
   - if [[ "$TRAVIS_EVENT_TYPE" = "push" ]]; then
       travis_retry karma start --single-run --sauce;
     fi;
+
+after_success:
+  - "cat coverage/lcov.info | coveralls"
 
 notifications:
   email:
