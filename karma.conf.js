@@ -1,7 +1,8 @@
 
 /* SAUCE LABS LAUNCHERS */
 
-const isSauceLabs = process.argv.includes ( '--sauce' );
+const isSauceLabs = process.argv.includes ( '--sauce' ),
+      needsCoverage = process.argv.includes ( '--generate-coverage' );
 
 const SauceLabsLaunchers = {
   win_ie_11: {
@@ -85,7 +86,7 @@ const SauceLabsLaunchers = {
 
 function config ( config ) {
 
-  config.set ({
+  const obj = {
     frameworks: [
       'qunit'
     ],
@@ -116,13 +117,31 @@ function config ( config ) {
     ],
     browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome', 'Firefox'],
     customLaunchers: SauceLabsLaunchers,
+    preprocessors: {},
     reporters: [
       'spec',
       'saucelabs'
     ],
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        { type: 'html', subdir: '.' },
+        { type: 'lcov', subdir: '.' }
+      ]
+    },
     captureTimeout: 360000,
     browserNoActivityTimeout: 360000
-  });
+  };
+
+  if ( needsCoverage ) {
+
+    obj.plugins.push ( 'karma-coverage' );
+    obj.preprocessors['dist/cash.js'] = ['coverage'];
+    obj.reporters.push ( 'coverage' );
+
+  }
+
+  config.set ( obj );
 
 }
 
