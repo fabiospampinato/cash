@@ -69,6 +69,18 @@ describe ( 'CSS', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(document.createTextNode ( '.css' ));
+
+      t.is ( ele.css ( 'width' ), undefined );
+
+      ele.css ( 'width', 10 );
+
+      t.pass ();
+
+    });
+
   });
 
 });

@@ -104,7 +104,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       t.is ( val, 'not-selected' );
 
-    })
+    });
 
     it ( 'sets the value of select multiple', function ( t ) {
 

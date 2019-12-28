@@ -33,13 +33,32 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
-    it ( 'supports unitless numebrs', function ( t ) {
+    it ( 'supports unitless numbers', function ( t ) {
 
       var ele = $('.rectangle');
 
       ele.height ( 200 );
 
       t.is ( Math.round ( ele.height () ), 200 ); // Rounding to work around browsers returning floats
+
+    });
+
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(window);
+
+      ele.height ( 10 );
+
+      t.pass ();
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.height (), undefined );
+      t.is ( ele.height ( 100 ), ele );
 
     });
 
@@ -60,6 +79,14 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var val = $(window).innerHeight ();
 
       t.is ( val, window.innerHeight );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.innerHeight (), undefined );
 
     });
 
@@ -88,6 +115,14 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var ele = $('.rectangle');
 
       t.is ( ele.outerHeight ( true ), 82 );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.outerHeight (), undefined );
 
     });
 
@@ -121,13 +156,32 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
-    it ( 'supports unitless numebrs', function ( t ) {
+    it ( 'supports unitless numbers', function ( t ) {
 
       var ele = $('.rectangle');
 
       ele.width ( 200 );
 
       t.is ( Math.round ( ele.width () ), 200 ); // Rounding to work around browsers returning floats
+
+    });
+
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(window);
+
+      ele.width ( 10 );
+
+      t.pass ();
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.width (), undefined );
+      t.is ( ele.width ( 100 ), ele );
 
     });
 
@@ -148,6 +202,14 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var val = $(window).innerWidth ();
 
       t.is ( val, window.innerWidth );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.innerWidth (), undefined );
 
     });
 
@@ -176,6 +238,14 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var ele = $('.rectangle');
 
       t.is ( ele.outerWidth ( true ), 132 );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.outerWidth (), undefined );
 
     });
 

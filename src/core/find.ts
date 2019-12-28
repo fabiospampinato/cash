@@ -1,7 +1,7 @@
 
 // @require ./variables.ts
 
-function find ( selector: string, context: Ele = doc ): ArrayLike<Element> {
+function find ( selector: string, context: Ele ): ArrayLike<Element> {
 
   return !isDocument ( context ) && !isElement ( context )
            ? []

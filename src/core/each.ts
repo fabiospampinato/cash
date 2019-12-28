@@ -7,9 +7,9 @@ interface CashStatic {
   each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void;
 }
 
-function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: EachCallback<U[0]>, reverse?: boolean ): U {
+function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: EachCallback<U[0]>, _reverse?: boolean ): U {
 
-  if ( reverse ) {
+  if ( _reverse ) {
 
     let i = arr.length;
 

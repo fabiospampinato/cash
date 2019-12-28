@@ -68,6 +68,13 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'works also with either zero or one object(s)', function ( t ) {
+
+      t.is ( $.extend (), undefined );
+      t.deepEqual ( $.extend ( { foo: 1 } ), { foo: 1 } );
+
+    });
+
   });
 
   describe ( '$.isArray', function ( it ) {
@@ -184,6 +191,15 @@ describe ( 'Utilities', function () {
       htmls.forEach ( function ( htmls ) {
         t.is ( $.parseHTML ( htmls[0] )[0].outerHTML, htmls[1] );
       })
+
+    });
+
+    it ( 'supports missing or falsy arguments', function ( t ) {
+
+      t.is ( $.parseHTML ( 0 ).length, 0 );
+      t.is ( $.parseHTML ( '' ).length, 0 );
+      t.is ( $.parseHTML ( undefined ).length, 0 );
+      t.is ( $.parseHTML ( null ).length, 0 );
 
     });
 

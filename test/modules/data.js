@@ -1,6 +1,6 @@
 
 var fixture = '\
-  <div class="data" data-one="one" data-two="two"></div>\
+  <div class="data" data-one="one" data-two="two" data-multi-words="three"></div>\
 ';
 
 describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -40,6 +40,15 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports retrieving multi-words attributes, even if already camel-case-ized', function ( t ) {
+
+      var ele = $('.data');
+
+      t.is ( ele.data ( 'multi-words' ), 'three' );
+      t.is ( ele.data ( 'multiWords' ), 'three' );
+
+    });
+
     it ( 'doesn\'t cache the values', function ( t ) {
 
       var ele = $('.data');
@@ -55,7 +64,7 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var ele = $('.data');
       var data = ele.data ();
 
-      t.deepEqual ( data, { one: 'one', two: 'two' } );
+      t.deepEqual ( data, { one: 'one', two: 'two', multiWords: 'three' } );
 
     });
 
@@ -63,7 +72,7 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var ele = $('.data');
 
-      ele.data ( 'one', 'uno' )
+      ele.data ( 'one', 'uno' );
       ele.data ( 'three', 3 );
 
       t.is ( ele.data ( 'one' ), 'uno' );
@@ -80,6 +89,15 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       t.is ( ele.data ( 'one' ), 'uno' );
       t.is ( ele.data ( 'two' ), 'due' );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.data (), undefined );
+      t.is ( ele.data ( 'one' ), undefined );
 
     });
 

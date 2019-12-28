@@ -31,6 +31,14 @@ describe ( 'Offset', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.offset (), undefined );
+
+    });
+
   });
 
   describe ( '$.fn.position', function ( it ) {
@@ -40,6 +48,14 @@ describe ( 'Offset', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var absolute = $('.absolute');
 
       t.deepEqual ( absolute.position (), { top: 20, left: 10 } );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.position (), undefined );
 
     });
 

@@ -4,7 +4,7 @@
 
 class Cash {
 
-  constructor ( selector?: Selector, context: Context | Cash = doc ) {
+  constructor ( selector?: Selector, context?: Context | Cash ) {
 
     if ( !selector ) return;
 
@@ -14,7 +14,7 @@ class Cash {
 
     if ( isString ( selector ) ) {
 
-      const ctx = isCash ( context ) ? context[0] : context;
+      const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
 
       eles = idRe.test ( selector )
                 ? ( ctx as Document ).getElementById ( selector.slice ( 1 ) )
@@ -59,5 +59,5 @@ fn.length = 0;
 fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 
 if ( typeof Symbol === 'function' ) { // Ensuring a cash collection is iterable
-  fn[Symbol['iterator']] = ArrayProtoType[Symbol['iterator']];
+  fn[Symbol['iterator']] = ArrayPrototype[Symbol['iterator']];
 }

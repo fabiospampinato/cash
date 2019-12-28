@@ -72,6 +72,22 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'shows even hidden-by-default elements', function ( t ) {
+
+      var title = $('<title>Title<title>');
+
+      title.appendTo ( document.body );
+
+      t.is ( title.css ( 'display' ), 'none' );
+
+      title.show ();
+
+      t.is ( title.css ( 'display' ), 'block' );
+
+      title.detach ();
+
+    });
+
   });
 
   describe ( '$.fn.toggle', function ( it ) {

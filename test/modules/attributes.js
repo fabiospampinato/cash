@@ -92,6 +92,16 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'explicitly undefined values are ignored', function ( t ) {
+
+      var ele = $('.attr');
+
+      ele.attr ( 'one', undefined );
+
+      t.is ( ele.attr ( 'one' ), 'one' );
+
+    });
+
     it ( 'supports setting an object of attributes', function ( t ) {
 
       var ele = $('.attr');
@@ -101,6 +111,16 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       t.is ( ele.attr ( 'one' ), 'uno' );
       t.is ( ele.attr ( 'two' ), 'due' );
+
+    });
+
+    it ( 'supports removing an attribute', function ( t ) {
+
+      var ele = $('.attr');
+
+      ele.attr ( 'one', null );
+
+      t.is ( ele.attr ( 'one' ), undefined );
 
     });
 
@@ -117,6 +137,14 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var ele = $('.attr');
 
       t.is ( ele.attr (), undefined );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.attr ( 'foo' ), undefined );
 
     });
 
@@ -283,7 +311,7 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var ele = $('.class');
 
-      ele.addClass ( 'foo$bar' ).removeClass ( 'foo$bar' )
+      ele.addClass ( 'foo$bar' ).removeClass ( 'foo$bar' );
 
       t.false ( ele.hasClass ( 'foo$bar' ) );
 

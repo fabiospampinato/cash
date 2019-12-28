@@ -4,8 +4,6 @@
 
 function addEvent ( ele: EleLoose, name: string, namespaces: string[], selector: string, callback: EventCallback ): void {
 
-  callback.guid = callback.guid || cash.guid++;
-
   const eventCache = getEventsCache ( ele );
 
   eventCache[name] = ( eventCache[name] || [] );

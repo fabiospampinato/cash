@@ -13,6 +13,7 @@ var fixture = '\
     <div class="uncle"></div>\
     <div class="aunt"></div>\
   </div>\
+  <iframe src="about:blank"></iframe>\
 ';
 
 describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -80,6 +81,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports iframes', function ( t ) {
+
+      var iframe = $('iframe');
+      var contents = iframe.contents ();
+
+      t.deepEqual ( contents.get (), [iframe[0].contentDocument] );
+
+    });
+
   });
 
   describe ( '$.fn.find', function ( it ) {
@@ -106,6 +116,16 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       t.is ( eles.has ( '.sibling' ).length, 1 );
       t.is ( eles.has ( 'div' ).length, 1 );
       t.is ( eles.has ( '.foo' ).length, 0 );
+
+    });
+
+    it ( 'supports nodes', function ( t ) {
+
+      var eles = $('.grandparent').children ();
+
+      t.is ( eles.has ( eles.find ( '.sibling' ).first ()[0] ).length, 1 );
+      t.is ( eles.has ( eles.find ( 'div' ).first ()[0] ).length, 1 );
+      t.is ( eles.has ( eles.find ( '.foo' ).first ()[0] ).length, 0 );
 
     });
 
@@ -329,7 +349,6 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
     it ( 'supports selector', function ( t ) {
 
       var child = $('.child');
-      var siblings = $('.sibling').not ( child );
       var surrounding = $('.prev, .next');
 
       t.deepEqual ( child.siblings ( '.prev, .next' ), surrounding );

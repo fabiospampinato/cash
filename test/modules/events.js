@@ -2,7 +2,9 @@
 var fixture = '\
   <div class="parent">\
     <div class="event">\
-      <div class="child"></div>\
+      <div class="child">\
+        <div class="grandchild"></div>\
+      </div>\
     </div>\
     <input class="event-focus">\
   </div>\
@@ -118,6 +120,21 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'calls native event triggerers directly', function ( t ) {
+
+      var ele = $('.event-focus');
+      var count = 0;
+
+      ele[0].focus = function () {
+        count++;
+      };
+
+      ele.trigger ( 'focus' );
+
+      t.is ( count, 1 );
+
+    });
+
     it ( 'supports namespaces', function ( t ) {
 
       var ele = $('.event');
@@ -139,21 +156,23 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var ele = $('.event');
       var parent = $('.parent');
+      var grandchild = $('.grandchild');
       var count = 0;
 
       function handler () {
         count++;
-      };
+      }
 
       parent.on ( 'click', '.event', handler );
       ele.trigger ( 'click' );
+      grandchild.trigger ( 'click' );
 
-      t.is ( count, 1 );
+      t.is ( count, 2 );
 
       parent.off ( 'click', handler );
       ele.trigger ( 'click' );
 
-      t.is ( count, 1 );
+      t.is ( count, 2 );
 
     });
 
@@ -192,7 +211,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         count++;
         event.bubbles; // Ensuring the event object hasn't been corrupted
         currentTargets.push ( event.currentTarget );
-      };
+      }
 
       ele.on ( 'click', handler );
       parent.on ( 'click', '.event', handler );
@@ -402,11 +421,11 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       function handlerChild () {
         countChild++;
-      };
+      }
 
       function handlerDelegate () {
         countDelegate++;
-      };
+      }
 
       ele.on ( 'click', handlerChild );
       parent.on ( 'click', '.event', handlerDelegate );
@@ -415,6 +434,53 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       t.is ( countChild, 1 );
       t.is ( countDelegate, 0 );
+
+    });
+
+  });
+
+  describe ( '$.fn.ready', function ( it ) {
+
+    it ( 'calls the callback is the DOM is already ready', function ( t ) {
+
+      Object.defineProperty ( document, 'readyState', {
+        configurable: true,
+        value: 'complete'
+      });
+
+      var count = 0;
+
+      var handler = function () {
+        count++;
+      };
+
+      $(handler);
+
+      t.is ( count, 1 );
+
+    });
+
+    QUnit.test ( 'calls the callback is the DOM is not ready already', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+
+      Object.defineProperty ( document, 'readyState', {
+        configurable: true,
+        value: 'loading'
+      });
+
+      var done = assert.async ();
+      var count = 0;
+
+      var handler = function () {
+        count++;
+      };
+
+      $(handler);
+      $(document).trigger ( 'DOMContentLoaded' );
+
+      setTimeout ( function () {
+        assert.is ( count, 1 );
+        done ();
+      }, 100 );
 
     });
 
@@ -509,7 +575,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.on ( 'foo.ns1.ns2', handler );
       ele.trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns1.ns2' );
 
-      t.deepEqual ( namespaces ['', 'ns1', 'ns2', 'ns1.ns2'] );
+      t.deepEqual ( namespaces, ['', 'ns1', 'ns2', 'ns1.ns2'] );
 
     });
 

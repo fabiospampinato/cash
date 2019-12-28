@@ -20,6 +20,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       ['<script type="">if ( window.__script_test__ === 2 ) throw new Error (); window.__script_test__ = 2</script>', '__script_test__', 2],
       ['<script type="text/javascript">if ( window.__script_test__ === 3 ) throw new Error (); window.__script_test__ = 3</script>', '__script_test__', 3],
       ['<script type="text/ecmascript">if ( window.__script_test__ === 4 ) throw new Error (); window.__script_test__ = 4</script>', '__script_test__', 4],
+      ['<script type="text/custom">if ( window.__script_test__ === 5 ) throw new Error (); window.__script_test__ = 5</script>', '__script_test__', 4],
       ['<div class="nested"><script>if ( window.__script_test__ === 5 ) throw new Error (); window.__script_test__ = 5</script></div>', '__script_test__', 5],
       ['<script><![CDATA[if ( window.__script_test__ === 6 ) throw new Error (); window.__script_test__ = 6</script>', '__script_test__', 6]
     ];
@@ -491,6 +492,14 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       anchor.text ( 0 );
 
       t.is ( anchor.text (), '0' );
+
+    });
+
+    it ( 'supports empty collections', function ( t ) {
+
+      var ele = $();
+
+      t.is ( ele.text (), '' );
 
     });
 

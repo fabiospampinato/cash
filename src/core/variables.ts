@@ -7,8 +7,8 @@ const doc = document,
       table = createElement ( 'table' ),
       tbody = createElement ( 'tbody' ),
       tr = createElement ( 'tr' ),
-      {isArray, prototype: ArrayProtoType} = Array,
-      {filter, indexOf, map, push, slice, some, splice} = ArrayProtoType;
+      {isArray, prototype: ArrayPrototype} = Array,
+      {filter, indexOf, map, push, slice, some, splice} = ArrayPrototype;
 
 const idRe = /^#[\w-]*$/,
       classRe = /^\.[\w-]*$/,
