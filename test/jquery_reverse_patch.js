@@ -1,10 +1,10 @@
 
-for ( prop in jQuery ) {
+for ( prop in cash ) {
 
-  if ( ['fn', 'each', 'extend'].indexOf ( prop ) >= 0 ) continue;
+  if ( jQuery[prop] ) continue;
 
-  cash[prop] = jQuery[prop];
+  jQuery[prop] = cash[prop];
 
 }
 
-cash.extend ( cash.fn, jQuery.fn );
+window.$ = jQuery;
