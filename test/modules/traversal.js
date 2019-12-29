@@ -45,7 +45,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var closest = child.closest ( '*' );
 
-      t.deepEqual ( closest, child );
+      t.deepEqual ( closest.get (), child.get () );
 
     });
 
@@ -54,7 +54,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var parent = $('.parent');
       var closest = $('.child').closest ( '.parent' );
 
-      t.deepEqual ( closest, parent );
+      t.deepEqual ( closest.get (), parent.get () );
 
     });
 
@@ -156,7 +156,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var next = $('.next');
 
-      t.deepEqual ( child.next (), next );
+      t.deepEqual ( child.next ().get (), next.get () );
 
     });
 
@@ -165,7 +165,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var anchors = $('.child, .prevprev');
       var next = $('.prev, .next');
 
-      t.deepEqual ( anchors.next (), next );
+      t.deepEqual ( anchors.next ().get (), next.get () );
 
     });
 
@@ -174,7 +174,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var next = $('.next');
 
-      t.deepEqual ( child.next ( '.next' ), next );
+      t.deepEqual ( child.next ( '.next' ).get (), next.get () );
       t.is ( child.next ( 'foo' ).length, 0 );
 
     });
@@ -190,9 +190,9 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var nextnext = $('.nextnext');
       var nexts = anchor.nextAll ();
 
-      t.deepEqual ( nexts.length, 2 );
-      t.deepEqual ( nexts[0], next[0] );
-      t.deepEqual ( nexts[1], nextnext[0] );
+      t.is ( nexts.length, 2 );
+      t.is ( nexts[0], next[0] );
+      t.is ( nexts[1], nextnext[0] );
 
     });
 
@@ -221,7 +221,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var parent = $('.parent');
 
-      t.deepEqual ( child.parent (), parent );
+      t.deepEqual ( child.parent ().get (), parent.get () );
 
     });
 
@@ -230,8 +230,8 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var parent = $('.parent');
 
-      t.deepEqual ( child.parent ( '.parent' ), parent );
-      t.deepEqual ( child.parent ( 'foo' ).length, 0 );
+      t.deepEqual ( child.parent ( '.parent' ).get (), parent.get () );
+      t.is ( child.parent ( 'foo' ).length, 0 );
 
     });
 
@@ -282,7 +282,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var prev = $('.prev');
 
-      t.deepEqual ( child.prev (), prev );
+      t.deepEqual ( child.prev ().get (), prev.get () );
 
     });
 
@@ -291,7 +291,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var anchors = $('.child, .nextnext');
       var prev = $('.prev, .next');
 
-      t.deepEqual ( anchors.prev (), prev );
+      t.deepEqual ( anchors.prev ().get (), prev.get () );
 
     });
 
@@ -300,7 +300,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var prev = $('.prev');
 
-      t.deepEqual ( child.prev ( '.prev' ), prev );
+      t.deepEqual ( child.prev ( '.prev' ).get (), prev.get () );
       t.is ( child.prev ( 'foo' ).length, 0 );
 
     });
@@ -317,9 +317,9 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var prevprev = $('.prevprev');
       var prevs = anchor.prevAll ();
 
-      t.deepEqual ( prevs.length, 2 );
-      t.deepEqual ( prevs[0], prev[0] );
-      t.deepEqual ( prevs[1], prevprev[0] );
+      t.is ( prevs.length, 2 );
+      t.is ( prevs[0], prev[0] );
+      t.is ( prevs[1], prevprev[0] );
 
     });
 
@@ -332,7 +332,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var siblings = $('.sibling').not ( child );
 
-      t.deepEqual ( child.siblings (), siblings );
+      t.deepEqual ( child.siblings ().get (), siblings.get () );
 
     });
 
@@ -351,9 +351,9 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var child = $('.child');
       var surrounding = $('.prev, .next');
 
-      t.deepEqual ( child.siblings ( '.prev, .next' ), surrounding );
-      t.deepEqual ( child.siblings ( '*' ), child.siblings () );
-      t.deepEqual ( child.siblings ( 'foo' ).length, 0 );
+      t.deepEqual ( child.siblings ( '.prev, .next' ).get (), surrounding.get () );
+      t.deepEqual ( child.siblings ( '*' ).get (), child.siblings ().get () );
+      t.is ( child.siblings ( 'foo' ).length, 0 );
 
     });
 

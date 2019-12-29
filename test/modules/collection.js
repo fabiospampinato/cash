@@ -26,7 +26,8 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var added = ele.add ( document.body );
 
       t.is ( added.length, 2 );
-      t.is ( added[1], document.body );
+      t.true ( !!added.get ().find ( e => e === ele[0] ) );
+      t.true ( !!added.get ().find ( e => e === document.body ) );
 
     });
 
@@ -127,7 +128,7 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       t.deepEqual ( indexes, [0, 1, 2, 3, 4] );
       t.deepEqual ( eles, siblings.get () );
       t.deepEqual ( thats, siblings.get () );
-      t.deepEqual ( filtered, siblings.slice ( 1 ) );
+      t.deepEqual ( filtered.get (), siblings.slice ( 1 ).get () );
 
     });
 
@@ -224,7 +225,7 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       t.deepEqual ( indexes, [0, 1, 2, 3, 4] );
       t.deepEqual ( eles, siblings.get () );
       t.deepEqual ( thats, siblings.get () );
-      t.deepEqual ( mapped, $([body, body, body, body, body]) );
+      t.deepEqual ( mapped.get (), [body, body, body, body, body] );
 
     });
 
@@ -238,8 +239,8 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       t.is ( siblings.slice ( 2 ).length, 3 );
       t.is ( siblings.slice ( 2, 3 ).length, 1 );
-      t.deepEqual ( siblings.slice ( 2, 3 ), siblings.eq ( 2 ) );
-      t.deepEqual ( siblings.slice ( -1 ), siblings.eq ( 4 ) );
+      t.deepEqual ( siblings.slice ( 2, 3 ).get (), siblings.eq ( 2 ).get () );
+      t.deepEqual ( siblings.slice ( -1 ).get (), siblings.eq ( 4 ).get () );
 
     });
 

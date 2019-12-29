@@ -514,7 +514,7 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       anchor.unwrap ();
 
       t.is ( $('.parent').length, 0 );
-      t.deepEqual ( anchor.parent (), $('#qunit-fixture') );
+      t.deepEqual ( anchor.parent ().get (), $('#qunit-fixture').get () );
 
     });
 

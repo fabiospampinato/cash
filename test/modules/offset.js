@@ -15,7 +15,7 @@ describe ( 'Offset', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var relative = $('.relative');
       var absolute = $('.absolute');
 
-      t.deepEqual ( absolute.offsetParent (), relative );
+      t.deepEqual ( absolute.offsetParent ().get (), relative.get () );
 
     });
 

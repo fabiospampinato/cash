@@ -439,15 +439,16 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   });
 
-  describe ( '$.fn.ready', function ( it ) {
+  describe ( '$.fn.ready', function () {
 
-    it ( 'calls the callback is the DOM is already ready', function ( t ) {
+    QUnit.test ( 'calls the callback is the DOM is already ready', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
 
       Object.defineProperty ( document, 'readyState', {
         configurable: true,
         value: 'complete'
       });
 
+      var done = assert.async ();
       var count = 0;
 
       var handler = function () {
@@ -456,7 +457,10 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       $(handler);
 
-      t.is ( count, 1 );
+      setTimeout ( () => {
+        t.is ( count, 1 );
+        done ();
+      }, 100 );
 
     });
 
