@@ -21,19 +21,6 @@ describe ( 'Utilities', function () {
 
   });
 
-  describe ( '$.camelCase', function ( it ) {
-
-    it ( 'converts a string to camelCase', function ( t ) {
-
-      t.is ( $.camelCase ( 'width' ), 'width' );
-      t.is ( $.camelCase ( 'border-width' ), 'borderWidth' );
-      t.is ( $.camelCase ( 'border_width' ), 'border_width' );
-      t.is ( $.camelCase ( '--foo-bar' ), '-FooBar' );
-
-    });
-
-  });
-
   describe ( '$.each', function ( it ) {
 
     it ( 'iterates over an array-like object', function ( t ) {
@@ -125,20 +112,6 @@ describe ( 'Utilities', function () {
 
   });
 
-  describe ( '$.isString', function ( it ) {
-
-    it ( 'checks if the passed variable is a string', function ( t ) {
-
-      t.true ( $.isString ( 'foo' ) );
-      t.false ( $.isString ( true ) );
-      t.false ( $.isString ( 123 ) );
-      t.false ( $.isString ([ 1, 2, 3 ]) );
-      t.false ( $.isString ( function () {} ) );
-
-    });
-
-  });
-
   describe ( '$.isWindow', function ( it ) {
 
     it ( 'checks if the passed variable is a window', function ( t ) {
@@ -150,29 +123,6 @@ describe ( 'Utilities', function () {
       t.false ( $.isWindow ( 123 ) );
       t.false ( $.isWindow ([ 1, 2, 3 ]) );
       t.false ( $.isWindow ( function () {} ) );
-
-    });
-
-  });
-
-  describe ( '$.matches', function ( it ) {
-
-    it ( 'checks if the passed element matches the passed selector', function ( t ) {
-
-      var ele = $('<div class="test">')[0];
-
-      t.true ( $.matches ( ele, '.test' ) );
-      t.true ( $.matches ( ele, 'div' ) );
-      t.false ( $.matches ( ele, '#foo' ) );
-
-    });
-
-    it ( 'supports falsy elements', function ( t ) {
-
-      t.false ( $.matches ( 0, '*' ) );
-      t.false ( $.matches ( '', '*' ) );
-      t.false ( $.matches ( undefined, '*' ) );
-      t.false ( $.matches ( null, '*' ) );
 
     });
 
@@ -270,30 +220,6 @@ describe ( 'Utilities', function () {
       $('<div></div>');
 
       t.is ( span.html (), 'CONTENT' );
-
-    });
-
-  });
-
-  describe ( '$.prefixedProp', function ( it ) {
-
-    it ( 'prefixes a css property', function ( t ) { // This test depends on the browser it's being run in
-
-      t.is ( $.prefixedProp ( 'width' ), 'width' );
-      t.is ( $.prefixedProp ( 'height' ), 'height' );
-
-    });
-
-    it ( 'supports css variables', function ( t ) {
-
-      t.is ( $.prefixedProp ( '--foo' ), '--foo' );
-      t.is ( $.prefixedProp ( '--foo-bar' ), '--foo-bar' );
-
-    });
-
-    it ( 'doesn\'t throw on invalid properties', function ( t ) {
-
-      t.is ( $.prefixedProp ( 'foo-bar' ), undefined );
 
     });
 

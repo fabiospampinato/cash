@@ -5,7 +5,6 @@
 interface CashStatic {
   isWindow ( x: any ): x is Window;
   isFunction ( x: any ): x is Function;
-  isString ( x: any ): x is string;
   isNumeric ( x: any ): boolean;
   isArray ( x: any ): x is Array<any>;
 }
@@ -66,6 +65,5 @@ function isNumeric ( x: any ): boolean {
 
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
-cash.isString = isString;
 cash.isNumeric = isNumeric;
 cash.isArray = isArray;

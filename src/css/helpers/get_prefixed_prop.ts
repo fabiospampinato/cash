@@ -5,10 +5,6 @@
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-interface CashStatic {
-  prefixedProp ( prop: string, isVariable?: boolean ): string;
-}
-
 const prefixedProps: { [prop: string]: string } = {},
       {style} = div,
       vendorsPrefixes = ['webkit', 'moz', 'ms'];
@@ -40,5 +36,3 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
   return prefixedProps[prop];
 
 };
-
-cash.prefixedProp = getPrefixedProp;

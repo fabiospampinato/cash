@@ -825,21 +825,18 @@ $(element).wrapInner ( structure ) // => collection
 These methods are exported from the global `$` object, and are called like so:
 
 ```js
-$.isString ( str ) // => boolean
+$.isArray ( arr ) // => boolean
 ```
 
 Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
 
-| Type Checking                   | Utilities                           |
-| ------------------------------- | ----------------------------------- |
-| [$.isArray ()](#isarray-)       | [$.guid](#guid)                     |
-| [$.isFunction ()](#isfunction-) | [$.camelCase ()](#camelcase-)       |
-| [$.isNumeric ()](#isnumeric-)   | [$.each ()](#each-)                 |
-| [$.isString ()](#isstring-)     | [$.extend ()](#extend-)             |
-| [$.isWindow ()](#iswindow-)     | [$.matches ()](#matches-)           |
-|                                 | [$.parseHTML ()](#parsehtml-)       |
-|                                 | [$.prefixedProp ()](#prefixedprop-) |
-|                                 | [$.unique ()](#unique-)             |
+| Type Checking                   | Utilities                     |
+| ------------------------------- | ----------------------------- |
+| [$.isArray ()](#isarray-)       | [$.guid](#guid)               |
+| [$.isFunction ()](#isfunction-) | [$.each ()](#each-)           |
+| [$.isNumeric ()](#isnumeric-)   | [$.extend ()](#extend-)       |
+| [$.isWindow ()](#iswindow-)     | [$.parseHTML ()](#parsehtml-) |
+|                                 | [$.unique ()](#unique-)       |
 
 #### $.guid
 
@@ -847,14 +844,6 @@ A unique number.
 
 ```js
 $.guid++ // => number
-```
-
-#### $.camelCase ()
-
-Transforms a string to camelCase.
-
-```js
-$.camelCase ( 'border-width' ) // => 'borderWidth'
 ```
 
 #### $.each ()
@@ -898,14 +887,6 @@ Check if the argument is numeric.
 $.isNumeric ( 57 ) // => true
 ```
 
-#### $.isString ()
-
-Check if the argument is a string.
-
-```js
-$.isString ( 'hello' ) // => true
-```
-
 #### $.isWindow ()
 
 Check if the argument is a Window object.
@@ -914,28 +895,12 @@ Check if the argument is a Window object.
 $.isWindow ( window ) // => true
 ```
 
-#### $.matches ()
-
-Checks a selector against an element, returning a boolean value for match.
-
-```js
-$.matches ( element, selector ) // => boolean
-```
-
 #### $.parseHTML ()
 
 Returns a collection from an HTML string.
 
 ```js
 $.parseHTML ( htmlString ) // => collection
-```
-
-#### $.prefixedProp ()
-
-Return a prefixed CSS property, if necessary.
-
-```js
-$.prefixedProp ( 'transform' ) // => 'mozTransform'
 ```
 
 #### $.unique ()
