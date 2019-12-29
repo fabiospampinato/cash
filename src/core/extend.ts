@@ -2,6 +2,8 @@
 // @require ./cash.ts
 
 interface CashStatic {
+  extend (): any;
+  extend ( target: any ): typeof cash;
   extend ( target: any, ...objs: any[] ): any;
 }
 
@@ -9,11 +11,15 @@ interface Cash {
   extend ( plugins: Record<any, any> ): this;
 }
 
-cash.extend = function ( target: any, ...objs: any[] ) {
+function extend ( target?: any, ...objs: any[] ) {
 
   const length = arguments.length;
 
-  for ( let i = ( length < 2 ? 0 : 1 ); i < length; i++ ) {
+  if ( !length ) return {};
+
+  if ( length === 1 ) return extend ( cash, target );
+
+  for ( let i = 1; i < length; i++ ) {
 
     for ( const key in arguments[i] ) {
 
@@ -25,10 +31,12 @@ cash.extend = function ( target: any, ...objs: any[] ) {
 
   return target;
 
-};
+}
+
+cash.extend = extend;
 
 fn.extend = function ( plugins: Record<string, any> ) {
 
-  return cash.extend ( fn, plugins );
+  return extend ( fn, plugins );
 
 };

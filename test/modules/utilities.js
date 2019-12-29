@@ -57,8 +57,11 @@ describe ( 'Utilities', function () {
 
     it ( 'works also with either zero or one object(s)', function ( t ) {
 
-      t.is ( $.extend (), undefined );
-      t.deepEqual ( $.extend ( { foo: 1 } ), { foo: 1 } );
+      t.deepEqual ( $.extend (), {} );
+      t.deepEqual ( $.extend ( { foo: 1 } ), $ );
+      t.is ( $.foo, 1 );
+
+      delete $.foo;
 
     });
 
