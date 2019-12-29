@@ -85,7 +85,7 @@ function on ( this: Cash, eventFullName: string | Record<string, EventCallback>,
 
         }
 
-        const returnValue = callback.call ( thisArg, event, event.data );
+        const returnValue = callback.call ( thisArg, event, event.___td );
 
         if ( _one ) {
 

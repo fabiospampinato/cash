@@ -23,7 +23,7 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   }
 
-  event.data = data;
+  event.___td = data;
 
   const isEventFocus = ( event.type in eventsFocus );
 

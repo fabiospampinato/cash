@@ -540,12 +540,10 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var ele = $('.event');
       var count;
-      var eventData;
       var data;
 
       function handler ( event, d ) {
-        count ++;
-        eventData = event.data;
+        count++;
         data = d;
       }
 
@@ -560,7 +558,6 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         ele.off ( 'custom', handler );
 
         t.is ( count, 1 );
-        t.is ( eventData, value );
         t.is ( data, value );
 
       });

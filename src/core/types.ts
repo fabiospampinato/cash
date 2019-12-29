@@ -2,7 +2,8 @@
 interface Event {
   namespace: string,
   data: any,
-  ___cd?: boolean // Delegate
+  ___cd?: boolean, // Delegate
+  ___td?: boolean // Trigger data
 }
 
 interface Cash {
