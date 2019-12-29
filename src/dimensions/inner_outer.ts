@@ -21,7 +21,7 @@ each ( [true, false], ( i, outer?: boolean ) => {
 
       if ( !this[0] ) return;
 
-      if ( isWindow ( this[0] ) ) return win[name];
+      if ( isWindow ( this[0] ) ) return outer ? this[0][`inner${prop}`] : this[0].document.documentElement[`client${prop}`];
 
       return this[0][`${outer ? 'offset' : 'client'}${prop}`] + ( includeMargins && outer ? computeStyleInt ( this[0], `margin${ i ? 'Top' : 'Left' }` ) + computeStyleInt ( this[0], `margin${ i ? 'Bottom' : 'Right' }` ) : 0 );
 

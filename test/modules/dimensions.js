@@ -19,7 +19,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).height ();
 
-      t.is ( val, window.outerHeight );
+      t.is ( val, document.documentElement.clientHeight );
 
     });
 
@@ -78,7 +78,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).innerHeight ();
 
-      t.is ( val, window.innerHeight );
+      t.is ( val, document.documentElement.clientHeight );
 
     });
 
@@ -106,7 +106,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).outerHeight ();
 
-      t.is ( val, window.outerHeight );
+      t.is ( val, window.innerHeight );
 
     });
 
@@ -142,7 +142,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).width ();
 
-      t.is ( val, window.outerWidth );
+      t.is ( val, document.documentElement.clientWidth );
 
     });
 
@@ -201,7 +201,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).innerWidth ();
 
-      t.is ( val, window.innerWidth );
+      t.is ( val, document.documentElement.clientWidth );
 
     });
 
@@ -229,7 +229,7 @@ describe ( 'Dimensions', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
       var val = $(window).outerWidth ();
 
-      t.is ( val, window.outerWidth );
+      t.is ( val, window.innerWidth );
 
     });
 
