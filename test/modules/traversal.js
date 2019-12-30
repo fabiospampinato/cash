@@ -229,6 +229,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'excludes non-element nodes', function ( t ) {
+
+      var eles = $('<div>there <!-- mon ami --></div>').contents ();
+      var filtered = eles.not ( '*' );
+
+      t.is ( filtered.length, 0 );
+
+    });
+
   });
 
   describe ( '$.fn.parent', function ( it ) {
