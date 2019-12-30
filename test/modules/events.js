@@ -450,15 +450,18 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var done = assert.async ();
       var count = 0;
+      var arg;
 
-      var handler = function () {
+      var handler = function ( $ ) {
         count++;
+        arg = $;
       };
 
       $(handler);
 
       setTimeout ( () => {
-        t.is ( count, 1 );
+        assert.is ( count, 1 );
+        assert.is ( arg, $ );
         done ();
       }, 100 );
 
@@ -473,9 +476,11 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var done = assert.async ();
       var count = 0;
+      var arg;
 
-      var handler = function () {
+      var handler = function ( $ ) {
         count++;
+        arg = $;
       };
 
       $(handler);
@@ -483,6 +488,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       setTimeout ( function () {
         assert.is ( count, 1 );
+        assert.is ( arg, $ );
         done ();
       }, 100 );
 
