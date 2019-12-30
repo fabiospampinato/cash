@@ -540,6 +540,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'doesn\'t unwrap immediate children of the body', function ( t ) {
+
+      var ele = $('body > #qunit');
+
+      ele.unwrap ();
+
+      t.is ( $('body > #qunit').length, 1 );
+
+    });
+
   });
 
   describe ( '$.fn.wrap', function ( it ) {
