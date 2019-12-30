@@ -597,7 +597,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
         data = d;
       }
 
-      var values = [123, 'string', { obj: true }];
+      var values = [123, 'string', { obj: true }, 0, ''];
 
       values.forEach ( function ( value ) {
 
