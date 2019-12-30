@@ -254,6 +254,74 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'maps special HTML attributes into the equivalent DOM properties', function ( t ) {
+
+      // For some reason calling `removeProp` with most of these properties doesn't work
+
+      var label = $('<label class="foo" contenteditable="true" for="input"></label>');
+
+      t.is ( label.prop ( 'class' ), 'foo' );
+      label.prop ( 'class', 'bar' );
+      t.is ( label.prop ( 'class' ), 'bar' );
+      // label.removeProp ( 'class' );
+      // t.is ( label.prop ( 'class' ), undefined );
+
+      t.is ( label.prop ( 'contenteditable' ), 'true' );
+      label.prop ( 'contenteditable', 'false' );
+      t.is ( label.prop ( 'contenteditable' ), 'false' );
+      // label.removeProp ( 'contenteditable' );
+      // t.is ( label.prop ( 'contenteditable' ), undefined );
+
+      t.is ( label.prop ( 'for' ), 'input' );
+      label.prop ( 'for', 'textarea' );
+      t.is ( label.prop ( 'for' ), 'textarea' );
+      // label.removeProp ( 'for' );
+      // t.is ( label.prop ( 'for' ), undefined );
+
+      var input = $('<input type="text" readonly="true" maxlength="1" tabindex="1"></input>');
+
+      t.is ( input.prop ( 'readonly' ), true );
+      input.prop ( 'readonly', false );
+      t.is ( input.prop ( 'readonly' ), false );
+      // input.removeProp ( 'readonly' );
+      // t.is ( input.prop ( 'readonly' ), undefined );
+
+      t.is ( input.prop ( 'maxlength' ), 1 );
+      input.prop ( 'maxlength', 2 );
+      t.is ( input.prop ( 'maxlength' ), 2 );
+      // input.removeProp ( 'maxlength' );
+      // t.is ( input.prop ( 'maxlength' ), undefined );
+
+      t.is ( input.prop ( 'tabindex' ), 1 );
+      input.prop ( 'tabindex', 2 );
+      t.is ( input.prop ( 'tabindex' ), 2 );
+      // input.removeProp ( 'tabindex' );
+      // t.is ( input.prop ( 'tabindex' ), undefined );
+
+      var td = $('<td colspan="1" rowspan="1"></td>');
+
+      t.is ( td.prop ( 'colspan' ), 1 );
+      td.prop ( 'colspan', 2 );
+      t.is ( td.prop ( 'colspan' ), 2 );
+      // td.removeProp ( 'colspan' );
+      // t.is ( td.prop ( 'colspan' ), undefined );
+
+      t.is ( td.prop ( 'rowspan' ), 1 );
+      td.prop ( 'rowspan', 2 );
+      t.is ( td.prop ( 'rowspan' ), 2 );
+      // td.removeProp ( 'rowspan' );
+      // t.is ( td.prop ( 'rowspan' ), undefined );
+
+      var img = $('<img usemap="#1" />');
+
+      t.is ( img.prop ( 'usemap' ), '#1' );
+      img.prop ( 'usemap', '#2' );
+      t.is ( img.prop ( 'usemap' ), '#2' );
+      // img.removeProp ( 'usemap' );
+      // t.is ( img.prop ( 'usemap' ), undefined );
+
+    });
+
   });
 
   describe ( '$.fn.removeAttr', function ( it ) {

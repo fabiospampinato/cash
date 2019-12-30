@@ -2,6 +2,7 @@
 // @require core/cash.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
+// @require ./helpers/variables.ts
 
 interface Cash {
   prop ( prop: string ): any;
@@ -14,6 +15,8 @@ fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any
   if ( !prop ) return;
 
   if ( isString ( prop ) ) {
+
+    prop = propMap[prop] || prop;
 
     if ( arguments.length < 2 ) return this[0] && this[0][prop];
 
