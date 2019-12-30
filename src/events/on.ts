@@ -42,6 +42,8 @@ function on ( this: Cash, eventFullName: string | Record<string, EventCallback>,
 
   }
 
+  if ( !callback ) return;
+
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
     const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );

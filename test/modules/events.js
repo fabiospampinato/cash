@@ -261,6 +261,19 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'doesn\'t throw an error when receiving a falsy callback', function ( t ) {
+
+      var ele = $('.event');
+
+      ele.on ( 'click', 0 );
+      ele.on ( 'click', '' );
+      ele.on ( 'click', undefined );
+      ele.on ( 'click', null );
+
+      t.pass ();
+
+    });
+
   });
 
   describe ( '$.fn.one', function ( it ) {
@@ -434,6 +447,19 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       t.is ( countChild, 1 );
       t.is ( countDelegate, 0 );
+
+    });
+
+    it ( 'doesn\'t throw an error when receiving a falsy callback', function ( t ) {
+
+      var ele = $('.event');
+
+      ele.off ( 'click', 0 );
+      ele.off ( 'click', '' );
+      ele.off ( 'click', undefined );
+      ele.off ( 'click', null );
+
+      t.pass ();
 
     });
 
