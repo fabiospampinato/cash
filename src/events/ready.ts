@@ -6,19 +6,17 @@ interface Cash {
   ready ( callback: Function ): this;
 }
 
-fn.ready = function ( this: Cash, callback: Function ) {
+fn.ready = function ( this: Cash, callback: ( $: typeof cash ) => any ) {
+
+  const cb = () => attempt ( callback, cash );
 
   if ( doc.readyState !== 'loading' ) {
 
-    try {
-
-      callback ( cash );
-
-    } catch {}
+    cb ();
 
   } else {
 
-    doc.addEventListener ( 'DOMContentLoaded', () => { callback ( cash ) } );
+    doc.addEventListener ( 'DOMContentLoaded', cb );
 
   }
 
