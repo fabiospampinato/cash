@@ -216,6 +216,23 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'preserves leading/trailing whitespace', function ( t ) {
+
+      var htmls = [
+        '  <b>foo</b>',
+        '<b>foo</b>  ',
+        '  <b>foo</b>  ',
+        '  <div></div>',
+        '<div></div>   ',
+        '  <div></div>   '
+      ];
+
+      htmls.forEach ( function ( html ) {
+        t.is ( $('<div>').append ( $.parseHTML ( html ) ).html (), html );
+      });
+
+    });
+
     it ( 'doesn\'t overwrite previous DOM nodes', function ( t ) {
 
       var span = $('<span>CONTENT</span>');

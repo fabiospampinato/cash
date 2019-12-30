@@ -10,7 +10,7 @@ interface CashStatic {
 }
 
 const fragmentRe = /^\s*<(\w+)[^>]*>/,
-      singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
+      singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
 
 const containers = {
   '*': div,
