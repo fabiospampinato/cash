@@ -132,6 +132,13 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'doesn\'t throw with an empty selector', function ( t ) {
+
+      $('*').filter ( '' );
+      t.pass ();
+
+    });
+
   });
 
   describe ( '$.fn.first', function ( it ) {

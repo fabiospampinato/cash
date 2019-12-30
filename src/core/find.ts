@@ -3,7 +3,7 @@
 
 function find ( selector: string, context: Ele ): ArrayLike<Element> {
 
-  return !isDocument ( context ) && !isElement ( context )
+  return !selector || ( !isDocument ( context ) && !isElement ( context ) )
            ? []
            : classRe.test ( selector )
              ? context.getElementsByClassName ( selector.slice ( 1 ) )

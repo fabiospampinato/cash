@@ -105,6 +105,14 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'doesn\'t throw with an empty selector', function ( t ) {
+
+      $('*').find ( '' );
+      t.pass ();
+
+    });
+
+
   });
 
   describe ( '$.fn.has', function ( it ) {
