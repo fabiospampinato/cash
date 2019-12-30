@@ -10,7 +10,11 @@ fn.ready = function ( this: Cash, callback: Function ) {
 
   if ( doc.readyState !== 'loading' ) {
 
-    callback ( cash );
+    try {
+
+      callback ( cash );
+
+    } catch {}
 
   } else {
 

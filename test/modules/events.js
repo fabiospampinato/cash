@@ -494,6 +494,24 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    QUnit.test ( 'exceptions aren\'t propagated', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+
+      var done = assert.async ();
+
+      var handler = function () {
+        throw new Error ();
+      };
+
+      $(handler);
+      $(document).trigger ( 'DOMContentLoaded' );
+
+      setTimeout ( function () {
+        assert.is ( true, true );
+        done ();
+      }, 100 );
+
+    });
+
   });
 
   describe ( '$.fn.trigger', function ( it ) {
