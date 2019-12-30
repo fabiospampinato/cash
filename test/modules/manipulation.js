@@ -83,6 +83,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'supports non-element nodes', function ( t ) {
+
+      var ele = $('<div><span> dear</span>world</div>');
+
+      ele.find ( 'span' ).after ( '<span>hello, </span>' );
+
+      t.is ( ele.html (), '<span> dear</span><span>hello, </span>world' );
+
+    });
+
   });
 
   describe ( '$.fn.append', function ( it ) {
@@ -110,6 +120,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       t.is ( prev.length, 0 );
       t.is ( next.length, 3 );
       t.deepEqual ( $('.parent').children ().slice ( 1 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
+
+    });
+
+    it ( 'supports non-element nodes', function ( t ) {
+
+      var ele = $('<div>world</div>');
+
+      ele.append ( '<span>hello, </span>' );
+
+      t.is ( ele.html (), 'world<span>hello, </span>' );
 
     });
 
@@ -165,6 +185,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
       t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
+
+    });
+
+    it ( 'supports non-element nodes', function ( t ) {
+
+      var ele = $('<div>world<span> dear</span></div>');
+
+      ele.find ( 'span' ).before ( '<span>hello, </span>' );
+
+      t.is ( ele.html (), 'world<span>hello, </span><span> dear</span>' );
 
     });
 
@@ -352,6 +382,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
       t.is ( prev.length, 3 );
       t.is ( next.length, 0 );
       t.deepEqual ( $('.parent').children ().slice ( 0, 3 ).get ().map ( ele2tagname ), ['A', 'B', 'C'] );
+
+    });
+
+    it ( 'supports non-element nodes', function ( t ) {
+
+      var ele = $('<div>world</div>');
+
+      ele.prepend ( '<span>hello, </span>' );
+
+      t.is ( ele.html (), '<span>hello, </span>world' );
 
     });
 

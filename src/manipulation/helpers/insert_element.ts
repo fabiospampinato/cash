@@ -5,11 +5,11 @@ function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, ins
 
   if ( inside ) { // prepend/append
 
-    anchor.insertBefore ( target, left ? anchor.firstElementChild : null );
+    anchor.insertBefore ( target, left ? anchor.firstChild : null );
 
   } else { // before/after
 
-    anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextElementSibling );
+    anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextSibling );
 
   }
 
