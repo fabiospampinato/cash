@@ -90,6 +90,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports templates', function ( t ) {
+
+      var template = $('<template id="template">    <div id="template-div0">        <span>Hello, Web Component!</span>    </div>    <div id="template-div1"></div>    <div id="template-div2"></div></template>');
+      var contents = template.contents ();
+
+      t.is ( contents.length, 6 );
+
+    });
+
   });
 
   describe ( '$.fn.find', function ( it ) {

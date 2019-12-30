@@ -10,6 +10,6 @@ interface Cash {
 
 fn.contents = function ( this: Cash ) {
 
-  return cash ( unique ( pluck ( this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes ) ) );
+  return cash ( unique ( pluck ( this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ( ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes ) ) ) );
 
 };
