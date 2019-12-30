@@ -10,9 +10,10 @@ function insertSelectors<T extends ArrayLike<EleLoose> = ArrayLike<EleLoose>> ( 
       each ( cash ( anchors ), ( ai, anchor ) => {
 
         const anchorFinal = inverse ? target : anchor,
-              targetFinal = inverse ? anchor : target;
+              targetFinal = inverse ? anchor : target,
+              indexFinal = inverse ? ti : ai;
 
-        insertElement ( anchorFinal, !ai ? targetFinal : targetFinal.cloneNode ( true ), left, inside );
+        insertElement ( anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode ( true ), left, inside );
 
       }, reverseLoop3 );
 

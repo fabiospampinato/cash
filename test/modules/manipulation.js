@@ -572,6 +572,16 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'doesn\'t clone elements', function ( t ) {
+
+      var ele = $('<div><a><b></b></a><a></a></div>');
+
+      ele.find ( 'a' ).wrapAll ( '<i>' );
+
+      t.is ( ele.html (), '<i><a><b></b></a><a></a></i>' );
+
+    });
+
   });
 
   describe ( '$.fn.wrapInner', function ( it ) {
