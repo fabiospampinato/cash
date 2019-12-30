@@ -236,6 +236,20 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports callbacks that returns multiple elements', function ( t ) {
+
+      var mapped = $('<div>').map ( function () {
+
+        return [document.head, document.body];
+
+      });
+
+      t.is ( mapped.length, 2 );
+      t.true ( !!mapped.get ().find ( e => e === document.head ) );
+      t.true ( !!mapped.get ().find ( e => e === document.body ) );
+
+    });
+
   });
 
   describe ( '$.fn.slice', function ( it ) {

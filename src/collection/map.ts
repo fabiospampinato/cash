@@ -10,6 +10,6 @@ interface Cash {
 
 fn.map = function ( this: Cash, callback: MapCallback<EleLoose> ) {
 
-  return cash ( map.call ( this, ( ele: EleLoose, i: number ) => callback.call ( ele, i, ele ) ) );
+  return cash ( concat.apply ( [], map.call ( this, ( ele: EleLoose, i: number ) => callback.call ( ele, i, ele ) ) ) );
 
 };
