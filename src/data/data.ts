@@ -38,6 +38,8 @@ function data ( this: Cash, name?: string | Record<string, any>, value?: any ) {
 
     if ( arguments.length < 2 ) return this[0] && getData ( this[0], name );
 
+    if ( isUndefined ( value ) ) return this;
+
     return this.each ( ( i, ele ) => { setData ( ele, name, value ) } );
 
   }

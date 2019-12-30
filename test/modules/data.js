@@ -111,6 +111,17 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'explicitly undefined values are ignored', function ( t ) {
+
+      var ele = $('div');
+
+      ele.data ( 'test', 'foo' );
+      ele.data( 'test', undefined );
+
+      t.is ( ele.data ( 'test' ), 'foo' );
+
+    });
+
   });
 
 });
