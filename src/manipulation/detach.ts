@@ -1,14 +1,15 @@
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require collection/each.ts
 
 interface Cash {
-  detach (): this;
+  detach ( comparator?: Comparator ): this;
 }
 
-fn.detach = function ( this: Cash ) {
+fn.detach = function ( this: Cash, comparator?: Comparator ) {
 
-  return this.each ( ( i, ele ) => {
+  filtered ( this, comparator ).each ( ( i, ele ) => {
 
     if ( ele.parentNode ) {
 
@@ -17,5 +18,7 @@ fn.detach = function ( this: Cash ) {
     }
 
   });
+
+  return this;
 
 };

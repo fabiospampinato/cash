@@ -208,6 +208,17 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'supports an optional selector', function ( t ) {
+
+      var eles = $('.parent').parent ().children ();
+
+      eles.detach ( '.aunt' );
+
+      t.is ( $('.parent').parent ().children ().length, 2 );
+      t.is ( $('.aunt').length, 0 );
+
+    });
+
   });
 
   describe ( '$.fn.empty', function ( it ) {
@@ -391,6 +402,17 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       t.is ( $('.anchor').length, 0 );
       t.is ( count, 0 );
+
+    });
+
+    it ( 'supports an optional selector', function ( t ) {
+
+      var eles = $('.parent').parent ().children ();
+
+      eles.remove ( '.aunt' );
+
+      t.is ( $('.parent').parent ().children ().length, 2 );
+      t.is ( $('.aunt').length, 0 );
 
     });
 

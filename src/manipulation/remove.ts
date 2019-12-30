@@ -1,14 +1,17 @@
 
 // @require core/cash.ts
+// @require core/filtered.ts
 // @require events/off.ts
 // @require ./detach.ts
 
 interface Cash {
-  remove (): this;
+  remove ( comparator?: Comparator ): this;
 }
 
-fn.remove = function ( this: Cash ) {
+fn.remove = function ( this: Cash, comparator?: Comparator ) {
 
-  return this.detach ().off ();
+  filtered ( this, comparator ).detach ().off ();
+
+  return this;
 
 };

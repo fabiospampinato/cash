@@ -245,10 +245,11 @@ $(element).clone () // => collection
 
 #### fn.detach ()
 
-Removes collection elements from the DOM.
+Removes collection elements, optionally that match the selector, from the DOM.
 
 ```js
 $(element).detach () // => collection
+$(element).detach ( selector ) // => collection
 ```
 
 #### fn.css ()
@@ -645,10 +646,11 @@ $(document).ready ( callback ) // => collection/span
 
 #### fn.remove ()
 
-Removes collection elements from the DOM and removes all their event listeners.
+Removes collection elements, optionally that match the selector, from the DOM and removes all their event listeners.
 
 ```js
 $(element).remove () // => collection
+$(element).remove ( selector ) // => collection
 ```
 
 #### fn.replaceAll ()
