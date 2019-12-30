@@ -1,6 +1,7 @@
 
 var fixture = '\
   <div class="data" data-one="one" data-two="two" data-multi-words="three"></div>\
+  <div class="data-whitespace" data-leading="  {}" data-trailing="{}  "></div>\
 ';
 
 describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -98,6 +99,15 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       t.is ( ele.data (), undefined );
       t.is ( ele.data ( 'one' ), undefined );
+
+    });
+
+    it ( 'reads strings with leading/trailing whitespace as plain strings', function ( t ) {
+
+      var ele = $('.data-whitespace');
+
+      t.is ( ele.data ( 'leading' ), '  {}' );
+      t.is ( ele.data ( 'trailing' ), '{}  ' );
 
     });
 
