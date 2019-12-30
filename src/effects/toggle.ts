@@ -13,6 +13,8 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
 
   return this.each ( ( i, ele ) => {
 
+    if ( !isElement ( ele ) ) return;
+
     const show = isUndefined ( force ) ? isHidden ( ele ) : force;
 
     if ( show ) {

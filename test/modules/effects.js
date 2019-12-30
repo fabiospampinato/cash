@@ -134,6 +134,16 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var eles = $('.shown');
+
+      eles.toggle ().toggle ().toggle ().toggle ();
+
+      t.pass ();
+
+    });
+
   });
 
 });
