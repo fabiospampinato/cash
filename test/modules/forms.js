@@ -50,6 +50,14 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'normalizes newlines', function ( t ) {
+
+      const ele = $('<textarea name="T3" rows="2" cols="15">?\nZ</textarea>');
+
+      t.is ( ele.serialize (), 'T3=%3F%0D%0AZ' );
+
+    });
+
   });
 
   describe ( '$.fn.val', function ( it ) {
