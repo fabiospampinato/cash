@@ -617,6 +617,21 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'supports non-element nodes', function ( t ) {
+
+      var ele = $('<div id="nonnodes"><span>hi</span> there <!-- mon ami --></div>');
+      var contents = ele.contents ();
+
+      contents.wrap ( '<i></i>' );
+
+      console.log ( ele[0].outerHTML );
+      console.log ( ele.find ( 'i' ) );
+
+      t.is ( ele.find ( 'i' ).length, 3 );
+      t.is ( ele.find ( 'i' ).text (), contents.text () );
+
+    });
+
   });
 
   describe ( '$.fn.wrapAll', function ( it ) {
