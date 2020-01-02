@@ -14,20 +14,30 @@
 
 interface Cash {
   on ( events: Record<string, EventCallback> ): this;
-  on ( events: string, callback: EventCallback, _one?: boolean ): this;
-  on ( events: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): this;
+  on ( events: Record<string, EventCallback>, selector: string ): this;
+  on ( events: Record<string, EventCallback>, data: any ): this;
+  on ( events: Record<string, EventCallback>, selector: string | null | undefined, data: any ): this;
+  on ( events: string, callback: EventCallback ): this;
+  on ( events: string, selector: string, callback: EventCallback ): this;
+  on ( events: string, data: any, callback: EventCallback ): this;
+  on ( events: string, selector: string | null | undefined, data: any, callback: EventCallback, _one?: boolean ): this;
 }
 
 function on ( this: Cash, eventFullName: Record<string, EventCallback> ): Cash;
-function on ( this: Cash, eventFullName: string, callback: EventCallback, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean ): Cash;
-function on ( this: Cash, eventFullName: string | Record<string, EventCallback>, selector?: string | EventCallback, callback?: boolean | EventCallback, _one?: boolean ) {
+function on ( this: Cash, eventFullName: Record<string, EventCallback>, selector: string ): Cash;
+function on ( this: Cash, eventFullName: Record<string, EventCallback>, data: any ): Cash;
+function on ( this: Cash, eventFullName: Record<string, EventCallback>, selector: string | null | undefined, data: any ): Cash;
+function on ( this: Cash, eventFullName: string, callback: EventCallback ): Cash;
+function on ( this: Cash, eventFullName: string, selector: string, callback: EventCallback ): Cash;
+function on ( this: Cash, eventFullName: string, data: any, callback: EventCallback ): Cash;
+function on ( this: Cash, eventFullName: string, selector: string | null | undefined, data: any, callback: EventCallback, _one?: boolean ): Cash;
+function on ( this: Cash, eventFullName: Record<string, EventCallback> | string, selector?: any, data?: any, callback?: EventCallback, _one?: boolean ) {
 
   if ( !isString ( eventFullName ) ) {
 
     for ( const key in eventFullName ) {
 
-      this.on ( key, selector, eventFullName[key] );
+      this.on ( key, selector, data, eventFullName[key], _one );
 
     }
 
@@ -35,10 +45,31 @@ function on ( this: Cash, eventFullName: string | Record<string, EventCallback>,
 
   }
 
-  if ( isFunction ( selector ) ) {
+  if ( !isString ( selector ) ) {
 
-    callback = selector;
-    selector = '';
+    if ( isUndefined ( selector ) || isNull ( selector ) ) {
+
+      selector = '';
+
+    } else if ( isUndefined ( data ) ) {
+
+      data = selector;
+      selector = '';
+
+    } else {
+
+      callback = data;
+      data = selector;
+      selector = '';
+
+    }
+
+  }
+
+  if ( !isFunction ( callback ) ) {
+
+    callback = data;
+    data = undefined;
 
   }
 
@@ -86,6 +117,8 @@ function on ( this: Cash, eventFullName: string | Record<string, EventCallback>,
           });
 
         }
+
+        event.data = data;
 
         const returnValue = callback.call ( thisArg, event, event.___td );
 

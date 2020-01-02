@@ -176,6 +176,39 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports a data argument', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+      var datas = [];
+
+      function handler ( event ) {
+        count++;
+        datas.push ( event.data );
+      }
+
+      var values = [123, 'string', { obj: true }, 0, ''];
+
+      values.forEach ( function ( value ) {
+
+        ele.on ( 'foo', value, handler ); // Simple + Naive
+        ele.on ( 'foo', undefined,  value, handler ); // Simple
+        ele.on ( 'foo', '.event',  value, handler ); // Event delegation (Matching)
+        ele.on ( 'foo', '.eventz',  value, handler ); // Event delegation (Not Matching)
+        ele.on ( { foo: handler }, value ); // Map Simple + Naive
+        ele.on ( { foo: handler }, null, value ); // Map Simple
+        ele.on ( { foo: handler }, '.event', value ); // Map + Event delegation (Matching)
+        ele.on ( { foo: handler }, '.evenz', value ); // Map + Event delegation (Not Matching)
+
+      });
+
+      ele.trigger ( 'foo' );
+
+      t.is ( count, 28 );
+      t.deepEqual ( datas, [123, 123, 123, 123, 123, 123, 'string', 'string', 'string', 'string', { obj: true }, { obj: true }, { obj: true }, { obj: true }, { obj: true }, { obj: true }, 0, 0, 0, 0, 0, 0, undefined, '', '', undefined, '', ''] );
+
+    });
+
     it ( 'ignores the order of namespaces', function ( t ) {
 
       var ele = $('.event');
