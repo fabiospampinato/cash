@@ -18,8 +18,8 @@ fn.offset = function ( this: Cash ) {
   const rect = ele.getBoundingClientRect ();
 
   return {
-    top: rect.top + win.pageYOffset - docEle.clientTop,
-    left: rect.left + win.pageXOffset - docEle.clientLeft
+    top: rect.top + win.pageYOffset,
+    left: rect.left + win.pageXOffset
   };
 
 };
