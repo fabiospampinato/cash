@@ -5,11 +5,11 @@
 // @require core/unique.ts
 
 interface Cash {
-  prev ( comparator?: Comparator, _all?: boolean ): Cash;
+  prev ( comparator?: Comparator, _all?: boolean, _until?: Comparator ): Cash;
 }
 
-fn.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean ) {
+fn.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean, _until?: Comparator ) {
 
-  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all ) ) ), comparator );
+  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all, _until ) ) ), comparator );
 
 };

@@ -215,6 +215,21 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
   });
 
+  describe ( '$.fn.nextAll', function ( it ) {
+
+    it ( 'gets all the next siblings, until a selector matches', function ( t ) {
+
+      var anchor = $('.child');
+      var next = $('.next');
+      var nexts = anchor.nextUntil ( '.nextnext' );
+
+      t.is ( nexts.length, 1 );
+      t.is ( nexts[0], next[0] );
+
+    });
+
+  });
+
   describe ( '$.fn.not', function ( it ) {
 
     it ( 'filter by negating a comparator', function ( t ) {
@@ -301,6 +316,21 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
   });
 
+  describe ( '$.fn.parentsUntil', function ( it ) {
+
+    it ( 'gets all parents, until a selector matches', function ( t ) {
+
+      var child = $('.child');
+      var parent = $('.parent');
+      var parents = child.parentsUntil ( '.grandparent' );
+
+      t.is ( parents.length, 1 );
+      t.is ( parents[0], parent[0] );
+
+    });
+
+  });
+
   describe ( '$.fn.prev', function ( it ) {
 
     it ( 'gets the previous sibling', function ( t ) {
@@ -346,6 +376,21 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       t.is ( prevs.length, 2 );
       t.is ( prevs[0], prev[0] );
       t.is ( prevs[1], prevprev[0] );
+
+    });
+
+  });
+
+  describe ( '$.fn.prevUntil', function ( it ) {
+
+    it ( 'gets all the previous siblings, until a selector matches', function ( t ) {
+
+      var anchor = $('.child');
+      var prev = $('.prev');
+      var prevs = anchor.prevUntil ( '.prevprev' );
+
+      t.is ( prevs.length, 1 );
+      t.is ( prevs[0], prev[0] );
 
     });
 

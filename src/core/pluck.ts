@@ -1,15 +1,15 @@
 
+// @require ./get_compare_function.ts
 // @require ./type_checking.ts
 // @require ./variables.ts
 
 type PluckCallback<T> = ( ele: T ) => ArrayLike<Ele>;
 
-function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: PluckCallback<U[0]> ): Array<Ele>;
-function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string, deep?: boolean ): Array<Ele>;
-function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string | PluckCallback<U[0]>, deep?: boolean ): Array<Ele> {
+function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string | PluckCallback<U[0]>, deep?: boolean, until?: Comparator ): Array<Ele> {
 
   const plucked: Array<Ele> = [],
-        isCallback = isFunction ( prop );
+        isCallback = isFunction ( prop ),
+        compare = until && getCompareFunction ( until );
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
@@ -24,6 +24,8 @@ function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string 
       let val = arr[i][prop];
 
       while ( val != null ) {
+
+        if ( until && compare ( -1, val ) ) break;
 
         plucked.push ( val );
 

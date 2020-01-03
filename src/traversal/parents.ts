@@ -7,11 +7,11 @@
 // @require collection/each.ts
 
 interface Cash {
-  parents ( comparator?: Comparator ): Cash;
+  parents ( comparator?: Comparator, _until?: Comparator ): Cash;
 }
 
-fn.parents = function ( this: Cash, comparator?: Comparator ) {
+fn.parents = function ( this: Cash, comparator?: Comparator, _until?: Comparator ) {
 
-  return filtered ( cash ( unique ( pluck ( this, 'parentElement', true ) ) ), comparator );
+  return filtered ( cash ( unique ( pluck ( this, 'parentElement', true, _until ) ) ), comparator );
 
 };
