@@ -19,7 +19,13 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
   if ( isUndefined ( eventFullName ) ) {
 
-    this.each ( ( i, ele ) => { removeEvent ( ele ) } );
+    this.each ( ( i, ele ) => {
+
+      if ( !isElement ( ele ) ) return;
+
+      removeEvent ( ele );
+
+    });
 
   } else if ( !isString ( eventFullName ) ) {
 
@@ -42,7 +48,13 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
       const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
-      this.each ( ( i, ele ) => { removeEvent ( ele, name, namespaces, selector, callback ) } );
+      this.each ( ( i, ele ) => {
+
+        if ( !isElement ( ele ) ) return;
+
+        removeEvent ( ele, name, namespaces, selector, callback );
+
+      });
 
     });
 

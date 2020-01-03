@@ -83,6 +83,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
     this.each ( ( i, ele ) => {
 
+      if ( !isElement ( ele ) ) return;
+
       const finalCallback = function ( event: Event ) {
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;

@@ -248,6 +248,22 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'ignores non-elements objects in the collections', function ( t ) {
+
+      var ele = $(document.createTextNode ( '.css' ));
+      var count = 0;
+
+      function handler () {
+        count++;
+      }
+
+      ele.on ( 'foo', handler );
+      ele.trigger ( 'foo' );
+
+      t.is ( count, 0 );
+
+    });
+
     it ( 'overwrites event.currentTarget when using event delegation', function ( t ) {
 
       var ele = $('.event');
