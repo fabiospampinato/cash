@@ -79,6 +79,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
     const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
 
+    if ( !name ) return;
+
     this.each ( ( i, ele ) => {
 
       const finalCallback = function ( event: Event ) {

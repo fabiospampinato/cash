@@ -232,6 +232,22 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'ignores namespaces-only events', function ( t ) {
+
+      var ele = $('.event');
+      var count = 0;
+
+      function handler ( event ) {
+        count++;
+      }
+
+      ele.on ( '.ns1.ns2', handler );
+      ele.trigger ( '.ns1.ns2' );
+
+      t.is ( count, 0 );
+
+    });
+
     it ( 'overwrites event.currentTarget when using event delegation', function ( t ) {
 
       var ele = $('.event');
