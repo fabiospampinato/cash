@@ -87,6 +87,16 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports string indexes', function ( t ) {
+
+      var siblings = $('.sibling');
+
+      siblings.each ( function ( index ) {
+        t.is ( siblings.eq ( String ( index ) )[0], siblings[index] );
+      });
+
+    });
+
   });
 
   describe ( '$.fn.filter', function ( it ) {
@@ -174,6 +184,16 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       t.true ( $.isArray ( arr ) );
       t.is ( arr.length, 5 );
       t.deepEqual ( arr, [siblings[0], siblings[1], siblings[2], siblings[3], siblings[4]] );
+
+    });
+
+    it ( 'supports string indexes', function ( t ) {
+
+      var siblings = $('.sibling');
+
+      siblings.each ( function ( index ) {
+        t.is ( siblings.get ( String ( index ) ), siblings[index] );
+      });
 
     });
 
