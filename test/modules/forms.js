@@ -6,6 +6,8 @@ var fixture = '\
     <input type="text" value="disabled" name="disabled-check" disabled />\
     <input type="checkbox" value="yes" checked="checked" name="checkbox-yes" />\
     <input type="checkbox" value="no" name="checkbox-no" />\
+    <input type="checkbox" value="1" name="checkbox-multi" />\
+    <input type="checkbox" value="2" name="checkbox-multi" />\
     <input type="radio" value="yes" checked="checked" name="radio" />\
     <input type="radio" value="no" name="radio" />\
     <select name="select">\
@@ -127,6 +129,34 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var val = $('select[name=select-multiple]').val ();
 
       t.deepEqual ( val, ['option-1', 'option-2'] );
+
+    });
+
+    it ( 'sets the value of checkboxes', function ( t ) {
+
+      var eles = $('input[name="checkbox-multi"]');
+
+      eles.val ( 2 );
+
+      t.is ( eles.serialize (), 'checkbox-multi=2' );
+
+      eles.val ([ 1, '2' ]);
+
+      t.is ( eles.serialize (), 'checkbox-multi=1&checkbox-multi=2' );
+
+    });
+
+    it ( 'sets the value of radios', function ( t ) {
+
+      var eles = $('input[name="radio"]');
+
+      eles.val ( 'yes' );
+
+      t.is ( eles.serialize (), 'radio=yes' );
+
+      eles.val ([ 'yes', 'no' ]);
+
+      t.is ( eles.serialize (), 'radio=no' );
 
     });
 

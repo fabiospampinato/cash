@@ -18,15 +18,25 @@ function val ( this: Cash, value?: string | string[] ) {
 
   return this.each ( ( i, ele ) => {
 
-    if ( ele.tagName === 'SELECT' ) {
+    const isSelect = ele.multiple && ele.options;
 
-      const eleValue = isArray ( value ) ? value : ( isNull ( value ) ? [] : [value] );
+    if ( isSelect || checkableRe.test ( ele.type ) ) {
 
-      each ( ele.options, ( i, option ) => {
+      const eleValue = isArray ( value ) ? map.call ( value, String ) : ( isNull ( value ) ? [] : [String ( value )] );
 
-        option.selected = eleValue.indexOf ( option.value ) >= 0;
+      if ( isSelect ) {
 
-      });
+        each ( ele.options, ( i, option ) => {
+
+          option.selected = eleValue.indexOf ( option.value ) >= 0;
+
+        });
+
+      } else {
+
+        ele.checked = eleValue.indexOf ( ele.value ) >= 0;
+
+      }
 
     } else {
 
