@@ -23,7 +23,7 @@ function attr ( this: Cash, attr?: string | Record<string, string>, value?: stri
 
     if ( arguments.length < 2 ) {
 
-      if ( !this[0] ) return;
+      if ( !this[0] || !isElement ( this[0] ) ) return;
 
       const value = this[0].getAttribute ( attr );
 
@@ -35,7 +35,13 @@ function attr ( this: Cash, attr?: string | Record<string, string>, value?: stri
 
     if ( isNull ( value ) ) return this.removeAttr ( attr );
 
-    return this.each ( ( i, ele ) => { ele.setAttribute ( attr, value ) } );
+    return this.each ( ( i, ele ) => {
+
+      if ( !isElement ( ele ) ) return;
+
+      ele.setAttribute ( attr, value )
+
+    });
 
   }
 
