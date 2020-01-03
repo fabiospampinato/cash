@@ -1,5 +1,4 @@
 
-// @require core/camel_case.ts
 // @require core/cash.ts
 // @require core/each.ts
 // @require core/type_checking.ts
@@ -7,6 +6,7 @@
 // @require css/helpers/compute_style.ts
 // @require css/helpers/get_suffixed_value.ts
 // @require ./helpers/get_extra_space.ts
+// @require ./helpers/get_document_dimension.ts
 
 interface Cash {
   width (): number;
@@ -15,17 +15,21 @@ interface Cash {
   height ( value: number | string ): this;
 }
 
-each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
+each ( ['Width', 'Height'], ( index: number, prop: 'Width' | 'Height' ) => {
 
-  fn[prop] = function ( this: Cash, value?: number | string ) {
+  const propLC = prop.toLowerCase ();
+
+  fn[propLC] = function ( this: Cash, value?: number | string ) {
 
     if ( !this[0] ) return isUndefined ( value ) ? undefined : this;
 
     if ( !arguments.length ) {
 
-      if ( isWindow ( this[0] ) ) return this[0].document.documentElement[ camelCase ( `client-${prop}` )];
+      if ( isWindow ( this[0] ) ) return this[0].document.documentElement[`client${prop}`];
 
-      return this[0].getBoundingClientRect ()[prop] - getExtraSpace ( this[0], !index );
+      if ( isDocument ( this[0] ) ) return getDocumentDimension ( this[0], prop );
+
+      return this[0].getBoundingClientRect ()[propLC] - getExtraSpace ( this[0], !index );
 
     }
 
@@ -37,7 +41,7 @@ each ( ['width', 'height'], ( index: number, prop: 'width' | 'height' ) => {
 
       const boxSizing = computeStyle ( ele, 'boxSizing' );
 
-      ele.style[prop] = getSuffixedValue ( prop, valueNumber + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
+      ele.style[propLC] = getSuffixedValue ( propLC, valueNumber + ( boxSizing === 'border-box' ? getExtraSpace ( ele, !index ) : 0 ) );
 
     });
 

@@ -3,6 +3,7 @@
 // @require core/each.ts
 // @require core/type_checking.ts
 // @require core/variables.ts
+// @require ./helpers/get_document_dimension.ts
 
 interface Cash {
   innerWidth (): number | undefined;
@@ -22,6 +23,8 @@ each ( [true, false], ( i, outer?: boolean ) => {
       if ( !this[0] ) return;
 
       if ( isWindow ( this[0] ) ) return outer ? this[0][`inner${prop}`] : this[0].document.documentElement[`client${prop}`];
+
+      if ( isDocument ( this[0] ) ) return getDocumentDimension ( this[0], prop );
 
       return this[0][`${outer ? 'offset' : 'client'}${prop}`] + ( includeMargins && outer ? computeStyleInt ( this[0], `margin${ i ? 'Top' : 'Left' }` ) + computeStyleInt ( this[0], `margin${ i ? 'Bottom' : 'Right' }` ) : 0 );
 
