@@ -346,6 +346,16 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(document.createTextNode ( '.css' ));
+
+      ele.removeAttr ( 'foo' );
+
+      t.pass ();
+
+    });
+
   });
 
   describe ( '$.fn.removeClass', function ( it ) {

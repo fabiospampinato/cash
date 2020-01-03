@@ -13,6 +13,8 @@ fn.removeAttr = function ( this: Cash, attr: string ) {
 
   return this.each ( ( i, ele ) => {
 
+    if ( !isElement ( ele ) ) return;
+
     each ( attrs, ( i, a ) => {
 
       ele.removeAttribute ( a );
