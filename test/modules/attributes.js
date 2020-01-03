@@ -504,6 +504,16 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(document.createTextNode ( '.css' ));
+
+      ele.toggleClass ( 'foo' ).toggleClass ( 'foo' ).toggleClass ( 'foo' );
+
+      t.pass ();
+
+    });
+
     it ( 'doesn\'t throw on falsy values', function ( t ) {
 
       var ele = $('.class');

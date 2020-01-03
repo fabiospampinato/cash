@@ -16,6 +16,8 @@ fn.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
 
   return this.each ( ( i, ele ) => {
 
+    if ( !isElement ( ele ) ) return;
+
     each ( classes, ( i, c ) => {
 
       if ( isForce ) {
