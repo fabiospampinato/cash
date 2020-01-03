@@ -181,6 +181,14 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports collections containing non-elements objects', function ( t ) {
+
+      var ele = $(document.createTextNode ( '.css' ));
+
+      t.is ( ele.hasClass ( 'foo' ), false );
+
+    });
+
     it ( 'doesn\'t throw on falsy values', function ( t ) {
 
       var ele = $('.class');
