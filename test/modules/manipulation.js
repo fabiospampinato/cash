@@ -321,6 +321,22 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'ignores non-elements objects in the collections', function ( t ) {
+
+      var eles = $('<div id="nonnodes"><span id="nonnodesElement">hi</span> there <!-- mon ami --></div>');
+      var actual = [];
+      var expected = [];
+
+      eles.contents ().html ( '<b>bold</b>' ).each ( function ( i, ele ) {
+        var html = $(ele).html ();
+        expected.push ( this.nodeType === 1 ? '<b>bold</b>' : undefined );
+        actual.push ( html ? html.toLowerCase () : html );
+      });
+
+      t.deepEqual ( actual, expected );
+
+    });
+
   });
 
   describe ( '$.fn.insertAfter', function ( it ) {

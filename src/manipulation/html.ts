@@ -14,7 +14,13 @@ function html ( this: Cash, html?: string ) {
 
   if ( isUndefined ( html ) ) return this[0] && this[0].innerHTML;
 
-  return this.each ( ( i, ele ) => { ele.innerHTML = html } );
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    ele.innerHTML = html;
+
+  });
 
 }
 
