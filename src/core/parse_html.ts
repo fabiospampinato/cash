@@ -22,6 +22,9 @@ const containers = {
   tfoot: table
 };
 
+//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
+//TODO: Ensure the created elements have the fragment as their parent instead of null
+
 function parseHTML ( html: string ): EleLoose[] {
 
   if ( !isString ( html ) ) return [];

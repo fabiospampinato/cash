@@ -5,7 +5,7 @@
 // @optional ./filter.ts
 // @optional ./first.ts
 // @optional ./get.ts
-// @optional ./indexFn.ts
+// @optional ./index_fn.ts
 // @optional ./last.ts
 // @optional ./map.ts
 // @optional ./slice.ts
