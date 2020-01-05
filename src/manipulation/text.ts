@@ -14,7 +14,13 @@ function text ( this: Cash, text?: string ) {
 
   if ( isUndefined ( text ) ) return this[0] ? this[0].textContent : '';
 
-  return this.each ( ( i, ele ) => { ele.textContent = text } );
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    ele.textContent = text
+
+  });
 
 };
 
