@@ -122,7 +122,12 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
         }
 
-        event.data = data;
+        Object.defineProperty ( event, 'data', {
+          configurable: true,
+          get () {
+            return data;
+          }
+        });
 
         const returnValue = callback.call ( thisArg, event, event.___td );
 
