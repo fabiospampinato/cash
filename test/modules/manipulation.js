@@ -640,9 +640,6 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
       contents.wrap ( '<i></i>' );
 
-      console.log ( ele[0].outerHTML );
-      console.log ( ele.find ( 'i' ) );
-
       t.is ( ele.find ( 'i' ).length, 3 );
       t.is ( ele.find ( 'i' ).text (), contents.text () );
 

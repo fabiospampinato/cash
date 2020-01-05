@@ -23,7 +23,7 @@ const containers = {
 };
 
 //TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
-//TODO: Ensure the created elements have the fragment as their parent instead of null
+//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
 
 function parseHTML ( html: string ): EleLoose[] {
 

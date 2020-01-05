@@ -237,7 +237,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var ele = $('.event');
       var count = 0;
 
-      function handler ( event ) {
+      function handler () {
         count++;
       }
 
@@ -532,7 +532,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
   describe ( '$.fn.ready', function () {
 
-    QUnit.test ( 'calls the callback is the DOM is already ready', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+    QUnit.test ( 'calls the callback if the DOM is already ready', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
 
       Object.defineProperty ( document, 'readyState', {
         configurable: true,
@@ -558,7 +558,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    QUnit.test ( 'calls the callback is the DOM is not ready already', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+    QUnit.test ( 'calls the callback if the DOM is not ready already', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
 
       Object.defineProperty ( document, 'readyState', {
         configurable: true,
