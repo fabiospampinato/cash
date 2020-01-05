@@ -1,7 +1,7 @@
 
 // @require ./eval_scripts.ts
 
-function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, inside?: boolean ): void {
+function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, inside?: boolean, evaluate?: boolean ): void {
 
   if ( inside ) { // prepend/append
 
@@ -13,6 +13,10 @@ function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, ins
 
   }
 
-  evalScripts ( target, anchor.ownerDocument );
+  if ( evaluate ) {
+
+    evalScripts ( target, anchor.ownerDocument );
+
+  }
 
 }

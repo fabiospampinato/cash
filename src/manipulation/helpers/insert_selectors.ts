@@ -13,7 +13,7 @@ function insertSelectors<T extends ArrayLike<EleLoose> = ArrayLike<EleLoose>> ( 
               targetFinal = inverse ? anchor : target,
               indexFinal = inverse ? ti : ai;
 
-        insertElement ( anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode ( true ), left, inside );
+        insertElement ( anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode ( true ), left, inside, !indexFinal );
 
       }, reverseLoop3 );
 
