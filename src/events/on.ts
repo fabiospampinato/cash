@@ -73,7 +73,7 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
   }
 
-  if ( !callback ) return;
+  if ( !callback ) return this;
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
