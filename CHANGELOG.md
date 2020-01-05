@@ -1,3 +1,53 @@
+### Version 6.0.0
+
+##### Removed Features
+- $.camelCase|matches|isString|prefixedProp: no longer exposing these methods, aligning with jQuery
+
+##### New Features
+- $.fn.nextUntil|prevUntil|parentsUntil: implemented these methods
+- $.fn.detach|remove: added support for an optional "selector" argument
+- $.fn.on|one: added support for an optional “data” argument
+- Set-up test coverage (currently at ~99%) reporting to coveralls.io
+- Migration guide: major update
+
+##### Bug Fixes
+- $.extend: aligned more with jQuery when called with zero or one argument
+- $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring cloned scripts don't get executed
+- $.fn.contents: ensuring template elements are supported
+- $.fn.css: ensuring “grid-*“ properties don’t get the “px” suffix appended to their values when they are not supposed to
+- $.fn.data: doing nothing when trying to set values to undefined
+- $.fn.data: ensuring strings containing leading/trailing whitespace aren’t parsed as JSON
+- $.fn.get|eq: ensuring string indexes are supported
+- $.fn.map: ensuring callbacks that return an array of elements are supported too
+- $.fn.offset|offsetParent|position: rewritten to much more closely match jQuery’s implementation
+- $.fn.on|one|off: ensuring namespaces-only events are ignored
+- $.fn.on|one|off: ensuring they don’t throw when receiving a falsy callback
+- $.fn.on|one: ensuring these methods are chainable even when receiving falsy callbacks
+- $.fn.prop|removeProp: mapping special HTML attributes into their equivalent DOM properties (e.g. “for” -> “htmlFor”)
+- $.fn.ready: ensuring exceptions are always caught, so they can't crash the app
+- $.fn.serialize: normalizing newlines
+- $.fn.trigger: testing that non-nil falsy values are passed correctly
+- $.fn.unwrap: ensuring immediate children of the body don’t get unwrapped
+- $.fn.val: ensuring checkboxes and radios can be set properly
+- $.fn.val: ensuring non-string values are supported
+- $.fn.val|html: more reliably detecting when being called with no arguments
+- $.fn.width|height|innerWidth|innerHeight|outerWidth|outerHeight: ensuring document objects are supported too
+- $.fn.width|height|innerWidth|innerHeight|outerWidth|outerHeight: ensuring they return the right value for the Window object
+- $.fn.wrapAll: ensuring elements aren’t cloned unnecessarely
+- $.parseHTML: ensuring whitespace around a single HTML tag is preserved
+- Ensuring empty selectors don’t throw an error
+- Collections containing non-element objects:
+  - $.fn.addClass|removeClass|toggleClass: ensuring it doesn’t throw with collections containing non-elements
+  - $.fn.attr: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring non-element nodes are accounted for properly
+  - $.fn.hasClass: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.hide|show|toggle: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.html: ensuring collections containing non-element objects are supported
+  - $.fn.not: ensuring non-element nodes are excluded
+  - $.fn.on|off: ensuring non-element objects in the collection are ignored
+  - $.fn.removeAttr: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.text: improved support of collections containing non-elements objects
+
 ### Version 5.0.0
 - Dropped support for IE10
 - $.fn.hasClass: ensuring it always returns a boolean

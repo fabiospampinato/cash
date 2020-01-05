@@ -1,9 +1,33 @@
 /* MIT https://github.com/kenwheeler/cash */
-const doc = document, win = window, docEle = doc.documentElement, createElement = doc.createElement.bind(doc), div = createElement('div'), table = createElement('table'), tbody = createElement('tbody'), tr = createElement('tr'), { isArray, prototype: ArrayProtoType } = Array, { filter, indexOf, map, push, slice, some, splice } = ArrayProtoType;
+const propMap = {
+    /* GENERAL */
+    class: 'className',
+    contenteditable: 'contentEditable',
+    /* LABEL */
+    for: 'htmlFor',
+    /* INPUT */
+    readonly: 'readOnly',
+    maxlength: 'maxLength',
+    tabindex: 'tabIndex',
+    /* TABLE */
+    colspan: 'colSpan',
+    rowspan: 'rowSpan',
+    /* IMAGE */
+    usemap: 'useMap'
+};
+function attempt(fn, arg) {
+    try {
+        return fn(arg);
+    }
+    catch (_a) {
+        return arg;
+    }
+}
+const doc = document, win = window, docEle = doc.documentElement, createElement = doc.createElement.bind(doc), div = createElement('div'), table = createElement('table'), tbody = createElement('tbody'), tr = createElement('tr'), { isArray, prototype: ArrayPrototype } = Array, { concat, filter, indexOf, map, push, slice, some, splice } = ArrayPrototype;
 const idRe = /^#[\w-]*$/, classRe = /^\.[\w-]*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
 // @require ./variables.ts
-function find(selector, context = doc) {
-    return !isDocument(context) && !isElement(context)
+function find(selector, context) {
+    return !selector || (!isDocument(context) && !isElement(context))
         ? []
         : classRe.test(selector)
             ? context.getElementsByClassName(selector.slice(1))
@@ -14,14 +38,14 @@ function find(selector, context = doc) {
 // @require ./find.ts
 // @require ./variables.ts
 class Cash {
-    constructor(selector, context = doc) {
+    constructor(selector, context) {
         if (!selector)
             return;
         if (isCash(selector))
             return selector;
         let eles = selector;
         if (isString(selector)) {
-            const ctx = isCash(context) ? context[0] : context;
+            const ctx = (isCash(context) ? context[0] : context) || doc;
             eles = idRe.test(selector)
                 ? ctx.getElementById(selector.slice(1))
                 : htmlRe.test(selector)
@@ -49,21 +73,21 @@ cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
 fn.length = 0;
 fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 if (typeof Symbol === 'function') { // Ensuring a cash collection is iterable
-    fn[Symbol['iterator']] = ArrayProtoType[Symbol['iterator']];
+    fn[Symbol['iterator']] = ArrayPrototype[Symbol['iterator']];
 }
 fn.map = function (callback) {
-    return cash(map.call(this, (ele, i) => callback.call(ele, i, ele)));
+    return cash(concat.apply([], map.call(this, (ele, i) => callback.call(ele, i, ele))));
 };
 fn.slice = function (start, end) {
     return cash(slice.call(this, start, end));
 };
+// @require ./cash.ts
 const dashAlphaRe = /-([a-z])/g;
 function camelCase(str) {
     return str.replace(dashAlphaRe, (match, letter) => letter.toUpperCase());
 }
-cash.camelCase = camelCase;
-function each(arr, callback, reverse) {
-    if (reverse) {
+function each(arr, callback, _reverse) {
+    if (_reverse) {
         let i = arr.length;
         while (i--) {
             if (callback.call(arr[i], i, arr[i]) === false)
@@ -83,26 +107,31 @@ fn.each = function (callback) {
     return each(this, callback);
 };
 fn.removeProp = function (prop) {
-    return this.each((i, ele) => { delete ele[prop]; });
+    return this.each((i, ele) => { delete ele[propMap[prop] || prop]; });
 };
-cash.extend = function (target, ...objs) {
+function extend(target, ...objs) {
     const length = arguments.length;
-    for (let i = (length < 2 ? 0 : 1); i < length; i++) {
+    if (!length)
+        return {};
+    if (length === 1)
+        return extend(cash, target);
+    for (let i = 1; i < length; i++) {
         for (const key in arguments[i]) {
             target[key] = arguments[i][key];
         }
     }
     return target;
-};
+}
+cash.extend = extend;
 fn.extend = function (plugins) {
-    return cash.extend(fn, plugins);
+    return extend(fn, plugins);
 };
 cash.guid = 1;
+// @require ./cash.ts
 function matches(ele, selector) {
     const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector']);
-    return !!matches && matches.call(ele, selector);
+    return !!matches && !!selector && matches.call(ele, selector);
 }
-cash.matches = matches;
 function isCash(x) {
     return x instanceof Cash;
 }
@@ -132,13 +161,13 @@ function isNumeric(x) {
 }
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
-cash.isString = isString;
 cash.isNumeric = isNumeric;
 cash.isArray = isArray;
 fn.prop = function (prop, value) {
     if (!prop)
         return;
     if (isString(prop)) {
+        prop = propMap[prop] || prop;
         if (arguments.length < 2)
             return this[0] && this[0][prop];
         return this.each((i, ele) => { ele[prop] = value; });
@@ -151,6 +180,7 @@ fn.prop = function (prop, value) {
 fn.get = function (index) {
     if (isUndefined(index))
         return slice.call(this);
+    index = Number(index);
     return this[index < 0 ? index + this.length : index];
 };
 fn.eq = function (index) {
@@ -189,11 +219,13 @@ function getSplitValues(str) {
     return isString(str) ? str.match(splitValuesRe) || [] : [];
 }
 fn.hasClass = function (cls) {
-    return !!cls && some.call(this, (ele) => ele.classList.contains(cls));
+    return !!cls && some.call(this, (ele) => isElement(ele) && ele.classList.contains(cls));
 };
 fn.removeAttr = function (attr) {
     const attrs = getSplitValues(attr);
     return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
         each(attrs, (i, a) => {
             ele.removeAttribute(a);
         });
@@ -204,7 +236,7 @@ function attr(attr, value) {
         return;
     if (isString(attr)) {
         if (arguments.length < 2) {
-            if (!this[0])
+            if (!this[0] || !isElement(this[0]))
                 return;
             const value = this[0].getAttribute(attr);
             return isNull(value) ? undefined : value;
@@ -213,7 +245,11 @@ function attr(attr, value) {
             return this;
         if (isNull(value))
             return this.removeAttr(attr);
-        return this.each((i, ele) => { ele.setAttribute(attr, value); });
+        return this.each((i, ele) => {
+            if (!isElement(ele))
+                return;
+            ele.setAttribute(attr, value);
+        });
     }
     for (const key in attr) {
         this.attr(key, attr[key]);
@@ -224,6 +260,8 @@ fn.attr = attr;
 fn.toggleClass = function (cls, force) {
     const classes = getSplitValues(cls), isForce = !isUndefined(force);
     return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
         each(classes, (i, c) => {
             if (isForce) {
                 force ? ele.classList.add(c) : ele.classList.remove(c);
@@ -242,8 +280,8 @@ fn.removeClass = function (cls) {
         return this.toggleClass(cls, false);
     return this.attr('class', '');
 };
-function pluck(arr, prop, deep) {
-    const plucked = [], isCallback = isFunction(prop);
+function pluck(arr, prop, deep, until) {
+    const plucked = [], isCallback = isFunction(prop), compare = until && getCompareFunction(until);
     for (let i = 0, l = arr.length; i < l; i++) {
         if (isCallback) {
             const val = prop(arr[i]);
@@ -253,6 +291,8 @@ function pluck(arr, prop, deep) {
         else {
             let val = arr[i][prop];
             while (val != null) {
+                if (until && compare(-1, val))
+                    break;
                 plucked.push(val);
                 val = deep ? val[prop] : null;
             }
@@ -270,10 +310,10 @@ fn.add = function (selector, context) {
 // @require core/type_checking.ts
 // @require core/variables.ts
 function computeStyle(ele, prop, isVariable) {
-    if (!isElement(ele) || !prop)
+    if (!isElement(ele))
         return;
     const style = win.getComputedStyle(ele, null);
-    return prop ? (isVariable ? style.getPropertyValue(prop) || undefined : style[prop]) : style;
+    return isVariable ? style.getPropertyValue(prop) || undefined : style[prop];
 }
 // @require ./compute_style.ts
 function computeStyleInt(ele, prop) {
@@ -284,6 +324,11 @@ const cssVariableRe = /^--/;
 function isCSSVariable(prop) {
     return cssVariableRe.test(prop);
 }
+// @require core/camel_case.ts
+// @require core/cash.ts
+// @require core/each.ts
+// @require core/variables.ts
+// @require ./is_css_variable.ts
 const prefixedProps = {}, { style } = div, vendorsPrefixes = ['webkit', 'moz', 'ms'];
 function getPrefixedProp(prop, isVariable = isCSSVariable(prop)) {
     if (isVariable)
@@ -300,7 +345,6 @@ function getPrefixedProp(prop, isVariable = isCSSVariable(prop)) {
     return prefixedProps[prop];
 }
 ;
-cash.prefixedProp = getPrefixedProp;
 // @require core/type_checking.ts
 // @require ./is_css_variable.ts
 const numericProps = {
@@ -309,6 +353,13 @@ const numericProps = {
     flexGrow: true,
     flexShrink: true,
     fontWeight: true,
+    gridArea: true,
+    gridColumn: true,
+    gridColumnEnd: true,
+    gridColumnStart: true,
+    gridRow: true,
+    gridRowEnd: true,
+    gridRowStart: true,
     lineHeight: true,
     opacity: true,
     order: true,
@@ -347,21 +398,19 @@ function css(prop, value) {
 ;
 fn.css = css;
 // @optional ./css.ts
+// @require core/attempt.ts
 // @require core/camel_case.ts
+const JSONStringRe = /^\s+|\s+$/;
 function getData(ele, key) {
     const value = ele.dataset[key] || ele.dataset[camelCase(key)];
-    try {
-        return JSON.parse(value);
-    }
-    catch (_a) { }
-    return value;
+    if (JSONStringRe.test(value))
+        return value;
+    return attempt(JSON.parse, value);
 }
+// @require core/attempt.ts
 // @require core/camel_case.ts
 function setData(ele, key, value) {
-    try {
-        value = JSON.stringify(value);
-    }
-    catch (_a) { }
+    value = attempt(JSON.stringify, value);
     ele.dataset[camelCase(key)] = value;
 }
 function data(name, value) {
@@ -377,6 +426,8 @@ function data(name, value) {
     if (isString(name)) {
         if (arguments.length < 2)
             return this[0] && getData(this[0], name);
+        if (isUndefined(value))
+            return this;
         return this.each((i, ele) => { setData(ele, name, value); });
     }
     for (const key in name) {
@@ -386,6 +437,10 @@ function data(name, value) {
 }
 fn.data = data;
 // @optional ./data.ts
+function getDocumentDimension(doc, dimension) {
+    const docEle = doc.documentElement;
+    return Math.max(doc.body[`scroll${dimension}`], docEle[`scroll${dimension}`], doc.body[`offset${dimension}`], docEle[`offset${dimension}`], docEle[`client${dimension}`]);
+}
 // @require css/helpers/compute_style_int.ts
 function getExtraSpace(ele, xAxis) {
     return computeStyleInt(ele, `border${xAxis ? 'Left' : 'Top'}Width`) + computeStyleInt(ele, `padding${xAxis ? 'Left' : 'Top'}`) + computeStyleInt(ele, `padding${xAxis ? 'Right' : 'Bottom'}`) + computeStyleInt(ele, `border${xAxis ? 'Right' : 'Bottom'}Width`);
@@ -397,26 +452,31 @@ each([true, false], (i, outer) => {
             if (!this[0])
                 return;
             if (isWindow(this[0]))
-                return win[name];
+                return outer ? this[0][`inner${prop}`] : this[0].document.documentElement[`client${prop}`];
+            if (isDocument(this[0]))
+                return getDocumentDimension(this[0], prop);
             return this[0][`${outer ? 'offset' : 'client'}${prop}`] + (includeMargins && outer ? computeStyleInt(this[0], `margin${i ? 'Top' : 'Left'}`) + computeStyleInt(this[0], `margin${i ? 'Bottom' : 'Right'}`) : 0);
         };
     });
 });
-each(['width', 'height'], (index, prop) => {
-    fn[prop] = function (value) {
+each(['Width', 'Height'], (index, prop) => {
+    const propLC = prop.toLowerCase();
+    fn[propLC] = function (value) {
         if (!this[0])
             return isUndefined(value) ? undefined : this;
         if (!arguments.length) {
             if (isWindow(this[0]))
-                return this[0][camelCase(`outer-${prop}`)];
-            return this[0].getBoundingClientRect()[prop] - getExtraSpace(this[0], !index);
+                return this[0].document.documentElement[`client${prop}`];
+            if (isDocument(this[0]))
+                return getDocumentDimension(this[0], prop);
+            return this[0].getBoundingClientRect()[propLC] - getExtraSpace(this[0], !index);
         }
         const valueNumber = parseInt(value, 10);
         return this.each((i, ele) => {
             if (!isElement(ele))
                 return;
             const boxSizing = computeStyle(ele, 'boxSizing');
-            ele.style[prop] = getSuffixedValue(prop, valueNumber + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
+            ele.style[propLC] = getSuffixedValue(propLC, valueNumber + (boxSizing === 'border-box' ? getExtraSpace(ele, !index) : 0));
         });
     };
 });
@@ -440,6 +500,8 @@ function isHidden(ele) {
 const displayProperty = '___cd';
 fn.toggle = function (force) {
     return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
         const show = isUndefined(force) ? isHidden(ele) : force;
         if (show) {
             ele.style.display = ele[displayProperty] || '';
@@ -477,7 +539,6 @@ function getEventsCache(ele) {
 // @require core/guid.ts
 // @require events/helpers/get_events_cache.ts
 function addEvent(ele, name, namespaces, selector, callback) {
-    callback.guid = callback.guid || cash.guid++;
     const eventCache = getEventsCache(ele);
     eventCache[name] = (eventCache[name] || []);
     eventCache[name].push([namespaces, selector, callback]);
@@ -508,7 +569,11 @@ function removeEvent(ele, name, namespaces, selector, callback) {
 }
 fn.off = function (eventFullName, selector, callback) {
     if (isUndefined(eventFullName)) {
-        this.each((i, ele) => { removeEvent(ele); });
+        this.each((i, ele) => {
+            if (!isElement(ele))
+                return;
+            removeEvent(ele);
+        });
     }
     else if (!isString(eventFullName)) {
         for (const key in eventFullName) {
@@ -522,25 +587,49 @@ fn.off = function (eventFullName, selector, callback) {
         }
         each(getSplitValues(eventFullName), (i, eventFullName) => {
             const [name, namespaces] = parseEventName(getEventNameBubbling(eventFullName));
-            this.each((i, ele) => { removeEvent(ele, name, namespaces, selector, callback); });
+            this.each((i, ele) => {
+                if (!isElement(ele))
+                    return;
+                removeEvent(ele, name, namespaces, selector, callback);
+            });
         });
     }
     return this;
 };
-function on(eventFullName, selector, callback, _one) {
+function on(eventFullName, selector, data, callback, _one) {
     if (!isString(eventFullName)) {
         for (const key in eventFullName) {
-            this.on(key, selector, eventFullName[key]);
+            this.on(key, selector, data, eventFullName[key], _one);
         }
         return this;
     }
-    if (isFunction(selector)) {
-        callback = selector;
-        selector = '';
+    if (!isString(selector)) {
+        if (isUndefined(selector) || isNull(selector)) {
+            selector = '';
+        }
+        else if (isUndefined(data)) {
+            data = selector;
+            selector = '';
+        }
+        else {
+            callback = data;
+            data = selector;
+            selector = '';
+        }
     }
+    if (!isFunction(callback)) {
+        callback = data;
+        data = undefined;
+    }
+    if (!callback)
+        return this;
     each(getSplitValues(eventFullName), (i, eventFullName) => {
         const [name, namespaces] = parseEventName(getEventNameBubbling(eventFullName));
+        if (!name)
+            return;
         this.each((i, ele) => {
+            if (!isElement(ele))
+                return;
             const finalCallback = function (event) {
                 if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator)))
                     return;
@@ -565,7 +654,8 @@ function on(eventFullName, selector, callback, _one) {
                         }
                     });
                 }
-                const returnValue = callback.call(thisArg, event, event.data);
+                event.data = data;
+                const returnValue = callback.call(thisArg, event, event.___td);
                 if (_one) {
                     removeEvent(ele, name, namespaces, selector, finalCallback);
                 }
@@ -581,28 +671,32 @@ function on(eventFullName, selector, callback, _one) {
     return this;
 }
 fn.on = on;
-function one(eventFullName, selector, callback) {
-    return this.on(eventFullName, selector, callback, true);
+function one(eventFullName, selector, data, callback) {
+    return this.on(eventFullName, selector, data, callback, true);
 }
 ;
 fn.one = one;
 fn.ready = function (callback) {
+    const cb = () => attempt(callback, cash);
     if (doc.readyState !== 'loading') {
-        callback(cash);
+        cb();
     }
     else {
-        doc.addEventListener('DOMContentLoaded', () => { callback(cash); });
+        doc.addEventListener('DOMContentLoaded', cb);
     }
     return this;
 };
 fn.trigger = function (event, data) {
     if (isString(event)) {
-        const [name, namespaces] = parseEventName(event), type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
+        const [name, namespaces] = parseEventName(event);
+        if (!name)
+            return this;
+        const type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
         event = doc.createEvent(type);
         event.initEvent(name, true, true);
         event.namespace = namespaces.join(eventsNamespacesSeparator);
     }
-    event.data = data;
+    event.___td = data;
     const isEventFocus = (event.type in eventsFocus);
     return this.each((i, ele) => {
         if (isEventFocus && isFunction(ele[event.type])) {
@@ -625,9 +719,9 @@ function getValue(ele) {
         return pluck(filter.call(ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled), 'value');
     return ele.value || '';
 }
-const queryEncodeSpaceRe = /%20/g;
+const queryEncodeSpaceRe = /%20/g, queryEncodeCRLFRe = /\r?\n/g;
 function queryEncode(prop, value) {
-    return `&${encodeURIComponent(prop)}=${encodeURIComponent(value).replace(queryEncodeSpaceRe, '+')}`;
+    return `&${encodeURIComponent(prop)}=${encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+')}`;
 }
 const skippableRe = /file|reset|submit|button|image/i, checkableRe = /radio|checkbox/i;
 fn.serialize = function () {
@@ -648,17 +742,23 @@ fn.serialize = function () {
     return query.slice(1);
 };
 function val(value) {
-    if (isUndefined(value))
+    if (!arguments.length)
         return this[0] && getValue(this[0]);
     return this.each((i, ele) => {
-        if (ele.tagName === 'SELECT') {
-            const eleValue = isArray(value) ? value : (isNull(value) ? [] : [value]);
-            each(ele.options, (i, option) => {
-                option.selected = eleValue.indexOf(option.value) >= 0;
-            });
+        const isSelect = ele.multiple && ele.options;
+        if (isSelect || checkableRe.test(ele.type)) {
+            const eleValue = isArray(value) ? map.call(value, String) : (isNull(value) ? [] : [String(value)]);
+            if (isSelect) {
+                each(ele.options, (i, option) => {
+                    option.selected = eleValue.indexOf(option.value) >= 0;
+                }, true);
+            }
+            else {
+                ele.checked = eleValue.indexOf(ele.value) >= 0;
+            }
         }
         else {
-            ele.value = isNull(value) ? '' : value;
+            ele.value = isUndefined(value) || isNull(value) ? '' : value;
         }
     });
 }
@@ -666,14 +766,15 @@ fn.val = val;
 fn.clone = function () {
     return this.map((i, ele) => ele.cloneNode(true));
 };
-fn.detach = function () {
-    return this.each((i, ele) => {
+fn.detach = function (comparator) {
+    filtered(this, comparator).each((i, ele) => {
         if (ele.parentNode) {
             ele.parentNode.removeChild(ele);
         }
     });
+    return this;
 };
-const fragmentRe = /^\s*<(\w+)[^>]*>/, singleTagRe = /^\s*<(\w+)\s*\/?>(?:<\/\1>)?\s*$/;
+const fragmentRe = /^\s*<(\w+)[^>]*>/, singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
 const containers = {
     '*': div,
     tr: tbody,
@@ -683,6 +784,8 @@ const containers = {
     tbody: table,
     tfoot: table
 };
+//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
+//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
 function parseHTML(html) {
     if (!isString(html))
         return [];
@@ -701,23 +804,36 @@ fn.empty = function () {
     });
 };
 function html(html) {
-    if (isUndefined(html))
+    if (!arguments.length)
         return this[0] && this[0].innerHTML;
-    return this.each((i, ele) => { ele.innerHTML = html; });
+    if (isUndefined(html))
+        return this;
+    return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
+        ele.innerHTML = html;
+    });
 }
 fn.html = html;
-fn.remove = function () {
-    return this.detach().off();
+fn.remove = function (comparator) {
+    filtered(this, comparator).detach().off();
+    return this;
 };
 function text(text) {
     if (isUndefined(text))
         return this[0] ? this[0].textContent : '';
-    return this.each((i, ele) => { ele.textContent = text; });
+    return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
+        ele.textContent = text;
+    });
 }
 ;
 fn.text = text;
 fn.unwrap = function () {
     this.parent().each((i, ele) => {
+        if (ele.tagName === 'BODY')
+            return;
         const $ele = cash(ele);
         $ele.replaceWith($ele.children());
     });
@@ -729,27 +845,46 @@ fn.offset = function () {
         return;
     const rect = ele.getBoundingClientRect();
     return {
-        top: rect.top + win.pageYOffset - docEle.clientTop,
-        left: rect.left + win.pageXOffset - docEle.clientLeft
+        top: rect.top + win.pageYOffset,
+        left: rect.left + win.pageXOffset
     };
 };
 fn.offsetParent = function () {
-    return cash(this[0] && this[0].offsetParent);
+    return this.map((i, ele) => {
+        let offsetParent = ele.offsetParent;
+        while (offsetParent && computeStyle(offsetParent, 'position') === 'static') {
+            offsetParent = offsetParent.offsetParent;
+        }
+        return offsetParent || docEle;
+    });
 };
 fn.position = function () {
     const ele = this[0];
     if (!ele)
         return;
+    const isFixed = (computeStyle(ele, 'position') === 'fixed'), offset = isFixed ? ele.getBoundingClientRect() : this.offset();
+    if (!isFixed) {
+        const doc = ele.ownerDocument;
+        let offsetParent = ele.offsetParent || doc.documentElement;
+        while ((offsetParent === doc.body || offsetParent === doc.documentElement) && computeStyle(offsetParent, 'position') === 'static') {
+            offsetParent = offsetParent.parentNode;
+        }
+        if (offsetParent !== ele && isElement(offsetParent)) {
+            const parentOffset = cash(offsetParent).offset();
+            offset.top -= parentOffset.top + computeStyleInt(offsetParent, 'borderTopWidth');
+            offset.left -= parentOffset.left + computeStyleInt(offsetParent, 'borderLeftWidth');
+        }
+    }
     return {
-        left: ele.offsetLeft,
-        top: ele.offsetTop
+        top: offset.top - computeStyleInt(ele, 'marginTop'),
+        left: offset.left - computeStyleInt(ele, 'marginLeft')
     };
 };
 fn.children = function (comparator) {
     return filtered(cash(unique(pluck(this, ele => ele.children))), comparator);
 };
 fn.contents = function () {
-    return cash(unique(pluck(this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ele.childNodes)));
+    return cash(unique(pluck(this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : (ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes))));
 };
 fn.find = function (selector) {
     return cash(unique(pluck(this, ele => find(selector, ele))));
@@ -774,22 +909,24 @@ function evalScripts(node, doc) {
     });
 }
 // @require ./eval_scripts.ts
-function insertElement(anchor, target, left, inside) {
+function insertElement(anchor, target, left, inside, evaluate) {
     if (inside) { // prepend/append
-        anchor.insertBefore(target, left ? anchor.firstElementChild : null);
+        anchor.insertBefore(target, left ? anchor.firstChild : null);
     }
     else { // before/after
-        anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextElementSibling);
+        anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
     }
-    evalScripts(target, anchor.ownerDocument);
+    if (evaluate) {
+        evalScripts(target, anchor.ownerDocument);
+    }
 }
 // @require ./insert_element.ts
 function insertSelectors(selectors, anchors, inverse, left, inside, reverseLoop1, reverseLoop2, reverseLoop3) {
     each(selectors, (si, selector) => {
         each(cash(selector), (ti, target) => {
             each(cash(anchors), (ai, anchor) => {
-                const anchorFinal = inverse ? target : anchor, targetFinal = inverse ? anchor : target;
-                insertElement(anchorFinal, !ai ? targetFinal : targetFinal.cloneNode(true), left, inside);
+                const anchorFinal = inverse ? target : anchor, targetFinal = inverse ? anchor : target, indexFinal = inverse ? ti : ai;
+                insertElement(anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode(true), left, inside, !indexFinal);
             }, reverseLoop3);
         }, reverseLoop2);
     }, reverseLoop1);
@@ -855,15 +992,18 @@ fn.is = function (comparator) {
     const compare = getCompareFunction(comparator);
     return some.call(this, (ele, i) => compare.call(ele, i, ele));
 };
-fn.next = function (comparator, _all) {
-    return filtered(cash(unique(pluck(this, 'nextElementSibling', _all))), comparator);
+fn.next = function (comparator, _all, _until) {
+    return filtered(cash(unique(pluck(this, 'nextElementSibling', _all, _until))), comparator);
 };
 fn.nextAll = function (comparator) {
     return this.next(comparator, true);
 };
+fn.nextUntil = function (until, comparator) {
+    return this.next(comparator, true, until);
+};
 fn.not = function (comparator) {
     const compare = getCompareFunction(comparator);
-    return this.filter((i, ele) => !compare.call(ele, i, ele));
+    return this.filter((i, ele) => (!isString(comparator) || isElement(ele)) && !compare.call(ele, i, ele));
 };
 fn.parent = function (comparator) {
     return filtered(cash(unique(pluck(this, 'parentNode'))), comparator);
@@ -881,14 +1021,20 @@ fn.closest = function (comparator) {
         return filtered;
     return $parent.closest(comparator);
 };
-fn.parents = function (comparator) {
-    return filtered(cash(unique(pluck(this, 'parentElement', true))), comparator);
+fn.parents = function (comparator, _until) {
+    return filtered(cash(unique(pluck(this, 'parentElement', true, _until))), comparator);
 };
-fn.prev = function (comparator, _all) {
-    return filtered(cash(unique(pluck(this, 'previousElementSibling', _all))), comparator);
+fn.parentsUntil = function (until, comparator) {
+    return this.parents(comparator, until);
+};
+fn.prev = function (comparator, _all, _until) {
+    return filtered(cash(unique(pluck(this, 'previousElementSibling', _all, _until))), comparator);
 };
 fn.prevAll = function (comparator) {
     return this.prev(comparator, true);
+};
+fn.prevUntil = function (until, comparator) {
+    return this.prev(comparator, true, until);
 };
 fn.siblings = function (comparator) {
     return filtered(cash(unique(pluck(this, ele => cash(ele).parent().children().not(ele)))), comparator);
@@ -900,10 +1046,15 @@ fn.siblings = function (comparator) {
 // @optional ./has.ts
 // @optional ./is.ts
 // @optional ./next.ts
+// @optional ./next_all.ts
+// @optional ./next_until.ts
 // @optional ./not.ts
 // @optional ./parent.ts
 // @optional ./parents.ts
+// @optional ./parents_until.ts
 // @optional ./prev.ts
+// @optional ./prev_all.ts
+// @optional ./prev_until.ts
 // @optional ./siblings.ts
 // @optional attributes/index.ts
 // @optional collection/index.ts

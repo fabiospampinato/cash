@@ -2,6 +2,7 @@ interface Event {
     namespace: string;
     data: any;
     ___cd?: boolean;
+    ___td?: boolean;
 }
 interface Cash {
     [index: number]: EleLoose | undefined;
@@ -36,9 +37,6 @@ interface Cash {
 interface Cash {
     slice(start?: number, end?: number): Cash;
 }
-interface CashStatic {
-    camelCase(str: string): string;
-}
 declare type EachCallback<T> = (this: T, index: number, ele: T) => any;
 interface CashStatic {
     each<T>(arr: ArrayLike<T>, callback: EachCallback<T>): void;
@@ -50,6 +48,8 @@ interface Cash {
     removeProp(prop: string): this;
 }
 interface CashStatic {
+    extend(): any;
+    extend(target: any): typeof cash;
     extend(target: any, ...objs: any[]): any;
 }
 interface Cash {
@@ -59,12 +59,8 @@ interface CashStatic {
     guid: number;
 }
 interface CashStatic {
-    matches(ele: any, selector: string): boolean;
-}
-interface CashStatic {
     isWindow(x: any): x is Window;
     isFunction(x: any): x is Function;
-    isString(x: any): x is string;
     isNumeric(x: any): boolean;
     isArray(x: any): x is Array<any>;
 }
@@ -116,9 +112,6 @@ interface CashStatic {
 interface Cash {
     add(selector: Selector, context?: Context): Cash;
 }
-interface CashStatic {
-    prefixedProp(prop: string, isVariable?: boolean): string;
-}
 interface Cash {
     css(prop: string): string | undefined;
     css(prop: string, value: number | string): this;
@@ -160,13 +153,23 @@ interface Cash {
 }
 interface Cash {
     on(events: Record<string, EventCallback>): this;
-    on(events: string, callback: EventCallback, _one?: boolean): this;
-    on(events: string, selector: string | EventCallback, callback: EventCallback, _one?: boolean): this;
+    on(events: Record<string, EventCallback>, selector: string): this;
+    on(events: Record<string, EventCallback>, data: any): this;
+    on(events: Record<string, EventCallback>, selector: string | null | undefined, data: any): this;
+    on(events: string, callback: EventCallback): this;
+    on(events: string, selector: string, callback: EventCallback): this;
+    on(events: string, data: any, callback: EventCallback): this;
+    on(events: string, selector: string | null | undefined, data: any, callback: EventCallback, _one?: boolean): this;
 }
 interface Cash {
     one(events: Record<string, EventCallback>): this;
+    one(events: Record<string, EventCallback>, selector: string): this;
+    one(events: Record<string, EventCallback>, data: any): this;
+    one(events: Record<string, EventCallback>, selector: string | null | undefined, data: any): this;
     one(events: string, callback: EventCallback): this;
-    one(events: string, selector: string | EventCallback, callback: EventCallback): this;
+    one(events: string, selector: string, callback: EventCallback): this;
+    one(events: string, data: any, callback: EventCallback): this;
+    one(events: string, selector: string | null | undefined, data: any, callback: EventCallback): this;
 }
 interface Cash {
     ready(callback: Function): this;
@@ -185,7 +188,7 @@ interface Cash {
     clone(): this;
 }
 interface Cash {
-    detach(): this;
+    detach(comparator?: Comparator): this;
 }
 interface CashStatic {
     parseHTML(html: string): EleLoose[];
@@ -198,7 +201,7 @@ interface Cash {
     html(html: string): this;
 }
 interface Cash {
-    remove(): this;
+    remove(comparator?: Comparator): this;
 }
 interface Cash {
     text(): string;
@@ -277,10 +280,13 @@ interface Cash {
     is(comparator?: Comparator): boolean;
 }
 interface Cash {
-    next(comparator?: Comparator, _all?: boolean): Cash;
+    next(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
 }
 interface Cash {
     nextAll(comparator?: Comparator): Cash;
+}
+interface Cash {
+    nextUntil(until?: Comparator, comparator?: Comparator): Cash;
 }
 interface Cash {
     not(comparator?: Comparator): Cash;
@@ -295,13 +301,19 @@ interface Cash {
     closest(comparator?: Comparator): Cash;
 }
 interface Cash {
-    parents(comparator?: Comparator): Cash;
+    parents(comparator?: Comparator, _until?: Comparator): Cash;
 }
 interface Cash {
-    prev(comparator?: Comparator, _all?: boolean): Cash;
+    parentsUntil(until?: Comparator, comparator?: Comparator): Cash;
+}
+interface Cash {
+    prev(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
 }
 interface Cash {
     prevAll(comparator?: Comparator): Cash;
+}
+interface Cash {
+    prevUntil(until?: Comparator, comparator?: Comparator): Cash;
 }
 interface Cash {
     siblings(comparator?: Comparator): Cash;
