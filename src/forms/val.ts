@@ -14,7 +14,7 @@ function val ( this: Cash ): string | string[];
 function val ( this: Cash, value: string | string[] ): Cash;
 function val ( this: Cash, value?: string | string[] ) {
 
-  if ( isUndefined ( value ) ) return this[0] && getValue ( this[0] );
+  if ( !arguments.length ) return this[0] && getValue ( this[0] );
 
   return this.each ( ( i, ele ) => {
 
@@ -40,7 +40,7 @@ function val ( this: Cash, value?: string | string[] ) {
 
     } else {
 
-      ele.value = isNull ( value ) ? '' : value;
+      ele.value = isUndefined ( value ) || isNull ( value ) ? '' : value;
 
     }
 
