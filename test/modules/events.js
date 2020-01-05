@@ -209,6 +209,22 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'supports Window and Document objects', function ( t ) {
+
+      var eles = $([window, document]);
+      var count = 0;
+
+      function handler () {
+        count++;
+      }
+
+      eles.on ( 'foo', handler );
+      eles.trigger ( 'foo' );
+
+      t.is ( count, 3 );
+
+    });
+
     it ( 'ignores the order of namespaces', function ( t ) {
 
       var ele = $('.event');

@@ -21,7 +21,7 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
     this.each ( ( i, ele ) => {
 
-      if ( !isElement ( ele ) ) return;
+      if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
       removeEvent ( ele );
 
@@ -50,7 +50,7 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
       this.each ( ( i, ele ) => {
 
-        if ( !isElement ( ele ) ) return;
+        if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
         removeEvent ( ele, name, namespaces, selector, callback );
 
