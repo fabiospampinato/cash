@@ -570,7 +570,7 @@ function removeEvent(ele, name, namespaces, selector, callback) {
 fn.off = function (eventFullName, selector, callback) {
     if (isUndefined(eventFullName)) {
         this.each((i, ele) => {
-            if (!isElement(ele))
+            if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                 return;
             removeEvent(ele);
         });
@@ -588,7 +588,7 @@ fn.off = function (eventFullName, selector, callback) {
         each(getSplitValues(eventFullName), (i, eventFullName) => {
             const [name, namespaces] = parseEventName(getEventNameBubbling(eventFullName));
             this.each((i, ele) => {
-                if (!isElement(ele))
+                if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                     return;
                 removeEvent(ele, name, namespaces, selector, callback);
             });
@@ -628,7 +628,7 @@ function on(eventFullName, selector, data, callback, _one) {
         if (!name)
             return;
         this.each((i, ele) => {
-            if (!isElement(ele))
+            if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                 return;
             const finalCallback = function (event) {
                 if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator)))
@@ -654,7 +654,12 @@ function on(eventFullName, selector, data, callback, _one) {
                         }
                     });
                 }
-                event.data = data;
+                Object.defineProperty(event, 'data', {
+                    configurable: true,
+                    get() {
+                        return data;
+                    }
+                });
                 const returnValue = callback.call(thisArg, event, event.___td);
                 if (_one) {
                     removeEvent(ele, name, namespaces, selector, finalCallback);

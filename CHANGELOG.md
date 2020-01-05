@@ -1,3 +1,7 @@
+### Version 6.0.1
+- Ensuring events work with Document and Window objects
+- Ensuring “event.data” is setted reliably
+
 ### Version 6.0.0
 
 ##### Removed Features

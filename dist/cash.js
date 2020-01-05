@@ -711,7 +711,7 @@ fn.off = function (eventFullName, selector, callback) {
 
   if (isUndefined(eventFullName)) {
     this.each(function (i, ele) {
-      if (!isElement(ele)) return;
+      if (!isElement(ele) && !isDocument(ele) && !isWindow(ele)) return;
       removeEvent(ele);
     });
   } else if (!isString(eventFullName)) {
@@ -730,7 +730,7 @@ fn.off = function (eventFullName, selector, callback) {
           namespaces = _a[1];
 
       _this.each(function (i, ele) {
-        if (!isElement(ele)) return;
+        if (!isElement(ele) && !isDocument(ele) && !isWindow(ele)) return;
         removeEvent(ele, name, namespaces, selector, callback);
       });
     });
@@ -777,7 +777,7 @@ function on(eventFullName, selector, data, callback, _one) {
     if (!name) return;
 
     _this.each(function (i, ele) {
-      if (!isElement(ele)) return;
+      if (!isElement(ele) && !isDocument(ele) && !isWindow(ele)) return;
 
       var finalCallback = function finalCallback(event) {
         if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator))) return;
@@ -805,7 +805,12 @@ function on(eventFullName, selector, data, callback, _one) {
           });
         }
 
-        event.data = data;
+        Object.defineProperty(event, 'data', {
+          configurable: true,
+          get: function get() {
+            return data;
+          }
+        });
         var returnValue = callback.call(thisArg, event, event.___td);
 
         if (_one) {
