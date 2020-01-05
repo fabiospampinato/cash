@@ -244,12 +244,17 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
-    it ( 'excludes non-element nodes', function ( t ) {
+    it ( 'works with non-element nodes', function ( t ) {
 
-      var eles = $('<div>there <!-- mon ami --></div>').contents ();
-      var filtered = eles.not ( '*' );
+      var eles = $('<span id="nonnodesElement">hi</span> there <!-- mon ami -->');
 
-      t.is ( filtered.length, 0 );
+      t.is ( eles.not ( eles ).length, 0 );
+      t.is ( eles.not ( '*' ).length, 0 );
+      t.is ( eles.not ( eles.first () ).length, eles.length - 1 );
+      t.is ( eles.not ( eles.get ( 0 ) ).length, eles.length - 1 );
+      t.is ( eles.not ( eles.get ( 1 ) ).length, eles.length - 1 );
+      t.is ( eles.not ( eles.get ( 2 ) ).length, eles.length - 1 );
+      t.deepEqual ( eles.not ( document.body ).get (), eles.get () );
 
     });
 
