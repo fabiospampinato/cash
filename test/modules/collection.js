@@ -26,8 +26,8 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       var added = ele.add ( document.body );
 
       t.is ( added.length, 2 );
-      t.true ( !!added.get ().find ( e => e === ele[0] ) );
-      t.true ( !!added.get ().find ( e => e === document.body ) );
+      t.true ( added.get ().indexOf ( ele[0] ) >= 0 );
+      t.true ( added.get ().indexOf ( document.body ) >= 0 );
 
     });
 
@@ -265,8 +265,8 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
       });
 
       t.is ( mapped.length, 2 );
-      t.true ( !!mapped.get ().find ( e => e === document.head ) );
-      t.true ( !!mapped.get ().find ( e => e === document.body ) );
+      t.true ( mapped.get ().indexOf ( document.head ) >= 0 );
+      t.true ( mapped.get ().indexOf ( document.body ) >= 0 );
 
     });
 

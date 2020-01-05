@@ -142,7 +142,7 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
       $(handler);
 
-      setTimeout ( () => {
+      setTimeout ( function () {
         t.is ( count, 1 );
         done ();
       }, 100 );

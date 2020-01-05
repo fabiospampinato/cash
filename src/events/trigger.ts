@@ -14,8 +14,11 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   if ( isString ( event ) ) {
 
-    const [name, namespaces] = parseEventName ( event ),
-          type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
+    const [name, namespaces] = parseEventName ( event );
+
+    if ( !name ) return this;
+
+    const type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
 
     event = doc.createEvent ( type );
     event.initEvent ( name, true, true );

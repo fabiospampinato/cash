@@ -550,7 +550,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       $(handler);
 
-      setTimeout ( () => {
+      setTimeout ( function () {
         assert.is ( count, 1 );
         assert.is ( arg, $ );
         done ();

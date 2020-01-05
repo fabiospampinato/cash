@@ -30,7 +30,7 @@ function val ( this: Cash, value?: string | string[] ) {
 
           option.selected = eleValue.indexOf ( option.value ) >= 0;
 
-        });
+        }, true );
 
       } else {
 

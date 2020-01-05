@@ -10,5 +10,6 @@ function getFixtureInit ( fixture ) {
 /* SUPPORTS */
 
 var Supports = {
-  CSSvariables: window.CSS && window.CSS.supports && window.CSS.supports ( '--f:0' )
+  CSSvariables: window.CSS && window.CSS.supports && window.CSS.supports ( '--f:0' ),
+  template: !!$('<template>')[0].content
 };

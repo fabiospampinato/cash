@@ -598,11 +598,13 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     it ( 'doesn\'t unwrap immediate children of the body', function ( t ) {
 
-      var ele = $('body > #qunit');
+      var ele = $('<div id="foo" ></div>').appendTo ( document.body );
 
       ele.unwrap ();
 
-      t.is ( $('body > #qunit').length, 1 );
+      t.is ( $('#foo').length, 1 );
+
+      ele.remove ();
 
     });
 
