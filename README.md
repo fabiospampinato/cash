@@ -286,7 +286,7 @@ $(element).data ( object ) // => collection
 
 #### fn.each ()
 
-Iterates over a collection with `callback ( index, element )`.
+Iterates over a collection with `callback ( index, element )`. The callback function may exit iteration early by returning `false`.
 
 ```js
 $(element).each ( callback ) // => collection
@@ -876,10 +876,10 @@ $.guid++ // => number
 
 #### $.each ()
 
-Iterates through an array and calls the `callback ( value, index, array )` method on each.
+Iterates through an array and calls the `callback ( index, element )` method on each element. The callback function may exit iteration early by returning `false`.
 
 ```js
-$.each ( array, callback ) // => undefined
+$.each ( array, callback ) // => array
 ```
 
 #### $.extend ()
