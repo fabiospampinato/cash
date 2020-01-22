@@ -9,22 +9,23 @@ Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that pr
 
 ## Comparison
 
-| Size               | Cash        | Zepto 1.2.0 | jQuery 3.4.1 |
-| ------------------ | ----------- | ----------- | ------------ |
-| Unminified         | **34.6 KB** | 58.7 KB     | 280 KB       |
-| Minified           | **15.2 KB** | 26 KB       | 88.1 KB      |
-| Minified & Gzipped | **5.6 KB**  | 9.8 KB      | 30.7 KB      |
+| Size               | Cash        | Zepto 1.2.0 | jQuery Slim 3.4.1 |
+| ------------------ | ----------- | ----------- | ----------------- |
+| Unminified         | **34.9 KB** | 58.7 KB     | 227 KB            |
+| Minified           | **15.3 KB** | 26 KB       | 71 KB             |
+| Minified & Gzipped | **5.7 KB**  | 9.8 KB      | 24.4 KB           |
 
-An **82%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/kenwheeler/cash/blob/master/docs/partial_builds.md) too.
+A **76.6%%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/kenwheeler/cash/blob/master/docs/partial_builds.md) too.
 
-| Features                 | Cash                         | Zepto 1.2.0                    | jQuery 3.4.1             |
-| ------------------------ | ---------------------------- | ------------------------------ | ------------------------ |
-| Supports Modern Browsers | ✔                            | ️✔                             | ✔                        |
-| Actively Maintained      | ✔                            | ❌                              | ✔                        |
-| Namespaced Events        | ✔                            | ️❌                             | ✔                        |
-| Modern Codebase          | ✔ (TypeScript)               | ️❌                             | ❌                        |
-| TypeScript Types         | ✔ (generated from code)      | ⚠️ (via DefinitelyTyped)       | ⚠️ (via DefinitelyTyped) |
-| Partial Builds           | ✔ (can exclude single files) | ⚠️ (can exclude whole modules) | ❌                        |
+| Features                 | Cash                               | Zepto 1.2.0                    | jQuery Slim 3.4.1              |
+| ------------------------ | ---------------------------------- | ------------------------------ | ------------------------------ |
+| Supports Older Browsers  | ❌                                  | ️❌                             | ✔                              |
+| Supports Modern Browsers | ✔                                  | ️✔                             | ✔                              |
+| Actively Maintained      | ✔                                  | ❌                              | ✔                              |
+| Namespaced Events        | ✔                                  | ️❌                             | ✔                              |
+| Modern Codebase          | ✔ (TypeScript)                     | ️❌                             | ❌                              |
+| TypeScript Types         | ✔ (generated from code)            | ⚠️ (via DefinitelyTyped)       | ⚠️ (via DefinitelyTyped)       |
+| Partial Builds           | ✔ (can exclude individual methods) | ⚠️ (can exclude whole modules) | ⚠️ (can exclude whole modules) |
 
 If you're migrating from jQuery be sure to read our [migration guide](https://github.com/kenwheeler/cash/blob/master/docs/migration_guide.md).
 
