@@ -23,7 +23,7 @@ A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bun
 | Supports Modern Browsers | ✔                                  | ️✔                             | ✔                              |
 | Actively Maintained      | ✔                                  | ❌                              | ✔                              |
 | Namespaced Events        | ✔                                  | ️❌                             | ✔                              |
-| Modern Codebase          | ✔ (TypeScript)                     | ️❌                             | ❌                              |
+| Typed Codebase           | ✔ (TypeScript)                     | ️❌                             | ❌                              |
 | TypeScript Types         | ✔ (generated from code)            | ⚠️ (via DefinitelyTyped)       | ⚠️ (via DefinitelyTyped)       |
 | Partial Builds           | ✔ (can exclude individual methods) | ⚠️ (can exclude whole modules) | ⚠️ (can exclude whole modules) |
 
