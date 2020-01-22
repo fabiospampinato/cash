@@ -254,6 +254,10 @@ $('#foo').attr ( 'bar', () => Math.random () );
 
 Cash doesn't support this.
 
+### Sort order
+
+Elements inside Cash and jQuery collections may be sorted differently.
+
 ## Contributing
 
 Did you find another difference between jQuery and Cash during your migration? Please add that to this page so that future migrations will be smoother for others.
