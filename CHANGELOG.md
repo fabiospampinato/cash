@@ -1,3 +1,8 @@
+### Version 6.0.2
+- Readme: improved comparison with jQuery, fixing some wrong/unfair comparisons/statements
+- Migration guide: mentioning sort order
+- $.fn.ready: ensuring the callback is called asynchronously and errors are not silenced
+
 ### Version 6.0.1
 - Ensuring events work with Document and Window objects
 - Ensuring “event.data” is setted reliably

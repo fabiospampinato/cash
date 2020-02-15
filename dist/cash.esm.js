@@ -682,7 +682,7 @@ function one(eventFullName, selector, data, callback) {
 ;
 fn.one = one;
 fn.ready = function (callback) {
-    const cb = () => attempt(callback, cash);
+    const cb = () => setTimeout(callback, 0, cash);
     if (doc.readyState !== 'loading') {
         cb();
     }

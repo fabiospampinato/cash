@@ -841,7 +841,7 @@ fn.one = one;
 
 fn.ready = function (callback) {
   var cb = function cb() {
-    return attempt(callback, cash);
+    return setTimeout(callback, 0, cash);
   };
 
   if (doc.readyState !== 'loading') {

@@ -1650,7 +1650,7 @@ interface Cash {
 
 fn.ready = function ( this: Cash, callback: ( $: typeof cash ) => any ) {
 
-  const cb = () => attempt ( callback, cash );
+  const cb = () => setTimeout ( callback, 0, cash );
 
   if ( doc.readyState !== 'loading' ) {
 
