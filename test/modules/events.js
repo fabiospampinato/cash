@@ -586,6 +586,8 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       $(handler);
 
+      assert.is ( count, 0 ); // Ensuring it's called asynchronously
+
       setTimeout ( function () {
         assert.is ( count, 1 );
         assert.is ( arg, $ );
@@ -611,6 +613,9 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       };
 
       $(handler);
+
+      assert.is ( count, 0 ); // Ensuring it's called asynchronously
+
       $(document).trigger ( 'DOMContentLoaded' );
 
       setTimeout ( function () {
@@ -621,12 +626,18 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    QUnit.test ( 'exceptions aren\'t propagated', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+    QUnit.test ( 'exceptions are propagated', function ( assert ) { // For some reason we can't use our nice helpers for async assertions :(
+
+      assert.expect ( 2 );
 
       var done = assert.async ();
 
+      window.onerror = function ( err ) {
+        assert.ok ( /foo/i.test ( err ) );
+      };
+
       var handler = function () {
-        throw new Error ();
+        throw new Error ( 'foo' );
       };
 
       $(handler);
