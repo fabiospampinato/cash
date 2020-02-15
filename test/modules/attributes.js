@@ -340,6 +340,14 @@ describe ( 'Attributes', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var ele = $('.event');
+
+      t.is ( ele.prop ( 'constructor' ), ele[0].constructor );
+
+    });
+
   });
 
   describe ( '$.fn.removeAttr', function ( it ) {

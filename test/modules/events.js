@@ -355,6 +355,16 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var ele = $('.event');
+
+      ele.on ( 'valueOf', function () {} );
+
+      t.pass ();
+
+    });
+
   });
 
   describe ( '$.fn.one', function ( it ) {
@@ -544,6 +554,16 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var ele = $('.event');
+
+      ele.off ( 'valueOf', function () {} );
+
+      t.pass ();
+
+    });
+
   });
 
   describe ( '$.fn.ready', function () {
@@ -723,6 +743,16 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.on ( 'foo.ns1.ns2', handler ).trigger ( 'foo' ).trigger ( 'foo.ns1' ).trigger ( 'foo.ns2' ).trigger ( 'foo.ns3' ).trigger ( 'foo.ns1.ns3' );
 
       t.is ( count, 3 );
+
+    });
+
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var ele = $('.event');
+
+      ele.trigger ( 'valueOf' );
+
+      t.pass ();
 
     });
 

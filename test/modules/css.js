@@ -81,6 +81,16 @@ describe ( 'CSS', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var ele = $('.css');
+
+      ele.css ( 'constructor', '3px' );
+
+      t.is ( ele.css ( 'constructor' ), '3px' );
+
+    });
+
   });
 
 });

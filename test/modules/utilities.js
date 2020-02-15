@@ -243,6 +243,14 @@ describe ( 'Utilities', function () {
 
     });
 
+    it.skip ( 'doesn\'t have prototype inheritance issues', function ( t ) {
+
+      var constructor = $('<constructor>CONTENT</constructor>');
+
+      t.is ( constructor.html (), 'CONTENT' );
+
+    });
+
   });
 
   describe ( '$.unique', function ( it ) {
