@@ -22,9 +22,13 @@ function extend ( target?: any, ...objs: any[] ) {
   for ( let i = 1; i < length; i++ ) {
 
     for ( const key in arguments[i] ) {
-      if (arguments[i].hasOwnProperty(key)) {
+
+      if ( arguments[i].hasOwnProperty( key ) ) {
+
         target[key] = arguments[i][key];
+
       }
+
     }
 
   }
