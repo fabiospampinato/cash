@@ -633,11 +633,11 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var done = assert.async ();
 
       window.onerror = function ( err ) {
-        assert.ok ( /foo/i.test ( err ) );
+        assert.ok ( /ready/i.test ( err ) );
       };
 
       var handler = function () {
-        throw new Error ( 'foo' );
+        throw new Error ( 'Ready exception...' );
       };
 
       $(handler);
