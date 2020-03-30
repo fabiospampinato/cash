@@ -77,7 +77,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
+    const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
+          name = getEventNameBubbling ( nameOriginal );
 
     if ( !name ) return;
 
