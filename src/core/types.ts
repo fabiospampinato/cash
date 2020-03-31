@@ -3,6 +3,7 @@ interface Event {
   namespace: string,
   data: any,
   ___cd?: boolean, // Delegate
+  ___ot?: string, // Original type
   ___td?: boolean // Trigger data
 }
 

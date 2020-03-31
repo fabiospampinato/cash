@@ -92,52 +92,71 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    ( document.hasFocus () ? it.only : it.skip )( 'supports events that do not bubble', function ( t ) { // If the document isn't focused the element won't get the focus either
+    //TODO: Ensure native `.focus ()` and `.blur ()` calls work
+
+    describe ( 'supports events that do not bubble', function ( it ) { // If the document isn't focused the element won't get the focus either
+
+      if ( !document.hasFocus () ) return; // If the document isn't focused the element won't get the focus either
 
       var events = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur', 'mouseenter', 'mouseleave'],
           eventsTrigger = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focusin', 'focusout', 'mouseover', 'mouseout'],
-          counts = [7, 7, 8, 14, 14, 14, 14, 14, 14, 4, 4, 14, 14];
+          counts = [[1, 1, 3, 3, 0, 0, 0], [1, 1, 3, 3, 0, 0, 0], [1, 1, 3, 3, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 
       events.forEach ( function ( event, index ) {
 
-        var doc = $(document);
-        var ele = $('.event-focus');
-        var parent = $('.parent');
-        var child = $('event-focus-child');
-        var count = 0;
-        var eventTrigger = eventsTrigger[index];
+        it ( `[${event} -> ${eventsTrigger[index]}]`, function ( t ) {
 
-        function handler () {
-          count++;
-        }
+          var doc = $(document);
+          var ele = $('.event-focus');
+          var parent = $('.parent');
+          var child = $('event-focus-child');
+          var count = 0;
+          var eventTrigger = eventsTrigger[index];
 
-        doc.on ( event, handler );
-        doc.on ( event, '.event-focus', handler );
-        parent.on ( event, handler );
-        parent.on ( event, '.event-focus', handler );
-        ele.on ( event, handler );
+          function handler () {
+            count++;
+          }
 
-        parent.trigger ( eventTrigger );
-        parent.trigger ( eventTrigger );
-        ele.trigger ( eventTrigger );
-        ele.trigger ( eventTrigger );
-        child.trigger ( eventTrigger );
-        child.trigger ( eventTrigger );
+          function check ( countIndex ) {
+            t.is ( count, counts[index][countIndex] );
+            count = 0;
+          }
 
-        doc.off ( event, handler );
-        doc.off ( event, '.event-focus', handler );
-        parent.off ( event, handler );
-        parent.off ( event, '.event-focus', handler );
-        ele.off ( event, handler );
+          doc.on ( event, handler );
+          doc.on ( event, '.event-focus', handler );
+          parent.on ( event, handler );
+          parent.on ( event, '.event-focus', handler );
+          ele.on ( event, handler );
 
-        parent.trigger ( eventTrigger );
-        parent.trigger ( eventTrigger );
-        ele.trigger ( eventTrigger );
-        ele.trigger ( eventTrigger );
-        child.trigger ( eventTrigger );
-        child.trigger ( eventTrigger );
+          parent.trigger ( eventTrigger );
+          check ( 0 );
+          parent.trigger ( eventTrigger );
+          check ( 1 );
+          ele.trigger ( eventTrigger );
+          check ( 2 );
+          ele.trigger ( eventTrigger );
+          check ( 3 );
+          child.trigger ( eventTrigger );
+          check ( 4 );
+          child.trigger ( eventTrigger );
+          check ( 5 );
 
-        t.is ( count, counts[index] );
+          doc.off ( event, handler );
+          doc.off ( event, '.event-focus', handler );
+          parent.off ( event, handler );
+          parent.off ( event, '.event-focus', handler );
+          ele.off ( event, handler );
+
+          parent.trigger ( eventTrigger );
+          parent.trigger ( eventTrigger );
+          ele.trigger ( eventTrigger );
+          ele.trigger ( eventTrigger );
+          child.trigger ( eventTrigger );
+          child.trigger ( eventTrigger );
+
+          check ( 6 );
+
+        });
 
       });
 

@@ -78,7 +78,9 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
     const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-          name = getEventNameBubbling ( nameOriginal );
+          name = getEventNameBubbling ( nameOriginal ),
+          isEventBubblingProxy = ( nameOriginal !== name ),
+          isEventFocus = ( nameOriginal in eventsFocus );
 
     if ( !name ) return;
 
@@ -87,6 +89,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
       if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
       const finalCallback = function ( event: Event ) {
+
+        if ( isEventBubblingProxy && event.___ot !== nameOriginal ) return;
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -109,6 +113,10 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
           thisArg = target;
 
           event.___cd = true; // Delegate
+
+        } else if ( isEventFocus && event.___ot === nameOriginal && ele !== event.target && ele.contains ( event.target ) ) {
+
+          return;
 
         }
 
