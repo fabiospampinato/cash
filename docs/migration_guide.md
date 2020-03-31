@@ -112,6 +112,17 @@ event.cancelBubble;
 event;
 ```
 
+### Non-bubbling events
+
+Some native events don't actually bubble at the browser level, for historical reasons: `focus`, `blur`, `mouseenter` and `mouseleave`, but alternative bubbling versions of these events exist: `focusin`, `focusout`, `mouseover` and `mouseout`.
+
+Both jQuery and Cash let you use the non-bubbling version of these events and transparently make them bubble, however there are some minor differences:
+
+- In Cash if you pass `$.fn.on` the non-bubbling version of an event, and then pass `$.fn.trigger` the bubbling version of that event, the event handler registered for the non-bubbling version of that event won't be triggered, you must use event names consistently.
+  - In jQuery depending on the circumstances the event handler registered for the non-bubbling version of an event could be triggered even when then triggering the bubbling version of that event.
+- In Cash as long as you use non-bubbling events with the provided event functions, like `$.fn.on` and `$.fn.trigger`, they will always be made bubble. If you instead trigger non-bubbling events manually, like by calling the `focus` method of an element, that event won't be made bubble.
+  - In jQuery natively-triggered non-bubbling events will be made bubble too.
+
 ### Stopping propagation from a delegated event handler
 
 In Cash when using event delegation calling `event.stopPropagation` or returning `false` stops the propagation from the target element, not the delegate element.
