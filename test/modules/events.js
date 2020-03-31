@@ -6,6 +6,7 @@ var fixture = '\
         <div class="grandchild"></div>\
       </div>\
     </div>\
+    <input class="input" />\
     <div class="event-focus" tabindex="-1">\
       <div class="event-focus-child" tabindex="-1"></div>\
     </div>\
@@ -102,7 +103,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       events.forEach ( function ( event, index ) {
 
-        it ( `[${event} -> ${eventsTrigger[index]}]`, function ( t ) {
+        it ( '[' + event + ' -> ' + eventsTrigger[index] + ']', function ( t ) {
 
           var doc = $(document);
           var ele = $('.event-focus');
@@ -180,6 +181,28 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.trigger ( 'blur' );
 
       t.is ( count, 2 );
+
+    });
+
+    ( document.hasFocus () ? it : it.skip )( 'listens to native focus/blur', function ( t ) { // If the document isn't focused the element won't get the focus either
+
+      var events = ['focus', 'blur'];
+
+      events.forEach ( function ( event ) {
+
+        var input = $('.input');
+        var count = 0;
+
+        function handler () {
+          count++;
+        }
+
+        input.on ( event, handler );
+        input[0][event] ();
+
+        t.is ( count, 1 );
+
+      });
 
     });
 
@@ -737,10 +760,9 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
           nativeHandler.apply ( this, arguments );
         };
 
-        ele.on ( event, handler );
         ele.trigger ( event );
 
-        t.is ( count, 2 );
+        t.is ( count, 1 );
 
       });
 

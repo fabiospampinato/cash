@@ -3,6 +3,8 @@ interface Event {
   namespace: string,
   data: any,
   ___cd?: boolean, // Delegate
+  ___ifocus?: boolean, // Ignore focus
+  ___iblur?: boolean, // Ignore blur
   ___ot?: string, // Original type
   ___td?: boolean // Trigger data
 }

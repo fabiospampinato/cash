@@ -35,7 +35,13 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   return this.each ( ( i, ele ) => {
 
-    if ( isEventFocus && isFunction ( ele[event.___ot] ) ) ele[event.___ot]();
+    if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
+
+      ele[`___i${event.___ot}`] = true; // Ensuring this event gets ignored
+
+      ele[event.___ot]();
+
+    }
 
     ele.dispatchEvent ( event );
 

@@ -90,7 +90,7 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
       const finalCallback = function ( event: Event ) {
 
-        if ( isEventBubblingProxy && event.___ot !== nameOriginal ) return;
+        if ( isEventBubblingProxy && ( event.___ot ? event.___ot !== nameOriginal : event.type !== nameOriginal || ( event.target[`___i${nameOriginal}`] && ( delete event.target[`___i${nameOriginal}`], event.stopImmediatePropagation (), true ) ) ) ) return;
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -158,6 +158,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
       finalCallback.guid = callback.guid = ( callback.guid || cash.guid++ );
 
       addEvent ( ele, name, namespaces, selector, finalCallback );
+
+      if ( isEventBubblingProxy ) addEvent ( ele, nameOriginal, namespaces, selector, finalCallback );
 
     });
 
