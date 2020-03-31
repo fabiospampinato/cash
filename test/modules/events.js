@@ -92,8 +92,6 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
-    //TODO: Ensure native `.focus ()` and `.blur ()` calls work
-
     describe ( 'supports events that do not bubble', function ( it ) { // If the document isn't focused the element won't get the focus either
 
       if ( !document.hasFocus () ) return; // If the document isn't focused the element won't get the focus either
@@ -174,6 +172,14 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.trigger ( 'focus' );
 
       t.is ( count, 1 );
+
+      ele[0].blur = function () {
+        count++;
+      };
+
+      ele.trigger ( 'blur' );
+
+      t.is ( count, 2 );
 
     });
 
