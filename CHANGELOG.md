@@ -1,3 +1,9 @@
+### Version 7.0.0
+- focus|blur|mouseenter|mouseleave: ensuring namespaces are handled properly
+- focus|blur|mouseenter|mouseleave: aligned behavior more with jQuery
+- focus|blur|mouseenter|mouseleave: ensuring natively triggered events are handled properly
+- Migration guide: mentioning native non-bubbling events
+
 ### Version 6.0.2
 - Readme: improved comparison with jQuery, fixing some wrong/unfair comparisons/statements
 - Migration guide: mentioning sort order

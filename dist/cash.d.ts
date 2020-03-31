@@ -2,6 +2,9 @@ interface Event {
     namespace: string;
     data: any;
     ___cd?: boolean;
+    ___ifocus?: boolean;
+    ___iblur?: boolean;
+    ___ot?: string;
     ___td?: boolean;
 }
 interface Cash {

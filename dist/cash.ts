@@ -36,6 +36,9 @@ interface Event {
   namespace: string,
   data: any,
   ___cd?: boolean, // Delegate
+  ___ifocus?: boolean, // Ignore focus
+  ___iblur?: boolean, // Ignore blur
+  ___ot?: string, // Original type
   ___td?: boolean // Trigger data
 }
 
@@ -1429,13 +1432,17 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-      const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
+      const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
+            name = getEventNameBubbling ( nameOriginal ),
+            isEventBubblingProxy = ( nameOriginal !== name );
 
       this.each ( ( i, ele ) => {
 
         if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
         removeEvent ( ele, name, namespaces, selector, callback );
+
+        if ( isEventBubblingProxy ) removeEvent ( ele, nameOriginal, namespaces, selector, callback );
 
       });
 
@@ -1526,7 +1533,10 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [name, namespaces] = parseEventName ( getEventNameBubbling ( eventFullName ) );
+    const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
+          name = getEventNameBubbling ( nameOriginal ),
+          isEventBubblingProxy = ( nameOriginal !== name ),
+          isEventFocus = ( nameOriginal in eventsFocus );
 
     if ( !name ) return;
 
@@ -1535,6 +1545,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
       if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
       const finalCallback = function ( event: Event ) {
+
+        if ( isEventBubblingProxy && ( event.___ot ? event.___ot !== nameOriginal : event.type !== nameOriginal || ( event.target[`___i${nameOriginal}`] && ( delete event.target[`___i${nameOriginal}`], event.stopImmediatePropagation (), true ) ) ) ) return;
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
 
@@ -1557,6 +1569,10 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
           thisArg = target;
 
           event.___cd = true; // Delegate
+
+        } else if ( isEventFocus && event.___ot === nameOriginal && ele !== event.target && ele.contains ( event.target ) ) {
+
+          return;
 
         }
 
@@ -1598,6 +1614,8 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
       finalCallback.guid = callback.guid = ( callback.guid || cash.guid++ );
 
       addEvent ( ele, name, namespaces, selector, finalCallback );
+
+      if ( isEventBubblingProxy ) addEvent ( ele, nameOriginal, namespaces, selector, finalCallback );
 
     });
 
@@ -1671,6 +1689,7 @@ fn.ready = function ( this: Cash, callback: ( $: typeof cash ) => any ) {
 // @require core/type_checking.ts
 // @require core/variables.ts
 // @require collection/each.ts
+// @require ./helpers/get_event_name_bubbling.ts
 // @require ./helpers/parse_event_name.ts
 // @require ./helpers/variables.ts
 
@@ -1682,7 +1701,8 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   if ( isString ( event ) ) {
 
-    const [name, namespaces] = parseEventName ( event );
+    const [nameOriginal, namespaces] = parseEventName ( event ),
+          name = getEventNameBubbling ( nameOriginal );
 
     if ( !name ) return this;
 
@@ -1691,24 +1711,25 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
     event = doc.createEvent ( type );
     event.initEvent ( name, true, true );
     event.namespace = namespaces.join ( eventsNamespacesSeparator );
+    event.___ot = nameOriginal;
 
   }
 
   event.___td = data;
 
-  const isEventFocus = ( event.type in eventsFocus );
+  const isEventFocus = ( event.___ot in eventsFocus );
 
   return this.each ( ( i, ele ) => {
 
-    if ( isEventFocus && isFunction ( ele[event.type] ) ) {
+    if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
 
-      ele[event.type]();
+      ele[`___i${event.___ot}`] = true; // Ensuring this event gets ignored
 
-    } else {
-
-      ele.dispatchEvent ( event );
+      ele[event.___ot]();
 
     }
+
+    ele.dispatchEvent ( event );
 
   });
 
