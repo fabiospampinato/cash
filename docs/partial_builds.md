@@ -3,9 +3,9 @@
 
 Cash is bundled using [pacco](https://github.com/fabiospampinato/pacco), therefore it supports partial builds out of the box.
 
-In order to make a custom build you'll have to use a custom configuration for pacco, the [default one](https://github.com/kenwheeler/cash/blob/master/pacco.json) includes everything.
+In order to make a custom build you'll have to use a custom configuration for pacco, the [default one](https://github.com/fabiospampinato/cash/blob/master/pacco.json) includes everything.
 
-Some alternative configuration files are available [here](https://github.com/kenwheeler/cash/tree/master/resources/pacco).
+Some alternative configuration files are available [here](https://github.com/fabiospampinato/cash/tree/master/resources/pacco).
 
 ## Size Comparison
 

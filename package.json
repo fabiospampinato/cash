@@ -37,13 +37,13 @@
     "prepublishOnly": "npm run clean && npm run build:deploy && npm run test:karma"
   },
   "bugs": {
-    "url": "https://github.com/kenwheeler/cash/issues"
+    "url": "https://github.com/fabiospampinato/cash/issues"
   },
-  "homepage": "https://github.com/kenwheeler/cash",
+  "homepage": "https://github.com/fabiospampinato/cash",
   "author": "Ken Wheeler <ken_wheeler@me.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kenwheeler/cash.git"
+    "url": "https://github.com/fabiospampinato/cash.git"
   },
   "dependencies": {},
   "devDependencies": {

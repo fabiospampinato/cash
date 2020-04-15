@@ -24,8 +24,8 @@
     "wrapper": {
       "options": {
         "templates": {
-          "unminified": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]\n})();",
-          "minified": "/* MIT https://github.com/kenwheeler/cash */\n(function(){\n[content]})();"
+          "unminified": "/* MIT https://github.com/fabiospampinato/cash */\n(function(){\n[content]\n})();",
+          "minified": "/* MIT https://github.com/fabiospampinato/cash */\n(function(){\n[content]})();"
         }
       }
     }
@@ -59,7 +59,7 @@
         "wrapper": {
           "options": {
             "templates": {
-              "unminified": "/* MIT https://github.com/kenwheeler/cash */\n[content]\n"
+              "unminified": "/* MIT https://github.com/fabiospampinato/cash */\n[content]\n"
             }
           }
         }

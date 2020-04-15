@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014-present Ken Wheeler
+Copyright (c) 2014-2020 Ken Wheeler, 2020-present Fabio Spampinato
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

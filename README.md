@@ -15,7 +15,7 @@ Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that pr
 | Minified           | **15.3 KB** | 26 KB       | 71 KB             |
 | Minified & Gzipped | **5.7 KB**  | 9.8 KB      | 24.4 KB           |
 
-A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/kenwheeler/cash/blob/master/docs/partial_builds.md) too.
+A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
 
 | Features                 | Cash                               | Zepto 1.2.0                    | jQuery Slim 3.4.1              |
 | ------------------------ | ---------------------------------- | ------------------------------ | ------------------------------ |
@@ -27,7 +27,7 @@ A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bun
 | TypeScript Types         | ✔ (generated from code)            | ⚠️ (via DefinitelyTyped)       | ⚠️ (via DefinitelyTyped)       |
 | Partial Builds           | ✔ (can exclude individual methods) | ⚠️ (can exclude whole modules) | ⚠️ (can exclude whole modules) |
 
-If you're migrating from jQuery be sure to read our [migration guide](https://github.com/kenwheeler/cash/blob/master/docs/migration_guide.md).
+If you're migrating from jQuery be sure to read our [migration guide](https://github.com/fabiospampinato/cash/blob/master/docs/migration_guide.md).
 
 ## Usage
 
@@ -62,7 +62,7 @@ $(function () {
 
 ## Documentation
 
-Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/kenwheeler/cash/blob/master/docs/extending_cash.md).
+Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/fabiospampinato/cash/blob/master/docs/extending_cash.md).
 
 ### $()
 
@@ -88,7 +88,7 @@ These methods from the collection prototype ([$.fn](#fn)) are available once you
 $(element).addClass ( className ) // => collection
 ```
 
-Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
+Some [extra methods](https://github.com/fabiospampinato/cash/tree/master/src/extra) are available but [disabled](https://github.com/fabiospampinato/cash/blob/master/pacco.json#L3) by default.
 
 | Attributes                           | Collection                 | CSS                  | Data                   | Dimensions                           | Effects                    |
 | ------------------------------------ | -------------------------- | -------------------- | ---------------------- | ------------------------------------ | -------------------------- |
@@ -857,7 +857,7 @@ These methods are exported from the global `$` object, and are called like so:
 $.isArray ( arr ) // => boolean
 ```
 
-Some [extra methods](https://github.com/kenwheeler/cash/tree/master/src/extra) are available but [disabled](https://github.com/kenwheeler/cash/blob/master/pacco.json#L3) by default.
+Some [extra methods](https://github.com/fabiospampinato/cash/tree/master/src/extra) are available but [disabled](https://github.com/fabiospampinato/cash/blob/master/pacco.json#L3) by default.
 
 | Type Checking                   | Utilities                     |
 | ------------------------------- | ----------------------------- |
@@ -942,11 +942,11 @@ $.unique ( array ) // => array
 
 ## Contributing
 
-If you found a problem, or have a feature request, please open an [issue](https://github.com/kenwheeler/cash/issues) about it.
+If you found a problem, or have a feature request, please open an [issue](https://github.com/fabiospampinato/cash/issues) about it.
 
 If you want to make a pull request you should:
 
-1. Clone the repository: `git clone https://github.com/kenwheeler/cash.git`.
+1. Clone the repository: `git clone https://github.com/fabiospampinato/cash.git`.
 2. Enter the cloned repository: `cd cash`
 3. Install the dependencies: `npm install`.
 4. Automatically recompile Cash whenever a change is made: `npm run dev`.
@@ -955,9 +955,10 @@ If you want to make a pull request you should:
 
 ## Thanks
 
+- **[@kenwheeler](https://github.com/kenwheeler), [@shshaw](https://github.com/shshaw), [@jamiebuilds](https://github.com/jamiebuilds), [@simeydotme](https://github.com/simeydotme)** and all the contributors who helped making Cash.
 - **[@hisk](https://github.com/hisk)** - The "design focused engineer" behind our awesome logo.
 - **[Sauce Labs](https://saucelabs.com)** - The cross-browser testing platform we use for testing our builds in all the supported environments.
 
 ## License
 
-MIT © Ken Wheeler
+MIT © Fabio Spampinato
