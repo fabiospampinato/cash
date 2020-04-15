@@ -824,7 +824,7 @@ function computeStyle ( ele: EleLoose, prop: string, isVariable?: boolean ): str
 
   const style = win.getComputedStyle ( ele, null );
 
-  return isVariable ? style.getPropertyValue ( prop ) || undefined : style[prop];
+  return isVariable ? style.getPropertyValue ( prop ) || undefined : style[prop] || ele.style[prop];
 
 }
 

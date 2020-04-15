@@ -400,7 +400,7 @@ fn.add = function (selector, context) {
 function computeStyle(ele, prop, isVariable) {
   if (!isElement(ele)) return;
   var style = win.getComputedStyle(ele, null);
-  return isVariable ? style.getPropertyValue(prop) || undefined : style[prop];
+  return isVariable ? style.getPropertyValue(prop) || undefined : style[prop] || ele.style[prop];
 } // @require ./compute_style.ts
 
 

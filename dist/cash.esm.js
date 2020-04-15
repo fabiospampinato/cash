@@ -313,7 +313,7 @@ function computeStyle(ele, prop, isVariable) {
     if (!isElement(ele))
         return;
     const style = win.getComputedStyle(ele, null);
-    return isVariable ? style.getPropertyValue(prop) || undefined : style[prop];
+    return isVariable ? style.getPropertyValue(prop) || undefined : style[prop] || ele.style[prop];
 }
 // @require ./compute_style.ts
 function computeStyleInt(ele, prop) {

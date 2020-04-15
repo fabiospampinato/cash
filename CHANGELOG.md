@@ -1,3 +1,6 @@
+### Version 7.0.1
+- $.fn.css: added support for retrieving properties of disconnected nodes
+
 ### Version 7.0.0
 - focus|blur|mouseenter|mouseleave: ensuring namespaces are handled properly
 - focus|blur|mouseenter|mouseleave: aligned behavior more with jQuery
