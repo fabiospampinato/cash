@@ -16,6 +16,16 @@ describe ( 'CSS', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'gets the value of a property (disconnected node)', function ( t ) {
+
+      var ele = $('<div></div>');
+
+      ele.css ({ top: 10 });
+
+      t.is ( ele.css ( 'top' ), '10px' );
+
+    });
+
     it ( 'sets the value of a property', function ( t ) {
 
       var ele = $('.css');
