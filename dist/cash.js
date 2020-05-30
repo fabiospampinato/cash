@@ -1,4 +1,4 @@
-/* MIT https://github.com/kenwheeler/cash */
+/* MIT https://github.com/fabiospampinato/cash */
 (function(){
 "use strict";
 

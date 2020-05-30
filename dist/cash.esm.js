@@ -1,4 +1,4 @@
-/* MIT https://github.com/kenwheeler/cash */
+/* MIT https://github.com/fabiospampinato/cash */
 const propMap = {
     /* GENERAL */
     class: 'className',

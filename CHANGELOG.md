@@ -1,3 +1,7 @@
+### Version 7.0.2
+- Readme: updated npm installation command
+- Updated the “EleLoose” TypeScript type ensuring it isn’t evaluated as “never”
+
 ### Version 7.0.1
 - $.fn.css: added support for retrieving properties of disconnected nodes
 
