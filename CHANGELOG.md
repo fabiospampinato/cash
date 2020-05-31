@@ -1,3 +1,6 @@
+### Version 7.0.3
+- Updated “EleLoose” type
+
 ### Version 7.0.2
 - Readme: updated npm installation command
 - Updated the “EleLoose” TypeScript type ensuring it isn’t evaluated as “never”

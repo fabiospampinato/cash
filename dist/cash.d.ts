@@ -18,7 +18,7 @@ interface CashStatic {
 }
 declare type falsy = undefined | null | false | 0 | '';
 declare type Ele = Window | Document | HTMLElement | Element | Node;
-declare type EleLoose = Window & Document & HTMLElement & Element & Node;
+declare type EleLoose = HTMLElement & Element & Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 declare type Comparator = string | Ele | Cash | ((this: EleLoose, index: number, ele: EleLoose) => boolean);
 declare type Context = Document | HTMLElement | Element;
