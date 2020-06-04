@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+      cash-dom - An absurdly small jQuery alternative for modern browsers.
+    </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta
+      name="description"
+      content="An absurdly small jQuery alternative for modern browsers."
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css"
+    />
+
+    <link
+      href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/no-italics.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+      @import url("https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap");
+      :root {
+        --base-font-family: "Inter", sans-serif, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        --code-font-family: "Fira Mono", monospace;
+
+        --base-font-size: 1.2rem;
+        --code-font-size: 0.8rem;
+        --sidebar-toggle-icon-stroke-width: 2px;
+        --sidebar-toggle-background: transparent;
+        --sidebar-toggle-icon-height: 14px;
+      }
+      .sidebar-toggle span {
+        background-color: var(--theme-color, #42b983);
+        display: block;
+        margin-bottom: 4px;
+        width: 20px;
+        height: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      window.$docsify = {
+        name: "cash-dom",
+        repo: "https://github.com/fabiospampinato/cash",
+        relativePath: true,
+        loadSidebar: true,
+        subMaxLevel: 2,
+      };
+    </script>
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+
+    <link
+      href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/no-italics.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+      @import url("https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap");
+      :root {
+        --base-font-family: "Inter", sans-serif, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        --code-font-family: "Fira Mono", monospace;
+
+        --base-font-size: 1.2rem;
+        --code-font-size: 1rem;
+        --sidebar-toggle-icon-stroke-width: 2px;
+        --sidebar-toggle-background: transparent;
+        --sidebar-toggle-icon-height: 14px;
+      }
+      .sidebar-toggle span {
+        background-color: var(--theme-color, #42b983);
+        display: block;
+        margin-bottom: 4px;
+        width: 20px;
+        height: 2px;
+      }
+    </style>
+  </body>
+</html>
