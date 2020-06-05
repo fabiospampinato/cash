@@ -1,4 +1,6 @@
 * [Docs](documentation.md)
-* [Extending Cash](extending_cash.md)
-* [Partial Builds](partial_builds.md)
+* [Collection Method](collection.md)
+* [Cash Method](cash.md)
 * [Migration Guide](migration_guide.md)
+* [Extending Cash](extending_cash.md)
+* [Partail Build](partial_builds.md)
