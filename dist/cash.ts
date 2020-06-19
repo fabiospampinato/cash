@@ -78,8 +78,8 @@ const doc = document,
       {isArray, prototype: ArrayPrototype} = Array,
       {concat, filter, indexOf, map, push, slice, some, splice} = ArrayPrototype;
 
-const idRe = /^#[\w-]*$/,
-      classRe = /^\.[\w-]*$/,
+const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/,
+      classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/,
       htmlRe = /<.+>/,
       tagRe = /^\w+$/;
 

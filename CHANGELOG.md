@@ -1,3 +1,6 @@
+### Version 7.0.4
+- Ensuring unusual but valid simple selectors are handled properly
+
 ### Version 7.0.3
 - Updated “EleLoose” type
 

@@ -49,8 +49,8 @@ var doc = document,
     slice = ArrayPrototype.slice,
     some = ArrayPrototype.some,
     splice = ArrayPrototype.splice;
-var idRe = /^#[\w-]*$/,
-    classRe = /^\.[\w-]*$/,
+var idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/,
+    classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/,
     htmlRe = /<.+>/,
     tagRe = /^\w+$/; // @require ./variables.ts
 
