@@ -1,5 +1,6 @@
 
 var fixture = '\
+  <div id="123-ção" class="123-ção"></div>\
   <div id="id"></div>\
   <div id="id"></div>\
   <div class="single"></div>\
@@ -73,6 +74,12 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
+    it ( 'supports unusual IDs', function ( t ) {
+
+      t.is ( $('#123-ção').length, 1 );
+
+    });
+
     it ( 'supports non-existent ID', function ( t ) {
 
       t.is ( $('#foo').length, 0 );
@@ -83,6 +90,12 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
       t.is ( $('.single').length, 1 );
       t.is ( $('.multiple').length, 2 );
+
+    });
+
+    it ( 'supports unusual class', function ( t ) {
+
+      t.is ( $('.123-ção').length, 1 );
 
     });
 
