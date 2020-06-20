@@ -79,7 +79,7 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
     const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
           name = getEventNameBubbling ( nameOriginal ),
-          isEventBubblingProxy = ( nameOriginal !== name ),
+          isEventHover = ( nameOriginal in eventsHover ),
           isEventFocus = ( nameOriginal in eventsFocus );
 
     if ( !name ) return;
@@ -90,9 +90,11 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
       const finalCallback = function ( event: Event ) {
 
-        if ( isEventBubblingProxy && ( event.___ot ? event.___ot !== nameOriginal : event.type !== nameOriginal || ( event.target[`___i${nameOriginal}`] && ( delete event.target[`___i${nameOriginal}`], event.stopImmediatePropagation (), true ) ) ) ) return;
+        if ( event.target[`___i${event.type}`] ) return event.stopImmediatePropagation (); // Ignoring native event in favor of the upcoming custom one
 
         if ( event.namespace && !hasNamespaces ( namespaces, event.namespace.split ( eventsNamespacesSeparator ) ) ) return;
+
+        if ( !selector && ( ( isEventFocus && ( event.target !== ele || event.___ot === name ) ) || ( isEventHover && event.relatedTarget && ele.contains ( event.relatedTarget ) ) ) ) return;
 
         let thisArg: EventTarget = ele;
 
@@ -113,10 +115,6 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
           thisArg = target;
 
           event.___cd = true; // Delegate
-
-        } else if ( isEventFocus && event.___ot === nameOriginal && ele !== event.target && ele.contains ( event.target ) ) {
-
-          return;
 
         }
 
@@ -158,8 +156,6 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
       finalCallback.guid = callback.guid = ( callback.guid || cash.guid++ );
 
       addEvent ( ele, name, namespaces, selector, finalCallback );
-
-      if ( isEventBubblingProxy ) addEvent ( ele, nameOriginal, namespaces, selector, finalCallback );
 
     });
 

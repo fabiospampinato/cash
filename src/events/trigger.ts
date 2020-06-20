@@ -37,9 +37,11 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
     if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
 
-      ele[`___i${event.___ot}`] = true; // Ensuring this event gets ignored
+      ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
 
       ele[event.___ot]();
+
+      ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
 
     }
 

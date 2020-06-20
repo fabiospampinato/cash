@@ -99,7 +99,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var events = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur', 'mouseenter', 'mouseleave'],
           eventsTrigger = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focusin', 'focusout', 'mouseover', 'mouseout'],
-          counts = [[1, 1, 3, 3, 0, 0, 0], [1, 1, 3, 3, 0, 0, 0], [1, 1, 3, 3, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [2, 2, 5, 5, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
+          counts = [[1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [0, 0, 2, 2, 2, 2, 0], [0, 0, 2, 2, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0]];
 
       events.forEach ( function ( event, index ) {
 
@@ -108,7 +108,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
           var doc = $(document);
           var ele = $('.event-focus');
           var parent = $('.parent');
-          var child = $('event-focus-child');
+          var child = $('.event-focus-child');
           var count = 0;
           var eventTrigger = eventsTrigger[index];
 

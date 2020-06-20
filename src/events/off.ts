@@ -47,16 +47,13 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
       const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-            name = getEventNameBubbling ( nameOriginal ),
-            isEventBubblingProxy = ( nameOriginal !== name );
+            name = getEventNameBubbling ( nameOriginal );
 
       this.each ( ( i, ele ) => {
 
         if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
         removeEvent ( ele, name, namespaces, selector, callback );
-
-        if ( isEventBubblingProxy ) removeEvent ( ele, nameOriginal, namespaces, selector, callback );
 
       });
 
