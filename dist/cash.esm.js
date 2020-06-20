@@ -586,13 +586,11 @@ fn.off = function (eventFullName, selector, callback) {
             selector = '';
         }
         each(getSplitValues(eventFullName), (i, eventFullName) => {
-            const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal), isEventBubblingProxy = (nameOriginal !== name);
+            const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal);
             this.each((i, ele) => {
                 if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                     return;
                 removeEvent(ele, name, namespaces, selector, callback);
-                if (isEventBubblingProxy)
-                    removeEvent(ele, nameOriginal, namespaces, selector, callback);
             });
         });
     }
@@ -626,16 +624,18 @@ function on(eventFullName, selector, data, callback, _one) {
     if (!callback)
         return this;
     each(getSplitValues(eventFullName), (i, eventFullName) => {
-        const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal), isEventBubblingProxy = (nameOriginal !== name), isEventFocus = (nameOriginal in eventsFocus);
+        const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal), isEventHover = (nameOriginal in eventsHover), isEventFocus = (nameOriginal in eventsFocus);
         if (!name)
             return;
         this.each((i, ele) => {
             if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                 return;
             const finalCallback = function (event) {
-                if (isEventBubblingProxy && (event.___ot ? event.___ot !== nameOriginal : event.type !== nameOriginal || (event.target[`___i${nameOriginal}`] && (delete event.target[`___i${nameOriginal}`], event.stopImmediatePropagation(), true))))
-                    return;
+                if (event.target[`___i${event.type}`])
+                    return event.stopImmediatePropagation(); // Ignoring native event in favor of the upcoming custom one
                 if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator)))
+                    return;
+                if (!selector && ((isEventFocus && (event.target !== ele || event.___ot === name)) || (isEventHover && event.relatedTarget && ele.contains(event.relatedTarget))))
                     return;
                 let thisArg = ele;
                 if (selector) {
@@ -649,9 +649,6 @@ function on(eventFullName, selector, data, callback, _one) {
                     }
                     thisArg = target;
                     event.___cd = true; // Delegate
-                }
-                else if (isEventFocus && event.___ot === nameOriginal && ele !== event.target && ele.contains(event.target)) {
-                    return;
                 }
                 if (event.___cd) {
                     Object.defineProperty(event, 'currentTarget', {
@@ -678,8 +675,6 @@ function on(eventFullName, selector, data, callback, _one) {
             };
             finalCallback.guid = callback.guid = (callback.guid || cash.guid++);
             addEvent(ele, name, namespaces, selector, finalCallback);
-            if (isEventBubblingProxy)
-                addEvent(ele, nameOriginal, namespaces, selector, finalCallback);
         });
     });
     return this;
@@ -715,8 +710,9 @@ fn.trigger = function (event, data) {
     const isEventFocus = (event.___ot in eventsFocus);
     return this.each((i, ele) => {
         if (isEventFocus && isFunction(ele[event.___ot])) {
-            ele[`___i${event.___ot}`] = true; // Ensuring this event gets ignored
+            ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
             ele[event.___ot]();
+            ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
         }
         ele.dispatchEvent(event);
     });

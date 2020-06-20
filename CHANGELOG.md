@@ -1,3 +1,6 @@
+### Version 8.0.0
+- Improved alignment with jQuery regarding handling of non-bubbling events significantly
+
 ### Version 7.0.4
 - Ensuring unusual but valid simple selectors are handled properly
 

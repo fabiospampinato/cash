@@ -1,6 +1,7 @@
 interface Event {
     namespace: string;
     data: any;
+    relatedTarget?: Node | null;
     ___cd?: boolean;
     ___ifocus?: boolean;
     ___iblur?: boolean;
