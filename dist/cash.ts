@@ -277,25 +277,51 @@ interface CashStatic {
   extend (): any;
   extend ( target: any ): typeof cash;
   extend ( target: any, ...objs: any[] ): any;
+  extend ( deep: boolean, target: any, ...objs: any[] ): any;
 }
 
 interface Cash {
   extend ( plugins: Record<any, any> ): this;
 }
 
-function extend ( target?: any, ...objs: any[] ) {
+function extend ( ...objs: any[] ) {
 
-  const length = arguments.length;
+  const length = objs.length;
 
   if ( !length ) return {};
 
-  if ( length === 1 ) return extend ( cash, target );
+  if ( length === 1 ) return extend ( cash, objs[0] );
 
-  for ( let i = 1; i < length; i++ ) {
+  let deep = typeof objs[0] === 'boolean'
+    ? objs.shift()
+    : false;
 
-    for ( const key in arguments[i] ) {
+  let target = objs.shift();
 
-      target[key] = arguments[i][key];
+  for ( let i = 0; i < objs.length; i++ ) {
+
+    for ( const key in objs[i] ) {
+
+      if (deep && (Array.isArray(objs[i][key]) || isPlainObject(objs[i][key]))) {
+
+        if (Array.isArray(objs[i][key]) && !Array.isArray(target[key])) {
+
+          target[key] = [];
+
+        } else if (isPlainObject(objs[i][key]) && !isPlainObject(target[key])) {
+
+          target[key] = {};
+
+        }
+
+        extend(deep, target[key], objs[i][key]);
+
+      }
+      else {
+
+        target[key] = objs[i][key];
+
+      }
 
     }
 

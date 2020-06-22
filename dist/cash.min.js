@@ -111,19 +111,34 @@ fn.each = function (callback) {
 fn.removeProp = function (prop) {
     return this.each(function (i, ele) { delete ele[propMap[prop] || prop]; });
 };
-function extend(target) {
+function extend() {
     var objs = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        objs[_i - 1] = arguments[_i];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        objs[_i] = arguments[_i];
     }
-    var length = arguments.length;
+    var length = objs.length;
     if (!length)
         return {};
     if (length === 1)
-        return extend(cash, target);
-    for (var i = 1; i < length; i++) {
-        for (var key in arguments[i]) {
-            target[key] = arguments[i][key];
+        return extend(cash, objs[0]);
+    var deep = typeof objs[0] === 'boolean'
+        ? objs.shift()
+        : false;
+    var target = objs.shift();
+    for (var i = 0; i < objs.length; i++) {
+        for (var key in objs[i]) {
+            if (deep && (Array.isArray(objs[i][key]) || isPlainObject(objs[i][key]))) {
+                if (Array.isArray(objs[i][key]) && !Array.isArray(target[key])) {
+                    target[key] = [];
+                }
+                else if (isPlainObject(objs[i][key]) && !isPlainObject(target[key])) {
+                    target[key] = {};
+                }
+                extend(deep, target[key], objs[i][key]);
+            }
+            else {
+                target[key] = objs[i][key];
+            }
         }
     }
     return target;

@@ -70,11 +70,12 @@ interface CashStatic {
     extend(): any;
     extend(target: any): typeof cash;
     extend(target: any, ...objs: any[]): any;
+    extend(deep: boolean, target: any, ...objs: any[]): any;
 }
 interface Cash {
     extend(plugins: Record<any, any>): this;
 }
-declare function extend(target?: any, ...objs: any[]): any;
+declare function extend(...objs: any[]): any;
 interface CashStatic {
     guid: number;
 }

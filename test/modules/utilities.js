@@ -65,6 +65,21 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'can deep extend', function ( t ) {
+      let deep1 = $.extend ( true, { foo: 1 }, { bar: { inner: 2 } } );
+      t.deepEqual ( deep1, { foo: 1, bar: { inner: 2 } } );
+
+      let deep2 = $.extend ( true, { foo: 1 }, { bar: [ 1, 2 ] } );
+      t.deepEqual ( deep2, { foo: 1, bar: [ 1, 2 ] } );
+
+      let deep3 = $.extend ( true, {}, { foo: 1 }, { bar: { inner: 2, baz: { inner2: 3 } } } );
+      t.deepEqual ( deep3, { foo: 1, bar: { inner: 2, baz: { inner2: 3 } } } );
+
+      let deep4 = $.extend ( true, {}, { foo: 1, bar: { baz: 3 } }, { bar: { baz: 4 } } );
+      t.deepEqual ( deep4, { foo: 1, bar: { baz: 4 } } );
+    });
+
+
   });
 
   describe ( '$.isArray', function ( it ) {
