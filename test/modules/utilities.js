@@ -269,4 +269,26 @@ describe ( 'Utilities', function () {
 
   });
 
+  describe ( '$.isPlainObject', function ( it ) {
+
+    it ( 'detects a plain object', function ( t ) {
+
+      t.is ( $.isPlainObject({}), true );
+
+    });
+
+    it ( 'detects other types as not a plain object', function ( t ) {
+
+      t.is ( $.isPlainObject(function () {}), false );
+      t.is ( $.isPlainObject(window), false );
+      t.is ( $.isPlainObject($), false );
+      t.is ( $.isPlainObject(true), false );
+      t.is ( $.isPlainObject(undefined), false );
+      t.is ( $.isPlainObject(null), false );
+      t.is ( $.isPlainObject(Date), false );
+
+    });
+
+  });
+
 });

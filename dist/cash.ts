@@ -335,6 +335,21 @@ function matches ( ele: any, selector: string ): boolean {
 
 
 // @require ./cash.ts
+
+interface CashStatic {
+  isPlainObject ( test: any ): any;
+}
+
+function isPlainObject(x) {
+
+  return x !== null && typeof x === 'object' && x !== window && Object.getPrototypeOf(x) == Object.prototype;
+
+}
+
+cash.isPlainObject = isPlainObject;
+
+
+// @require ./cash.ts
 // @require ./variables.ts
 
 interface CashStatic {
@@ -1944,6 +1959,7 @@ function parseHTML ( html: string ): EleLoose[] {
 cash.parseHTML = parseHTML;
 
 
+// @optional ./plain_object.ts
 // @optional ./each.ts
 // @optional ./extend.ts
 // @optional ./find.ts
@@ -2856,6 +2872,14 @@ fn.siblings = function ( this: Cash, comparator?: Comparator ) {
 
 // @priority -100
 // @require ./cash.ts
+// @require ./variables.ts
 
-export default cash;
-export {Cash, CashStatic, Ele as Element, Selector, Comparator, Context};
+if ( typeof exports !== 'undefined' ) { // Node.js
+
+  module.exports = cash;
+
+} else { // Browser
+
+  win['cash'] = win['$'] = cash;
+
+}
