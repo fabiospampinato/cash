@@ -39,6 +39,22 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'iterates over an object', function ( t ) {
+
+      var count = 0;
+      var result = {};
+
+      function handler (name, value) {
+        count++;
+        result[name] = value;
+      }
+
+      $.each ( { foo: 1, bar: 2 }, handler );
+      t.deepEqual ( result, { foo: 1, bar: 2 } );
+      t.is ( count, 2 );
+
+    });
+
   });
 
   describe ( '$.extend', function ( it ) {
@@ -297,6 +313,7 @@ describe ( 'Utilities', function () {
       t.is ( $.isPlainObject(function () {}), false );
       t.is ( $.isPlainObject(window), false );
       t.is ( $.isPlainObject($), false );
+      t.is ( $.isPlainObject($('body')), false );
       t.is ( $.isPlainObject(true), false );
       t.is ( $.isPlainObject(undefined), false );
       t.is ( $.isPlainObject(null), false );

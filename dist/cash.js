@@ -96,6 +96,13 @@ function each(arr, callback, _reverse) {
                 return arr;
         }
     }
+    else if (isPlainObject(arr)) {
+        var keys = Object.keys(arr);
+        for (var i = 0, l = keys.length; i < l; i++) {
+            if (callback.call(arr[keys[i]], keys[i], arr[keys[i]]) === false)
+                return arr;
+        }
+    }
     else {
         for (var i = 0, l = arr.length; i < l; i++) {
             if (callback.call(arr[i], i, arr[i]) === false)

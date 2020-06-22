@@ -225,6 +225,16 @@ function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: Each
 
     }
 
+  } else if ( isPlainObject( arr ) ) {
+
+    let keys = Object.keys( arr );
+
+    for ( let i = 0, l = keys.length; i < l; i++ ) {
+
+      if ( callback.call ( arr[keys[i]], keys[i], arr[keys[i]] ) === false ) return arr;
+
+    }
+
   } else {
 
     for ( let i = 0, l = arr.length; i < l; i++ ) {
