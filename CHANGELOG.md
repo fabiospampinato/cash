@@ -1,117 +1,134 @@
-### Version 8.0.0
+### 8.0.0 - 2020-06-20
+
 - Improved alignment with jQuery regarding handling of non-bubbling events significantly
 
-### Version 7.0.4
+### 7.0.4 - 2020-06-19
+
 - Ensuring unusual but valid simple selectors are handled properly
 
-### Version 7.0.3
-- Updated “EleLoose” type
+### 7.0.3 - 2020-05-31
 
-### Version 7.0.2
+- Updated "EleLoose" type
+
+### 7.0.2 - 2020-05-30
+
 - Readme: updated npm installation command
-- Updated the “EleLoose” TypeScript type ensuring it isn’t evaluated as “never”
+- Updated the "EleLoose" TypeScript type ensuring it isn't evaluated as "never"
 
-### Version 7.0.1
+### 7.0.1 - 2020-04-15
+
 - $.fn.css: added support for retrieving properties of disconnected nodes
 
-### Version 7.0.0
+### 7.0.0 - 2020-03-31
+
 - focus|blur|mouseenter|mouseleave: ensuring namespaces are handled properly
 - focus|blur|mouseenter|mouseleave: aligned behavior more with jQuery
 - focus|blur|mouseenter|mouseleave: ensuring natively triggered events are handled properly
 - Migration guide: mentioning native non-bubbling events
 
-### Version 6.0.2
+### 6.0.2 - 2020-02-15
+
 - Readme: improved comparison with jQuery, fixing some wrong/unfair comparisons/statements
 - Migration guide: mentioning sort order
 - $.fn.ready: ensuring the callback is called asynchronously and errors are not silenced
 
-### Version 6.0.1
-- Ensuring events work with Document and Window objects
-- Ensuring “event.data” is setted reliably
+### 6.0.1 - 2020-01-05
 
-### Version 6.0.0
+- Ensuring events work with Document and Window objects
+- Ensuring "event.data" is setted reliably
+
+### 6.0.0 - 2020-01-05
 
 ##### Removed Features
+
 - $.camelCase|matches|isString|prefixedProp: no longer exposing these methods, aligning with jQuery
 
 ##### New Features
+
 - $.fn.nextUntil|prevUntil|parentsUntil: implemented these methods
 - $.fn.detach|remove: added support for an optional "selector" argument
-- $.fn.on|one: added support for an optional “data” argument
+- $.fn.on|one: added support for an optional "data" argument
 - Set-up test coverage (currently at ~99%) reporting to coveralls.io
 - Migration guide: major update
 
 ##### Bug Fixes
+
 - $.extend: aligned more with jQuery when called with zero or one argument
 - $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring cloned scripts don't get executed
 - $.fn.contents: ensuring template elements are supported
-- $.fn.css: ensuring “grid-*“ properties don’t get the “px” suffix appended to their values when they are not supposed to
+- $.fn.css: ensuring "grid-*" properties don't get the "px" suffix appended to their values when they are not supposed to
 - $.fn.data: doing nothing when trying to set values to undefined
-- $.fn.data: ensuring strings containing leading/trailing whitespace aren’t parsed as JSON
+- $.fn.data: ensuring strings containing leading/trailing whitespace aren't parsed as JSON
 - $.fn.get|eq: ensuring string indexes are supported
 - $.fn.map: ensuring callbacks that return an array of elements are supported too
-- $.fn.offset|offsetParent|position: rewritten to much more closely match jQuery’s implementation
+- $.fn.offset|offsetParent|position: rewritten to much more closely match jQuery's implementation
 - $.fn.on|one|off: ensuring namespaces-only events are ignored
-- $.fn.on|one|off: ensuring they don’t throw when receiving a falsy callback
+- $.fn.on|one|off: ensuring they don't throw when receiving a falsy callback
 - $.fn.on|one: ensuring these methods are chainable even when receiving falsy callbacks
-- $.fn.prop|removeProp: mapping special HTML attributes into their equivalent DOM properties (e.g. “for” -> “htmlFor”)
+- $.fn.prop|removeProp: mapping special HTML attributes into their equivalent DOM properties (e.g. "for" -> "htmlFor")
 - $.fn.ready: ensuring exceptions are always caught, so they can't crash the app
 - $.fn.serialize: normalizing newlines
 - $.fn.trigger: testing that non-nil falsy values are passed correctly
-- $.fn.unwrap: ensuring immediate children of the body don’t get unwrapped
+- $.fn.unwrap: ensuring immediate children of the body don't get unwrapped
 - $.fn.val: ensuring checkboxes and radios can be set properly
 - $.fn.val: ensuring non-string values are supported
 - $.fn.val|html: more reliably detecting when being called with no arguments
 - $.fn.width|height|innerWidth|innerHeight|outerWidth|outerHeight: ensuring document objects are supported too
 - $.fn.width|height|innerWidth|innerHeight|outerWidth|outerHeight: ensuring they return the right value for the Window object
-- $.fn.wrapAll: ensuring elements aren’t cloned unnecessarely
+- $.fn.wrapAll: ensuring elements aren't cloned unnecessarely
 - $.parseHTML: ensuring whitespace around a single HTML tag is preserved
-- Ensuring empty selectors don’t throw an error
+- Ensuring empty selectors don't throw an error
 - Collections containing non-element objects:
-  - $.fn.addClass|removeClass|toggleClass: ensuring it doesn’t throw with collections containing non-elements
-  - $.fn.attr: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.addClass|removeClass|toggleClass: ensuring it doesn't throw with collections containing non-elements
+  - $.fn.attr: ensuring a collection containing non-element objects doesn't cause an error to be thrown
   - $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring non-element nodes are accounted for properly
-  - $.fn.hasClass: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
-  - $.fn.hide|show|toggle: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.hasClass: ensuring a collection containing non-element objects doesn't cause an error to be thrown
+  - $.fn.hide|show|toggle: ensuring a collection containing non-element objects doesn't cause an error to be thrown
   - $.fn.html: ensuring collections containing non-element objects are supported
   - $.fn.not: ensuring non-element nodes are excluded
   - $.fn.on|off: ensuring non-element objects in the collection are ignored
-  - $.fn.removeAttr: ensuring a collection containing non-element objects doesn’t cause an error to be thrown
+  - $.fn.removeAttr: ensuring a collection containing non-element objects doesn't cause an error to be thrown
   - $.fn.text: improved support of collections containing non-elements objects
 
-### Version 5.0.0
+### 5.0.0 - 2019-12-17
+
 - Dropped support for IE10
 - $.fn.hasClass: ensuring it always returns a boolean
 - $.fn.off: accepting also an events map as its only argument
 - $.fn.show|toggle: restoring custom display values
 - $.fn.before|after|append|prepend|insertBefore|insertAfter|appendTo|prependTo: ensuring multiple nodes are inserted in the correct order
 - Ensuring attached events never get forgotten
-- Ensuring script tags are executed even if they have a “src” attribute, and without using `eval`
-- Ensuring the order of event namespaces doesn’t matter
+- Ensuring script tags are executed even if they have a "src" attribute, and without using `eval`
+- Ensuring the order of event namespaces doesn't matter
 - Squeezed some more bytes out of the bundle (~4%) and improved code style consistency
 - Squeezed some more bytes out of the bundle (~1.5%), bringing back the minified and gzipped size below 5kb
 
-### Version 4.1.5
-- $.fn.val: ensuring it works with “input[type=file][multiple]” elements
+### 4.1.5 - 2019-09-06
+
+- $.fn.val: ensuring it works with "input[type=file][multiple]" elements
 - Migration guide: mentioning how $.fn.data stores values
 
-### Version 4.1.4
+### 4.1.4 - 2019-08-05
+
 - $.fn.get: improved types
 - TypeScript: made types a little more forgiving
 - TypeScript: improved collections index signature
 - TypeScript: improved support for props/methods available only in specific HTML nodes
 - Added a guide for extending Cash
 
-### Version 4.1.3
-- Ensuring Cash can be bundled correctly via WebPack
+### 4.1.3 - 2019-07-13
+
+- Ensuring Cash can be bundled correctly via webpack
 - $.fn.toggle: ensuring each element is toggled independently
 - TypeScript: ensuring some useful internal types are exported
 - TypeScript: made types a little more forgiving
 
-### Version 4.1.2
+### 4.1.2 - 2019-05-16
+
 - Avoiding publishing unnecessary files to NPM
 
-### Version 4.1.1
+### 4.1.1 - 2019-05-13
+
 - Raising bundle size limit to 5.5kB
 - Test: replaced iOS 9.3 with iOS 11.0
 - Test: using setAttribute instead of the dataset API
@@ -120,46 +137,54 @@
 - TypeScript: typing events more loosely
 - TypeScript: typing collection elements more loosely
 
-### Version 4.1.0
+### 4.1.0 - 2019-05-12
+
 - Added $.isWindow
 - Made the TypeScript type system stricter
-- $.guid: ensuring it’s properly exported
+- $.guid: ensuring it's properly exported
 - $.fn.siblings: ensuring it supports multi-element collections
 - $.fn.empty: ensuring it supports multi-element collections
 - $.fn.attr: doing nothing when the value equals undefined
 
-### Version 4.0.0
+### 4.0.0 - 2019-05-08
+
 - Removed `$.fn.removeData`
 - Removed `$.hasData`
 - `$.fn.data`: removed caching mechanism
 - `$.fn.data`: added a missing TypeScript method overload
 
-### Version 3.2.0
+### 3.2.0 - 2019-04-30
+
 - Readme: updated sizes
 - $.fn.off: added support for removing delegated handlers
 
-### Version 3.1.0
+### 3.1.0 - 2019-03-22
+
 - Improved support for running selectors inside documents
 - Ensuring Cash collections are iterable
 - Added an extra reference implementation for shorthand event methods
 - Added an extra reference implementation for `$.getScript`
 - Readme: mentioning the extra methods
 
-### Version 3.0.0
-- Added a changelog
-- Migration guide: mentioning the `zoom` property
-- Readme: improved description of the optional context argument (origin/master, origin/HEAD)
-- Ensuring valid typescript types are generated
-- Ensuring build files are updated when bumping the version
+### 3.0.0 - 2019-03-17
 
-### Version 3.0.0-beta.3
+- Library rewritten in TypeScript
+- Bundle TypeScript typings (no need for @types/cash, which is now obsolete)
+- Added a changelog
+- Migration guide: mention the `zoom` property
+- Readme: improved description of the optional context argument
+- Ensure valid TypeScript types are generated
+- Ensure build files are updated when bumping the version
+
+### 3.0.0-beta.3 - 2018-12-06
+
 - Fixed export on the ESM build
 
-### Version 3.0.0-beta.2
-- Renamed some “private” variables
-- Readme: minor changes
+### 3.0.0-beta.2 - 2018-11-21
+
+- Renamed some "private" variables
 - Travis: avoiding caching `node_modules`
-- Test: improved tests regarding event delegatino
+- Test: improved tests regarding event delegating
 - Migration guide: added a section about events
 - Moved "@types/*" to "dependencies"
 - Replaced tabs with spaces
@@ -171,14 +196,15 @@
 - Fixed support for `event.currentTarget`
 - Migration guide: added a section about parsing script tags
 - Generalized `insertElement` to support a custom prepend target
-- Evaluating the contnet of `script` tags when attaching them to the DOM
+- Evaluating the content of `script` tags when attaching them to the DOM
 - Migration guide: added a `loadScript` function
 - find: improved resilience against text/comment/etc. nodes
 - $.fn.trigger: using `MouseEvents` when appropriate
 - evalScripts: improved browsers support
 - Improved support for `event.currentTarget`
 
-### Version 3.0.0-beta.1
+### 3.0.0-beta.1 - 2018-10-27
+
 - Merge branch 'master' of github.com:kenwheeler/cash
 - Updated Karma configuration
 - $.fn.hasClass: ensuring it supports falsy values
@@ -196,11 +222,12 @@
 - Added `$.fn.prevAll`
 - Added `$.fn.nextAll`
 - Updated readme
-- Added a “Migration Guide”
+- Added a "Migration Guide"
 - Added `$.fn.hide|show|toggle`
 - Added `$.fn.unwrap|wrap|wrapAll|wrapInner`
 
-### Version 3.0.0-beta.0
+### 3.0.0-beta.0 - 2018-10-26
+
 - Test: added Firefox to Karma
 - Rewritten test suite
 - TypeScript: updated compiler options
@@ -208,7 +235,7 @@
 - $.camelCase: aligned more with jQuery
 - $.fn.extend: fixed support for defining plugins with it
 - computeStyle: check if a property is actually passed
-- computeStyle: returning `undefined` for unset css variables
+- computeStyle: returning `undefined` for unset CSS variables
 - Added `@types/node` as a dev dependency
 - camelCase: removed description
 - $.fn.each: improved performance
@@ -224,21 +251,18 @@
 - $.fn.val: cleaner implementation
 - Simplified some events-related helpers
 - Creating one fewer div element
-- Minor changes
 - unique: improved performance
 - Updated logo
 - Readme: updated comparison tables
 - Added configuration for `bump`
 
-### Version 2.3.9
+### 2.3.9 - 2018-10-21
 
-### Version 2.3.8
-
-### Version 2.3.9
 - Changed files extensions to `ts`
 - $.parseHTML: fixed a regression regarding non-browser environments
 
-### Version 2.3.8
+### 2.3.8 - 2018-10-20
+
 - Updated some dependencies
 - Test: added `travis_retry` to tests with SauceLabs
 - Ignored package-lock.json
@@ -248,68 +272,75 @@
 - Test: updated `height` test to better support browsers returning floating values
 - Test: updated Karma configuration
 - $.fn.val: properly handling `null`
-- $.fn.append|prepend: ensuring it doesn’t throw when passed `undefined`
+- $.fn.append|prepend: ensuring it doesn't throw when passed `undefined`
 - $.parseHTML: added support for malformed single-tags
 - $.parseHTML: added support for parsing thead/tbody/tfoot/tr/td/th elements
-- Test: removed the “ Passed!” suffix from messages
+- Test: removed the " Passed!" suffix from messages
 - Test: fixed some malformed HTML
 
-### Version 2.3.7
+### 2.3.7 - 2018-10-14
+
 - Added cross-platform tests with SauceLabs
 - Test only against node LTS
 - Test: use IE11 on Windows 8.1
 - Added a `test:karma:sauce` script
 - Added a `prepublish` script
 - Added some issue templates
-- Readme: added a “Contributing” section
+- Readme: added a "Contributing" section
 - Renamed `prepublish` script to `prepublishOnly`
 - Ensuring `$.parseHTML` always preserves the content of nodes
 
-### Version 2.3.6
-- chore(README): npm always lowercase
+### 2.3.6 - 2018-10-03
+
 - Merge pull request #201 from limonte/patch-1
 - chore(tests): bump qunit to latest
 - Merge pull request #202 from limonte/upgrade-qunit
-- ci: setup karma test runner + travis
+- CI: set up Karma test runner + Travis
 - Readme: removed travis-ci badge
 - Coding-style normalization
 - Added a `test:karma` script
 - Test: avoiding passing malformed html to `$.parseHTML`
 - Test: ensuring there are no syntax errors on IE11
-- tests: use npm ci
-- chore: use Node.js 10
-- Readme: added a “License” section
-- Readme: added a “Thanks” section
+- Readme: added a "License" section
+- Readme: added a "Thanks" section
 - Optimize .empty(), use removeChild() instead of .innerHTML = ''
 - `$.fn.empty`: updated code style
 
-### Version 2.3.5
+### 2.3.5 - 2018-09-08
+
 - Improved support for Node.js
 
-### Version 2.3.4
+### 2.3.4 - 2018-09-07
+
 - Moved `pacco` to `devDependencies`
 
-### Version 2.3.3
-- cash: using the provided context when selecting by id
-- cash: added support for using a cash object as the context
+### 2.3.3 - 2018-07-09
+
+- using the provided context when selecting by id
+- added support for using a cash object as the context
 - Improved readme
 
-### Version 2.3.2
+### 2.3.2 - 2018-07-09
+
 - Added a logo
 - Ensuring `$.fn.replaceWith` and `$.fn.replaceAll` work with multiple targets
 - $.fn.val: ensuring setting multiple values on a `select[multiple]` works
 - Added some tests
 
-### Version 2.3.1
+### 2.3.1 - 2018-07-05
+
 - Added support for `window` to dimensions-related methods
 
-### Version 2.3.0
+### 2.3.0 - 2018-07-05
+
 - Added a `$.fn.contents` method
 
-### Version 2.2.1
+### 2.2.1 - 2018-06-16
+
 - Ensuring a cash collection gets printed as array-like in Chrome
 
-### Version 2.2.0
+### 2.2.0 - 2018-06-10
+
 - Improved `test:jquery` script
 - Added `$.hasData`
 - $.fn.serialize: ensuring elements have a name
@@ -319,7 +350,7 @@
 - computeStyle: ensuring only element nodes are considered
 - $.fn.css: skipping setting unsupported properties
 - $.fn.css: ensuring only element nodes are considered
-- $.parseHTML: ensuring it doesn’t throw when non-string values are passed to it
+- $.parseHTML: ensuring it doesn't throw when non-string values are passed to it
 - $.parseHTML: returning an array instead of a `NodeList`
 - $.fn.attr: returning `undefined` instead of `null` for missing attributes
 - $.fn.attr: removing the attribute when setting a value of `null`
@@ -337,27 +368,33 @@
 - getSuffixedValue: added back support for `animationIterationCount`
 - $.fn.after|prependTo: avoiding mutating passed objects
 
-### Version 2.1.8
+### 2.1.8 - 2018-06-10
+
 - Updated some dependencies
 - $.fn.on: calling `preventDefault` and `stopPropagation` on the event if the handler returns `false`
 - Added a `test:jquery` script for running the jQuery test suite with cash
 
-### Version 2.1.7
+### 2.1.7 - 2018-05-28
+
 - Added some more explicit `@require` statements
 - Added a script for rendering the dependencies graph
 - Added an ESM build
 
-### Version 2.1.6
+### 2.1.6 - 2018-05-19
+
 - Events: passing the actual target element as `this` for delegated events
 
-### Version 2.1.5
+### 2.1.5 - 2018-05-16
+
 - $.fn.removeClass: fixed attribute resetting
 
-### Version 2.1.4
-- Updated jsDelivr url
+### 2.1.4 - 2018-05-14
+
+- Updated jsDelivr URL
 - $.fn.trigger: events are now cancelable
 
-### Version 2.1.3
+### 2.1.3 - 2018-05-12
+
 - Merge pull request #184 from fabiospampinato/master
 - $.fn.width|height: fixed a bug with Firefox
 - Dropped IE9 support
@@ -369,8 +406,6 @@
 - Events: avoiding using `get_data` for the cache
 - $.fn.filter: without a selector returns an empty collection
 - $.fn.index: optimized
-- test:watch: watching only the unminified bundle
-- Properly wrapping the bundle
 - getPrefixedProp: fixed caching logic
 - Major cleanup and bytes squeezing
 - Readme: updated `fn.has` documentation
@@ -379,38 +414,41 @@
 - Updated cash sizes
 - Updated partial builds
 
-### Version 2.1.2
-- Added some alternative configurations for pacco
-- Aligned `$.fn.prop` with jQuery’s
-- Aligned `$.fn.removeClass` with jQuery’s
-- Event delegation: handling the removal of the target from the DOM
-- Pre-merge cleanup/update
+### 2.1.2 - 2018-05-11
 
-### Version 2.1.1
+- Added some alternative configurations for pacco
+- Aligned `$.fn.prop` with jQuery's
+- Aligned `$.fn.removeClass` with jQuery's
+- Event delegation: handling the removal of the target from the DOM
+
+### 2.1.1 - 2018-05-03
+
 - $.parseHTML: added a todo
 - $.fn.filter: optimized
 - $.fn.map: optimized
 - $.fn.find: optimized
 - Minor style changes
-- Aligned `$.fn.removeData` with jQuery’s
+- Aligned `$.fn.removeData` with jQuery's
 
-### Version 2.1.0
-- Aligned `$.fn.each` with jQuery’s
-- Aligned `$.fn.map` with jQuery’s
-- Aligned `$.fn.filter` with jQuery’s
+### 2.1.0 - 2018-04-12
+
+- Aligned `$.fn.each` with jQuery's
+- Aligned `$.fn.map` with jQuery's
+- Aligned `$.fn.filter` with jQuery's
 - $.fn.height|width: setting to each element in the collection
 - $.fn.on: renamed `delegate` to `selector`
-- Aligned `$.val` with jQuery’s
-- Aligned `$.fn.data` with jQuery’s
+- Aligned `$.val` with jQuery's
+- Aligned `$.fn.data` with jQuery's
 - $.fn.css: automatically adding the `px` suffix when necessary
 - Readme: updated minified + gzip size
 - $.fn.height: fixed
-- Aligned `$.fn.width|height` with jQuery’s
+- Aligned `$.fn.width|height` with jQuery's
 - Added support for namespaced events
 - $.fn.trigger: ensuring all namespaces match
 - Adding some methods to events: isDefaultPrevented, isPropagationStopped, isImmediatePropagationStopped
 
-### Version 2.0.0
+### 2.0.0 - 2018-04-08
+
 - Added a `guid`
 - $.fn.trigger: added support for triggering already-made events
 - $.fn.on|one|off: added support for multiple events
@@ -426,46 +464,41 @@
 - Readme: updated `$.fn.not`
 - Improved support for empty objects, without throwing errors
 - Ensuring eventCache is properly cleared
-- $.fn.off: added support for remiving all handlers
+- $.fn.off: added support for removing all handlers
 - $.fn.remove: removing also all events
 - Added a `$.fn.detach` method
 - Added a `$.contains` utility
 - Added a `$.fn.replaceWith` method
 - Added a `$.fn.replaceAll` method
 - Removed event un-namespacing
-- Simplified wrapper
 - Added support for removing wrapped event handlers
 - Added support for removing handlers attached with `.one`
 - $.fn.one: ensuring `callback.guid` is set
 - Passing data as an argument
-- Major refactoring
 - Readme: updated links
 - Renamed `Global Methods` to `Cash Methods`
 - hasClass: properly escaping regex special characters
-- $.fn.offsetParent: ensuring it doesn’t throw with an empty collection
+- $.fn.offsetParent: ensuring it doesn't throw with an empty collection
 - $.fn.removeData: fixed
 - removeData: fixed a variable name
 - initFragment: passing a string to `doc.implementation.createHTMLDocument`, as per spec
 - Added some tests
 - Requiring pacco@^1.1.0
-- Explicitly compiling for ie >= 9
+- Explicitly compiling for IE >= 9
 - Updated a todo
 
-### Version 1.3.7
+### 1.3.7 - 2018-01-17
 
-### Version 1.3.6
+### 1.3.6 - 2018-01-11
+
 - Test fixes
-- 1.3.5
 - Argument required for `createHTMLDocument`
-- Run build tasks
 - fix: attributes/addClass, the wrong checking on class-name inclusion
 - fix: remove `spacedName` from `addClass` interface
-- Added travis ci support for modern node versions
+- Added Travis CI support for modern node versions
 - Merge pull request #160 from amilajack/patch-1
 - Update jsDelivr links
 - Merge pull request #168 from LukasDrgon/patch-1
-- fix title
-- fix travis setup
 - Merge pull request #173 from DanielRuf/patch-travis
 - Merge pull request #171 from DanielRuf/patch-readme
 - Merge pull request #157 from AugustMiller/am-createdocument-argument
@@ -474,12 +507,12 @@
 - Compiled className fix
 - Merge pull request #141 from vivekimsit/add-gitattribute
 
-### Version 1.3.5
-- Add test case.
-- Normalize all text file in the repo.
-- Serialize elemnts outside form as well.
+### 1.3.5 - 2016-10-12
+
+- Normalize all text files in the repo
+- Serialize elements outside form as well
 - Fix for #143
-- fn in  should always be called asynchronously
+- fn in should always be called asynchronously
 - Merge PR #105 'parseHTML-fix' of https://github.com/softwarespot/cash into 1.3.5
 - Merge PR #116 "Form Cleanup"
 - Merge PR #140 "Form Cleanup"
@@ -490,92 +523,58 @@
 - Merge PR #138 'constructor-fix' into 1.3.5
 - Merge PR #145 "event-off-fix"
 
-### Version 1.3.4
+### 1.3.4 - 2016-06-28
 
-### Version 1.3.0
+### 1.3.3 - 2016-05-20
+
+- Filter fix
+
+### 1.3.2 - 2016-05-18
+
+### 1.3.1 - 2016-05-16
+
+- CDN version links
+
+### 1.3.0 - 2016-05-04
+
 - jQuery 3 comparison
 - Unified compare function for `$.fn.is` and `$.fn.not` to support looking for elements
 - Fixed `$.fn.siblings` to return a Collection instead of Array.
 - Fix for `$.fn.has` to return collection instead of Array and support for checking for an element instead of a string selector.
 - Use `$.fn.find` with an element instead of selector.
-- Minor cleanup
 - Merge branch 'master' of https://github.com/kenwheeler/cash
 - Fix for `$.fn.closest` to return correct results, `$.fn.filter` can now filter by Elements
-- Cleanup & build
 - Fix for #135: `$.fn.closest()` callstack exceeded
-- Add semicolon.
 - Use `Object.defineProperty` to attach the `constructor` property to the `cash.fn` prototype. #134
+- merge PR #110
+- merge PR #111
 
-### Version 1.3.4
+### 1.2.3 - 2016-??-??
 
-### Version 1.3.4-rc1
-
-### Version 1.3.3
-- Merge branch 'master' into filter-fix
-- Filter fix
-
-### Version 1.3.2
-
-### Version 1.3.1
-- CDN Version Links
-
-### Version 1.3.0
-
-### Version 1.2.0
-- Size updates
-- Keep CDN files at last version until the CDNs have had a chance to update.
-- Simplified `on`
-- Updated README
-- Merge pull request #115 from kenwheeler/1.3.0
-
-### Version 1.3.0
-- merge PR 110
-- merge PR 111
-
-### Version 1.2.2
-- merge PR 96
-
-### Version 1.2.1
-- [ attr() ] - fix to return collection for multi-add
-- [ update ] - improve based on @shshaw comment   https://github.com/kenwheeler/cash/pull/111#issuecomment-216283171
-- Cleanup and @rwwagner90 fix
-
-### Version 1.2.3
 - Saving bytes
 - [ remove class ] - add test for removing all classes
 - [ remove all classes ] - add an option for removing all classes - supply no arguments to .removeClass() - update readme
 
-### Version 1.2.2
+### 1.2.2 - 2016-??-??
 
-### Version 1.2.1
-
-### Version 1.2.2
-- [ add / remove / toggle / has class ] - add hecks for integers and falsey values - closer to jQuery - was having script-killing errors when `.addClass("")
-
-### Version 1.2.1
-
-### Version 1.2.2
-- Version bump
 - `$.fn.filter` fix
+- merge PR #96
+- [ add / remove / toggle / has class ] - add checks for integers and falsey values - closer to jQuery - was having script-killing errors when `.addClass("")`
 
-### Version 1.2.1
+### 1.2.1 - 2016-04-25
+
+- [ attr() ] - fix to return collection for multi-add
+- [ update ] - improve based on @shshaw comment https://github.com/kenwheeler/cash/pull/111#issuecomment-216283171
+- Cleanup and @rwwagner90 fix
 - CloudFlare CDN
 - Clarified intro paragraph
-- Updated parseHTML which fixes the base url issue
-
-### Version 1.2.0
-
-### Version 1.2.1
+- Updated parseHTML which fixes the base URL issue
 - Fix conflict
 - Merge branch 'kenwheeler-master'
 - Added NPM reference
 - Bower.json fix
 - Usage updates
 - Merge pull request #102 from kenwheeler/npm-bower-fixes
-
-### Version 1.2.0
-
-### Version 1.2.1
 - Update README.md
 - Fix example for $.isArray
 - Merge pull request #81 from shvelo/patch-1
@@ -587,10 +586,10 @@
 - Size comparison
 - Latest CDN version
 - Heading comment
-- Set multiple attributes & properties
+- Set multiple attributes &amp; properties
 - Merge pull request #87 from kenwheeler/attr-obj
 - added index to docs
-- updated utilities & type checking links
+- updated utilities &amp; type checking links
 - Merge pull request #89 from devinargenta/docs/index-added
 - Size alignment
 - Documentation for `$.fn.offet`, `$.fn.offetParent` and `$.fn.position`
@@ -600,36 +599,37 @@
 - Clarifying $.fn prototype
 - Method index tables ( #88 )
 
-### Version 1.2.0
+### 1.2.0 - 2016-04-01
+
 - Merge pull request #1 from shshaw/selector
 - Merge pull request #70 from shshaw/master
+- Size updates
+- Keep CDN files at last version until the CDNs have had a chance to update.
+- Simplified `on`
+- Updated README
+- Merge pull request #115 from kenwheeler/1.3.0
 
-### Version 1.1.0
+### 1.1.0 - 2016-04-12
+
 - Fixed css() return value for object type input
 - Merge pull request #58 from kornalius/master
 - Update README.md
-- Fixing length to 0 when element doesnt exist
+- Fixing length to 0 when element doesn't exist
 - Merge pull request #64 from defrag/fix/empty-item-length
-- Fixing suite
 - Merge pull request #65 from defrag/fix/suite-fix
-- This is embarassing
-- Better init
-- Better `fn.find`
-- `return false` break `.each`
+- Improve `fn.find`
+- `return false` breaks `.each`
 - `fn.children` and `fn.is` improvements
-- Minor fixes
-- Smaller file size & Consistency
-- Better `append`, `prepend`
+- Smaller file size &amp; consistency
+- Improve `append`, `prepend`
 - Clone entire collections
-- Cleanup
 - Added `.map`
 - README fixes
 - Simplification of manipulations
-- Fixed chain ability on `remove`
+- Fixed chainability of `remove`
 - Traversal cleanup
 - Unified collection functions
 - Simplified class manipulation
-- Cleanup & simplification
 - Form fixes
 - Tiny utils added to `cash`
 - Trim down by using local `each`
@@ -639,22 +639,16 @@
 - Multi-parameter extend
 - Merge pull request #66 from shshaw/master
 - Merge remote-tracking branch 'kenwheeler/master'
-- Tabs to Spaces
 - Trimmed `index`
 - Direct `map`
-- Trimmed `outerWidth` & `outerHeight`
+- Trimmed `outerWidth` &amp; `outerHeight`
 - Cleaned up events
-- spaces instead of tabs
-- Minor cleanup
 - Form serialize fix
 - Merge pull request #67 from shshaw/master
 - Merge remote-tracking branch 'kenwheeler/master'
-- `after`, `before` & `insert...`
-- README cleanup
-- Trimming
-- README fix
+- `after`, `before` &amp; `insert...`
 - Updated hints
-- Simplified `outerWidth` & `outerHeight`
+- Simplified `outerWidth` &amp; `outerHeight`
 - Prefixed CSS Properties
 - Selector performance
 - Form test update
@@ -663,34 +657,31 @@
 - Even smaller `dimensions`
 - `event` fixes
 - `window` fixes
-- Clear _eventCache when all removed
-- No need for this check
-- No need for `i`
+- Clear `_eventCache` when all removed
 - Private `data` store
 - Replace `_eventCache`
 - `.one` support
-- Move `data` up
 - `offset`
-- README updates
 
-### Version 1.0.0
+### 1.0.0 - 2015-02-06
+
 - Available in npm as cash-dom now
-- Adding is documentation
+- Adding `is` documentation
 - Add UMD wrapper
 - Store references for better minifying
 - Fill out package.json
-- Cleanup README
+- Clean up README
 - Merge pull request #40 from hackbone/umd
-- Conform to Airbnb javascript style guide
+- Conform to Airbnb JavaScript style guide
 - Arbitrary stylistic changes for readability
 - Minify dimensions better
 - Minify events better and cleanup
 - Alias slice and filter for minifying
 - fn reference for minifying
-- Cleanup gulpfile and remove beautify
+- Clean up gulpfile and remove beautify
 - Build lib
 - Stop using arguments object when unnecessary for better minifying
-- Switch to es6 with 6to5 and update linting
+- Switch to ES6 with 6to5 and update linting
 - Return target in extend, improve minifying
 - Build lib
 - Remove "use strict" due to Safari HTMLCollection bug
@@ -698,34 +689,23 @@
 - Removing strict from list
 - Merge branch 'thejameskyle-master'
 
-### Version 0.0.3
-- Trailing comma
-- Closure compiler did me dirty
-- README update
-- One mo gain
+### 0.0.3 - 2014-11-09
+
 - Update README.md
 - Merge pull request #9 from richguan/patch-1
 - Merge pull request #7 from Fender123/master
-- Committing the dd feature in response to #16
+- Committing the `add` feature in response to #16
 - create tests for .add
-- gulped out the dist files
-- adding a few more testaroonies
-- adding some more testaroonies
 - allowing selector string input
 - fixing tests for selector string
--  - cash creeped back to $ when trying something, fixed.
 - Refactoring the $.fn.add method based on Ken's feedback, also update documentation and tests
 - Merge pull request #20 from simeydotme/master
-- change parents to closest and create new parents
 - add tests for parents, closest
 - updating documentation for closest and parents
-- committing gulped files
 - change parents to closest and create new parents
 - Merge branch 'master' of https://github.com/simeydotme/cash
 - improve performance
 - test that HTML is last item in collection
-- tidy up to match original format
-- First commit.
 - Merge pull request #23 from simeydotme/master
 - Merge pull request #22 from vivekimsit/feature-closest-method
 - Remove deprecated JSHint options
@@ -733,7 +713,7 @@
 - Merge pull request #26 from arthurvr/patch-2
 - Merge pull request #25 from arthurvr/patch-1
 - matches was throwing errors in IE9
-- fix up closest tests, and make the removeclass test more robust
+- fix up closest tests, and make the removeClass test more robust
 - fix merge error with .closest()
 - make .removeClass() more robust for IE9
 - dist files committed
@@ -743,7 +723,6 @@
 - Update README.md
 - Merge pull request #31 from simeydotme/patch-1
 - Fixing #32
-- First commit.
 - Adds cash object support.
 - updating addClass function to allow multiple classes and to prevent duplicates in IE9
 - update tests for multiple classes and to detect duplicates
@@ -752,23 +731,19 @@
 - create a utility method to return a unique collection
 - update .parent(), .parents() and .add() to use $.unique()
 - update dist files and test cases
-- oopsy, meant to be parentElement
-- no need for that variable declaration
-- gulp back some refreshing minification
 - Merge pull request #37 from simeydotme/patch-parents-with-unique
 - Merge pull request #34 from vivekimsit/feature-add-is-support
 
-### Version 0.0.2
+### 0.0.2 - 2014-09-27
+
 - Performance
-- Big update
 - Fixing readme
-- Fixing siblings, making QSA return array
-- So dumb
-- Fixing _ leak
+- Fixing siblings, making qSA return array
+- Fixing `_` leak
 - Add bower.json
 - Merge pull request #3 from digitaljhelms/bower-json
 - First round of unit tests + bug fixes
-- Fixing README typo & adding License
+- Fixing README typo &amp; adding License
 - Fixes
 - Adding "auto-off" event registration and indexing
 - Bug Fixes
@@ -779,11 +754,11 @@
 - Added a period(.) to the descriptions in README
 - Fixes #6 - Append and AppendTo can't chain
 - Merge pull request #10 from mienaikoe/master
-- Fixing html() & append returns
+- Fixing html() &amp; append returns
 - Merge branch 'master' of https://github.com/kenwheeler/cash
 
-### Version 0.0.1
+### 0.0.1 - 2014-09-19
+
 - Initial commit
-- Initial commit
-- README & Homepage
+- README &amp; Homepage
 - Update README.md
