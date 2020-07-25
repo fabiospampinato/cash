@@ -1,4 +1,4 @@
-# Cash Method
+# Cash Methods
 These methods are exported from the global `$` object, and are called like so:
 
 ```js

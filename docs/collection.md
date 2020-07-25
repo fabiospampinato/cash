@@ -1,4 +1,4 @@
-# Collection Method
+# Collection Methods
 These methods from the collection prototype ([$.fn](#fn)) are available once you create a collection with `$()` and are called like so:
 
 ```js

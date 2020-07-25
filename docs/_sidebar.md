@@ -3,4 +3,4 @@
 * [Cash Method](cash.md)
 * [Migration Guide](migration_guide.md)
 * [Extending Cash](extending_cash.md)
-* [Partail Build](partial_builds.md)
+* [Partial Build](partial_builds.md)
