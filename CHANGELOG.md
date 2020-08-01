@@ -1,43 +1,43 @@
-### 8.0.0 - 2020-06-20
+### [v8.0.0](https://github.com/fabiospampinato/cash/releases/tag/8.0.0) (2020-06-20)
 
 - Improved alignment with jQuery regarding handling of non-bubbling events significantly
 
-### 7.0.4 - 2020-06-19
+### [v7.0.4](https://github.com/fabiospampinato/cash/releases/tag/7.0.4) (2020-06-19)
 
 - Ensuring unusual but valid simple selectors are handled properly
 
-### 7.0.3 - 2020-05-31
+### [v7.0.3](https://github.com/fabiospampinato/cash/releases/tag/7.0.3) (2020-05-31)
 
 - Updated "EleLoose" type
 
-### 7.0.2 - 2020-05-30
+### v7.0.2 (2020-05-30)
 
 - Readme: updated npm installation command
 - Updated the "EleLoose" TypeScript type ensuring it isn't evaluated as "never"
 
-### 7.0.1 - 2020-04-15
+### [v7.0.1](https://github.com/fabiospampinato/cash/releases/tag/7.0.1) (2020-04-15)
 
 - $.fn.css: added support for retrieving properties of disconnected nodes
 
-### 7.0.0 - 2020-03-31
+### [v7.0.0](https://github.com/fabiospampinato/cash/releases/tag/7.0.0) (2020-03-31)
 
 - focus|blur|mouseenter|mouseleave: ensuring namespaces are handled properly
 - focus|blur|mouseenter|mouseleave: aligned behavior more with jQuery
 - focus|blur|mouseenter|mouseleave: ensuring natively triggered events are handled properly
 - Migration guide: mentioning native non-bubbling events
 
-### 6.0.2 - 2020-02-15
+### [v6.0.2](https://github.com/fabiospampinato/cash/releases/tag/6.0.2) (2020-02-15)
 
 - Readme: improved comparison with jQuery, fixing some wrong/unfair comparisons/statements
 - Migration guide: mentioning sort order
 - $.fn.ready: ensuring the callback is called asynchronously and errors are not silenced
 
-### 6.0.1 - 2020-01-05
+### [v6.0.1](https://github.com/fabiospampinato/cash/releases/tag/6.0.1) (2020-01-05)
 
 - Ensuring events work with Document and Window objects
 - Ensuring "event.data" is setted reliably
 
-### 6.0.0 - 2020-01-05
+### [v6.0.0](https://github.com/fabiospampinato/cash/releases/tag/6.0.0) (2020-01-05)
 
 ##### Removed Features
 
@@ -90,7 +90,7 @@
   - $.fn.removeAttr: ensuring a collection containing non-element objects doesn't cause an error to be thrown
   - $.fn.text: improved support of collections containing non-elements objects
 
-### 5.0.0 - 2019-12-17
+### [v5.0.0](https://github.com/fabiospampinato/cash/releases/tag/5.0.0) (2019-12-17)
 
 - Dropped support for IE10
 - $.fn.hasClass: ensuring it always returns a boolean
@@ -103,12 +103,12 @@
 - Squeezed some more bytes out of the bundle (~4%) and improved code style consistency
 - Squeezed some more bytes out of the bundle (~1.5%), bringing back the minified and gzipped size below 5kb
 
-### 4.1.5 - 2019-09-06
+### [v4.1.5](https://github.com/fabiospampinato/cash/releases/tag/4.1.5) (2019-09-06)
 
 - $.fn.val: ensuring it works with "input[type=file][multiple]" elements
 - Migration guide: mentioning how $.fn.data stores values
 
-### 4.1.4 - 2019-08-05
+### [v4.1.4](https://github.com/fabiospampinato/cash/releases/tag/4.1.4) (2019-08-05)
 
 - $.fn.get: improved types
 - TypeScript: made types a little more forgiving
@@ -116,18 +116,18 @@
 - TypeScript: improved support for props/methods available only in specific HTML nodes
 - Added a guide for extending Cash
 
-### 4.1.3 - 2019-07-13
+### [v4.1.3](https://github.com/fabiospampinato/cash/releases/tag/4.1.3) (2019-07-13)
 
 - Ensuring Cash can be bundled correctly via webpack
 - $.fn.toggle: ensuring each element is toggled independently
 - TypeScript: ensuring some useful internal types are exported
 - TypeScript: made types a little more forgiving
 
-### 4.1.2 - 2019-05-16
+### [v4.1.2](https://github.com/fabiospampinato/cash/releases/tag/4.1.2) (2019-05-16)
 
 - Avoiding publishing unnecessary files to NPM
 
-### 4.1.1 - 2019-05-13
+### [v4.1.1](https://github.com/fabiospampinato/cash/releases/tag/4.1.1) (2019-05-13)
 
 - Raising bundle size limit to 5.5kB
 - Test: replaced iOS 9.3 with iOS 11.0
@@ -137,7 +137,7 @@
 - TypeScript: typing events more loosely
 - TypeScript: typing collection elements more loosely
 
-### 4.1.0 - 2019-05-12
+### [v4.1.0](https://github.com/fabiospampinato/cash/releases/tag/4.1.0) (2019-05-12)
 
 - Added $.isWindow
 - Made the TypeScript type system stricter
@@ -146,19 +146,19 @@
 - $.fn.empty: ensuring it supports multi-element collections
 - $.fn.attr: doing nothing when the value equals undefined
 
-### 4.0.0 - 2019-05-08
+### [v4.0.0](https://github.com/fabiospampinato/cash/releases/tag/4.0.0) (2019-05-08)
 
 - Removed `$.fn.removeData`
 - Removed `$.hasData`
 - `$.fn.data`: removed caching mechanism
 - `$.fn.data`: added a missing TypeScript method overload
 
-### 3.2.0 - 2019-04-30
+### [v3.2.0](https://github.com/fabiospampinato/cash/releases/tag/3.2.0) (2019-04-30)
 
 - Readme: updated sizes
 - $.fn.off: added support for removing delegated handlers
 
-### 3.1.0 - 2019-03-22
+### [v3.1.0](https://github.com/fabiospampinato/cash/releases/tag/3.1.0) (2019-03-22)
 
 - Improved support for running selectors inside documents
 - Ensuring Cash collections are iterable
@@ -166,7 +166,7 @@
 - Added an extra reference implementation for `$.getScript`
 - Readme: mentioning the extra methods
 
-### 3.0.0 - 2019-03-17
+### [v3.0.0](https://github.com/fabiospampinato/cash/releases/tag/3.0.0) (2019-03-17)
 
 - Library rewritten in TypeScript
 - Bundle TypeScript typings (no need for @types/cash, which is now obsolete)
@@ -176,11 +176,11 @@
 - Ensure valid TypeScript types are generated
 - Ensure build files are updated when bumping the version
 
-### 3.0.0-beta.3 - 2018-12-06
+### v3.0.0-beta.3 (2018-12-06)
 
 - Fixed export on the ESM build
 
-### 3.0.0-beta.2 - 2018-11-21
+### v3.0.0-beta.2 (2018-11-21)
 
 - Renamed some "private" variables
 - Travis: avoiding caching `node_modules`
@@ -203,7 +203,7 @@
 - evalScripts: improved browsers support
 - Improved support for `event.currentTarget`
 
-### 3.0.0-beta.1 - 2018-10-27
+### v3.0.0-beta.1 (2018-10-27)
 
 - Merge branch 'master' of github.com:kenwheeler/cash
 - Updated Karma configuration
@@ -226,7 +226,7 @@
 - Added `$.fn.hide|show|toggle`
 - Added `$.fn.unwrap|wrap|wrapAll|wrapInner`
 
-### 3.0.0-beta.0 - 2018-10-26
+### v3.0.0-beta.0 (2018-10-26)
 
 - Test: added Firefox to Karma
 - Rewritten test suite
@@ -256,12 +256,12 @@
 - Readme: updated comparison tables
 - Added configuration for `bump`
 
-### 2.3.9 - 2018-10-21
+### [v2.3.9](https://github.com/fabiospampinato/cash/releases/tag/2.3.9) (2018-10-21)
 
 - Changed files extensions to `ts`
 - $.parseHTML: fixed a regression regarding non-browser environments
 
-### 2.3.8 - 2018-10-20
+### [v2.3.8](https://github.com/fabiospampinato/cash/releases/tag/2.3.8) (2018-10-20)
 
 - Updated some dependencies
 - Test: added `travis_retry` to tests with SauceLabs
@@ -278,7 +278,7 @@
 - Test: removed the " Passed!" suffix from messages
 - Test: fixed some malformed HTML
 
-### 2.3.7 - 2018-10-14
+### [v2.3.7](https://github.com/fabiospampinato/cash/releases/tag/2.3.7) (2018-10-14)
 
 - Added cross-platform tests with SauceLabs
 - Test only against node LTS
@@ -290,7 +290,7 @@
 - Renamed `prepublish` script to `prepublishOnly`
 - Ensuring `$.parseHTML` always preserves the content of nodes
 
-### 2.3.6 - 2018-10-03
+### [v2.3.6](https://github.com/fabiospampinato/cash/releases/tag/2.3.6) (2018-10-03)
 
 - Merge pull request #201 from limonte/patch-1
 - chore(tests): bump qunit to latest
@@ -306,40 +306,40 @@
 - Optimize .empty(), use removeChild() instead of .innerHTML = ''
 - `$.fn.empty`: updated code style
 
-### 2.3.5 - 2018-09-08
+### [v2.3.5](https://github.com/fabiospampinato/cash/releases/tag/2.3.5) (2018-09-08)
 
 - Improved support for Node.js
 
-### 2.3.4 - 2018-09-07
+### v2.3.4 (2018-09-07)
 
 - Moved `pacco` to `devDependencies`
 
-### 2.3.3 - 2018-07-09
+### [v2.3.3](https://github.com/fabiospampinato/cash/releases/tag/2.3.3) (2018-07-09)
 
 - using the provided context when selecting by id
 - added support for using a cash object as the context
 - Improved readme
 
-### 2.3.2 - 2018-07-09
+### [v2.3.2](https://github.com/fabiospampinato/cash/releases/tag/2.3.2) (2018-07-09)
 
 - Added a logo
 - Ensuring `$.fn.replaceWith` and `$.fn.replaceAll` work with multiple targets
 - $.fn.val: ensuring setting multiple values on a `select[multiple]` works
 - Added some tests
 
-### 2.3.1 - 2018-07-05
+### [v2.3.1](https://github.com/fabiospampinato/cash/releases/tag/2.3.1) (2018-07-05)
 
 - Added support for `window` to dimensions-related methods
 
-### 2.3.0 - 2018-07-05
+### [v2.3.0](https://github.com/fabiospampinato/cash/releases/tag/2.3.0) (2018-07-05)
 
 - Added a `$.fn.contents` method
 
-### 2.2.1 - 2018-06-16
+### [v2.2.1](https://github.com/fabiospampinato/cash/releases/tag/2.2.1) (2018-06-16)
 
 - Ensuring a cash collection gets printed as array-like in Chrome
 
-### 2.2.0 - 2018-06-10
+### [v2.2.0](https://github.com/fabiospampinato/cash/releases/tag/2.2.0) (2018-06-10)
 
 - Improved `test:jquery` script
 - Added `$.hasData`
@@ -368,32 +368,32 @@
 - getSuffixedValue: added back support for `animationIterationCount`
 - $.fn.after|prependTo: avoiding mutating passed objects
 
-### 2.1.8 - 2018-06-10
+### [v2.1.8](https://github.com/fabiospampinato/cash/releases/tag/2.1.8) (2018-06-10)
 
 - Updated some dependencies
 - $.fn.on: calling `preventDefault` and `stopPropagation` on the event if the handler returns `false`
 - Added a `test:jquery` script for running the jQuery test suite with cash
 
-### 2.1.7 - 2018-05-28
+### [v2.1.7](https://github.com/fabiospampinato/cash/releases/tag/2.1.7) (2018-05-28)
 
 - Added some more explicit `@require` statements
 - Added a script for rendering the dependencies graph
 - Added an ESM build
 
-### 2.1.6 - 2018-05-19
+### [v2.1.6](https://github.com/fabiospampinato/cash/releases/tag/2.1.6) (2018-05-19)
 
 - Events: passing the actual target element as `this` for delegated events
 
-### 2.1.5 - 2018-05-16
+### [v2.1.5](https://github.com/fabiospampinato/cash/releases/tag/2.1.5) (2018-05-16)
 
 - $.fn.removeClass: fixed attribute resetting
 
-### 2.1.4 - 2018-05-14
+### v2.1.4 (2018-05-14)
 
 - Updated jsDelivr URL
 - $.fn.trigger: events are now cancelable
 
-### 2.1.3 - 2018-05-12
+### [v2.1.3](https://github.com/fabiospampinato/cash/releases/tag/2.1.3) (2018-05-12)
 
 - Merge pull request #184 from fabiospampinato/master
 - $.fn.width|height: fixed a bug with Firefox
@@ -414,14 +414,14 @@
 - Updated cash sizes
 - Updated partial builds
 
-### 2.1.2 - 2018-05-11
+### v2.1.2 (2018-05-11)
 
 - Added some alternative configurations for pacco
 - Aligned `$.fn.prop` with jQuery's
 - Aligned `$.fn.removeClass` with jQuery's
 - Event delegation: handling the removal of the target from the DOM
 
-### 2.1.1 - 2018-05-03
+### v2.1.1 (2018-05-03)
 
 - $.parseHTML: added a todo
 - $.fn.filter: optimized
@@ -430,7 +430,7 @@
 - Minor style changes
 - Aligned `$.fn.removeData` with jQuery's
 
-### 2.1.0 - 2018-04-12
+### v2.1.0 (2018-04-12)
 
 - Aligned `$.fn.each` with jQuery's
 - Aligned `$.fn.map` with jQuery's
@@ -447,7 +447,7 @@
 - $.fn.trigger: ensuring all namespaces match
 - Adding some methods to events: isDefaultPrevented, isPropagationStopped, isImmediatePropagationStopped
 
-### 2.0.0 - 2018-04-08
+### v2.0.0 (2018-04-08)
 
 - Added a `guid`
 - $.fn.trigger: added support for triggering already-made events
@@ -487,9 +487,9 @@
 - Explicitly compiling for IE >= 9
 - Updated a todo
 
-### 1.3.7 - 2018-01-17
+### [v1.3.7](https://github.com/fabiospampinato/cash/releases/tag/1.3.7) (2018-01-17)
 
-### 1.3.6 - 2018-01-11
+### [v1.3.6](https://github.com/fabiospampinato/cash/releases/tag/1.3.6) (2018-01-11)
 
 - Test fixes
 - Argument required for `createHTMLDocument`
@@ -507,7 +507,7 @@
 - Compiled className fix
 - Merge pull request #141 from vivekimsit/add-gitattribute
 
-### 1.3.5 - 2016-10-12
+### [v1.3.5](https://github.com/fabiospampinato/cash/releases/tag/1.3.5) (2016-10-12)
 
 - Normalize all text files in the repo
 - Serialize elements outside form as well
@@ -523,19 +523,19 @@
 - Merge PR #138 'constructor-fix' into 1.3.5
 - Merge PR #145 "event-off-fix"
 
-### 1.3.4 - 2016-06-28
+### [v1.3.4](https://github.com/fabiospampinato/cash/releases/tag/1.3.4) (2016-06-28)
 
-### 1.3.3 - 2016-05-20
+### [v1.3.3](https://github.com/fabiospampinato/cash/releases/tag/1.3.3) (2016-05-20)
 
 - Filter fix
 
-### 1.3.2 - 2016-05-18
+### [v1.3.2](https://github.com/fabiospampinato/cash/releases/tag/1.3.2) (2016-05-18)
 
-### 1.3.1 - 2016-05-16
+### [v1.3.1](https://github.com/fabiospampinato/cash/releases/tag/1.3.1) (2016-05-16)
 
 - CDN version links
 
-### 1.3.0 - 2016-05-04
+### [v1.3.0](https://github.com/fabiospampinato/cash/releases/tag/1.3.0) (2016-05-04)
 
 - jQuery 3 comparison
 - Unified compare function for `$.fn.is` and `$.fn.not` to support looking for elements
@@ -549,19 +549,19 @@
 - merge PR #110
 - merge PR #111
 
-### 1.2.3 - 2016-??-??
+### v1.2.3 (2016-??-??)
 
 - Saving bytes
 - [ remove class ] - add test for removing all classes
 - [ remove all classes ] - add an option for removing all classes - supply no arguments to .removeClass() - update readme
 
-### 1.2.2 - 2016-??-??
+### v1.2.2 (2016-??-??)
 
 - `$.fn.filter` fix
 - merge PR #96
 - [ add / remove / toggle / has class ] - add checks for integers and falsey values - closer to jQuery - was having script-killing errors when `.addClass("")`
 
-### 1.2.1 - 2016-04-25
+### [v1.2.1](https://github.com/fabiospampinato/cash/releases/tag/1.2.1) (2016-04-25)
 
 - [ attr() ] - fix to return collection for multi-add
 - [ update ] - improve based on @shshaw comment https://github.com/kenwheeler/cash/pull/111#issuecomment-216283171
@@ -599,7 +599,7 @@
 - Clarifying $.fn prototype
 - Method index tables ( #88 )
 
-### 1.2.0 - 2016-04-01
+### [v1.2.0](https://github.com/fabiospampinato/cash/releases/tag/1.2.0) (2016-04-01)
 
 - Merge pull request #1 from shshaw/selector
 - Merge pull request #70 from shshaw/master
@@ -609,7 +609,7 @@
 - Updated README
 - Merge pull request #115 from kenwheeler/1.3.0
 
-### 1.1.0 - 2016-04-12
+### [v1.1.0](https://github.com/fabiospampinato/cash/releases/tag/1.1.0) (2016-04-12)
 
 - Fixed css() return value for object type input
 - Merge pull request #58 from kornalius/master
@@ -663,7 +663,7 @@
 - `.one` support
 - `offset`
 
-### 1.0.0 - 2015-02-06
+### [v1.0.0](https://github.com/fabiospampinato/cash/releases/tag/1.0.0) (2015-02-06)
 
 - Available in npm as cash-dom now
 - Adding `is` documentation
@@ -689,7 +689,7 @@
 - Removing strict from list
 - Merge branch 'thejameskyle-master'
 
-### 0.0.3 - 2014-11-09
+### [v0.0.3](https://github.com/fabiospampinato/cash/releases/tag/0.0.3) (2014-11-09)
 
 - Update README.md
 - Merge pull request #9 from richguan/patch-1
@@ -734,7 +734,7 @@
 - Merge pull request #37 from simeydotme/patch-parents-with-unique
 - Merge pull request #34 from vivekimsit/feature-add-is-support
 
-### 0.0.2 - 2014-09-27
+### [v0.0.2](https://github.com/fabiospampinato/cash/releases/tag/0.0.2) (2014-09-27)
 
 - Performance
 - Fixing readme
@@ -757,7 +757,7 @@
 - Fixing html() &amp; append returns
 - Merge branch 'master' of https://github.com/kenwheeler/cash
 
-### 0.0.1 - 2014-09-19
+### [v0.0.1](https://github.com/fabiospampinato/cash/releases/tag/0.0.1) (2014-09-19)
 
 - Initial commit
 - README &amp; Homepage
