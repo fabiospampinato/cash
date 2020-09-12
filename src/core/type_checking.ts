@@ -34,6 +34,12 @@ function isElement ( x: any ): x is HTMLElement {
 
 }
 
+function isBoolean ( x: any ): x is boolean {
+
+  return typeof x === 'boolean';
+
+}
+
 function isFunction ( x: any ): x is Function {
 
   return typeof x === 'function';

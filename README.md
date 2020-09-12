@@ -890,10 +890,11 @@ $.each ( object, callback ) // => object
 
 #### $.extend ()
 
-Extends target object with properties from the source object.
+Extends target object with properties from the source object, potentially deeply too.
 
 ```js
 $.extend ( target, source ) // => object
+$.extend ( true, target, source ) // => object
 ```
 
 #### $.isArray ()

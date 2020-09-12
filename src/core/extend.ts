@@ -1,29 +1,45 @@
 
 // @require ./cash.ts
+// @require ./type_checking.ts
 
 interface CashStatic {
   extend (): any;
+  extend ( deep: true, target: any, ...sources: any[] ): any;
   extend ( target: any ): typeof cash;
-  extend ( target: any, ...objs: any[] ): any;
+  extend ( target: any, ...sources: any[] ): any;
 }
 
 interface Cash {
   extend ( plugins: Record<any, any> ): this;
 }
 
-function extend ( target?: any, ...objs: any[] ) {
+function extend ( ...sources: any[] ) {
 
-  const length = arguments.length;
+  const deep = isBoolean ( sources[0] ) ? sources.shift () : false,
+        target = sources.shift (),
+        length = sources.length;
 
-  if ( !length ) return {};
+  if ( !target ) return {};
 
-  if ( length === 1 ) return extend ( cash, target );
+  if ( !length ) return extend ( deep, cash, target );
 
-  for ( let i = 1; i < length; i++ ) {
+  for ( let i = 0; i < length; i++ ) {
 
-    for ( const key in arguments[i] ) {
+    const source = sources[i];
 
-      target[key] = arguments[i][key];
+    for ( const key in source ) {
+
+      if ( deep && ( isArray ( source[key] ) || isPlainObject ( source[key] ) ) ) {
+
+        if ( !target[key] || target[key].constructor !== source[key].constructor ) target[key] = new source[key].constructor ();
+
+        extend ( deep, target[key], source[key] );
+
+      } else {
+
+        target[key] = source[key];
+
+      }
 
     }
 

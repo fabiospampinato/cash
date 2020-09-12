@@ -73,6 +73,25 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'can extend deeply', function ( t ) {
+
+      var result1 = $.extend ( true, { foo: 1 }, { bar: { inner: 2 } } );
+      t.deepEqual ( result1, { foo: 1, bar: { inner: 2 } } );
+
+      var result2 = $.extend ( true, { foo: 1 }, { bar: [1, 2] } );
+      t.deepEqual ( result2, { foo: 1, bar: [1, 2] } );
+
+      var result3 = $.extend ( true, {}, { foo: 1 }, { bar: { inner: 2, baz: { inner2: 3 } } } );
+      t.deepEqual ( result3, { foo: 1, bar: { inner: 2, baz: { inner2: 3 } } } );
+
+      var result4 = $.extend ( true, {}, { foo: 1, bar: { baz: 3 } }, { bar: { baz: 4 } } );
+      t.deepEqual ( result4, { foo: 1, bar: { baz: 4 } } );
+
+      var result5 = $.extend ( true, {}, { foo: 1, bar: { baz: 3 } }, { bar: { baz: 4 } }, { bar: { qux: 5 }} );
+      t.deepEqual ( result5, { foo: 1, bar: { baz: 4, qux: 5 } } );
+
+    });
+
     it ( 'works also with either zero or one object(s)', function ( t ) {
 
       t.deepEqual ( $.extend (), {} );
