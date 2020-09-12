@@ -115,6 +115,29 @@ describe ( 'Utilities', function () {
 
   });
 
+  describe ( '$.isPlainObject', function ( it ) {
+
+    it ( 'checks if the passed variable is a plain object', function ( t ) {
+
+      t.true ( $.isPlainObject ( {} ) );
+      t.true ( $.isPlainObject ( Object.create ( null ) ) );
+      t.false ( $.isPlainObject ( [] ) );
+      t.false ( $.isPlainObject ( function () {} ) );
+      t.false ( $.isPlainObject ( window ) );
+      t.false ( $.isPlainObject ( $ ) );
+      t.false ( $.isPlainObject ( $('body') ) );
+      t.false ( $.isPlainObject ( 'foo' ) );
+      t.false ( $.isPlainObject ( true ) );
+      t.false ( $.isPlainObject ( undefined ) );
+      t.false ( $.isPlainObject ( null ) );
+      t.false ( $.isPlainObject ( 0 ) );
+      t.false ( $.isPlainObject ( Date ) );
+      t.false ( $.isPlainObject ( new Date () ) );
+
+    });
+
+  });
+
   describe ( '$.isWindow', function ( it ) {
 
     it ( 'checks if the passed variable is a window', function ( t ) {

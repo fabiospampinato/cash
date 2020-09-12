@@ -29,6 +29,8 @@ type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | El
 type Comparator = string | Ele | Cash | (( this: EleLoose, index: number, ele: EleLoose ) => boolean);
 type Context = Document | HTMLElement | Element;
 
+type PlainObject = Record<string, any>;
+
 type EventCallback = {
   ( event: any, data?: any ): any,
   guid?: number

@@ -859,13 +859,13 @@ $.isArray ( arr ) // => boolean
 
 Some [extra methods](https://github.com/fabiospampinato/cash/tree/master/src/extra) are available but [disabled](https://github.com/fabiospampinato/cash/blob/master/pacco.json#L3) by default.
 
-| Type Checking                   | Utilities                     |
-| ------------------------------- | ----------------------------- |
-| [$.isArray ()](#isarray-)       | [$.guid](#guid)               |
-| [$.isFunction ()](#isfunction-) | [$.each ()](#each-)           |
-| [$.isNumeric ()](#isnumeric-)   | [$.extend ()](#extend-)       |
-| [$.isWindow ()](#iswindow-)     | [$.parseHTML ()](#parsehtml-) |
-|                                 | [$.unique ()](#unique-)       |
+| Type Checking                         | Utilities                     |
+| ------------------------------------- | ----------------------------- |
+| [$.isArray ()](#isarray-)             | [$.guid](#guid)               |
+| [$.isFunction ()](#isfunction-)       | [$.each ()](#each-)           |
+| [$.isNumeric ()](#isnumeric-)         | [$.extend ()](#extend-)       |
+| [$.isPlainObject ()](#isplainobject-) | [$.parseHTML ()](#parsehtml-) |
+| [$.isWindow ()](#iswindow-)           | [$.unique ()](#unique-)       |
 
 #### $.guid
 
@@ -914,6 +914,14 @@ Check if the argument is numeric.
 
 ```js
 $.isNumeric ( 57 ) // => true
+```
+
+#### $.isPlainObject ()
+
+Check if the argument is a plain object.
+
+```js
+$.isPlainObject ( {} ) // => true
 ```
 
 #### $.isWindow ()

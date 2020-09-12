@@ -5,8 +5,9 @@
 interface CashStatic {
   isWindow ( x: any ): x is Window;
   isFunction ( x: any ): x is Function;
-  isNumeric ( x: any ): boolean;
   isArray ( x: any ): x is Array<any>;
+  isNumeric ( x: any ): boolean;
+  isPlainObject ( x: any ): x is PlainObject;
 }
 
 function isCash ( x: any ): x is Cash {
@@ -63,7 +64,18 @@ function isNumeric ( x: any ): boolean {
 
 }
 
+function isPlainObject ( x: any ): x is PlainObject {
+
+  if ( typeof x !== 'object' || x === null ) return false;
+
+  const proto = Object.getPrototypeOf ( x );
+
+  return proto === null || proto === Object.prototype;
+
+}
+
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
-cash.isNumeric = isNumeric;
 cash.isArray = isArray;
+cash.isNumeric = isNumeric;
+cash.isPlainObject = isPlainObject;
