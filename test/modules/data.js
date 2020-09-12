@@ -122,6 +122,15 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'doesn\'t wrap strings in extra quotes', function ( t ) {
+
+      var ele = $('div');
+
+      ele.data( 'test', 'foo' );
+
+      t.is ( ele[0].getAttribute('data-test'), 'foo');
+    });
+
   });
 
 });

@@ -4,7 +4,7 @@
 
 function setData ( ele: EleLoose, key: string, value: any ): void {
 
-  value = attempt ( JSON.stringify, value );
+  value = isString(value) ? value : attempt ( JSON.stringify, value );
 
   ele.dataset[camelCase ( key )] = value;
 
