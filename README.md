@@ -11,9 +11,9 @@ Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that pr
 
 | Size               | Cash        | Zepto 1.2.0 | jQuery Slim 3.4.1 |
 | ------------------ | ----------- | ----------- | ----------------- |
-| Unminified         | **34.9 KB** | 58.7 KB     | 227 KB            |
-| Minified           | **15.3 KB** | 26 KB       | 71 KB             |
-| Minified & Gzipped | **5.7 KB**  | 9.8 KB      | 24.4 KB           |
+| Unminified         | **36.5 KB** | 58.7 KB     | 227 KB            |
+| Minified           | **16 KB**   | 26 KB       | 71 KB             |
+| Minified & Gzipped | **6 KB**    | 9.8 KB      | 24.4 KB           |
 
 A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
 
