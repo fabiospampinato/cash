@@ -1,3 +1,11 @@
+### [v8.1.0](https://github.com/fabiospampinato/cash/releases/tag/8.1.0) (2020-09-12)
+
+- Added `$.isPlainObject`
+- $.each: added support for iterating over objects
+- $.extend: added support for extending deeply
+- Readme: updated dimensions
+- Updated changelog template
+
 ### [v8.0.0](https://github.com/fabiospampinato/cash/releases/tag/8.0.0) (2020-06-20)
 
 - Improved alignment with jQuery regarding handling of non-bubbling events significantly

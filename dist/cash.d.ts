@@ -23,6 +23,7 @@ declare type EleLoose = HTMLElement & Element & Node;
 declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 declare type Comparator = string | Ele | Cash | ((this: EleLoose, index: number, ele: EleLoose) => boolean);
 declare type Context = Document | HTMLElement | Element;
+declare type PlainObject<T> = Record<string, T>;
 declare type EventCallback = {
     (event: any, data?: any): any;
     guid?: number;
@@ -39,37 +40,15 @@ interface Cash {
 interface Cash {
     slice(start?: number, end?: number): Cash;
 }
-declare type EachCallback<T> = (this: T, index: number, ele: T) => any;
-interface CashStatic {
-    each<T>(arr: ArrayLike<T>, callback: EachCallback<T>): void;
-}
-interface Cash {
-    each(callback: EachCallback<EleLoose>): this;
-}
-interface Cash {
-    removeProp(prop: string): this;
-}
-interface CashStatic {
-    extend(): any;
-    extend(target: any): typeof cash;
-    extend(target: any, ...objs: any[]): any;
-}
-interface Cash {
-    extend(plugins: Record<any, any>): this;
-}
 interface CashStatic {
     guid: number;
 }
 interface CashStatic {
     isWindow(x: any): x is Window;
     isFunction(x: any): x is Function;
-    isNumeric(x: any): boolean;
     isArray(x: any): x is Array<any>;
-}
-interface Cash {
-    prop(prop: string): any;
-    prop(prop: string, value: any): this;
-    prop(props: Record<string, any>): this;
+    isNumeric(x: any): boolean;
+    isPlainObject(x: any): x is PlainObject<any>;
 }
 interface Cash {
     get(): EleLoose[];
@@ -83,6 +62,32 @@ interface Cash {
 }
 interface Cash {
     last(): Cash;
+}
+declare type EachArrayCallback<T> = (this: T, index: number, ele: T) => any;
+declare type EachObjectCallback<T> = (this: T, key: string, value: T) => any;
+interface CashStatic {
+    each<T>(arr: ArrayLike<T>, callback: EachArrayCallback<T>): void;
+    each<T>(obj: PlainObject<T>, callback: EachObjectCallback<T>): void;
+}
+interface Cash {
+    each(callback: EachArrayCallback<EleLoose>): this;
+}
+interface Cash {
+    prop(prop: string): any;
+    prop(prop: string, value: any): this;
+    prop(props: Record<string, any>): this;
+}
+interface Cash {
+    removeProp(prop: string): this;
+}
+interface CashStatic {
+    extend(): any;
+    extend(deep: true, target: any, ...sources: any[]): any;
+    extend(target: any): typeof cash;
+    extend(target: any, ...sources: any[]): any;
+}
+interface Cash {
+    extend(plugins: Record<any, any>): this;
 }
 interface Cash {
     filter(comparator?: Comparator): Cash;

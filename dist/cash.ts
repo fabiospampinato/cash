@@ -62,6 +62,8 @@ type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | El
 type Comparator = string | Ele | Cash | (( this: EleLoose, index: number, ele: EleLoose ) => boolean);
 type Context = Document | HTMLElement | Element;
 
+type PlainObject<T> = Record<string, T>; //FIXME: Arrays can be assigned to this type, for whatever reason
+
 type EventCallback = {
   ( event: any, data?: any ): any,
   guid?: number
@@ -207,115 +209,6 @@ function camelCase ( str: string ): string {
 
 // @require ./cash.ts
 
-type EachCallback<T> = ( this: T, index: number, ele: T ) => any;
-
-interface CashStatic {
-  each<T> ( arr: ArrayLike<T>, callback: EachCallback<T> ): void;
-}
-
-function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: EachCallback<U[0]>, _reverse?: boolean ): U {
-
-  if ( _reverse ) {
-
-    let i = arr.length;
-
-    while ( i-- ) {
-
-      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
-
-    }
-
-  } else {
-
-    for ( let i = 0, l = arr.length; i < l; i++ ) {
-
-      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
-
-    }
-
-  }
-
-  return arr;
-
-}
-
-cash.each = each;
-
-
-// @require core/cash.ts
-// @require core/each.ts
-
-interface Cash {
-  each ( callback: EachCallback<EleLoose> ): this;
-}
-
-fn.each = function ( this: Cash, callback: EachCallback<EleLoose> ) {
-
-  return each ( this, callback );
-
-};
-
-
-// @require core/cash.ts
-// @require collection/each.ts
-// @require ./helpers/variables.ts
-
-interface Cash {
-  removeProp ( prop: string ): this;
-}
-
-fn.removeProp = function ( this: Cash, prop: string ) {
-
-  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
-
-};
-
-
-// @require ./cash.ts
-
-interface CashStatic {
-  extend (): any;
-  extend ( target: any ): typeof cash;
-  extend ( target: any, ...objs: any[] ): any;
-}
-
-interface Cash {
-  extend ( plugins: Record<any, any> ): this;
-}
-
-function extend ( target?: any, ...objs: any[] ) {
-
-  const length = arguments.length;
-
-  if ( !length ) return {};
-
-  if ( length === 1 ) return extend ( cash, target );
-
-  for ( let i = 1; i < length; i++ ) {
-
-    for ( const key in arguments[i] ) {
-
-      target[key] = arguments[i][key];
-
-    }
-
-  }
-
-  return target;
-
-}
-
-cash.extend = extend;
-
-fn.extend = function ( plugins: Record<string, any> ) {
-
-  return extend ( fn, plugins );
-
-};
-
-
-// @require ./cash.ts
-
 interface CashStatic {
   guid: number;
 }
@@ -340,8 +233,9 @@ function matches ( ele: any, selector: string ): boolean {
 interface CashStatic {
   isWindow ( x: any ): x is Window;
   isFunction ( x: any ): x is Function;
-  isNumeric ( x: any ): boolean;
   isArray ( x: any ): x is Array<any>;
+  isNumeric ( x: any ): boolean;
+  isPlainObject ( x: any ): x is PlainObject<any>;
 }
 
 function isCash ( x: any ): x is Cash {
@@ -365,6 +259,12 @@ function isDocument ( x: any ): x is Document {
 function isElement ( x: any ): x is HTMLElement {
 
   return !!x && x.nodeType === 1;
+
+}
+
+function isBoolean ( x: any ): x is boolean {
+
+  return typeof x === 'boolean';
 
 }
 
@@ -398,46 +298,21 @@ function isNumeric ( x: any ): boolean {
 
 }
 
-cash.isWindow = isWindow;
-cash.isFunction = isFunction;
-cash.isNumeric = isNumeric;
-cash.isArray = isArray;
+function isPlainObject ( x: any ): x is PlainObject<any> {
 
+  if ( typeof x !== 'object' || x === null ) return false;
 
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-// @require ./helpers/variables.ts
+  const proto = Object.getPrototypeOf ( x );
 
-interface Cash {
-  prop ( prop: string ): any;
-  prop ( prop: string, value: any ): this;
-  prop ( props: Record<string, any> ): this;
+  return proto === null || proto === Object.prototype;
+
 }
 
-fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any ) {
-
-  if ( !prop ) return;
-
-  if ( isString ( prop ) ) {
-
-    prop = propMap[prop] || prop;
-
-    if ( arguments.length < 2 ) return this[0] && this[0][prop];
-
-    return this.each ( ( i, ele ) => { ele[prop] = value } );
-
-  }
-
-  for ( const key in prop ) {
-
-    this.prop ( key, prop[key] );
-
-  }
-
-  return this;
-
-};
+cash.isWindow = isWindow;
+cash.isFunction = isFunction;
+cash.isArray = isArray;
+cash.isNumeric = isNumeric;
+cash.isPlainObject = isPlainObject;
 
 
 // @require core/cash.ts
@@ -498,6 +373,184 @@ interface Cash {
 fn.last = function ( this: Cash ) {
 
   return this.eq ( -1 );
+
+};
+
+
+// @require ./cash.ts
+// @require ./type_checking.ts
+
+type EachArrayCallback<T> = ( this: T, index: number, ele: T ) => any;
+type EachObjectCallback<T> = ( this: T, key: string, value: T ) => any;
+
+interface CashStatic {
+  each<T> ( arr: ArrayLike<T>, callback: EachArrayCallback<T> ): void;
+  each<T> ( obj: PlainObject<T>, callback: EachObjectCallback<T> ): void;
+}
+
+function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: EachArrayCallback<T>, _reverse?: boolean ): U;
+function each<T, U extends PlainObject<T> = PlainObject<T>> ( obj: U, callback: EachObjectCallback<T> ): U;
+function each<T, U extends ArrayLike<T> | PlainObject<T> = ArrayLike<T>> ( arr: U, callback: EachArrayCallback<T> | EachObjectCallback<T>, _reverse?: boolean ): U {
+
+  if ( _reverse ) {
+
+    let i = arr.length;
+
+    while ( i-- ) {
+
+      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
+
+    }
+
+  } else if ( isPlainObject ( arr ) ) {
+
+    const keys = Object.keys ( arr );
+
+    for ( let i = 0, l = keys.length; i < l; i++ ) {
+
+      const key = keys[i];
+
+      if ( callback.call ( arr[key], key, arr[key] ) === false ) return arr;
+
+    }
+
+  } else {
+
+    for ( let i = 0, l = arr.length; i < l; i++ ) {
+
+      if ( callback.call ( arr[i], i, arr[i] ) === false ) return arr;
+
+    }
+
+  }
+
+  return arr;
+
+}
+
+cash.each = each;
+
+
+// @require core/cash.ts
+// @require core/each.ts
+
+interface Cash {
+  each ( callback: EachArrayCallback<EleLoose> ): this;
+}
+
+fn.each = function ( this: Cash, callback: EachArrayCallback<EleLoose> ) {
+
+  return each ( this, callback );
+
+};
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+// @require ./helpers/variables.ts
+
+interface Cash {
+  prop ( prop: string ): any;
+  prop ( prop: string, value: any ): this;
+  prop ( props: Record<string, any> ): this;
+}
+
+fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any ) {
+
+  if ( !prop ) return;
+
+  if ( isString ( prop ) ) {
+
+    prop = propMap[prop] || prop;
+
+    if ( arguments.length < 2 ) return this[0] && this[0][prop];
+
+    return this.each ( ( i, ele ) => { ele[prop] = value } );
+
+  }
+
+  for ( const key in prop ) {
+
+    this.prop ( key, prop[key] );
+
+  }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./helpers/variables.ts
+
+interface Cash {
+  removeProp ( prop: string ): this;
+}
+
+fn.removeProp = function ( this: Cash, prop: string ) {
+
+  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
+
+};
+
+
+// @require ./cash.ts
+// @require ./type_checking.ts
+
+interface CashStatic {
+  extend (): any;
+  extend ( deep: true, target: any, ...sources: any[] ): any;
+  extend ( target: any ): typeof cash;
+  extend ( target: any, ...sources: any[] ): any;
+}
+
+interface Cash {
+  extend ( plugins: Record<any, any> ): this;
+}
+
+function extend ( ...sources: any[] ) {
+
+  const deep = isBoolean ( sources[0] ) ? sources.shift () : false,
+        target = sources.shift (),
+        length = sources.length;
+
+  if ( !target ) return {};
+
+  if ( !length ) return extend ( deep, cash, target );
+
+  for ( let i = 0; i < length; i++ ) {
+
+    const source = sources[i];
+
+    for ( const key in source ) {
+
+      if ( deep && ( isArray ( source[key] ) || isPlainObject ( source[key] ) ) ) {
+
+        if ( !target[key] || target[key].constructor !== source[key].constructor ) target[key] = new source[key].constructor ();
+
+        extend ( deep, target[key], source[key] );
+
+      } else {
+
+        target[key] = source[key];
+
+      }
+
+    }
+
+  }
+
+  return target;
+
+}
+
+cash.extend = extend;
+
+fn.extend = function ( plugins: Record<string, any> ) {
+
+  return extend ( fn, plugins );
 
 };
 

@@ -86,46 +86,6 @@ const dashAlphaRe = /-([a-z])/g;
 function camelCase(str) {
     return str.replace(dashAlphaRe, (match, letter) => letter.toUpperCase());
 }
-function each(arr, callback, _reverse) {
-    if (_reverse) {
-        let i = arr.length;
-        while (i--) {
-            if (callback.call(arr[i], i, arr[i]) === false)
-                return arr;
-        }
-    }
-    else {
-        for (let i = 0, l = arr.length; i < l; i++) {
-            if (callback.call(arr[i], i, arr[i]) === false)
-                return arr;
-        }
-    }
-    return arr;
-}
-cash.each = each;
-fn.each = function (callback) {
-    return each(this, callback);
-};
-fn.removeProp = function (prop) {
-    return this.each((i, ele) => { delete ele[propMap[prop] || prop]; });
-};
-function extend(target, ...objs) {
-    const length = arguments.length;
-    if (!length)
-        return {};
-    if (length === 1)
-        return extend(cash, target);
-    for (let i = 1; i < length; i++) {
-        for (const key in arguments[i]) {
-            target[key] = arguments[i][key];
-        }
-    }
-    return target;
-}
-cash.extend = extend;
-fn.extend = function (plugins) {
-    return extend(fn, plugins);
-};
 cash.guid = 1;
 // @require ./cash.ts
 function matches(ele, selector) {
@@ -144,6 +104,9 @@ function isDocument(x) {
 function isElement(x) {
     return !!x && x.nodeType === 1;
 }
+function isBoolean(x) {
+    return typeof x === 'boolean';
+}
 function isFunction(x) {
     return typeof x === 'function';
 }
@@ -159,24 +122,17 @@ function isNull(x) {
 function isNumeric(x) {
     return !isNaN(parseFloat(x)) && isFinite(x);
 }
+function isPlainObject(x) {
+    if (typeof x !== 'object' || x === null)
+        return false;
+    const proto = Object.getPrototypeOf(x);
+    return proto === null || proto === Object.prototype;
+}
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
-cash.isNumeric = isNumeric;
 cash.isArray = isArray;
-fn.prop = function (prop, value) {
-    if (!prop)
-        return;
-    if (isString(prop)) {
-        prop = propMap[prop] || prop;
-        if (arguments.length < 2)
-            return this[0] && this[0][prop];
-        return this.each((i, ele) => { ele[prop] = value; });
-    }
-    for (const key in prop) {
-        this.prop(key, prop[key]);
-    }
-    return this;
-};
+cash.isNumeric = isNumeric;
+cash.isPlainObject = isPlainObject;
 fn.get = function (index) {
     if (isUndefined(index))
         return slice.call(this);
@@ -191,6 +147,76 @@ fn.first = function () {
 };
 fn.last = function () {
     return this.eq(-1);
+};
+function each(arr, callback, _reverse) {
+    if (_reverse) {
+        let i = arr.length;
+        while (i--) {
+            if (callback.call(arr[i], i, arr[i]) === false)
+                return arr;
+        }
+    }
+    else if (isPlainObject(arr)) {
+        const keys = Object.keys(arr);
+        for (let i = 0, l = keys.length; i < l; i++) {
+            const key = keys[i];
+            if (callback.call(arr[key], key, arr[key]) === false)
+                return arr;
+        }
+    }
+    else {
+        for (let i = 0, l = arr.length; i < l; i++) {
+            if (callback.call(arr[i], i, arr[i]) === false)
+                return arr;
+        }
+    }
+    return arr;
+}
+cash.each = each;
+fn.each = function (callback) {
+    return each(this, callback);
+};
+fn.prop = function (prop, value) {
+    if (!prop)
+        return;
+    if (isString(prop)) {
+        prop = propMap[prop] || prop;
+        if (arguments.length < 2)
+            return this[0] && this[0][prop];
+        return this.each((i, ele) => { ele[prop] = value; });
+    }
+    for (const key in prop) {
+        this.prop(key, prop[key]);
+    }
+    return this;
+};
+fn.removeProp = function (prop) {
+    return this.each((i, ele) => { delete ele[propMap[prop] || prop]; });
+};
+function extend(...sources) {
+    const deep = isBoolean(sources[0]) ? sources.shift() : false, target = sources.shift(), length = sources.length;
+    if (!target)
+        return {};
+    if (!length)
+        return extend(deep, cash, target);
+    for (let i = 0; i < length; i++) {
+        const source = sources[i];
+        for (const key in source) {
+            if (deep && (isArray(source[key]) || isPlainObject(source[key]))) {
+                if (!target[key] || target[key].constructor !== source[key].constructor)
+                    target[key] = new source[key].constructor();
+                extend(deep, target[key], source[key]);
+            }
+            else {
+                target[key] = source[key];
+            }
+        }
+    }
+    return target;
+}
+cash.extend = extend;
+fn.extend = function (plugins) {
+    return extend(fn, plugins);
 };
 // @require ./matches.ts
 // @require ./type_checking.ts

@@ -1,6 +1,6 @@
 {
   "changelog": {
-    "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])"
+    "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])\n"
   },
   "files": {
     "README.md": [

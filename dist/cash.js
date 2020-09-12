@@ -122,60 +122,6 @@ function camelCase(str) {
   });
 }
 
-function each(arr, callback, _reverse) {
-  if (_reverse) {
-    var i = arr.length;
-
-    while (i--) {
-      if (callback.call(arr[i], i, arr[i]) === false) return arr;
-    }
-  } else {
-    for (var i = 0, l = arr.length; i < l; i++) {
-      if (callback.call(arr[i], i, arr[i]) === false) return arr;
-    }
-  }
-
-  return arr;
-}
-
-cash.each = each;
-
-fn.each = function (callback) {
-  return each(this, callback);
-};
-
-fn.removeProp = function (prop) {
-  return this.each(function (i, ele) {
-    delete ele[propMap[prop] || prop];
-  });
-};
-
-function extend(target) {
-  var objs = [];
-
-  for (var _i = 1; _i < arguments.length; _i++) {
-    objs[_i - 1] = arguments[_i];
-  }
-
-  var length = arguments.length;
-  if (!length) return {};
-  if (length === 1) return extend(cash, target);
-
-  for (var i = 1; i < length; i++) {
-    for (var key in arguments[i]) {
-      target[key] = arguments[i][key];
-    }
-  }
-
-  return target;
-}
-
-cash.extend = extend;
-
-fn.extend = function (plugins) {
-  return extend(fn, plugins);
-};
-
 cash.guid = 1; // @require ./cash.ts
 
 function matches(ele, selector) {
@@ -199,6 +145,10 @@ function isElement(x) {
   return !!x && x.nodeType === 1;
 }
 
+function isBoolean(x) {
+  return typeof x === 'boolean';
+}
+
 function isFunction(x) {
   return typeof x === 'function';
 }
@@ -219,10 +169,64 @@ function isNumeric(x) {
   return !isNaN(parseFloat(x)) && isFinite(x);
 }
 
+function isPlainObject(x) {
+  if (typeof x !== 'object' || x === null) return false;
+  var proto = Object.getPrototypeOf(x);
+  return proto === null || proto === Object.prototype;
+}
+
 cash.isWindow = isWindow;
 cash.isFunction = isFunction;
-cash.isNumeric = isNumeric;
 cash.isArray = isArray;
+cash.isNumeric = isNumeric;
+cash.isPlainObject = isPlainObject;
+
+fn.get = function (index) {
+  if (isUndefined(index)) return slice.call(this);
+  index = Number(index);
+  return this[index < 0 ? index + this.length : index];
+};
+
+fn.eq = function (index) {
+  return cash(this.get(index));
+};
+
+fn.first = function () {
+  return this.eq(0);
+};
+
+fn.last = function () {
+  return this.eq(-1);
+};
+
+function each(arr, callback, _reverse) {
+  if (_reverse) {
+    var i = arr.length;
+
+    while (i--) {
+      if (callback.call(arr[i], i, arr[i]) === false) return arr;
+    }
+  } else if (isPlainObject(arr)) {
+    var keys = Object.keys(arr);
+
+    for (var i = 0, l = keys.length; i < l; i++) {
+      var key = keys[i];
+      if (callback.call(arr[key], key, arr[key]) === false) return arr;
+    }
+  } else {
+    for (var i = 0, l = arr.length; i < l; i++) {
+      if (callback.call(arr[i], i, arr[i]) === false) return arr;
+    }
+  }
+
+  return arr;
+}
+
+cash.each = each;
+
+fn.each = function (callback) {
+  return each(this, callback);
+};
 
 fn.prop = function (prop, value) {
   if (!prop) return;
@@ -242,22 +246,45 @@ fn.prop = function (prop, value) {
   return this;
 };
 
-fn.get = function (index) {
-  if (isUndefined(index)) return slice.call(this);
-  index = Number(index);
-  return this[index < 0 ? index + this.length : index];
+fn.removeProp = function (prop) {
+  return this.each(function (i, ele) {
+    delete ele[propMap[prop] || prop];
+  });
 };
 
-fn.eq = function (index) {
-  return cash(this.get(index));
-};
+function extend() {
+  var sources = [];
 
-fn.first = function () {
-  return this.eq(0);
-};
+  for (var _i = 0; _i < arguments.length; _i++) {
+    sources[_i] = arguments[_i];
+  }
 
-fn.last = function () {
-  return this.eq(-1);
+  var deep = isBoolean(sources[0]) ? sources.shift() : false,
+      target = sources.shift(),
+      length = sources.length;
+  if (!target) return {};
+  if (!length) return extend(deep, cash, target);
+
+  for (var i = 0; i < length; i++) {
+    var source = sources[i];
+
+    for (var key in source) {
+      if (deep && (isArray(source[key]) || isPlainObject(source[key]))) {
+        if (!target[key] || target[key].constructor !== source[key].constructor) target[key] = new source[key].constructor();
+        extend(deep, target[key], source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+}
+
+cash.extend = extend;
+
+fn.extend = function (plugins) {
+  return extend(fn, plugins);
 }; // @require ./matches.ts
 // @require ./type_checking.ts
 
