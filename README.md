@@ -877,10 +877,15 @@ $.guid++ // => number
 
 #### $.each ()
 
-Iterates through an array and calls the `callback ( index, element )` method on each element. The callback function may exit iteration early by returning `false`.
+Iterates through an array and calls the `callback ( index, element )` method on each element.
+
+Iterates through an object and calls the `callback ( key, value )` method on each property.
+
+The callback function may exit iteration early by returning `false`.
 
 ```js
 $.each ( array, callback ) // => array
+$.each ( object, callback ) // => object
 ```
 
 #### $.extend ()

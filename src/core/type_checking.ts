@@ -7,7 +7,7 @@ interface CashStatic {
   isFunction ( x: any ): x is Function;
   isArray ( x: any ): x is Array<any>;
   isNumeric ( x: any ): boolean;
-  isPlainObject ( x: any ): x is PlainObject;
+  isPlainObject ( x: any ): x is PlainObject<any>;
 }
 
 function isCash ( x: any ): x is Cash {
@@ -64,7 +64,7 @@ function isNumeric ( x: any ): boolean {
 
 }
 
-function isPlainObject ( x: any ): x is PlainObject {
+function isPlainObject ( x: any ): x is PlainObject<any> {
 
   if ( typeof x !== 'object' || x === null ) return false;
 

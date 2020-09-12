@@ -39,6 +39,24 @@ describe ( 'Utilities', function () {
 
     });
 
+    it ( 'iterates over an object', function ( t ) {
+
+      var count = 0;
+      var handled = {};
+      var target = { foo: 1, bar: 2 };
+
+      function handler ( key, value ) {
+        count++;
+        handled[key] = value;
+      }
+
+      $.each ( target, handler );
+
+      t.is ( count, 2 );
+      t.deepEqual ( handled, target );
+
+    });
+
   });
 
   describe ( '$.extend', function ( it ) {

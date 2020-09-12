@@ -29,7 +29,7 @@ type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | El
 type Comparator = string | Ele | Cash | (( this: EleLoose, index: number, ele: EleLoose ) => boolean);
 type Context = Document | HTMLElement | Element;
 
-type PlainObject = Record<string, any>;
+type PlainObject<T> = Record<string, T>; //FIXME: Arrays can be assigned to this type, for whatever reason
 
 type EventCallback = {
   ( event: any, data?: any ): any,
