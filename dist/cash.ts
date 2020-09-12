@@ -225,16 +225,6 @@ function each<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, callback: Each
 
     }
 
-  } else if ( isPlainObject( arr ) ) {
-
-    let keys = Object.keys( arr );
-
-    for ( let i = 0, l = keys.length; i < l; i++ ) {
-
-      if ( callback.call ( arr[keys[i]], keys[i], arr[keys[i]] ) === false ) return arr;
-
-    }
-
   } else {
 
     for ( let i = 0, l = arr.length; i < l; i++ ) {
@@ -287,51 +277,25 @@ interface CashStatic {
   extend (): any;
   extend ( target: any ): typeof cash;
   extend ( target: any, ...objs: any[] ): any;
-  extend ( deep: boolean, target: any, ...objs: any[] ): any;
 }
 
 interface Cash {
   extend ( plugins: Record<any, any> ): this;
 }
 
-function extend ( ...objs: any[] ) {
+function extend ( target?: any, ...objs: any[] ) {
 
-  const length = objs.length;
+  const length = arguments.length;
 
   if ( !length ) return {};
 
-  if ( length === 1 ) return extend ( cash, objs[0] );
+  if ( length === 1 ) return extend ( cash, target );
 
-  let deep = typeof objs[0] === 'boolean'
-    ? objs.shift()
-    : false;
+  for ( let i = 1; i < length; i++ ) {
 
-  let target = objs.shift();
+    for ( const key in arguments[i] ) {
 
-  for ( let i = 0; i < objs.length; i++ ) {
-
-    for ( const key in objs[i] ) {
-
-      if (deep && (Array.isArray(objs[i][key]) || isPlainObject(objs[i][key]))) {
-
-        if (Array.isArray(objs[i][key]) && !Array.isArray(target[key])) {
-
-          target[key] = [];
-
-        } else if (isPlainObject(objs[i][key]) && !isPlainObject(target[key])) {
-
-          target[key] = {};
-
-        }
-
-        extend(deep, target[key], objs[i][key]);
-
-      }
-      else {
-
-        target[key] = objs[i][key];
-
-      }
+      target[key] = arguments[i][key];
 
     }
 
@@ -368,21 +332,6 @@ function matches ( ele: any, selector: string ): boolean {
   return !!matches && !!selector && matches.call ( ele, selector );
 
 }
-
-
-// @require ./cash.ts
-
-interface CashStatic {
-  isPlainObject ( test: any ): any;
-}
-
-function isPlainObject(x) {
-
-  return x !== null && typeof x === 'object' && x !== window && Object.getPrototypeOf(x) == Object.prototype;
-
-}
-
-cash.isPlainObject = isPlainObject;
 
 
 // @require ./cash.ts
@@ -1995,7 +1944,6 @@ function parseHTML ( html: string ): EleLoose[] {
 cash.parseHTML = parseHTML;
 
 
-// @optional ./plain_object.ts
 // @optional ./each.ts
 // @optional ./extend.ts
 // @optional ./find.ts
@@ -2908,14 +2856,6 @@ fn.siblings = function ( this: Cash, comparator?: Comparator ) {
 
 // @priority -100
 // @require ./cash.ts
-// @require ./variables.ts
 
-if ( typeof exports !== 'undefined' ) { // Node.js
-
-  module.exports = cash;
-
-} else { // Browser
-
-  win['cash'] = win['$'] = cash;
-
-}
+export default cash;
+export {Cash, CashStatic, Ele as Element, Selector, Comparator, Context};
