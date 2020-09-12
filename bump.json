@@ -1,4 +1,7 @@
 {
+  "changelog": {
+    "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])"
+  },
   "files": {
     "README.md": [
       ["cash/([^/]+?)/cash.min.js", "cash/[version]/cash.min.js"],
