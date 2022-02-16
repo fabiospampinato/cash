@@ -16,7 +16,7 @@ class Cash {
 
       const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
 
-      eles = idRe.test ( selector )
+      eles = idRe.test ( selector ) && 'getElementById' in ctx
                 ? ( ctx as Document ).getElementById ( selector.slice ( 1 ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
