@@ -9,7 +9,15 @@ function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, ins
 
   } else { // before/after
 
-    anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextSibling );
+    if ( anchor.nodeName === 'HTML' ) {
+
+      anchor.parentNode.replaceChild ( target, anchor );
+
+    } else {
+
+      anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextSibling );
+
+    }
 
   }
 
