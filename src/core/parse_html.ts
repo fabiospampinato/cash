@@ -34,7 +34,7 @@ function parseHTML ( html: string ): EleLoose[] {
   const fragment = fragmentRe.test ( html ) && RegExp.$1,
         container = containers[fragment] || containers['*'];
 
-  container.innerHTML = html.trim();
+  container.innerHTML = html.trim ();
 
   return cash ( container.childNodes ).detach ().get ();
 
