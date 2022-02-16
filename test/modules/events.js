@@ -375,6 +375,30 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
     });
 
+    it ( 'overwrites event.delegateTarget when using event delegation', function ( t ) {
+
+      var ele = $('.event');
+      var parent = $('.parent');
+      var html = $('html');
+      var count = 0;
+      var delegateTargets = [];
+
+      function handler ( event ) {
+        count++;
+        event.bubbles; // Ensuring the event object hasn't been corrupted
+        delegateTargets.push ( event.delegateTarget );
+      }
+
+      ele.on ( 'click', handler );
+      parent.on ( 'click', '.event', handler );
+      html.on ( 'click', handler );
+      ele.trigger ( 'click' );
+
+      t.is ( count, 3 );
+      t.deepEqual ( delegateTargets, [ele[0], parent[0], html[0]] );
+
+    });
+
     it.skip ( 'stops propagation if false is returned when using event delegation', function ( t ) { //URL: https://github.com/kenwheeler/cash/issues/235
 
       var ele = $('.event');
