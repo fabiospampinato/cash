@@ -118,6 +118,20 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'words with document fragments', function ( t ) {
+
+      var fragment = new DocumentFragment ();
+      var div = document.createElement ( 'div' );
+
+      fragment.appendChild ( div );
+
+      var found = $(fragment).find ( 'div' );
+
+      t.is ( found.length, 1 );
+      t.is ( found[0], div );
+
+    });
+
     it ( 'doesn\'t throw with an empty selector', function ( t ) {
 
       $('*').find ( '' );
