@@ -1,8 +1,5 @@
 ### [v8.1.1](https://github.com/fabiospampinato/cash/releases/tag/8.1.1) (2022-02-16)
 
-- Deleted repo-level github funding.yml
-- Updated some dependencies
-- Updated some dependencies
 - Ensuring the proper types for iteration are provided
 - Ensuring $.fn.find works with document fragments too
 - Ensuring the "delegateProperty" is attached to events
