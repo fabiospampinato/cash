@@ -11,6 +11,7 @@ interface Event {
 }
 
 interface Cash {
+  [Symbol.iterator](): IterableIterator<EleLoose>,
   [index: number]: EleLoose | undefined,
   length: number,
   splice ( start: number, deleteCount?: number ): EleLoose[],
