@@ -1,3 +1,14 @@
+### [v8.1.1](https://github.com/fabiospampinato/cash/releases/tag/8.1.1) (2022-02-16)
+
+- Deleted repo-level github funding.yml
+- Updated some dependencies
+- Updated some dependencies
+- Ensuring the proper types for iteration are provided
+- Ensuring $.fn.find works with document fragments too
+- Ensuring the "delegateProperty" is attached to events
+- More reliably using "getElementById", only if the context node actually supports it
+- Ensuring that before inserting a node before/after the html node the html node is removed from the DOM
+
 ### [v8.1.0](https://github.com/fabiospampinato/cash/releases/tag/8.1.0) (2020-09-12)
 
 - Added `$.isPlainObject`

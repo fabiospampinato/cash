@@ -27,11 +27,12 @@ const doc = document, win = window, docEle = doc.documentElement, createElement 
 const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/, classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
 // @require ./variables.ts
 function find(selector, context) {
-    return !selector || (!isDocument(context) && !isElement(context))
+    const isFragment = isDocumentFragment(context);
+    return !selector || (!isFragment && !isDocument(context) && !isElement(context))
         ? []
-        : classRe.test(selector)
+        : !isFragment && classRe.test(selector)
             ? context.getElementsByClassName(selector.slice(1))
-            : tagRe.test(selector)
+            : !isFragment && tagRe.test(selector)
                 ? context.getElementsByTagName(selector)
                 : context.querySelectorAll(selector);
 }
@@ -46,7 +47,7 @@ class Cash {
         let eles = selector;
         if (isString(selector)) {
             const ctx = (isCash(context) ? context[0] : context) || doc;
-            eles = idRe.test(selector)
+            eles = idRe.test(selector) && 'getElementById' in ctx
                 ? ctx.getElementById(selector.slice(1))
                 : htmlRe.test(selector)
                     ? parseHTML(selector)
@@ -100,6 +101,9 @@ function isWindow(x) {
 }
 function isDocument(x) {
     return !!x && x.nodeType === 9;
+}
+function isDocumentFragment(x) {
+    return !!x && x.nodeType === 11;
 }
 function isElement(x) {
     return !!x && x.nodeType === 1;
@@ -674,16 +678,19 @@ function on(eventFullName, selector, data, callback, _one) {
                             return;
                     }
                     thisArg = target;
-                    event.___cd = true; // Delegate
                 }
-                if (event.___cd) {
-                    Object.defineProperty(event, 'currentTarget', {
-                        configurable: true,
-                        get() {
-                            return thisArg;
-                        }
-                    });
-                }
+                Object.defineProperty(event, 'currentTarget', {
+                    configurable: true,
+                    get() {
+                        return thisArg;
+                    }
+                });
+                Object.defineProperty(event, 'delegateTarget', {
+                    configurable: true,
+                    get() {
+                        return ele;
+                    }
+                });
                 Object.defineProperty(event, 'data', {
                     configurable: true,
                     get() {
@@ -950,7 +957,12 @@ function insertElement(anchor, target, left, inside, evaluate) {
         anchor.insertBefore(target, left ? anchor.firstChild : null);
     }
     else { // before/after
-        anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
+        if (anchor.nodeName === 'HTML') {
+            anchor.parentNode.replaceChild(target, anchor);
+        }
+        else {
+            anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
+        }
     }
     if (evaluate) {
         evalScripts(target, anchor.ownerDocument);

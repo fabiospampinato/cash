@@ -55,7 +55,8 @@ var idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/,
     tagRe = /^\w+$/; // @require ./variables.ts
 
 function find(selector, context) {
-  return !selector || !isDocument(context) && !isElement(context) ? [] : classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
+  var isFragment = isDocumentFragment(context);
+  return !selector || !isFragment && !isDocument(context) && !isElement(context) ? [] : !isFragment && classRe.test(selector) ? context.getElementsByClassName(selector.slice(1)) : !isFragment && tagRe.test(selector) ? context.getElementsByTagName(selector) : context.querySelectorAll(selector);
 } // @require ./find.ts
 // @require ./variables.ts
 
@@ -70,7 +71,7 @@ function () {
 
     if (isString(selector)) {
       var ctx = (isCash(context) ? context[0] : context) || doc;
-      eles = idRe.test(selector) ? ctx.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, ctx);
+      eles = idRe.test(selector) && 'getElementById' in ctx ? ctx.getElementById(selector.slice(1)) : htmlRe.test(selector) ? parseHTML(selector) : find(selector, ctx);
       if (!eles) return;
     } else if (isFunction(selector)) {
       return this.ready(selector); //FIXME: `fn.ready` is not included in `core`, but it's actually a core functionality
@@ -139,6 +140,10 @@ function isWindow(x) {
 
 function isDocument(x) {
   return !!x && x.nodeType === 9;
+}
+
+function isDocumentFragment(x) {
+  return !!x && x.nodeType === 11;
 }
 
 function isElement(x) {
@@ -802,8 +807,8 @@ function on(eventFullName, selector, data, callback, _one) {
         nameOriginal = _a[0],
         namespaces = _a[1],
         name = getEventNameBubbling(nameOriginal),
-        isEventHover = nameOriginal in eventsHover,
-        isEventFocus = nameOriginal in eventsFocus;
+        isEventHover = (nameOriginal in eventsHover),
+        isEventFocus = (nameOriginal in eventsFocus);
 
     if (!name) return;
 
@@ -827,18 +832,20 @@ function on(eventFullName, selector, data, callback, _one) {
           }
 
           thisArg = target;
-          event.___cd = true; // Delegate
         }
 
-        if (event.___cd) {
-          Object.defineProperty(event, 'currentTarget', {
-            configurable: true,
-            get: function get() {
-              return thisArg;
-            }
-          });
-        }
-
+        Object.defineProperty(event, 'currentTarget', {
+          configurable: true,
+          get: function get() {
+            return thisArg;
+          }
+        });
+        Object.defineProperty(event, 'delegateTarget', {
+          configurable: true,
+          get: function get() {
+            return ele;
+          }
+        });
         Object.defineProperty(event, 'data', {
           configurable: true,
           get: function get() {
@@ -903,7 +910,7 @@ fn.trigger = function (event, data) {
   }
 
   event.___td = data;
-  var isEventFocus = event.___ot in eventsFocus;
+  var isEventFocus = (event.___ot in eventsFocus);
   return this.each(function (i, ele) {
     if (isEventFocus && isFunction(ele[event.___ot])) {
       ele["___i" + event.type] = true; // Ensuring the native event is ignored
@@ -1162,7 +1169,11 @@ function insertElement(anchor, target, left, inside, evaluate) {
     anchor.insertBefore(target, left ? anchor.firstChild : null);
   } else {
     // before/after
-    anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
+    if (anchor.nodeName === 'HTML') {
+      anchor.parentNode.replaceChild(target, anchor);
+    } else {
+      anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
+    }
   }
 
   if (evaluate) {
