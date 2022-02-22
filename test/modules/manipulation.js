@@ -321,6 +321,18 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
     });
 
+    it ( 'sets script and get executed', function ( t ) {
+
+      var anchor = $('.anchor');
+      var html = '<script>window.__html_script_test__ = 1</script>';
+
+      anchor.html ( html );
+
+      t.is ( window.__html_script_test__, 1 );
+      t.is ( anchor.html (), html );
+
+    });
+
     it ( 'ignores non-elements objects in the collections', function ( t ) {
 
       var eles = $('<div id="nonnodes"><span id="nonnodesElement">hi</span> there <!-- mon ami --></div>');
