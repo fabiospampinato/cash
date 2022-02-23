@@ -1,6 +1,8 @@
 
 var fixture = '\
   <div id="123-ção" class="123-ção"></div>\
+  <div id="id.with.dots" class="class.with.dots"></div>\
+  <div id="id" class="class"></div>\
   <div id="id"></div>\
   <div id="id"></div>\
   <div class="single"></div>\
@@ -80,6 +82,18 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
+    it ( 'supports IDs with dots', function ( t ) {
+
+      t.is ( $('#id\\.with\\.dots').length, 1 );
+
+    });
+
+    it ( 'supports ID with class', function ( t ) {
+
+      t.is ( $('#id.class').length, 1 );
+
+    });
+
     it ( 'supports non-existent ID', function ( t ) {
 
       t.is ( $('#foo').length, 0 );
@@ -96,6 +110,12 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
     it ( 'supports unusual class', function ( t ) {
 
       t.is ( $('.123-ção').length, 1 );
+
+    });
+
+    it ( 'supports class with dots', function ( t ) {
+
+      t.is ( $('.class\\.with\\.dots').length, 1 );
 
     });
 
