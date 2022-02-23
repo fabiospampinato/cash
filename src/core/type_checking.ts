@@ -28,6 +28,12 @@ function isDocument ( x: any ): x is Document {
 
 }
 
+function isDocumentFragment ( x: any ): x is DocumentFragment {
+
+  return !!x && x.nodeType === 11;
+
+}
+
 function isElement ( x: any ): x is HTMLElement {
 
   return !!x && x.nodeType === 1;

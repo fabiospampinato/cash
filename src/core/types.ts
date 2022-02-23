@@ -3,7 +3,6 @@ interface Event {
   namespace: string,
   data: any,
   relatedTarget?: Node | null,
-  ___cd?: boolean, // Delegate
   ___ifocus?: boolean, // Ignore focus
   ___iblur?: boolean, // Ignore blur
   ___ot?: string, // Original type
@@ -11,6 +10,7 @@ interface Event {
 }
 
 interface Cash {
+  [Symbol.iterator](): IterableIterator<EleLoose>,
   [index: number]: EleLoose | undefined,
   length: number,
   splice ( start: number, deleteCount?: number ): EleLoose[],

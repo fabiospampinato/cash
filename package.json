@@ -1,7 +1,7 @@
 {
   "name": "cash-dom",
   "description": "An absurdly small jQuery alternative for modern browsers.",
-  "version": "8.1.0",
+  "version": "8.1.1",
   "license": "MIT",
   "browser": "./dist/cash.js",
   "main": "./dist/cash.js",
@@ -47,20 +47,20 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "browser-sync": "^2.26.3",
-    "coveralls": "^3.0.9",
-    "jquery": "^3.3.1",
+    "browser-sync": "^2.26.14",
+    "coveralls": "^3.1.0",
+    "jquery": "^3.6.0",
     "karma": "^4.0.0",
-    "karma-chrome-launcher": "^3.0.0",
-    "karma-coverage": "^2.0.1",
-    "karma-firefox-launcher": "^1.1.0",
-    "karma-qunit": "^4.0.0",
-    "karma-sauce-launcher": "^4.0.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage": "^2.0.3",
+    "karma-firefox-launcher": "^1.3.0",
+    "karma-qunit": "^4.1.2",
+    "karma-sauce-launcher": "^4.3.6",
     "karma-spec-reporter": "0.0.32",
     "opn-cli": "^3.1.0",
-    "pacco": "^2.1.4",
+    "pacco": "^2.1.17",
     "qunit": "^2.7.1",
     "qunit-ava-spec": "^1.0.0",
-    "typescript": "^3.9.3"
+    "typescript": "^4.2.4"
   }
 }

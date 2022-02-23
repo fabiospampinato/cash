@@ -224,6 +224,22 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
     });
 
+    it ( 'supports searching by id in a disconnected DOM node', function ( t ) {
+
+      var div = document.createElement ( 'div' );
+      var span = document.createElement ( 'span' );
+
+      div.appendChild ( span );
+
+      $(span).attr ( 'id', 'foo' );
+
+      var found = $('#foo', div);
+
+      t.is ( found.length, 1 );
+      t.is ( found[0], span );
+
+    });
+
   });
 
 });

@@ -2,13 +2,13 @@ interface Event {
     namespace: string;
     data: any;
     relatedTarget?: Node | null;
-    ___cd?: boolean;
     ___ifocus?: boolean;
     ___iblur?: boolean;
     ___ot?: string;
     ___td?: boolean;
 }
 interface Cash {
+    [Symbol.iterator](): IterableIterator<EleLoose>;
     [index: number]: EleLoose | undefined;
     length: number;
     splice(start: number, deleteCount?: number): EleLoose[];

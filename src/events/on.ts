@@ -114,20 +114,21 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
           thisArg = target;
 
-          event.___cd = true; // Delegate
-
         }
 
-        if ( event.___cd ) {
+        Object.defineProperty ( event, 'currentTarget', {
+          configurable: true,
+          get () { // We need to define a getter for this to work everywhere
+            return thisArg;
+          }
+        });
 
-          Object.defineProperty ( event, 'currentTarget', {
-            configurable: true,
-            get () { // We need to define a getter for this to work everywhere
-              return thisArg;
-            }
-          });
-
-        }
+        Object.defineProperty ( event, 'delegateTarget', {
+          configurable: true,
+          get () { // We need to define a getter for this to work everywhere
+            return ele;
+          }
+        });
 
         Object.defineProperty ( event, 'data', {
           configurable: true,
