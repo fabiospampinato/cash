@@ -17,7 +17,7 @@ class Cash {
       const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
 
       eles = idRe.test ( selector )
-                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ) )
+                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
                   : find ( selector, ctx );
