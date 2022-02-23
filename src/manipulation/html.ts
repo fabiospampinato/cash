@@ -2,6 +2,8 @@
 // @require core/cash.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
+// @require ./append.ts
+// @require ./empty.ts
 
 interface Cash {
   html (): string;
@@ -16,14 +18,23 @@ function html ( this: Cash, html?: string ) {
 
   if ( isUndefined ( html ) ) return this;
 
+  const hasScript = /<script/.test ( html );
+
   return this.each ( ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 
-    ele.innerHTML = html;
+    if ( hasScript ) {
+
+      cash ( ele ).empty ().append ( html );
+
+    } else {
+
+      ele.innerHTML = html;
+
+    }
 
   });
-
 }
 
 fn.html = html;
