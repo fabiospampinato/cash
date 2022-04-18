@@ -2,6 +2,7 @@
 var fixture = '\
   <div class="data" data-one="one" data-two="two" data-multi-words="three"></div>\
   <div class="data-whitespace" data-leading="  {}" data-trailing="{}  "></div>\
+  <div class="data-scientific" data-unsigned="1234e5" data-epositive="1234e+5" data-enegative="1234e-5"></div>\
 ';
 
 describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
@@ -119,6 +120,16 @@ describe ( 'Data', { beforeEach: getFixtureInit ( fixture ) }, function () {
       ele.data( 'test', undefined );
 
       t.is ( ele.data ( 'test' ), 'foo' );
+
+    });
+
+    it ( 'reads scientific notation as string', function ( t ) {
+
+      var ele = $('.data-scientific');
+
+      t.is ( ele.data ( 'unsigned' ), '1234e5' );
+      t.is ( ele.data ( 'epositive' ), '1234e+5' );
+      t.is ( ele.data ( 'enegative' ), '1234e-5' );
 
     });
 
