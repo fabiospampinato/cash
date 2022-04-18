@@ -1,7 +1,7 @@
 {
   "name": "cash-dom",
   "description": "An absurdly small jQuery alternative for modern browsers.",
-  "version": "8.1.1",
+  "version": "8.1.2",
   "license": "MIT",
   "browser": "./dist/cash.js",
   "main": "./dist/cash.js",
@@ -45,10 +45,10 @@
     "type": "git",
     "url": "https://github.com/fabiospampinato/cash.git"
   },
-  "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.26.14",
     "coveralls": "^3.1.0",
+    "google-closure-compiler-java": "^20220405.0.0",
     "jquery": "^3.6.0",
     "karma": "^4.0.0",
     "karma-chrome-launcher": "^3.1.0",
