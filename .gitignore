@@ -40,4 +40,3 @@ package-lock.json
 coverage
 typings
 test/jquery
-.dccache
