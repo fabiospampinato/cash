@@ -464,8 +464,8 @@ function getPrefixedProp(prop, isVariable) {
 
   if (!prefixedProps[prop]) {
     var propCC = camelCase(prop),
-        propUC = "".concat(propCC[0].toUpperCase()).concat(propCC.slice(1)),
-        props = "".concat(propCC, " ").concat(vendorsPrefixes.join("".concat(propUC, " "))).concat(propUC).split(' ');
+        propUC = "" + propCC[0].toUpperCase() + propCC.slice(1),
+        props = (propCC + " " + vendorsPrefixes.join(propUC + " ") + propUC).split(' ');
     each(props, function (i, p) {
       if (p in style) {
         prefixedProps[prop] = p;
@@ -506,7 +506,7 @@ function getSuffixedValue(prop, value, isVariable) {
     isVariable = isCSSVariable(prop);
   }
 
-  return !isVariable && !numericProps[prop] && isNumeric(value) ? "".concat(value, "px") : value;
+  return !isVariable && !numericProps[prop] && isNumeric(value) ? value + "px" : value;
 }
 
 function css(prop, value) {
@@ -539,12 +539,11 @@ fn.css = css; // @optional ./css.ts
 // @require core/attempt.ts
 // @require core/camel_case.ts
 
-var trailingWhitespace = /^\s+|\s+$/;
-var scientificNotation = /e[+-]?\d+$/;
+var JSONStringRe = /^\s+|\s+$/;
 
 function getData(ele, key) {
   var value = ele.dataset[key] || ele.dataset[camelCase(key)];
-  if (trailingWhitespace.test(value) || scientificNotation.test(value)) return value;
+  if (JSONStringRe.test(value)) return value;
   return attempt(JSON.parse, value);
 } // @require core/attempt.ts
 // @require core/camel_case.ts
@@ -586,23 +585,23 @@ fn.data = data; // @optional ./data.ts
 
 function getDocumentDimension(doc, dimension) {
   var docEle = doc.documentElement;
-  return Math.max(doc.body["scroll".concat(dimension)], docEle["scroll".concat(dimension)], doc.body["offset".concat(dimension)], docEle["offset".concat(dimension)], docEle["client".concat(dimension)]);
+  return Math.max(doc.body["scroll" + dimension], docEle["scroll" + dimension], doc.body["offset" + dimension], docEle["offset" + dimension], docEle["client" + dimension]);
 } // @require css/helpers/compute_style_int.ts
 
 
 function getExtraSpace(ele, xAxis) {
-  return computeStyleInt(ele, "border".concat(xAxis ? 'Left' : 'Top', "Width")) + computeStyleInt(ele, "padding".concat(xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding".concat(xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border".concat(xAxis ? 'Right' : 'Bottom', "Width"));
+  return computeStyleInt(ele, "border" + (xAxis ? 'Left' : 'Top') + "Width") + computeStyleInt(ele, "padding" + (xAxis ? 'Left' : 'Top')) + computeStyleInt(ele, "padding" + (xAxis ? 'Right' : 'Bottom')) + computeStyleInt(ele, "border" + (xAxis ? 'Right' : 'Bottom') + "Width");
 }
 
 each([true, false], function (i, outer) {
   each(['Width', 'Height'], function (i, prop) {
-    var name = "".concat(outer ? 'outer' : 'inner').concat(prop);
+    var name = "" + (outer ? 'outer' : 'inner') + prop;
 
     fn[name] = function (includeMargins) {
       if (!this[0]) return;
-      if (isWindow(this[0])) return outer ? this[0]["inner".concat(prop)] : this[0].document.documentElement["client".concat(prop)];
+      if (isWindow(this[0])) return outer ? this[0]["inner" + prop] : this[0].document.documentElement["client" + prop];
       if (isDocument(this[0])) return getDocumentDimension(this[0], prop);
-      return this[0]["".concat(outer ? 'offset' : 'client').concat(prop)] + (includeMargins && outer ? computeStyleInt(this[0], "margin".concat(i ? 'Top' : 'Left')) + computeStyleInt(this[0], "margin".concat(i ? 'Bottom' : 'Right')) : 0);
+      return this[0]["" + (outer ? 'offset' : 'client') + prop] + (includeMargins && outer ? computeStyleInt(this[0], "margin" + (i ? 'Top' : 'Left')) + computeStyleInt(this[0], "margin" + (i ? 'Bottom' : 'Right')) : 0);
     };
   });
 });
@@ -613,7 +612,7 @@ each(['Width', 'Height'], function (index, prop) {
     if (!this[0]) return isUndefined(value) ? undefined : this;
 
     if (!arguments.length) {
-      if (isWindow(this[0])) return this[0].document.documentElement["client".concat(prop)];
+      if (isWindow(this[0])) return this[0].document.documentElement["client" + prop];
       if (isDocument(this[0])) return getDocumentDimension(this[0], prop);
       return this[0].getBoundingClientRect()[propLC] - getExtraSpace(this[0], !index);
     }
@@ -817,7 +816,7 @@ function on(eventFullName, selector, data, callback, _one) {
       if (!isElement(ele) && !isDocument(ele) && !isWindow(ele)) return;
 
       var finalCallback = function finalCallback(event) {
-        if (event.target["___i".concat(event.type)]) return event.stopImmediatePropagation(); // Ignoring native event in favor of the upcoming custom one
+        if (event.target["___i" + event.type]) return event.stopImmediatePropagation(); // Ignoring native event in favor of the upcoming custom one
 
         if (event.namespace && !hasNamespaces(namespaces, event.namespace.split(eventsNamespacesSeparator))) return;
         if (!selector && (isEventFocus && (event.target !== ele || event.___ot === name) || isEventHover && event.relatedTarget && ele.contains(event.relatedTarget))) return;
@@ -914,11 +913,11 @@ fn.trigger = function (event, data) {
   var isEventFocus = (event.___ot in eventsFocus);
   return this.each(function (i, ele) {
     if (isEventFocus && isFunction(ele[event.___ot])) {
-      ele["___i".concat(event.type)] = true; // Ensuring the native event is ignored
+      ele["___i" + event.type] = true; // Ensuring the native event is ignored
 
       ele[event.___ot]();
 
-      ele["___i".concat(event.type)] = false; // Ensuring the custom event is not ignored
+      ele["___i" + event.type] = false; // Ensuring the custom event is not ignored
     }
 
     ele.dispatchEvent(event);
@@ -943,7 +942,7 @@ var queryEncodeSpaceRe = /%20/g,
     queryEncodeCRLFRe = /\r?\n/g;
 
 function queryEncode(prop, value) {
-  return "&".concat(encodeURIComponent(prop), "=").concat(encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+'));
+  return "&" + encodeURIComponent(prop) + "=" + encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+');
 }
 
 var skippableRe = /file|reset|submit|button|image/i,

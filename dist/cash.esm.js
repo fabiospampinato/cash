@@ -430,11 +430,10 @@ fn.css = css;
 // @optional ./css.ts
 // @require core/attempt.ts
 // @require core/camel_case.ts
-const trailingWhitespace = /^\s+|\s+$/;
-const scientificNotation = /e[+-]?\d+$/;
+const JSONStringRe = /^\s+|\s+$/;
 function getData(ele, key) {
     const value = ele.dataset[key] || ele.dataset[camelCase(key)];
-    if (trailingWhitespace.test(value) || scientificNotation.test(value))
+    if (JSONStringRe.test(value))
         return value;
     return attempt(JSON.parse, value);
 }
