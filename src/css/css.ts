@@ -8,6 +8,7 @@
 // @require ./helpers/is_css_variable.ts
 
 interface Cash {
+  css ( prop: string[] ): Record<string, number | string>;
   css ( prop: string ): string | undefined;
   css ( prop: string, value: number | string ): this;
   css ( props: Record<string, number | string> ): this;
