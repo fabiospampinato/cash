@@ -88,6 +88,8 @@ jQuery ignores any `transform` applied to the element when computing its dimensi
 
 Cash doesn't.
 
+You may try reading untransformed dimensions with the `$.fn.css` method instead.
+
 ## Events
 
 Cash's event system relies heavily on the browser's underlying event system so there are some differences when comparing it with jQuery's.
