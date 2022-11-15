@@ -775,6 +775,7 @@ Hide or show the elements.
 
 ```js
 $(element).toggle () // => collection
+$(element).toggle ( force ) // => collection
 ```
 
 #### fn.toggleClass ()
