@@ -1,3 +1,12 @@
+### [v8.1.2](https://github.com/fabiospampinato/cash/releases/tag/8.1.2) (2022-11-18)
+
+- Migration guide: mentioning $.fn.css as a potential workaround for ignoring the effects of CSS transforms
+- $.fn.html: ensuring script elements are executed, to better align with jQuery
+- Switched to a new bundler, minipacco
+- Deleted most development dependencies
+- Simplified significantly partial compilation
+- Ensuring selectors contains escaped dots are handled correctly
+
 ### [v8.1.1](https://github.com/fabiospampinato/cash/releases/tag/8.1.1) (2022-02-16)
 
 - Ensuring the proper types for iteration are provided

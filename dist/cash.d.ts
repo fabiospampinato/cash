@@ -17,14 +17,14 @@ interface Cash {
 interface CashStatic {
     fn: Cash;
 }
-declare type falsy = undefined | null | false | 0 | '';
-declare type Ele = Window | Document | HTMLElement | Element | Node;
-declare type EleLoose = HTMLElement & Element & Node;
-declare type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
-declare type Comparator = string | Ele | Cash | ((this: EleLoose, index: number, ele: EleLoose) => boolean);
-declare type Context = Document | HTMLElement | Element;
-declare type PlainObject<T> = Record<string, T>;
-declare type EventCallback = {
+type falsy = undefined | null | false | 0 | '';
+type Ele = Window | Document | HTMLElement | Element | Node;
+type EleLoose = HTMLElement & Element & Node;
+type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
+type Comparator = string | Ele | Cash | ((this: EleLoose, index: number, ele: EleLoose) => boolean);
+type Context = Document | HTMLElement | Element;
+type PlainObject<T> = Record<string, T>;
+type EventCallback = {
     (event: any, data?: any): any;
     guid?: number;
 };
@@ -33,22 +33,58 @@ declare class Cash {
     init(selector?: Selector, context?: Context | Cash): Cash;
 }
 declare const cash: ((selector?: Selector, context?: Context | Cash) => Cash) & CashStatic;
-declare type MapCallback<T> = (this: T, index: number, ele: T) => Ele;
-interface Cash {
-    map(callback: MapCallback<EleLoose>): Cash;
+interface CashStatic {
+    isWindow(x: unknown): x is Window;
+    isFunction(x: unknown): x is Function;
+    isArray(x: unknown): x is Array<any>;
+    isNumeric(x: unknown): boolean;
+    isPlainObject(x: unknown): x is PlainObject<any>;
+}
+type EachArrayCallback<T> = (this: T, index: number, ele: T) => any;
+type EachObjectCallback<T> = (this: T, key: string, value: T) => any;
+interface CashStatic {
+    each<T>(arr: ArrayLike<T>, callback: EachArrayCallback<T>): void;
+    each<T>(obj: PlainObject<T>, callback: EachObjectCallback<T>): void;
 }
 interface Cash {
-    slice(start?: number, end?: number): Cash;
+    each(callback: EachArrayCallback<EleLoose>): this;
+}
+interface Cash {
+    empty(): this;
+}
+interface Cash {
+    text(): string;
+    text(text: string): this;
 }
 interface CashStatic {
-    guid: number;
+    extend(): any;
+    extend(deep: true, target: any, ...sources: any[]): any;
+    extend(target: any): typeof cash;
+    extend(target: any, ...sources: any[]): any;
 }
-interface CashStatic {
-    isWindow(x: any): x is Window;
-    isFunction(x: any): x is Function;
-    isArray(x: any): x is Array<any>;
-    isNumeric(x: any): boolean;
-    isPlainObject(x: any): x is PlainObject<any>;
+interface Cash {
+    extend(plugins: Record<any, any>): this;
+}
+interface Cash {
+    toggleClass(classes: string, force?: boolean): this;
+}
+interface Cash {
+    addClass(classes: string): this;
+}
+interface Cash {
+    removeAttr(attrs: string): this;
+}
+interface Cash {
+    attr(): undefined;
+    attr(attrs: string): string | null;
+    attr(attrs: string, value: string): this;
+    attr(attrs: Record<string, string>): this;
+}
+interface Cash {
+    removeClass(classes?: string): this;
+}
+interface Cash {
+    hasClass(cls: string): boolean;
 }
 interface Cash {
     get(): EleLoose[];
@@ -63,14 +99,149 @@ interface Cash {
 interface Cash {
     last(): Cash;
 }
-declare type EachArrayCallback<T> = (this: T, index: number, ele: T) => any;
-declare type EachObjectCallback<T> = (this: T, key: string, value: T) => any;
-interface CashStatic {
-    each<T>(arr: ArrayLike<T>, callback: EachArrayCallback<T>): void;
-    each<T>(obj: PlainObject<T>, callback: EachObjectCallback<T>): void;
+interface Cash {
+    filter(comparator?: Comparator): Cash;
 }
 interface Cash {
-    each(callback: EachArrayCallback<EleLoose>): this;
+    detach(comparator?: Comparator): this;
+}
+interface CashStatic {
+    parseHTML(html: string): EleLoose[];
+}
+interface Cash {
+    has(selector: string | Node): Cash;
+}
+interface Cash {
+    not(comparator?: Comparator): Cash;
+}
+interface Cash {
+    val(): string | string[];
+    val(value: string | string[]): this;
+}
+interface Cash {
+    is(comparator?: Comparator): boolean;
+}
+interface CashStatic {
+    guid: number;
+}
+interface CashStatic {
+    unique<T>(arr: ArrayLike<T>): ArrayLike<T>;
+}
+interface Cash {
+    add(selector: Selector, context?: Context): Cash;
+}
+interface Cash {
+    children(comparator?: Comparator): Cash;
+}
+interface Cash {
+    parent(comparator?: Comparator): Cash;
+}
+interface Cash {
+    index(selector?: Selector): number;
+}
+interface Cash {
+    closest(comparator?: Comparator): Cash;
+}
+interface Cash {
+    siblings(comparator?: Comparator): Cash;
+}
+interface Cash {
+    find(selector: string): Cash;
+}
+interface Cash {
+    after(...selectors: Selector[]): this;
+}
+interface Cash {
+    append(...selectors: Selector[]): this;
+}
+interface Cash {
+    html(): string;
+    html(html: string): this;
+}
+interface Cash {
+    appendTo(selector: Selector): this;
+}
+interface Cash {
+    wrapInner(selector?: Selector): this;
+}
+interface Cash {
+    before(...selectors: Selector[]): this;
+}
+interface Cash {
+    wrapAll(selector?: Selector): this;
+}
+interface Cash {
+    wrap(selector?: Selector): this;
+}
+interface Cash {
+    insertAfter(selector: Selector): this;
+}
+interface Cash {
+    insertBefore(selector: Selector): this;
+}
+interface Cash {
+    prepend(...selectors: Selector[]): this;
+}
+interface Cash {
+    prependTo(selector: Selector): this;
+}
+interface Cash {
+    contents(): Cash;
+}
+interface Cash {
+    next(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
+}
+interface Cash {
+    nextAll(comparator?: Comparator): Cash;
+}
+interface Cash {
+    nextUntil(until?: Comparator, comparator?: Comparator): Cash;
+}
+interface Cash {
+    parents(comparator?: Comparator, _until?: Comparator): Cash;
+}
+interface Cash {
+    parentsUntil(until?: Comparator, comparator?: Comparator): Cash;
+}
+interface Cash {
+    prev(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
+}
+interface Cash {
+    prevAll(comparator?: Comparator): Cash;
+}
+interface Cash {
+    prevUntil(until?: Comparator, comparator?: Comparator): Cash;
+}
+type MapCallback<T> = (this: T, index: number, ele: T) => Ele;
+interface Cash {
+    map(callback: MapCallback<EleLoose>): Cash;
+}
+interface Cash {
+    clone(): this;
+}
+interface Cash {
+    offsetParent(): Cash;
+}
+interface Cash {
+    slice(start?: number, end?: number): Cash;
+}
+interface Cash {
+    ready(callback: Function): this;
+}
+interface Cash {
+    unwrap(): this;
+}
+interface Cash {
+    offset(): undefined | {
+        top: number;
+        left: number;
+    };
+}
+interface Cash {
+    position(): undefined | {
+        top: number;
+        left: number;
+    };
 }
 interface Cash {
     prop(prop: string): any;
@@ -79,45 +250,6 @@ interface Cash {
 }
 interface Cash {
     removeProp(prop: string): this;
-}
-interface CashStatic {
-    extend(): any;
-    extend(deep: true, target: any, ...sources: any[]): any;
-    extend(target: any): typeof cash;
-    extend(target: any, ...sources: any[]): any;
-}
-interface Cash {
-    extend(plugins: Record<any, any>): this;
-}
-interface Cash {
-    filter(comparator?: Comparator): Cash;
-}
-interface Cash {
-    hasClass(cls: string): boolean;
-}
-interface Cash {
-    removeAttr(attrs: string): this;
-}
-interface Cash {
-    attr(): undefined;
-    attr(attrs: string): string | null;
-    attr(attrs: string, value: string): this;
-    attr(attrs: Record<string, string>): this;
-}
-interface Cash {
-    toggleClass(classes: string, force?: boolean): this;
-}
-interface Cash {
-    addClass(classes: string): this;
-}
-interface Cash {
-    removeClass(classes?: string): this;
-}
-interface CashStatic {
-    unique<T>(arr: ArrayLike<T>): ArrayLike<T>;
-}
-interface Cash {
-    add(selector: Selector, context?: Context): Cash;
 }
 interface Cash {
     css(prop: string): string | undefined;
@@ -152,11 +284,23 @@ interface Cash {
     show(): this;
 }
 interface Cash {
+    trigger(event: Event | string, data?: any): this;
+}
+interface Cash {
     off(): this;
     off(events: string): this;
     off(events: Record<string, EventCallback>): this;
     off(events: string, callback: EventCallback): this;
     off(events: string, selector: string, callback: EventCallback): this;
+}
+interface Cash {
+    remove(comparator?: Comparator): this;
+}
+interface Cash {
+    replaceWith(selector: Selector): this;
+}
+interface Cash {
+    replaceAll(selector: Selector): this;
 }
 interface Cash {
     on(events: Record<string, EventCallback>): this;
@@ -179,151 +323,7 @@ interface Cash {
     one(events: string, selector: string | null | undefined, data: any, callback: EventCallback): this;
 }
 interface Cash {
-    ready(callback: Function): this;
-}
-interface Cash {
-    trigger(event: Event | string, data?: any): this;
-}
-interface Cash {
     serialize(): string;
-}
-interface Cash {
-    val(): string | string[];
-    val(value: string | string[]): this;
-}
-interface Cash {
-    clone(): this;
-}
-interface Cash {
-    detach(comparator?: Comparator): this;
-}
-interface CashStatic {
-    parseHTML(html: string): EleLoose[];
-}
-interface Cash {
-    empty(): this;
-}
-interface Cash {
-    html(): string;
-    html(html: string): this;
-}
-interface Cash {
-    remove(comparator?: Comparator): this;
-}
-interface Cash {
-    text(): string;
-    text(text: string): this;
-}
-interface Cash {
-    unwrap(): this;
-}
-interface Cash {
-    offset(): undefined | {
-        top: number;
-        left: number;
-    };
-}
-interface Cash {
-    offsetParent(): Cash;
-}
-interface Cash {
-    position(): undefined | {
-        top: number;
-        left: number;
-    };
-}
-interface Cash {
-    children(comparator?: Comparator): Cash;
-}
-interface Cash {
-    contents(): Cash;
-}
-interface Cash {
-    find(selector: string): Cash;
-}
-interface Cash {
-    after(...selectors: Selector[]): this;
-}
-interface Cash {
-    append(...selectors: Selector[]): this;
-}
-interface Cash {
-    appendTo(selector: Selector): this;
-}
-interface Cash {
-    before(...selectors: Selector[]): this;
-}
-interface Cash {
-    insertAfter(selector: Selector): this;
-}
-interface Cash {
-    insertBefore(selector: Selector): this;
-}
-interface Cash {
-    prepend(...selectors: Selector[]): this;
-}
-interface Cash {
-    prependTo(selector: Selector): this;
-}
-interface Cash {
-    replaceWith(selector: Selector): this;
-}
-interface Cash {
-    replaceAll(selector: Selector): this;
-}
-interface Cash {
-    wrapAll(selector?: Selector): this;
-}
-interface Cash {
-    wrap(selector?: Selector): this;
-}
-interface Cash {
-    wrapInner(selector?: Selector): this;
-}
-interface Cash {
-    has(selector: string | Node): Cash;
-}
-interface Cash {
-    is(comparator?: Comparator): boolean;
-}
-interface Cash {
-    next(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
-}
-interface Cash {
-    nextAll(comparator?: Comparator): Cash;
-}
-interface Cash {
-    nextUntil(until?: Comparator, comparator?: Comparator): Cash;
-}
-interface Cash {
-    not(comparator?: Comparator): Cash;
-}
-interface Cash {
-    parent(comparator?: Comparator): Cash;
-}
-interface Cash {
-    index(selector?: Selector): number;
-}
-interface Cash {
-    closest(comparator?: Comparator): Cash;
-}
-interface Cash {
-    parents(comparator?: Comparator, _until?: Comparator): Cash;
-}
-interface Cash {
-    parentsUntil(until?: Comparator, comparator?: Comparator): Cash;
-}
-interface Cash {
-    prev(comparator?: Comparator, _all?: boolean, _until?: Comparator): Cash;
-}
-interface Cash {
-    prevAll(comparator?: Comparator): Cash;
-}
-interface Cash {
-    prevUntil(until?: Comparator, comparator?: Comparator): Cash;
-}
-interface Cash {
-    siblings(comparator?: Comparator): Cash;
 }
 export default cash;
 export { Cash, CashStatic, Ele as Element, Selector, Comparator, Context };

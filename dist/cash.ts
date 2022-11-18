@@ -1,37 +1,4 @@
 
-const propMap: Record<string, string> = {
-  /* GENERAL */
-  class: 'className',
-  contenteditable: 'contentEditable',
-  /* LABEL */
-  for: 'htmlFor',
-  /* INPUT */
-  readonly: 'readOnly',
-  maxlength: 'maxLength',
-  tabindex: 'tabIndex',
-  /* TABLE */
-  colspan: 'colSpan',
-  rowspan: 'rowSpan',
-  /* IMAGE */
-  usemap: 'useMap'
-};
-
-
-function attempt<T, U> ( fn: (( arg?: U ) => T), arg?: U ): T | U {
-
-  try {
-
-    return fn ( arg );
-
-  } catch {
-
-    return arg;
-
-  }
-
-}
-
-
 interface Event {
   namespace: string,
   data: any,
@@ -70,21 +37,21 @@ type EventCallback = {
 };
 
 
-const doc = document,
-      win = window,
-      docEle = doc.documentElement,
-      createElement = doc.createElement.bind ( doc ),
-      div = createElement ( 'div' ),
-      table = createElement ( 'table' ),
-      tbody = createElement ( 'tbody' ),
-      tr = createElement ( 'tr' ),
-      {isArray, prototype: ArrayPrototype} = Array,
-      {concat, filter, indexOf, map, push, slice, some, splice} = ArrayPrototype;
+const doc = document;
+const win = window;
+const docEle = doc.documentElement;
+const createElement = doc.createElement.bind ( doc );
+const div = createElement ( 'div' );
+const table = createElement ( 'table' );
+const tbody = createElement ( 'tbody' );
+const tr = createElement ( 'tr' );
+const {isArray, prototype: ArrayPrototype} = Array;
+const {concat, filter, indexOf, map, push, slice, some, splice} = ArrayPrototype;
 
-const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/,
-      classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/,
-      htmlRe = /<.+>/,
-      tagRe = /^\w+$/;
+const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/;
+const classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/;
+const htmlRe = /<.+>/;
+const tagRe = /^\w+$/;
 
 
 // @require ./variables.ts
@@ -96,7 +63,7 @@ function find ( selector: string, context: Ele ): ArrayLike<Element> {
   return !selector || ( !isFragment && !isDocument ( context ) && !isElement ( context ) )
            ? []
            : !isFragment && classRe.test ( selector )
-             ? context.getElementsByClassName ( selector.slice ( 1 ) )
+             ? context.getElementsByClassName ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
              : !isFragment && tagRe.test ( selector )
                ? context.getElementsByTagName ( selector )
                : context.querySelectorAll ( selector );
@@ -122,7 +89,7 @@ class Cash {
       const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
 
       eles = idRe.test ( selector ) && 'getElementById' in ctx
-                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ) )
+                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
                   : find ( selector, ctx );
@@ -155,8 +122,8 @@ class Cash {
 
 }
 
-const fn = Cash.prototype,
-      cash = fn.init as typeof Cash.prototype.init & CashStatic;
+const fn = Cash.prototype;
+const cash = fn.init as ( typeof Cash.prototype.init & CashStatic );
 
 cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
 
@@ -168,149 +135,88 @@ if ( typeof Symbol === 'function' ) { // Ensuring a cash collection is iterable
 }
 
 
-// @require core/cash.ts
-// @require core/variables.ts
-
-type MapCallback<T> = ( this: T, index: number, ele: T ) => Ele;
-
-interface Cash {
-  map ( callback: MapCallback<EleLoose> ): Cash;
-}
-
-fn.map = function ( this: Cash, callback: MapCallback<EleLoose> ) {
-
-  return cash ( concat.apply ( [], map.call ( this, ( ele: EleLoose, i: number ) => callback.call ( ele, i, ele ) ) ) );
-
-};
-
-
-// @require core/cash.ts
-// @require core/variables.ts
-
-interface Cash {
-  slice ( start?: number, end?: number ): Cash;
-}
-
-fn.slice = function ( this: Cash, start?: number, end?: number ) {
-
-  return cash ( slice.call ( this, start, end ) );
-
-};
-
-
-// @require ./cash.ts
-
-const dashAlphaRe = /-([a-z])/g;
-
-function camelCase ( str: string ): string {
-
-  return str.replace ( dashAlphaRe, ( match: string, letter: string ) => letter.toUpperCase () );
-
-}
-
-
-// @require ./cash.ts
-
-interface CashStatic {
-  guid: number;
-}
-
-cash.guid = 1;
-
-
-// @require ./cash.ts
-
-function matches ( ele: any, selector: string ): boolean {
-
-  const matches = ele && ( ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector'] );
-
-  return !!matches && !!selector && matches.call ( ele, selector );
-
-}
-
-
 // @require ./cash.ts
 // @require ./variables.ts
 
 interface CashStatic {
-  isWindow ( x: any ): x is Window;
-  isFunction ( x: any ): x is Function;
-  isArray ( x: any ): x is Array<any>;
-  isNumeric ( x: any ): boolean;
-  isPlainObject ( x: any ): x is PlainObject<any>;
+  isWindow ( x: unknown ): x is Window;
+  isFunction ( x: unknown ): x is Function;
+  isArray ( x: unknown ): x is Array<any>;
+  isNumeric ( x: unknown ): boolean;
+  isPlainObject ( x: unknown ): x is PlainObject<any>;
 }
 
-function isCash ( x: any ): x is Cash {
+function isCash ( value: unknown ): value is Cash {
 
-  return x instanceof Cash;
-
-}
-
-function isWindow ( x: any ): x is Window {
-
-  return !!x && x === x.window;
+  return value instanceof Cash;
 
 }
 
-function isDocument ( x: any ): x is Document {
+function isWindow ( value: unknown ): value is Window {
 
-  return !!x && x.nodeType === 9;
-
-}
-
-function isDocumentFragment ( x: any ): x is DocumentFragment {
-
-  return !!x && x.nodeType === 11;
+  return !!value && value === value.window;
 
 }
 
-function isElement ( x: any ): x is HTMLElement {
+function isDocument ( value: unknown ): value is Document {
 
-  return !!x && x.nodeType === 1;
-
-}
-
-function isBoolean ( x: any ): x is boolean {
-
-  return typeof x === 'boolean';
+  return !!value && value.nodeType === 9;
 
 }
 
-function isFunction ( x: any ): x is Function {
+function isDocumentFragment ( value: unknown ): value is DocumentFragment {
 
-  return typeof x === 'function';
-
-}
-
-function isString ( x: any ): x is string {
-
-  return typeof x === 'string';
+  return !!value && value.nodeType === 11;
 
 }
 
-function isUndefined ( x: any ): x is undefined {
+function isElement ( value: unknown ): value is HTMLElement {
 
-  return x === undefined;
-
-}
-
-function isNull ( x: any ): x is null {
-
-  return x === null;
+  return !!value && value.nodeType === 1;
 
 }
 
-function isNumeric ( x: any ): boolean {
+function isBoolean ( value: unknown ): value is boolean {
 
-  return !isNaN ( parseFloat ( x ) ) && isFinite ( x );
+  return typeof value === 'boolean';
 
 }
 
-function isPlainObject ( x: any ): x is PlainObject<any> {
+function isFunction ( value: unknown ): value is Function {
 
-  if ( typeof x !== 'object' || x === null ) return false;
+  return typeof value === 'function';
 
-  const proto = Object.getPrototypeOf ( x );
+}
+
+function isString ( value: unknown ): value is string {
+
+  return typeof value === 'string';
+
+}
+
+function isUndefined ( value: unknown ): value is undefined {
+
+  return value === undefined;
+
+}
+
+function isNull ( value: unknown ): value is null {
+
+  return value === null;
+
+}
+
+function isNumeric ( value: unknown ): boolean {
+
+  return !isNaN ( parseFloat ( value ) ) && isFinite ( value );
+
+}
+
+function isPlainObject ( value: unknown ): value is PlainObject<any> {
+
+  if ( typeof value !== 'object' || value === null ) return false;
+
+  const proto = Object.getPrototypeOf ( value );
 
   return proto === null || proto === Object.prototype;
 
@@ -321,68 +227,6 @@ cash.isFunction = isFunction;
 cash.isArray = isArray;
 cash.isNumeric = isNumeric;
 cash.isPlainObject = isPlainObject;
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require core/variables.ts
-
-interface Cash {
-  get (): EleLoose[];
-  get ( index: number ): EleLoose | undefined;
-}
-
-fn.get = function ( this: Cash, index?: number ) {
-
-  if ( isUndefined ( index ) ) return slice.call ( this );
-
-  index = Number ( index );
-
-  return this[index < 0 ? index + this.length : index];
-
-};
-
-
-// @require core/cash.ts
-// @require ./get.ts
-
-interface Cash {
-  eq ( index: number ): Cash;
-}
-
-fn.eq = function ( this: Cash, index: number ) {
-
-  return cash ( this.get ( index ) );
-
-};
-
-
-// @require core/cash.ts
-// @require ./eq.ts
-
-interface Cash {
-  first (): Cash;
-}
-
-fn.first = function ( this: Cash ) {
-
-  return this.eq ( 0 );
-
-};
-
-
-// @require core/cash.ts
-// @require ./eq.ts
-
-interface Cash {
-  last (): Cash;
-}
-
-fn.last = function ( this: Cash ) {
-
-  return this.eq ( -1 );
-
-};
 
 
 // @require ./cash.ts
@@ -454,54 +298,53 @@ fn.each = function ( this: Cash, callback: EachArrayCallback<EleLoose> ) {
 
 
 // @require core/cash.ts
-// @require core/type_checking.ts
 // @require collection/each.ts
-// @require ./helpers/variables.ts
 
 interface Cash {
-  prop ( prop: string ): any;
-  prop ( prop: string, value: any ): this;
-  prop ( props: Record<string, any> ): this;
+  empty (): this;
 }
 
-fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any ) {
+fn.empty = function ( this: Cash ) {
 
-  if ( !prop ) return;
+  return this.each ( ( i, ele ) => {
 
-  if ( isString ( prop ) ) {
+    while ( ele.firstChild ) {
 
-    prop = propMap[prop] || prop;
+      ele.removeChild ( ele.firstChild );
 
-    if ( arguments.length < 2 ) return this[0] && this[0][prop];
+    }
 
-    return this.each ( ( i, ele ) => { ele[prop] = value } );
-
-  }
-
-  for ( const key in prop ) {
-
-    this.prop ( key, prop[key] );
-
-  }
-
-  return this;
+  });
 
 };
 
 
 // @require core/cash.ts
+// @require core/type_checking.ts
 // @require collection/each.ts
-// @require ./helpers/variables.ts
 
 interface Cash {
-  removeProp ( prop: string ): this;
+  text (): string;
+  text ( text: string ): this;
 }
 
-fn.removeProp = function ( this: Cash, prop: string ) {
+function text ( this: Cash ): string;
+function text ( this: Cash, text: string ): Cash;
+function text ( this: Cash, text?: string ) {
 
-  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
+  if ( isUndefined ( text ) ) return this[0] ? this[0].textContent : '';
+
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    ele.textContent = text
+
+  });
 
 };
+
+fn.text = text;
 
 
 // @require ./cash.ts
@@ -520,9 +363,9 @@ interface Cash {
 
 function extend ( ...sources: any[] ) {
 
-  const deep = isBoolean ( sources[0] ) ? sources.shift () : false,
-        target = sources.shift (),
-        length = sources.length;
+  const deep = isBoolean ( sources[0] ) ? sources.shift () : false;
+  const target = sources.shift ();
+  const length = sources.length;
 
   if ( !target ) return {};
 
@@ -563,52 +406,6 @@ fn.extend = function ( plugins: Record<string, any> ) {
 };
 
 
-// @require ./matches.ts
-// @require ./type_checking.ts
-
-function getCompareFunction ( comparator?: Comparator ): (( i: number, ele: EleLoose ) => boolean) {
-
-  return isString ( comparator )
-           ? ( i: number, ele: EleLoose ) => matches ( ele, comparator )
-           : isFunction ( comparator )
-             ? comparator
-             : isCash ( comparator )
-               ? ( i: number, ele: EleLoose ) => comparator.is ( ele )
-               : !comparator
-                 ? () => false
-                 : ( i: number, ele: EleLoose ) => ele === comparator;
-
-}
-
-
-// @require core/cash.ts
-// @require core/get_compare_function.ts
-// @require core/type_checking.ts
-// @require core/variables.ts
-// @require collection/get.ts
-
-interface Cash {
-  filter ( comparator?: Comparator ): Cash;
-}
-
-fn.filter = function ( this: Cash, comparator?: Comparator ) {
-
-  const compare = getCompareFunction ( comparator );
-
-  return cash ( filter.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) ) );
-
-};
-
-
-// @require collection/filter.ts
-
-function filtered ( collection: Cash, comparator?: Comparator ): Cash {
-
-  return !comparator ? collection : collection.filter ( comparator );
-
-}
-
-
 // @require ./type_checking.ts
 
 const splitValuesRe = /\S+/g;
@@ -621,17 +418,53 @@ function getSplitValues ( str: string ) {
 
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/get_split_values.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
 
 interface Cash {
-  hasClass ( cls: string ): boolean;
+  toggleClass ( classes: string, force?: boolean ): this;
 }
 
-fn.hasClass = function ( this: Cash, cls: string ) {
+fn.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
 
-  return !!cls && some.call ( this, ( ele: EleLoose ) => isElement ( ele ) && ele.classList.contains ( cls ) );
+  const classes = getSplitValues ( cls );
+  const isForce = !isUndefined ( force );
+
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    each ( classes, ( i, c ) => {
+
+      if ( isForce ) {
+
+        force ? ele.classList.add ( c ) : ele.classList.remove ( c );
+
+      } else {
+
+        ele.classList.toggle ( c );
+
+      }
+
+    });
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require ./toggle_class.ts
+
+interface Cash {
+  addClass ( classes: string ): this;
+}
+
+fn.addClass = function ( this: Cash, cls: string ) {
+
+  return this.toggleClass ( cls, true );
 
 };
 
@@ -723,58 +556,6 @@ fn.attr = attr;
 
 
 // @require core/cash.ts
-// @require core/each.ts
-// @require core/get_split_values.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-
-interface Cash {
-  toggleClass ( classes: string, force?: boolean ): this;
-}
-
-fn.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
-
-  const classes = getSplitValues ( cls ),
-        isForce = !isUndefined ( force );
-
-  return this.each ( ( i, ele ) => {
-
-    if ( !isElement ( ele ) ) return;
-
-    each ( classes, ( i, c ) => {
-
-      if ( isForce ) {
-
-        force ? ele.classList.add ( c ) : ele.classList.remove ( c );
-
-      } else {
-
-        ele.classList.toggle ( c );
-
-      }
-
-    });
-
-  });
-
-};
-
-
-// @require core/cash.ts
-// @require ./toggle_class.ts
-
-interface Cash {
-  addClass ( classes: string ): this;
-}
-
-fn.addClass = function ( this: Cash, cls: string ) {
-
-  return this.toggleClass ( cls, true );
-
-};
-
-
-// @require core/cash.ts
 // @require ./attr.ts
 // @require ./toggle_class.ts
 
@@ -791,14 +572,308 @@ fn.removeClass = function ( this: Cash, cls?: string ) {
 };
 
 
-// @optional ./add_class.ts
-// @optional ./attr.ts
-// @optional ./has_class.ts
-// @optional ./prop.ts
-// @optional ./remove_attr.ts
-// @optional ./remove_class.ts
-// @optional ./remove_prop.ts
-// @optional ./toggle_class.ts
+// @require core/cash.ts
+// @require core/get_split_values.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+
+interface Cash {
+  hasClass ( cls: string ): boolean;
+}
+
+fn.hasClass = function ( this: Cash, cls: string ) {
+
+  return !!cls && some.call ( this, ( ele: EleLoose ) => isElement ( ele ) && ele.classList.contains ( cls ) );
+
+};
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require core/variables.ts
+
+interface Cash {
+  get (): EleLoose[];
+  get ( index: number ): EleLoose | undefined;
+}
+
+fn.get = function ( this: Cash, index?: number ) {
+
+  if ( isUndefined ( index ) ) return slice.call ( this );
+
+  index = Number ( index );
+
+  return this[index < 0 ? index + this.length : index];
+
+};
+
+
+// @require core/cash.ts
+// @require ./get.ts
+
+interface Cash {
+  eq ( index: number ): Cash;
+}
+
+fn.eq = function ( this: Cash, index: number ) {
+
+  return cash ( this.get ( index ) );
+
+};
+
+
+// @require core/cash.ts
+// @require ./eq.ts
+
+interface Cash {
+  first (): Cash;
+}
+
+fn.first = function ( this: Cash ) {
+
+  return this.eq ( 0 );
+
+};
+
+
+// @require core/cash.ts
+// @require ./eq.ts
+
+interface Cash {
+  last (): Cash;
+}
+
+fn.last = function ( this: Cash ) {
+
+  return this.eq ( -1 );
+
+};
+
+
+// @require core/type_checking.ts
+// @require core/variables.ts
+
+function computeStyle ( ele: EleLoose, prop: string, isVariable?: boolean ): string | undefined {
+
+  if ( !isElement ( ele ) ) return;
+
+  const style = win.getComputedStyle ( ele, null );
+
+  return isVariable ? style.getPropertyValue ( prop ) || undefined : style[prop] || ele.style[prop];
+
+}
+
+
+// @require ./compute_style.ts
+
+function computeStyleInt ( ele: EleLoose, prop: string ): number {
+
+  return parseInt ( computeStyle ( ele, prop ), 10 ) || 0;
+
+}
+
+
+// @require css/helpers/compute_style_int.ts
+
+function getExtraSpace ( ele: EleLoose, xAxis?: boolean ): number {
+
+  return computeStyleInt ( ele, `border${ xAxis ? 'Left' : 'Top' }Width` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Left' : 'Top' }` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Right' : 'Bottom' }` ) + computeStyleInt ( ele, `border${ xAxis ? 'Right' : 'Bottom' }Width` );
+
+}
+
+
+// @require css/helpers/compute_style.ts
+
+const defaultDisplay: { [tagName: string]: string } = {};
+
+function getDefaultDisplay ( tagName: string ): string {
+
+  if ( defaultDisplay[tagName] ) return defaultDisplay[tagName];
+
+  const ele = createElement ( tagName );
+
+  doc.body.insertBefore ( ele, null );
+
+  const display = computeStyle ( ele, 'display' );
+
+  doc.body.removeChild ( ele );
+
+  return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
+
+}
+
+
+// @require css/helpers/compute_style.ts
+
+function isHidden ( ele: EleLoose ): boolean {
+
+  return computeStyle ( ele, 'display' ) === 'none';
+
+}
+
+
+// @require ./cash.ts
+
+function matches ( ele: any, selector: string ): boolean {
+
+  const matches = ele && ( ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector'] );
+
+  return !!matches && !!selector && matches.call ( ele, selector );
+
+}
+
+
+// @require ./matches.ts
+// @require ./type_checking.ts
+
+function getCompareFunction ( comparator?: Comparator ): (( i: number, ele: EleLoose ) => boolean) {
+
+  return isString ( comparator )
+           ? ( i: number, ele: EleLoose ) => matches ( ele, comparator )
+           : isFunction ( comparator )
+             ? comparator
+             : isCash ( comparator )
+               ? ( i: number, ele: EleLoose ) => comparator.is ( ele )
+               : !comparator
+                 ? () => false
+                 : ( i: number, ele: EleLoose ) => ele === comparator;
+
+}
+
+
+// @require core/cash.ts
+// @require core/get_compare_function.ts
+// @require core/type_checking.ts
+// @require core/variables.ts
+// @require collection/get.ts
+
+interface Cash {
+  filter ( comparator?: Comparator ): Cash;
+}
+
+fn.filter = function ( this: Cash, comparator?: Comparator ) {
+
+  const compare = getCompareFunction ( comparator );
+
+  return cash ( filter.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) ) );
+
+};
+
+
+// @require collection/filter.ts
+
+function filtered ( collection: Cash, comparator?: Comparator ): Cash {
+
+  return !comparator ? collection : collection.filter ( comparator );
+
+}
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require collection/each.ts
+
+interface Cash {
+  detach ( comparator?: Comparator ): this;
+}
+
+fn.detach = function ( this: Cash, comparator?: Comparator ) {
+
+  filtered ( this, comparator ).each ( ( i, ele ) => {
+
+    if ( ele.parentNode ) {
+
+      ele.parentNode.removeChild ( ele );
+
+    }
+
+  });
+
+  return this;
+
+};
+
+
+// @require ./cash.ts
+// @require ./variables.ts
+// @require ./type_checking.ts
+// @require collection/get.ts
+// @require manipulation/detach.ts
+
+interface CashStatic {
+  parseHTML ( html: string ): EleLoose[];
+}
+
+const fragmentRe = /^\s*<(\w+)[^>]*>/;
+const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
+
+const containers = {
+  '*': div,
+  tr: tbody,
+  td: tr,
+  th: tr,
+  thead: table,
+  tbody: table,
+  tfoot: table
+};
+
+//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
+//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
+
+function parseHTML ( html: string ): EleLoose[] {
+
+  if ( !isString ( html ) ) return [];
+
+  if ( singleTagRe.test ( html ) ) return [createElement ( RegExp.$1 )];
+
+  const fragment = fragmentRe.test ( html ) && RegExp.$1;
+  const container = containers[fragment] || containers['*'];
+
+  container.innerHTML = html;
+
+  return cash ( container.childNodes ).detach ().get ();
+
+}
+
+cash.parseHTML = parseHTML;
+
+
+// @require core/cash.ts
+// @require core/find.ts
+// @require core/type_checking.ts
+// @require collection/filter.ts
+
+interface Cash {
+  has ( selector: string | Node ): Cash;
+}
+
+fn.has = function ( this: Cash, selector: string | Node ) {
+
+  const comparator = isString ( selector )
+                       ? ( i: number, ele: EleLoose ) => find ( selector, ele ).length
+                       : ( i: number, ele: EleLoose ) => ele.contains ( selector );
+
+  return this.filter ( comparator );
+
+};
+
+
+// @require core/cash.ts
+// @require core/get_compare_function.ts
+// @require core/type_checking.ts
+// @require collection/filter.ts
+
+interface Cash {
+  not ( comparator?: Comparator ): Cash;
+}
+
+fn.not = function ( this: Cash, comparator?: Comparator ) {
+
+  const compare = getCompareFunction ( comparator );
+
+  return this.filter ( ( i: number, ele: EleLoose ) => ( !isString ( comparator ) || isElement ( ele ) ) && !compare.call ( ele, i, ele ) );
+
+};
 
 
 // @require ./get_compare_function.ts
@@ -809,9 +884,9 @@ type PluckCallback<T> = ( ele: T ) => ArrayLike<Ele>;
 
 function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string | PluckCallback<U[0]>, deep?: boolean, until?: Comparator ): Array<Ele> {
 
-  const plucked: Array<Ele> = [],
-        isCallback = isFunction ( prop ),
-        compare = until && getCompareFunction ( until );
+  const plucked: Array<Ele> = [];
+  const isCallback = isFunction ( prop );
+  const compare = until && getCompareFunction ( until );
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 
@@ -842,6 +917,97 @@ function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string 
   return plucked;
 
 }
+
+
+// @require core/pluck.ts
+// @require core/variables.ts
+
+function getValue ( ele: EleLoose ): string | string[] {
+
+  if ( ele.multiple && ele.options ) return pluck ( filter.call ( ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled ), 'value' );
+
+  return ele.value || '';
+
+}
+
+
+// @require core/cash.ts
+// @require core/each.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+// @require ./helpers/get_value.ts
+
+interface Cash {
+  val (): string | string[];
+  val ( value: string | string[] ): this;
+}
+
+function val ( this: Cash ): string | string[];
+function val ( this: Cash, value: string | string[] ): Cash;
+function val ( this: Cash, value?: string | string[] ) {
+
+  if ( !arguments.length ) return this[0] && getValue ( this[0] );
+
+  return this.each ( ( i, ele ) => {
+
+    const isSelect = ele.multiple && ele.options;
+
+    if ( isSelect || checkableRe.test ( ele.type ) ) {
+
+      const eleValue = isArray ( value ) ? map.call ( value, String ) : ( isNull ( value ) ? [] : [String ( value )] );
+
+      if ( isSelect ) {
+
+        each ( ele.options, ( i, option ) => {
+
+          option.selected = eleValue.indexOf ( option.value ) >= 0;
+
+        }, true );
+
+      } else {
+
+        ele.checked = eleValue.indexOf ( ele.value ) >= 0;
+
+      }
+
+    } else {
+
+      ele.value = isUndefined ( value ) || isNull ( value ) ? '' : value;
+
+    }
+
+  });
+
+}
+
+fn.val = val;
+
+
+// @require core/cash.ts
+// @require core/get_compare_function.ts
+// @require core/variables.ts
+// @require collection/each.ts
+
+interface Cash {
+  is ( comparator?: Comparator ): boolean;
+}
+
+fn.is = function ( this: Cash, comparator?: Comparator ) {
+
+  const compare = getCompareFunction ( comparator );
+
+  return some.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) );
+
+};
+
+
+// @require ./cash.ts
+
+interface CashStatic {
+  guid: number;
+}
+
+cash.guid = 1;
 
 
 // @require ./cash.ts
@@ -875,27 +1041,844 @@ fn.add = function ( this: Cash, selector: Selector, context?: Context ) {
 };
 
 
-// @require core/type_checking.ts
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+// @require core/variables.ts
+// @require collection/each.ts
+
+interface Cash {
+  children ( comparator?: Comparator ): Cash;
+}
+
+fn.children = function ( this: Cash, comparator?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, ele => ele.children ) ) ), comparator );
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+
+interface Cash {
+  parent ( comparator?: Comparator ): Cash;
+}
+
+fn.parent = function ( this: Cash, comparator?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, 'parentNode' ) ) ), comparator );
+
+};
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+// @require traversal/children.ts
+// @require traversal/parent.ts
+// @require ./get.ts
+
+interface Cash {
+  index ( selector?: Selector ): number;
+}
+
+fn.index = function ( this: Cash, selector?: Selector ) {
+
+  const child = selector ? cash ( selector )[0] : this[0];
+  const collection = selector ? this : cash ( child ).parent ().children ();
+
+  return indexOf.call ( collection, child );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/filter.ts
+// @require ./is.ts
+// @require ./parent.ts
+
+interface Cash {
+  closest ( comparator?: Comparator ): Cash;
+}
+
+fn.closest = function ( this: Cash, comparator?: Comparator ) {
+
+  const filtered = this.filter ( comparator );
+
+  if ( filtered.length ) return filtered;
+
+  const $parent = this.parent ();
+
+  if ( !$parent.length ) return filtered;
+
+  return $parent.closest ( comparator );
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+// @require core/variables.ts
+// @require collection/each.ts
+// @require ./children.ts
+// @require ./not.ts
+// @require ./parent.ts
+
+interface Cash {
+  siblings ( comparator?: Comparator ): Cash;
+}
+
+fn.siblings = function ( this: Cash, comparator?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, ele => cash ( ele ).parent ().children ().not ( ele ) ) ) ), comparator );
+
+};
+
+
+// @require core/cash.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+// @require core/find.ts
 // @require core/variables.ts
 
-function computeStyle ( ele: EleLoose, prop: string, isVariable?: boolean ): string | undefined {
+interface Cash {
+  find ( selector: string ): Cash;
+}
 
-  if ( !isElement ( ele ) ) return;
+fn.find = function ( this: Cash, selector: string ) {
 
-  const style = win.getComputedStyle ( ele, null );
+  return cash ( unique ( pluck ( this, ele => find ( selector, ele ) ) ) );
 
-  return isVariable ? style.getPropertyValue ( prop ) || undefined : style[prop] || ele.style[prop];
+};
+
+
+// @require core/variables.ts
+// @require collection/filter.ts
+// @require traversal/find.ts
+
+const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+const scriptTypeRe = /^$|^module$|\/(java|ecma)script/i;
+const scriptAttributes: ('type' | 'src' | 'nonce' | 'noModule')[] = ['type', 'src', 'nonce', 'noModule'];
+
+function evalScripts ( node: Node, doc: Document ): void {
+
+  const collection = cash ( node );
+
+  collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele: HTMLScriptElement ) => {
+
+    if ( scriptTypeRe.test ( ele.type ) && docEle.contains ( ele ) ) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
+
+      const script = createElement ( 'script' );
+
+      script.text = ele.textContent.replace ( HTMLCDATARe, '' );
+
+      each ( scriptAttributes, ( i, attr ) => {
+
+        if ( ele[attr] ) script[attr] = ele[attr];
+
+      });
+
+      doc.head.insertBefore ( script, null );
+      doc.head.removeChild ( script );
+
+    }
+
+  });
 
 }
 
 
-// @require ./compute_style.ts
+// @require ./eval_scripts.ts
 
-function computeStyleInt ( ele: EleLoose, prop: string ): number {
+function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, inside?: boolean, evaluate?: boolean ): void {
 
-  return parseInt ( computeStyle ( ele, prop ), 10 ) || 0;
+  if ( inside ) { // prepend/append
+
+    anchor.insertBefore ( target, left ? anchor.firstChild : null );
+
+  } else { // before/after
+
+    if ( anchor.nodeName === 'HTML' ) {
+
+      anchor.parentNode.replaceChild ( target, anchor );
+
+    } else {
+
+      anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextSibling );
+
+    }
+
+  }
+
+  if ( evaluate ) {
+
+    evalScripts ( target, anchor.ownerDocument );
+
+  }
 
 }
+
+
+// @require ./insert_element.ts
+
+function insertSelectors<T extends ArrayLike<EleLoose> = ArrayLike<EleLoose>> ( selectors: ArrayLike<Selector>, anchors: T, inverse?: boolean, left?: boolean, inside?: boolean, reverseLoop1?: boolean, reverseLoop2?: boolean, reverseLoop3?: boolean ): T {
+
+  each ( selectors, ( si, selector: Selector ) => {
+
+    each ( cash ( selector ), ( ti, target ) => {
+
+      each ( cash ( anchors ), ( ai, anchor ) => {
+
+        const anchorFinal = inverse ? target : anchor;
+        const targetFinal = inverse ? anchor : target;
+        const indexFinal = inverse ? ti : ai;
+
+        insertElement ( anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode ( true ), left, inside, !indexFinal );
+
+      }, reverseLoop3 );
+
+    }, reverseLoop2 );
+
+  }, reverseLoop1 );
+
+  return anchors;
+
+}
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  after ( ...selectors: Selector[] ): this;
+}
+
+fn.after = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, false, false, true, true );
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  append ( ...selectors: Selector[] ): this;
+}
+
+fn.append = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, false, true );
+
+};
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+// @require manipulation/append.ts
+// @require manipulation/empty.ts
+
+interface Cash {
+  html (): string;
+  html ( html: string ): this;
+}
+
+function html ( this: Cash ): string;
+function html ( this: Cash, html: string ): Cash;
+function html ( this: Cash, html?: string ) {
+
+  if ( !arguments.length ) return this[0] && this[0].innerHTML;
+
+  if ( isUndefined ( html ) ) return this;
+
+  const hasScript = /<script[\s>]/.test ( html );
+
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    if ( hasScript ) {
+
+      cash ( ele ).empty ().append ( html );
+
+    } else {
+
+      ele.innerHTML = html;
+
+    }
+
+  });
+
+}
+
+fn.html = html;
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  appendTo ( selector: Selector ): this;
+}
+
+fn.appendTo = function ( this: Cash, selector: Selector ) {
+
+  return insertSelectors ( arguments, this, true, false, true );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+
+interface Cash {
+  wrapInner ( selector?: Selector ): this;
+}
+
+fn.wrapInner = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( i, ele ) => {
+
+    const $ele = cash ( ele );
+    const contents = $ele.contents ();
+
+    contents.length ? contents.wrapAll ( selector ) : $ele.append ( selector );
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  before ( ...selectors: Selector[] ): this;
+}
+
+fn.before = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, true );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/first.ts
+// @require manipulation/append_to.ts
+// @require manipulation/before.ts
+
+interface Cash {
+  wrapAll ( selector?: Selector ): this;
+}
+
+fn.wrapAll = function ( this: Cash, selector?: Selector ) {
+
+  let structure = cash ( selector );
+  let wrapper: Element = structure[0];
+
+  while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
+
+  this.first ().before ( structure );
+
+  return this.appendTo ( wrapper );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./wrap_all.ts
+
+interface Cash {
+  wrap ( selector?: Selector ): this;
+}
+
+fn.wrap = function ( this: Cash, selector?: Selector ) {
+
+  return this.each ( ( i, ele ) => {
+
+    const wrapper = cash ( selector )[0];
+
+    cash ( ele ).wrapAll ( !i ? wrapper : wrapper.cloneNode ( true ) );
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  insertAfter ( selector: Selector ): this;
+}
+
+fn.insertAfter = function ( this: Cash, selector: Selector ) {
+
+  return insertSelectors ( arguments, this, true, false, false, false, false, true );
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  insertBefore ( selector: Selector ): this;
+}
+
+fn.insertBefore = function ( this: Cash, selector: Selector ) {
+
+  return insertSelectors ( arguments, this, true, true );
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  prepend ( ...selectors: Selector[] ): this;
+}
+
+fn.prepend = function ( this: Cash ) {
+
+  return insertSelectors ( arguments, this, false, true, true, true, true );
+
+};
+
+
+// @require core/cash.ts
+// @require ./helpers/insert_selectors.ts
+
+interface Cash {
+  prependTo ( selector: Selector ): this;
+}
+
+fn.prependTo = function ( this: Cash, selector: Selector ) {
+
+  return insertSelectors ( arguments, this, true, true, true, false, false, true );
+
+};
+
+
+// @require core/cash.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+// @require collection/each.ts
+
+interface Cash {
+  contents (): Cash;
+}
+
+fn.contents = function ( this: Cash ) {
+
+  return cash ( unique ( pluck ( this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ( ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes ) ) ) );
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+
+interface Cash {
+  next ( comparator?: Comparator, _all?: boolean, _until?: Comparator ): Cash;
+}
+
+fn.next = function ( this: Cash, comparator?: Comparator, _all?: boolean, _until?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', _all, _until ) ) ), comparator );
+
+};
+
+
+// @require ./next.ts
+
+interface Cash {
+  nextAll ( comparator?: Comparator): Cash;
+}
+
+fn.nextAll = function ( this: Cash, comparator?: Comparator ) {
+
+  return this.next ( comparator, true );
+
+};
+
+
+// @require ./next.ts
+
+interface Cash {
+  nextUntil ( until?: Comparator, comparator?: Comparator): Cash;
+}
+
+fn.nextUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
+
+  return this.next ( comparator, true, until );
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/matches.ts
+// @require core/unique.ts
+// @require core/variables.ts
+// @require collection/each.ts
+
+interface Cash {
+  parents ( comparator?: Comparator, _until?: Comparator ): Cash;
+}
+
+fn.parents = function ( this: Cash, comparator?: Comparator, _until?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, 'parentElement', true, _until ) ) ), comparator );
+
+};
+
+
+// @require ./parents.ts
+
+interface Cash {
+  parentsUntil ( until?: Comparator, comparator?: Comparator): Cash;
+}
+
+fn.parentsUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
+
+  return this.parents ( comparator, until );
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require core/pluck.ts
+// @require core/unique.ts
+
+interface Cash {
+  prev ( comparator?: Comparator, _all?: boolean, _until?: Comparator ): Cash;
+}
+
+fn.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean, _until?: Comparator ) {
+
+  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all, _until ) ) ), comparator );
+
+};
+
+
+// @require ./prev.ts
+
+interface Cash {
+  prevAll ( comparator?: Comparator ): Cash;
+}
+
+fn.prevAll = function ( this: Cash, comparator?: Comparator ) {
+
+  return this.prev ( comparator, true );
+
+};
+
+
+// @require ./prev.ts
+
+interface Cash {
+  prevUntil ( until?: Comparator, comparator?: Comparator ): Cash;
+}
+
+fn.prevUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
+
+  return this.prev ( comparator, true, until );
+
+};
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+
+type MapCallback<T> = ( this: T, index: number, ele: T ) => Ele;
+
+interface Cash {
+  map ( callback: MapCallback<EleLoose> ): Cash;
+}
+
+fn.map = function ( this: Cash, callback: MapCallback<EleLoose> ) {
+
+  return cash ( concat.apply ( [], map.call ( this, ( ele: EleLoose, i: number ) => callback.call ( ele, i, ele ) ) ) );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/map.ts
+
+interface Cash {
+  clone (): this;
+}
+
+fn.clone = function ( this: Cash ) {
+
+  return this.map ( ( i, ele ) => ele.cloneNode ( true ) );
+
+};
+
+
+// @require core/cash.ts
+// @require collection/map.ts
+// @require css/helpers/compute_style.ts
+
+interface Cash {
+  offsetParent (): Cash;
+}
+
+fn.offsetParent = function ( this: Cash ) {
+
+  return this.map ( ( i, ele ) => {
+
+    let offsetParent = ele.offsetParent;
+
+    while ( offsetParent && computeStyle ( offsetParent, 'position' ) === 'static' ) {
+
+      offsetParent = offsetParent.offsetParent;
+
+    }
+
+    return offsetParent || docEle;
+
+  });
+
+};
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+
+interface Cash {
+  slice ( start?: number, end?: number ): Cash;
+}
+
+fn.slice = function ( this: Cash, start?: number, end?: number ) {
+
+  return cash ( slice.call ( this, start, end ) );
+
+};
+
+
+// @require ./cash.ts
+
+const dashAlphaRe = /-([a-z])/g;
+
+function camelCase ( str: string ): string {
+
+  return str.replace ( dashAlphaRe, ( match: string, letter: string ) => letter.toUpperCase () );
+
+}
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+
+interface Cash {
+  ready ( callback: Function ): this;
+}
+
+fn.ready = function ( this: Cash, callback: ( $: typeof cash ) => any ) {
+
+  const cb = () => setTimeout ( callback, 0, cash );
+
+  if ( doc.readyState !== 'loading' ) {
+
+    cb ();
+
+  } else {
+
+    doc.addEventListener ( 'DOMContentLoaded', cb );
+
+  }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+
+interface Cash {
+  unwrap (): this;
+}
+
+fn.unwrap = function ( this: Cash ) {
+
+  this.parent ().each ( ( i, ele ) => {
+
+    if ( ele.tagName === 'BODY' ) return;
+
+    const $ele = cash ( ele );
+
+    $ele.replaceWith ( $ele.children () );
+
+  });
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require core/variables.ts
+
+interface Cash {
+  offset (): undefined | {
+    top: number,
+    left: number
+  };
+}
+
+fn.offset = function ( this: Cash ) {
+
+  const ele = this[0];
+
+  if ( !ele ) return;
+
+  const rect = ele.getBoundingClientRect ();
+
+  return {
+    top: rect.top + win.pageYOffset,
+    left: rect.left + win.pageXOffset
+  };
+
+};
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require css/helpers/compute_style.ts
+// @require css/helpers/compute_style_int.ts
+// @require ./offset.ts
+
+interface Cash {
+  position (): undefined | {
+    top: number,
+    left: number
+  };
+}
+
+fn.position = function ( this: Cash ) {
+
+  const ele = this[0];
+
+  if ( !ele ) return;
+
+  const isFixed = ( computeStyle ( ele, 'position' ) === 'fixed' );
+  const offset = isFixed ? ele.getBoundingClientRect () : this.offset ();
+
+  if ( !isFixed ) {
+
+    const doc = ele.ownerDocument;
+
+    let offsetParent = ele.offsetParent || doc.documentElement;
+
+    while ( ( offsetParent === doc.body || offsetParent === doc.documentElement ) && computeStyle ( offsetParent, 'position' ) === 'static' ) {
+
+      offsetParent = offsetParent.parentNode;
+
+    }
+
+    if ( offsetParent !== ele && isElement ( offsetParent ) ) {
+
+      const parentOffset = cash ( offsetParent ).offset ();
+
+      offset.top -= parentOffset.top + computeStyleInt ( offsetParent, 'borderTopWidth' );
+      offset.left -= parentOffset.left + computeStyleInt ( offsetParent, 'borderLeftWidth' );
+
+    }
+
+  }
+
+  return {
+    top: offset.top - computeStyleInt ( ele, 'marginTop' ),
+    left: offset.left - computeStyleInt ( ele, 'marginLeft' )
+  };
+
+};
+
+
+const propMap: Record<string, string> = {
+  /* GENERAL */
+  class: 'className',
+  contenteditable: 'contentEditable',
+  /* LABEL */
+  for: 'htmlFor',
+  /* INPUT */
+  readonly: 'readOnly',
+  maxlength: 'maxLength',
+  tabindex: 'tabIndex',
+  /* TABLE */
+  colspan: 'colSpan',
+  rowspan: 'rowSpan',
+  /* IMAGE */
+  usemap: 'useMap'
+};
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+// @require ./helpers/variables.ts
+
+interface Cash {
+  prop ( prop: string ): any;
+  prop ( prop: string, value: any ): this;
+  prop ( props: Record<string, any> ): this;
+}
+
+fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any ) {
+
+  if ( !prop ) return;
+
+  if ( isString ( prop ) ) {
+
+    prop = propMap[prop] || prop;
+
+    if ( arguments.length < 2 ) return this[0] && this[0][prop];
+
+    return this.each ( ( i, ele ) => { ele[prop] = value } );
+
+  }
+
+  for ( const key in prop ) {
+
+    this.prop ( key, prop[key] );
+
+  }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require collection/each.ts
+// @require ./helpers/variables.ts
+
+interface Cash {
+  removeProp ( prop: string ): this;
+}
+
+fn.removeProp = function ( this: Cash, prop: string ) {
+
+  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
+
+};
 
 
 const cssVariableRe = /^--/;
@@ -916,9 +1899,9 @@ function isCSSVariable ( prop: string ): boolean {
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-const prefixedProps: { [prop: string]: string } = {},
-      {style} = div,
-      vendorsPrefixes = ['webkit', 'moz', 'ms'];
+const prefixedProps: { [prop: string]: string } = {};
+const {style} = div;
+const vendorsPrefixes = ['webkit', 'moz', 'ms'];
 
 function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( prop ) ): string {
 
@@ -926,9 +1909,9 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
 
   if ( !prefixedProps[prop] ) {
 
-    const propCC = camelCase ( prop ),
-          propUC = `${propCC[0].toUpperCase ()}${propCC.slice ( 1 )}`,
-          props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
+    const propCC = camelCase ( prop );
+    const propUC = `${propCC[0].toUpperCase ()}${propCC.slice ( 1 )}`;
+    const props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
     each ( props, ( i, p ) => {
 
@@ -946,7 +1929,7 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
 
   return prefixedProps[prop];
 
-};
+}
 
 
 // @require core/type_checking.ts
@@ -1042,7 +2025,19 @@ function css ( this: Cash, prop: string | Record<string, number | string>, value
 fn.css = css;
 
 
-// @optional ./css.ts
+function attempt<T, U> ( fn: (( arg?: U ) => T), arg?: U ): T | U {
+
+  try {
+
+    return fn ( arg );
+
+  } catch {
+
+    return arg;
+
+  }
+
+}
 
 
 // @require core/attempt.ts
@@ -1131,9 +2126,6 @@ function data ( this: Cash, name?: string | Record<string, any>, value?: any ) {
 fn.data = data;
 
 
-// @optional ./data.ts
-
-
 function getDocumentDimension ( doc: Document, dimension: 'Width' | 'Height' ): number {
 
   const docEle = doc.documentElement;
@@ -1145,15 +2137,6 @@ function getDocumentDimension ( doc: Document, dimension: 'Width' | 'Height' ): 
     docEle[`offset${dimension}`],
     docEle[`client${dimension}`]
   );
-
-}
-
-
-// @require css/helpers/compute_style_int.ts
-
-function getExtraSpace ( ele: EleLoose, xAxis?: boolean ): number {
-
-  return computeStyleInt ( ele, `border${ xAxis ? 'Left' : 'Top' }Width` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Left' : 'Top' }` ) + computeStyleInt ( ele, `padding${ xAxis ? 'Right' : 'Bottom' }` ) + computeStyleInt ( ele, `border${ xAxis ? 'Right' : 'Bottom' }Width` );
 
 }
 
@@ -1245,40 +2228,6 @@ each ( ['Width', 'Height'], ( index: number, prop: 'Width' | 'Height' ) => {
 });
 
 
-// @optional ./inner_outer.ts
-// @optional ./normal.ts
-
-
-// @require css/helpers/compute_style.ts
-
-const defaultDisplay: { [tagName: string]: string } = {};
-
-function getDefaultDisplay ( tagName: string ): string {
-
-  if ( defaultDisplay[tagName] ) return defaultDisplay[tagName];
-
-  const ele = createElement ( tagName );
-
-  doc.body.insertBefore ( ele, null );
-
-  const display = computeStyle ( ele, 'display' );
-
-  doc.body.removeChild ( ele );
-
-  return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
-
-}
-
-
-// @require css/helpers/compute_style.ts
-
-function isHidden ( ele: EleLoose ): boolean {
-
-  return computeStyle ( ele, 'display' ) === 'none';
-
-}
-
-
 const displayProperty = '___cd';
 
 
@@ -1286,6 +2235,7 @@ const displayProperty = '___cd';
 // @require core/type_checking.ts
 // @require css/helpers/compute_style.ts
 // @require ./helpers/get_default_display.ts
+// @require ./helpers/is_hidden.ts
 // @require ./helpers/variables.ts
 
 interface Cash {
@@ -1351,23 +2301,11 @@ fn.show = function ( this: Cash ) {
 };
 
 
-// @optional ./hide.ts
-// @optional ./show.ts
-// @optional ./toggle.ts
-
-
-function hasNamespaces ( ns1: string[], ns2?: string[] ): boolean {
-
-  return !ns2 || !some.call ( ns2, ( ns: string ) => ns1.indexOf ( ns ) < 0 );
-
-}
-
-
-const eventsNamespace = '___ce',
-      eventsNamespacesSeparator = '.',
-      eventsFocus: { [event: string]: string | undefined } = { focus: 'focusin', blur: 'focusout' },
-      eventsHover: { [event: string]: string | undefined } = { mouseenter: 'mouseover', mouseleave: 'mouseout' },
-      eventsMouseRe = /^(mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
+const eventsNamespace = '___ce';
+const eventsNamespacesSeparator = '.';
+const eventsFocus: { [event: string]: string | undefined } = { focus: 'focusin', blur: 'focusout' };
+const eventsHover: { [event: string]: string | undefined } = { mouseenter: 'mouseover', mouseleave: 'mouseout' };
+const eventsMouseRe = /^(mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
 
 
 // @require ./variables.ts
@@ -1377,6 +2315,70 @@ function getEventNameBubbling ( name: string ): string {
   return eventsHover[name] || eventsFocus[name] || name;
 
 }
+
+
+// @require ./variables.ts
+
+function parseEventName ( eventName: string ): [string, string[]] {
+
+  const parts = eventName.split ( eventsNamespacesSeparator );
+
+  return [parts[0], parts.slice ( 1 ).sort ()]; // [name, namespace[]]
+
+}
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require core/variables.ts
+// @require collection/each.ts
+// @require ./helpers/get_event_name_bubbling.ts
+// @require ./helpers/parse_event_name.ts
+// @require ./helpers/variables.ts
+
+interface Cash {
+  trigger ( event: Event | string, data?: any ): this;
+}
+
+fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
+
+  if ( isString ( event ) ) {
+
+    const [nameOriginal, namespaces] = parseEventName ( event );
+    const name = getEventNameBubbling ( nameOriginal );
+
+    if ( !name ) return this;
+
+    const type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
+
+    event = doc.createEvent ( type );
+    event.initEvent ( name, true, true );
+    event.namespace = namespaces.join ( eventsNamespacesSeparator );
+    event.___ot = nameOriginal;
+
+  }
+
+  event.___td = data;
+
+  const isEventFocus = ( event.___ot in eventsFocus );
+
+  return this.each ( ( i, ele ) => {
+
+    if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
+
+      ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
+
+      ele[event.___ot]();
+
+      ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
+
+    }
+
+    ele.dispatchEvent ( event );
+
+  });
+
+};
 
 
 // @require ./variables.ts
@@ -1403,13 +2405,9 @@ function addEvent ( ele: EleLoose, name: string, namespaces: string[], selector:
 }
 
 
-// @require ./variables.ts
+function hasNamespaces ( ns1: string[], ns2?: string[] ): boolean {
 
-function parseEventName ( eventName: string ): [string, string[]] {
-
-  const parts = eventName.split ( eventsNamespacesSeparator );
-
-  return [parts[0], parts.slice ( 1 ).sort ()]; // [name, namespace[]]
+  return !ns2 || !some.call ( ns2, ( ns: string ) => ns1.indexOf ( ns ) < 0 );
 
 }
 
@@ -1492,8 +2490,8 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-      const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-            name = getEventNameBubbling ( nameOriginal );
+      const [nameOriginal, namespaces] = parseEventName ( eventFullName );
+      const name = getEventNameBubbling ( nameOriginal );
 
       this.each ( ( i, ele ) => {
 
@@ -1506,6 +2504,55 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
     });
 
   }
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require core/filtered.ts
+// @require events/off.ts
+// @require ./detach.ts
+
+interface Cash {
+  remove ( comparator?: Comparator ): this;
+}
+
+fn.remove = function ( this: Cash, comparator?: Comparator ) {
+
+  filtered ( this, comparator ).detach ().off ();
+
+  return this;
+
+};
+
+
+// @require core/cash.ts
+// @require ./before.ts
+// @require ./remove.ts
+
+interface Cash {
+  replaceWith ( selector: Selector ): this;
+}
+
+fn.replaceWith = function ( this: Cash, selector: Selector ) {
+
+  return this.before ( selector ).remove ();
+
+};
+
+
+// @require core/cash.ts
+// @require ./replace_with.ts
+
+interface Cash {
+  replaceAll ( selector: Selector ): this;
+}
+
+fn.replaceAll = function ( this: Cash, selector: Selector ) {
+
+  cash ( selector ).replaceWith ( this );
 
   return this;
 
@@ -1590,10 +2637,10 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-          name = getEventNameBubbling ( nameOriginal ),
-          isEventHover = ( nameOriginal in eventsHover ),
-          isEventFocus = ( nameOriginal in eventsFocus );
+    const [nameOriginal, namespaces] = parseEventName ( eventFullName );
+    const name = getEventNameBubbling ( nameOriginal );
+    const isEventHover = ( nameOriginal in eventsHover );
+    const isEventFocus = ( nameOriginal in eventsFocus );
 
     if ( !name ) return;
 
@@ -1713,106 +2760,8 @@ function one ( this: Cash, eventFullName: Record<string, EventCallback> | string
 fn.one = one;
 
 
-// @require core/cash.ts
-// @require core/variables.ts
-
-interface Cash {
-  ready ( callback: Function ): this;
-}
-
-fn.ready = function ( this: Cash, callback: ( $: typeof cash ) => any ) {
-
-  const cb = () => setTimeout ( callback, 0, cash );
-
-  if ( doc.readyState !== 'loading' ) {
-
-    cb ();
-
-  } else {
-
-    doc.addEventListener ( 'DOMContentLoaded', cb );
-
-  }
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require core/variables.ts
-// @require collection/each.ts
-// @require ./helpers/get_event_name_bubbling.ts
-// @require ./helpers/parse_event_name.ts
-// @require ./helpers/variables.ts
-
-interface Cash {
-  trigger ( event: Event | string, data?: any ): this;
-}
-
-fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
-
-  if ( isString ( event ) ) {
-
-    const [nameOriginal, namespaces] = parseEventName ( event ),
-          name = getEventNameBubbling ( nameOriginal );
-
-    if ( !name ) return this;
-
-    const type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
-
-    event = doc.createEvent ( type );
-    event.initEvent ( name, true, true );
-    event.namespace = namespaces.join ( eventsNamespacesSeparator );
-    event.___ot = nameOriginal;
-
-  }
-
-  event.___td = data;
-
-  const isEventFocus = ( event.___ot in eventsFocus );
-
-  return this.each ( ( i, ele ) => {
-
-    if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
-
-      ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
-
-      ele[event.___ot]();
-
-      ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
-
-    }
-
-    ele.dispatchEvent ( event );
-
-  });
-
-};
-
-
-// @optional ./off.ts
-// @optional ./on.ts
-// @optional ./one.ts
-// @optional ./ready.ts
-// @optional ./trigger.ts
-
-
-// @require core/pluck.ts
-// @require core/variables.ts
-
-function getValue ( ele: EleLoose ): string | string[] {
-
-  if ( ele.multiple && ele.options ) return pluck ( filter.call ( ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled ), 'value' );
-
-  return ele.value || '';
-
-}
-
-
-const queryEncodeSpaceRe = /%20/g,
-      queryEncodeCRLFRe = /\r?\n/g;
+const queryEncodeSpaceRe = /%20/g;
+const queryEncodeCRLFRe = /\r?\n/g;
 
 function queryEncode ( prop: string, value: string ): string {
 
@@ -1831,8 +2780,8 @@ interface Cash {
   serialize (): string;
 }
 
-const skippableRe = /file|reset|submit|button|image/i,
-      checkableRe = /radio|checkbox/i;
+const skippableRe = /file|reset|submit|button|image/i;
+const checkableRe = /radio|checkbox/i;
 
 fn.serialize = function ( this: Cash ) {
 
@@ -1867,1065 +2816,108 @@ fn.serialize = function ( this: Cash ) {
 };
 
 
+// @require core/types.ts
 // @require core/cash.ts
+// @require core/type_checking.ts
+// @require core/variables.ts
 // @require core/each.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-// @require ./helpers/get_value.ts
-
-interface Cash {
-  val (): string | string[];
-  val ( value: string | string[] ): this;
-}
-
-function val ( this: Cash ): string | string[];
-function val ( this: Cash, value: string | string[] ): Cash;
-function val ( this: Cash, value?: string | string[] ) {
-
-  if ( !arguments.length ) return this[0] && getValue ( this[0] );
-
-  return this.each ( ( i, ele ) => {
-
-    const isSelect = ele.multiple && ele.options;
-
-    if ( isSelect || checkableRe.test ( ele.type ) ) {
-
-      const eleValue = isArray ( value ) ? map.call ( value, String ) : ( isNull ( value ) ? [] : [String ( value )] );
-
-      if ( isSelect ) {
-
-        each ( ele.options, ( i, option ) => {
-
-          option.selected = eleValue.indexOf ( option.value ) >= 0;
-
-        }, true );
-
-      } else {
-
-        ele.checked = eleValue.indexOf ( ele.value ) >= 0;
-
-      }
-
-    } else {
-
-      ele.value = isUndefined ( value ) || isNull ( value ) ? '' : value;
-
-    }
-
-  });
-
-}
-
-fn.val = val;
-
-
-// @optional ./serialize.ts
-// @optional ./val.ts
-
-
-// @require core/cash.ts
-// @require collection/map.ts
-
-interface Cash {
-  clone (): this;
-}
-
-fn.clone = function ( this: Cash ) {
-
-  return this.map ( ( i, ele ) => ele.cloneNode ( true ) );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require collection/each.ts
-
-interface Cash {
-  detach ( comparator?: Comparator ): this;
-}
-
-fn.detach = function ( this: Cash, comparator?: Comparator ) {
-
-  filtered ( this, comparator ).each ( ( i, ele ) => {
-
-    if ( ele.parentNode ) {
-
-      ele.parentNode.removeChild ( ele );
-
-    }
-
-  });
-
-  return this;
-
-};
-
-
-// @require ./cash.ts
-// @require ./variables.ts
-// @require ./type_checking.ts
-// @require collection/get.ts
-// @require manipulation/detach.ts
-
-interface CashStatic {
-  parseHTML ( html: string ): EleLoose[];
-}
-
-const fragmentRe = /^\s*<(\w+)[^>]*>/,
-      singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
-
-const containers = {
-  '*': div,
-  tr: tbody,
-  td: tr,
-  th: tr,
-  thead: table,
-  tbody: table,
-  tfoot: table
-};
-
-//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
-//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
-
-function parseHTML ( html: string ): EleLoose[] {
-
-  if ( !isString ( html ) ) return [];
-
-  if ( singleTagRe.test ( html ) ) return [createElement ( RegExp.$1 )];
-
-  const fragment = fragmentRe.test ( html ) && RegExp.$1,
-        container = containers[fragment] || containers['*'];
-
-  container.innerHTML = html;
-
-  return cash ( container.childNodes ).detach ().get ();
-
-}
-
-cash.parseHTML = parseHTML;
-
-
-// @optional ./each.ts
-// @optional ./extend.ts
-// @optional ./find.ts
-// @optional ./get_compare_function.ts
-// @optional ./get_split_values.ts
-// @optional ./guid.ts
-// @optional ./parse_html.ts
-// @optional ./unique.ts
-// @require ./cash.ts
-// @require ./type_checking.ts
-// @require ./variables.ts
-
-
-// @require core/cash.ts
-// @require collection/each.ts
-
-interface Cash {
-  empty (): this;
-}
-
-fn.empty = function ( this: Cash ) {
-
-  return this.each ( ( i, ele ) => {
-
-    while ( ele.firstChild ) {
-
-      ele.removeChild ( ele.firstChild );
-
-    }
-
-  });
-
-};
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-
-interface Cash {
-  html (): string;
-  html ( html: string ): this;
-}
-
-function html ( this: Cash ): string;
-function html ( this: Cash, html: string ): Cash;
-function html ( this: Cash, html?: string ) {
-
-  if ( !arguments.length ) return this[0] && this[0].innerHTML;
-
-  if ( isUndefined ( html ) ) return this;
-
-  return this.each ( ( i, ele ) => {
-
-    if ( !isElement ( ele ) ) return;
-
-    ele.innerHTML = html;
-
-  });
-
-}
-
-fn.html = html;
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require events/off.ts
-// @require ./detach.ts
-
-interface Cash {
-  remove ( comparator?: Comparator ): this;
-}
-
-fn.remove = function ( this: Cash, comparator?: Comparator ) {
-
-  filtered ( this, comparator ).detach ().off ();
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-
-interface Cash {
-  text (): string;
-  text ( text: string ): this;
-}
-
-function text ( this: Cash ): string;
-function text ( this: Cash, text: string ): Cash;
-function text ( this: Cash, text?: string ) {
-
-  if ( isUndefined ( text ) ) return this[0] ? this[0].textContent : '';
-
-  return this.each ( ( i, ele ) => {
-
-    if ( !isElement ( ele ) ) return;
-
-    ele.textContent = text
-
-  });
-
-};
-
-fn.text = text;
-
-
-// @require core/cash.ts
-
-interface Cash {
-  unwrap (): this;
-}
-
-fn.unwrap = function ( this: Cash ) {
-
-  this.parent ().each ( ( i, ele ) => {
-
-    if ( ele.tagName === 'BODY' ) return;
-
-    const $ele = cash ( ele );
-
-    $ele.replaceWith ( $ele.children () );
-
-  });
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
-// @require core/variables.ts
-
-interface Cash {
-  offset (): undefined | {
-    top: number,
-    left: number
-  };
-}
-
-fn.offset = function ( this: Cash ) {
-
-  const ele = this[0];
-
-  if ( !ele ) return;
-
-  const rect = ele.getBoundingClientRect ();
-
-  return {
-    top: rect.top + win.pageYOffset,
-    left: rect.left + win.pageXOffset
-  };
-
-};
-
-
-// @require core/cash.ts
-// @require collection/map.ts
-// @require css/helpers/compute_style.ts
-
-interface Cash {
-  offsetParent (): Cash;
-}
-
-fn.offsetParent = function ( this: Cash ) {
-
-  return this.map ( ( i, ele ) => {
-
-    let offsetParent = ele.offsetParent;
-
-    while ( offsetParent && computeStyle ( offsetParent, 'position' ) === 'static' ) {
-
-      offsetParent = offsetParent.offsetParent;
-
-    }
-
-    return offsetParent || docEle;
-
-  });
-
-};
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require css/helpers/compute_style.ts
-// @require css/helpers/compute_style_int.ts
-// @require ./offset.ts
-
-interface Cash {
-  position (): undefined | {
-    top: number,
-    left: number
-  };
-}
-
-fn.position = function ( this: Cash ) {
-
-  const ele = this[0];
-
-  if ( !ele ) return;
-
-  const isFixed = ( computeStyle ( ele, 'position' ) === 'fixed' ),
-        offset = isFixed ? ele.getBoundingClientRect () : this.offset ();
-
-  if ( !isFixed ) {
-
-    const doc = ele.ownerDocument;
-
-    let offsetParent = ele.offsetParent || doc.documentElement;
-
-    while ( ( offsetParent === doc.body || offsetParent === doc.documentElement ) && computeStyle ( offsetParent, 'position' ) === 'static' ) {
-
-      offsetParent = offsetParent.parentNode;
-
-    }
-
-    if ( offsetParent !== ele && isElement ( offsetParent ) ) {
-
-      const parentOffset = cash ( offsetParent ).offset ();
-
-      offset.top -= parentOffset.top + computeStyleInt ( offsetParent, 'borderTopWidth' );
-      offset.left -= parentOffset.left + computeStyleInt ( offsetParent, 'borderLeftWidth' );
-
-    }
-
-  }
-
-  return {
-    top: offset.top - computeStyleInt ( ele, 'marginTop' ),
-    left: offset.left - computeStyleInt ( ele, 'marginLeft' )
-  };
-
-};
-
-
-// @optional ./offset.ts
-// @optional ./offset_parent.ts
-// @optional ./position.ts
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-// @require core/variables.ts
-// @require collection/each.ts
-
-interface Cash {
-  children ( comparator?: Comparator ): Cash;
-}
-
-fn.children = function ( this: Cash, comparator?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, ele => ele.children ) ) ), comparator );
-
-};
-
-
-// @require core/cash.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-// @require collection/each.ts
-
-interface Cash {
-  contents (): Cash;
-}
-
-fn.contents = function ( this: Cash ) {
-
-  return cash ( unique ( pluck ( this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : ( ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes ) ) ) );
-
-};
-
-
-// @require core/cash.ts
-// @require core/pluck.ts
-// @require core/unique.ts
+// @require core/extend.ts
 // @require core/find.ts
-// @require core/variables.ts
+// @require core/get_compare_function.ts
+// @require core/get_split_values.ts
+// @require core/guid.ts
+// @require core/parse_html.ts
+// @require core/unique.ts
 
-interface Cash {
-  find ( selector: string ): Cash;
-}
+// @require attributes/add_class.ts
+// @require attributes/attr.ts
+// @require attributes/has_class.ts
+// @require attributes/prop.ts
+// @require attributes/remove_attr.ts
+// @require attributes/remove_class.ts
+// @require attributes/remove_prop.ts
+// @require attributes/toggle_class.ts
 
-fn.find = function ( this: Cash, selector: string ) {
-
-  return cash ( unique ( pluck ( this, ele => find ( selector, ele ) ) ) );
-
-};
-
-
-// @require core/variables.ts
+// @require collection/add.ts
+// @require collection/each.ts
+// @require collection/eq.ts
 // @require collection/filter.ts
-// @require traversal/find.ts
-
-const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,
-      scriptTypeRe = /^$|^module$|\/(java|ecma)script/i,
-      scriptAttributes: ('type' | 'src' | 'nonce' | 'noModule')[] = ['type', 'src', 'nonce', 'noModule'];
-
-function evalScripts ( node: Node, doc: Document ): void {
-
-  const collection = cash ( node );
-
-  collection.filter ( 'script' ).add ( collection.find ( 'script' ) ).each ( ( i, ele: HTMLScriptElement ) => {
-
-    if ( scriptTypeRe.test ( ele.type ) && docEle.contains ( ele ) ) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
-
-      const script = createElement ( 'script' );
-
-      script.text = ele.textContent.replace ( HTMLCDATARe, '' );
-
-      each ( scriptAttributes, ( i, attr ) => {
-
-        if ( ele[attr] ) script[attr] = ele[attr];
-
-      });
-
-      doc.head.insertBefore ( script, null );
-      doc.head.removeChild ( script );
-
-    }
-
-  });
-
-}
-
-
-// @require ./eval_scripts.ts
-
-function insertElement ( anchor: EleLoose, target: EleLoose, left?: boolean, inside?: boolean, evaluate?: boolean ): void {
-
-  if ( inside ) { // prepend/append
-
-    anchor.insertBefore ( target, left ? anchor.firstChild : null );
-
-  } else { // before/after
-
-    if ( anchor.nodeName === 'HTML' ) {
-
-      anchor.parentNode.replaceChild ( target, anchor );
-
-    } else {
-
-      anchor.parentNode.insertBefore ( target, left ? anchor : anchor.nextSibling );
-
-    }
-
-  }
-
-  if ( evaluate ) {
-
-    evalScripts ( target, anchor.ownerDocument );
-
-  }
-
-}
-
-
-// @require ./insert_element.ts
-
-function insertSelectors<T extends ArrayLike<EleLoose> = ArrayLike<EleLoose>> ( selectors: ArrayLike<Selector>, anchors: T, inverse?: boolean, left?: boolean, inside?: boolean, reverseLoop1?: boolean, reverseLoop2?: boolean, reverseLoop3?: boolean ): T {
-
-  each ( selectors, ( si, selector: Selector ) => {
-
-    each ( cash ( selector ), ( ti, target ) => {
-
-      each ( cash ( anchors ), ( ai, anchor ) => {
-
-        const anchorFinal = inverse ? target : anchor,
-              targetFinal = inverse ? anchor : target,
-              indexFinal = inverse ? ti : ai;
-
-        insertElement ( anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode ( true ), left, inside, !indexFinal );
-
-      }, reverseLoop3 );
-
-    }, reverseLoop2 );
-
-  }, reverseLoop1 );
-
-  return anchors;
-
-}
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  after ( ...selectors: Selector[] ): this;
-}
-
-fn.after = function ( this: Cash ) {
-
-  return insertSelectors ( arguments, this, false, false, false, true, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  append ( ...selectors: Selector[] ): this;
-}
-
-fn.append = function ( this: Cash ) {
-
-  return insertSelectors ( arguments, this, false, false, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  appendTo ( selector: Selector ): this;
-}
-
-fn.appendTo = function ( this: Cash, selector: Selector ) {
-
-  return insertSelectors ( arguments, this, true, false, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  before ( ...selectors: Selector[] ): this;
-}
-
-fn.before = function ( this: Cash ) {
-
-  return insertSelectors ( arguments, this, false, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  insertAfter ( selector: Selector ): this;
-}
-
-fn.insertAfter = function ( this: Cash, selector: Selector ) {
-
-  return insertSelectors ( arguments, this, true, false, false, false, false, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  insertBefore ( selector: Selector ): this;
-}
-
-fn.insertBefore = function ( this: Cash, selector: Selector ) {
-
-  return insertSelectors ( arguments, this, true, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  prepend ( ...selectors: Selector[] ): this;
-}
-
-fn.prepend = function ( this: Cash ) {
-
-  return insertSelectors ( arguments, this, false, true, true, true, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./helpers/insert_selectors.ts
-
-interface Cash {
-  prependTo ( selector: Selector ): this;
-}
-
-fn.prependTo = function ( this: Cash, selector: Selector ) {
-
-  return insertSelectors ( arguments, this, true, true, true, false, false, true );
-
-};
-
-
-// @require core/cash.ts
-// @require ./before.ts
-// @require ./remove.ts
-
-interface Cash {
-  replaceWith ( selector: Selector ): this;
-}
-
-fn.replaceWith = function ( this: Cash, selector: Selector ) {
-
-  return this.before ( selector ).remove ();
-
-};
-
-
-// @require core/cash.ts
-// @require ./replace_with.ts
-
-interface Cash {
-  replaceAll ( selector: Selector ): this;
-}
-
-fn.replaceAll = function ( this: Cash, selector: Selector ) {
-
-  cash ( selector ).replaceWith ( this );
-
-  return this;
-
-};
-
-
-// @require core/cash.ts
 // @require collection/first.ts
+// @require collection/get.ts
+// @require collection/index.ts
+// @require collection/last.ts
+// @require collection/map.ts
+// @require collection/slice.ts
+
+// @require css/css.ts
+
+// @require data/data.ts
+
+// @require dimensions/inner_outer.ts
+// @require dimensions/normal.ts
+
+// @require effects/hide.ts
+// @require effects/show.ts
+// @require effects/toggle.ts
+
+// @require events/off.ts
+// @require events/on.ts
+// @require events/one.ts
+// @require events/ready.ts
+// @require events/trigger.ts
+
+// @require forms/serialize.ts
+// @require forms/val.ts
+
+// @require manipulation/after.ts
+// @require manipulation/append.ts
 // @require manipulation/append_to.ts
 // @require manipulation/before.ts
+// @require manipulation/clone.ts
+// @require manipulation/detach.ts
+// @require manipulation/empty.ts
+// @require manipulation/html.ts
+// @require manipulation/insert_after.ts
+// @require manipulation/insert_before.ts
+// @require manipulation/prepend.ts
+// @require manipulation/prepend_to.ts
+// @require manipulation/remove.ts
+// @require manipulation/replace_all.ts
+// @require manipulation/replace_with.ts
+// @require manipulation/text.ts
+// @require manipulation/unwrap.ts
+// @require manipulation/wrap.ts
+// @require manipulation/wrap_all.ts
+// @require manipulation/wrap_inner.ts
+
+// @require offset/offset.ts
+// @require offset/offset_parent.ts
+// @require offset/position.ts
 
-interface Cash {
-  wrapAll ( selector?: Selector ): this;
-}
-
-fn.wrapAll = function ( this: Cash, selector?: Selector ) {
-
-  let structure = cash ( selector ),
-      wrapper: Element = structure[0];
-
-  while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
-
-  this.first ().before ( structure );
-
-  return this.appendTo ( wrapper );
-
-};
-
-
-// @require core/cash.ts
-// @require collection/each.ts
-// @require ./wrap_all.ts
-
-interface Cash {
-  wrap ( selector?: Selector ): this;
-}
-
-fn.wrap = function ( this: Cash, selector?: Selector ) {
-
-  return this.each ( ( i, ele ) => {
-
-    const wrapper = cash ( selector )[0];
-
-    cash ( ele ).wrapAll ( !i ? wrapper : wrapper.cloneNode ( true ) );
-
-  });
-
-};
-
-
-// @require core/cash.ts
-// @require collection/first.ts
-// @require manipulation/append_to.ts
-
-interface Cash {
-  wrapInner ( selector?: Selector ): this;
-}
-
-fn.wrapInner = function ( this: Cash, selector?: Selector ) {
-
-  return this.each ( ( i, ele ) => {
-
-    const $ele = cash ( ele ),
-          contents = $ele.contents ();
-
-    contents.length ? contents.wrapAll ( selector ) : $ele.append ( selector );
-
-  });
-
-};
-
-
-// @optional ./after.ts
-// @optional ./append.ts
-// @optional ./append_to.ts
-// @optional ./before.ts
-// @optional ./clone.ts
-// @optional ./detach.ts
-// @optional ./empty.ts
-// @optional ./html.ts
-// @optional ./insert_after.ts
-// @optional ./insert_before.ts
-// @optional ./prepend.ts
-// @optional ./prepend_to.ts
-// @optional ./remove.ts
-// @optional ./replace_all.ts
-// @optional ./replace_with.ts
-// @optional ./text.ts
-// @optional ./unwrap.ts
-// @optional ./wrap.ts
-// @optional ./wrap_all.ts
-// @optional ./wrap_inner.ts
-
-
-// @require core/cash.ts
-// @require core/find.ts
-// @require core/type_checking.ts
-// @require collection/filter.ts
-
-interface Cash {
-  has ( selector: string | Node ): Cash;
-}
-
-fn.has = function ( this: Cash, selector: string | Node ) {
-
-  const comparator = isString ( selector )
-                       ? ( i: number, ele: EleLoose ) => find ( selector, ele ).length
-                       : ( i: number, ele: EleLoose ) => ele.contains ( selector );
-
-  return this.filter ( comparator );
-
-};
-
-
-// @require core/cash.ts
-// @require core/get_compare_function.ts
-// @require core/variables.ts
-// @require collection/each.ts
-
-interface Cash {
-  is ( comparator?: Comparator ): boolean;
-}
-
-fn.is = function ( this: Cash, comparator?: Comparator ) {
-
-  const compare = getCompareFunction ( comparator );
-
-  return some.call ( this, ( ele: EleLoose, i: number ) => compare.call ( ele, i, ele ) );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-
-interface Cash {
-  next ( comparator?: Comparator, _all?: boolean, _until?: Comparator ): Cash;
-}
-
-fn.next = function ( this: Cash, comparator?: Comparator, _all?: boolean, _until?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, 'nextElementSibling', _all, _until ) ) ), comparator );
-
-};
-
-
-// @require ./next.ts
-
-interface Cash {
-  nextAll ( comparator?: Comparator): Cash;
-}
-
-fn.nextAll = function ( this: Cash, comparator?: Comparator ) {
-
-  return this.next ( comparator, true );
-
-};
-
-
-// @require ./next.ts
-
-interface Cash {
-  nextUntil ( until?: Comparator, comparator?: Comparator): Cash;
-}
-
-fn.nextUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
-
-  return this.next ( comparator, true, until );
-
-};
-
-
-// @require core/cash.ts
-// @require core/get_compare_function.ts
-// @require core/type_checking.ts
-// @require collection/filter.ts
-
-interface Cash {
-  not ( comparator?: Comparator ): Cash;
-}
-
-fn.not = function ( this: Cash, comparator?: Comparator ) {
-
-  const compare = getCompareFunction ( comparator );
-
-  return this.filter ( ( i: number, ele: EleLoose ) => ( !isString ( comparator ) || isElement ( ele ) ) && !compare.call ( ele, i, ele ) );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-
-interface Cash {
-  parent ( comparator?: Comparator ): Cash;
-}
-
-fn.parent = function ( this: Cash, comparator?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, 'parentNode' ) ) ), comparator );
-
-};
-
-
-// @require core/cash.ts
-// @require core/variables.ts
 // @require traversal/children.ts
+// @require traversal/closest.ts
+// @require traversal/contents.ts
+// @require traversal/find.ts
+// @require traversal/has.ts
+// @require traversal/is.ts
+// @require traversal/next.ts
+// @require traversal/next_all.ts
+// @require traversal/next_until.ts
+// @require traversal/not.ts
 // @require traversal/parent.ts
-// @require ./get.ts
+// @require traversal/parents.ts
+// @require traversal/parents_until.ts
+// @require traversal/prev.ts
+// @require traversal/prev_all.ts
+// @require traversal/prev_until.ts
+// @require traversal/siblings.ts
 
-interface Cash {
-  index ( selector?: Selector ): number;
-}
-
-fn.index = function ( this: Cash, selector?: Selector ) {
-
-  const child = selector ? cash ( selector )[0] : this[0],
-        collection = selector ? this : cash ( child ).parent ().children ();
-
-  return indexOf.call ( collection, child );
-
-};
+// @no-require extras/get_script.ts
+// @no-require extras/shorthands.ts
 
 
-// @optional ./add.ts
-// @optional ./each.ts
-// @optional ./eq.ts
-// @optional ./filter.ts
-// @optional ./first.ts
-// @optional ./get.ts
-// @optional ./index_fn.ts
-// @optional ./last.ts
-// @optional ./map.ts
-// @optional ./slice.ts
-
-
-// @require core/cash.ts
-// @require collection/filter.ts
-// @require ./is.ts
-// @require ./parent.ts
-
-interface Cash {
-  closest ( comparator?: Comparator ): Cash;
-}
-
-fn.closest = function ( this: Cash, comparator?: Comparator ) {
-
-  const filtered = this.filter ( comparator );
-
-  if ( filtered.length ) return filtered;
-
-  const $parent = this.parent ();
-
-  if ( !$parent.length ) return filtered;
-
-  return $parent.closest ( comparator );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/matches.ts
-// @require core/unique.ts
-// @require core/variables.ts
-// @require collection/each.ts
-
-interface Cash {
-  parents ( comparator?: Comparator, _until?: Comparator ): Cash;
-}
-
-fn.parents = function ( this: Cash, comparator?: Comparator, _until?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, 'parentElement', true, _until ) ) ), comparator );
-
-};
-
-
-// @require ./parents.ts
-
-interface Cash {
-  parentsUntil ( until?: Comparator, comparator?: Comparator): Cash;
-}
-
-fn.parentsUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
-
-  return this.parents ( comparator, until );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-
-interface Cash {
-  prev ( comparator?: Comparator, _all?: boolean, _until?: Comparator ): Cash;
-}
-
-fn.prev = function ( this: Cash, comparator?: Comparator, _all?: boolean, _until?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, 'previousElementSibling', _all, _until ) ) ), comparator );
-
-};
-
-
-// @require ./prev.ts
-
-interface Cash {
-  prevAll ( comparator?: Comparator ): Cash;
-}
-
-fn.prevAll = function ( this: Cash, comparator?: Comparator ) {
-
-  return this.prev ( comparator, true );
-
-};
-
-
-// @require ./prev.ts
-
-interface Cash {
-  prevUntil ( until?: Comparator, comparator?: Comparator ): Cash;
-}
-
-fn.prevUntil = function ( this: Cash, until?: Comparator, comparator?: Comparator ) {
-
-  return this.prev ( comparator, true, until );
-
-};
-
-
-// @require core/cash.ts
-// @require core/filtered.ts
-// @require core/pluck.ts
-// @require core/unique.ts
-// @require core/variables.ts
-// @require collection/each.ts
-// @require ./children.ts
-// @require ./not.ts
-// @require ./parent.ts
-
-interface Cash {
-  siblings ( comparator?: Comparator ): Cash;
-}
-
-fn.siblings = function ( this: Cash, comparator?: Comparator ) {
-
-  return filtered ( cash ( unique ( pluck ( this, ele => cash ( ele ).parent ().children ().not ( ele ) ) ) ), comparator );
-
-};
-
-
-// @optional ./children.ts
-// @optional ./closest.ts
-// @optional ./contents.ts
-// @optional ./find.ts
-// @optional ./has.ts
-// @optional ./is.ts
-// @optional ./next.ts
-// @optional ./next_all.ts
-// @optional ./next_until.ts
-// @optional ./not.ts
-// @optional ./parent.ts
-// @optional ./parents.ts
-// @optional ./parents_until.ts
-// @optional ./prev.ts
-// @optional ./prev_all.ts
-// @optional ./prev_until.ts
-// @optional ./siblings.ts
-
-
-// @optional attributes/index.ts
-// @optional collection/index.ts
-// @optional css/index.ts
-// @optional data/index.ts
-// @optional dimensions/index.ts
-// @optional effects/index.ts
-// @optional events/index.ts
-// @optional forms/index.ts
-// @optional manipulation/index.ts
-// @optional offset/index.ts
-// @optional traversal/index.ts
-// @require core/index.ts
-
-
-// @priority -100
-// @require ./cash.ts
+// @require methods.ts
 
 export default cash;
 export {Cash, CashStatic, Ele as Element, Selector, Comparator, Context};
+

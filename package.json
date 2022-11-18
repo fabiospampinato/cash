@@ -2,7 +2,7 @@
   "name": "cash-dom",
   "repository": "github:fabiospampinato/cash",
   "description": "An absurdly small jQuery alternative for modern browsers.",
-  "version": "8.1.1",
+  "version": "8.1.2",
   "license": "MIT",
   "browser": "./dist/cash.js",
   "main": "./dist/cash.js",

@@ -1,37 +1,24 @@
-/* MIT https://github.com/fabiospampinato/cash */
-const propMap = {
-    /* GENERAL */
-    class: 'className',
-    contenteditable: 'contentEditable',
-    /* LABEL */
-    for: 'htmlFor',
-    /* INPUT */
-    readonly: 'readOnly',
-    maxlength: 'maxLength',
-    tabindex: 'tabIndex',
-    /* TABLE */
-    colspan: 'colSpan',
-    rowspan: 'rowSpan',
-    /* IMAGE */
-    usemap: 'useMap'
-};
-function attempt(fn, arg) {
-    try {
-        return fn(arg);
-    }
-    catch (_a) {
-        return arg;
-    }
-}
-const doc = document, win = window, docEle = doc.documentElement, createElement = doc.createElement.bind(doc), div = createElement('div'), table = createElement('table'), tbody = createElement('tbody'), tr = createElement('tr'), { isArray, prototype: ArrayPrototype } = Array, { concat, filter, indexOf, map, push, slice, some, splice } = ArrayPrototype;
-const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/, classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/, htmlRe = /<.+>/, tagRe = /^\w+$/;
+const doc = document;
+const win = window;
+const docEle = doc.documentElement;
+const createElement = doc.createElement.bind(doc);
+const div = createElement('div');
+const table = createElement('table');
+const tbody = createElement('tbody');
+const tr = createElement('tr');
+const { isArray, prototype: ArrayPrototype } = Array;
+const { concat, filter, indexOf, map, push, slice, some, splice } = ArrayPrototype;
+const idRe = /^#(?:[\w-]|\\.|[^\x00-\xa0])*$/;
+const classRe = /^\.(?:[\w-]|\\.|[^\x00-\xa0])*$/;
+const htmlRe = /<.+>/;
+const tagRe = /^\w+$/;
 // @require ./variables.ts
 function find(selector, context) {
     const isFragment = isDocumentFragment(context);
     return !selector || (!isFragment && !isDocument(context) && !isElement(context))
         ? []
         : !isFragment && classRe.test(selector)
-            ? context.getElementsByClassName(selector.slice(1))
+            ? context.getElementsByClassName(selector.slice(1).replace(/\\/g, ''))
             : !isFragment && tagRe.test(selector)
                 ? context.getElementsByTagName(selector)
                 : context.querySelectorAll(selector);
@@ -48,7 +35,7 @@ class Cash {
         if (isString(selector)) {
             const ctx = (isCash(context) ? context[0] : context) || doc;
             eles = idRe.test(selector) && 'getElementById' in ctx
-                ? ctx.getElementById(selector.slice(1))
+                ? ctx.getElementById(selector.slice(1).replace(/\\/g, ''))
                 : htmlRe.test(selector)
                     ? parseHTML(selector)
                     : find(selector, ctx);
@@ -69,67 +56,51 @@ class Cash {
         return new Cash(selector, context);
     }
 }
-const fn = Cash.prototype, cash = fn.init;
+const fn = Cash.prototype;
+const cash = fn.init;
 cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
 fn.length = 0;
 fn.splice = splice; // Ensuring a cash collection gets printed as array-like in Chrome's devtools
 if (typeof Symbol === 'function') { // Ensuring a cash collection is iterable
     fn[Symbol['iterator']] = ArrayPrototype[Symbol['iterator']];
 }
-fn.map = function (callback) {
-    return cash(concat.apply([], map.call(this, (ele, i) => callback.call(ele, i, ele))));
-};
-fn.slice = function (start, end) {
-    return cash(slice.call(this, start, end));
-};
-// @require ./cash.ts
-const dashAlphaRe = /-([a-z])/g;
-function camelCase(str) {
-    return str.replace(dashAlphaRe, (match, letter) => letter.toUpperCase());
+function isCash(value) {
+    return value instanceof Cash;
 }
-cash.guid = 1;
-// @require ./cash.ts
-function matches(ele, selector) {
-    const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector']);
-    return !!matches && !!selector && matches.call(ele, selector);
+function isWindow(value) {
+    return !!value && value === value.window;
 }
-function isCash(x) {
-    return x instanceof Cash;
+function isDocument(value) {
+    return !!value && value.nodeType === 9;
 }
-function isWindow(x) {
-    return !!x && x === x.window;
+function isDocumentFragment(value) {
+    return !!value && value.nodeType === 11;
 }
-function isDocument(x) {
-    return !!x && x.nodeType === 9;
+function isElement(value) {
+    return !!value && value.nodeType === 1;
 }
-function isDocumentFragment(x) {
-    return !!x && x.nodeType === 11;
+function isBoolean(value) {
+    return typeof value === 'boolean';
 }
-function isElement(x) {
-    return !!x && x.nodeType === 1;
+function isFunction(value) {
+    return typeof value === 'function';
 }
-function isBoolean(x) {
-    return typeof x === 'boolean';
+function isString(value) {
+    return typeof value === 'string';
 }
-function isFunction(x) {
-    return typeof x === 'function';
+function isUndefined(value) {
+    return value === undefined;
 }
-function isString(x) {
-    return typeof x === 'string';
+function isNull(value) {
+    return value === null;
 }
-function isUndefined(x) {
-    return x === undefined;
+function isNumeric(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
 }
-function isNull(x) {
-    return x === null;
-}
-function isNumeric(x) {
-    return !isNaN(parseFloat(x)) && isFinite(x);
-}
-function isPlainObject(x) {
-    if (typeof x !== 'object' || x === null)
+function isPlainObject(value) {
+    if (typeof value !== 'object' || value === null)
         return false;
-    const proto = Object.getPrototypeOf(x);
+    const proto = Object.getPrototypeOf(value);
     return proto === null || proto === Object.prototype;
 }
 cash.isWindow = isWindow;
@@ -137,21 +108,6 @@ cash.isFunction = isFunction;
 cash.isArray = isArray;
 cash.isNumeric = isNumeric;
 cash.isPlainObject = isPlainObject;
-fn.get = function (index) {
-    if (isUndefined(index))
-        return slice.call(this);
-    index = Number(index);
-    return this[index < 0 ? index + this.length : index];
-};
-fn.eq = function (index) {
-    return cash(this.get(index));
-};
-fn.first = function () {
-    return this.eq(0);
-};
-fn.last = function () {
-    return this.eq(-1);
-};
 function each(arr, callback, _reverse) {
     if (_reverse) {
         let i = arr.length;
@@ -180,25 +136,28 @@ cash.each = each;
 fn.each = function (callback) {
     return each(this, callback);
 };
-fn.prop = function (prop, value) {
-    if (!prop)
-        return;
-    if (isString(prop)) {
-        prop = propMap[prop] || prop;
-        if (arguments.length < 2)
-            return this[0] && this[0][prop];
-        return this.each((i, ele) => { ele[prop] = value; });
-    }
-    for (const key in prop) {
-        this.prop(key, prop[key]);
-    }
-    return this;
+fn.empty = function () {
+    return this.each((i, ele) => {
+        while (ele.firstChild) {
+            ele.removeChild(ele.firstChild);
+        }
+    });
 };
-fn.removeProp = function (prop) {
-    return this.each((i, ele) => { delete ele[propMap[prop] || prop]; });
-};
+function text(text) {
+    if (isUndefined(text))
+        return this[0] ? this[0].textContent : '';
+    return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
+        ele.textContent = text;
+    });
+}
+;
+fn.text = text;
 function extend(...sources) {
-    const deep = isBoolean(sources[0]) ? sources.shift() : false, target = sources.shift(), length = sources.length;
+    const deep = isBoolean(sources[0]) ? sources.shift() : false;
+    const target = sources.shift();
+    const length = sources.length;
     if (!target)
         return {};
     if (!length)
@@ -222,34 +181,29 @@ cash.extend = extend;
 fn.extend = function (plugins) {
     return extend(fn, plugins);
 };
-// @require ./matches.ts
-// @require ./type_checking.ts
-function getCompareFunction(comparator) {
-    return isString(comparator)
-        ? (i, ele) => matches(ele, comparator)
-        : isFunction(comparator)
-            ? comparator
-            : isCash(comparator)
-                ? (i, ele) => comparator.is(ele)
-                : !comparator
-                    ? () => false
-                    : (i, ele) => ele === comparator;
-}
-fn.filter = function (comparator) {
-    const compare = getCompareFunction(comparator);
-    return cash(filter.call(this, (ele, i) => compare.call(ele, i, ele)));
-};
-// @require collection/filter.ts
-function filtered(collection, comparator) {
-    return !comparator ? collection : collection.filter(comparator);
-}
 // @require ./type_checking.ts
 const splitValuesRe = /\S+/g;
 function getSplitValues(str) {
     return isString(str) ? str.match(splitValuesRe) || [] : [];
 }
-fn.hasClass = function (cls) {
-    return !!cls && some.call(this, (ele) => isElement(ele) && ele.classList.contains(cls));
+fn.toggleClass = function (cls, force) {
+    const classes = getSplitValues(cls);
+    const isForce = !isUndefined(force);
+    return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
+        each(classes, (i, c) => {
+            if (isForce) {
+                force ? ele.classList.add(c) : ele.classList.remove(c);
+            }
+            else {
+                ele.classList.toggle(c);
+            }
+        });
+    });
+};
+fn.addClass = function (cls) {
+    return this.toggleClass(cls, true);
 };
 fn.removeAttr = function (attr) {
     const attrs = getSplitValues(attr);
@@ -287,31 +241,132 @@ function attr(attr, value) {
     return this;
 }
 fn.attr = attr;
-fn.toggleClass = function (cls, force) {
-    const classes = getSplitValues(cls), isForce = !isUndefined(force);
-    return this.each((i, ele) => {
-        if (!isElement(ele))
-            return;
-        each(classes, (i, c) => {
-            if (isForce) {
-                force ? ele.classList.add(c) : ele.classList.remove(c);
-            }
-            else {
-                ele.classList.toggle(c);
-            }
-        });
-    });
-};
-fn.addClass = function (cls) {
-    return this.toggleClass(cls, true);
-};
 fn.removeClass = function (cls) {
     if (arguments.length)
         return this.toggleClass(cls, false);
     return this.attr('class', '');
 };
+fn.hasClass = function (cls) {
+    return !!cls && some.call(this, (ele) => isElement(ele) && ele.classList.contains(cls));
+};
+fn.get = function (index) {
+    if (isUndefined(index))
+        return slice.call(this);
+    index = Number(index);
+    return this[index < 0 ? index + this.length : index];
+};
+fn.eq = function (index) {
+    return cash(this.get(index));
+};
+fn.first = function () {
+    return this.eq(0);
+};
+fn.last = function () {
+    return this.eq(-1);
+};
+// @require core/type_checking.ts
+// @require core/variables.ts
+function computeStyle(ele, prop, isVariable) {
+    if (!isElement(ele))
+        return;
+    const style = win.getComputedStyle(ele, null);
+    return isVariable ? style.getPropertyValue(prop) || undefined : style[prop] || ele.style[prop];
+}
+// @require ./compute_style.ts
+function computeStyleInt(ele, prop) {
+    return parseInt(computeStyle(ele, prop), 10) || 0;
+}
+// @require css/helpers/compute_style_int.ts
+function getExtraSpace(ele, xAxis) {
+    return computeStyleInt(ele, `border${xAxis ? 'Left' : 'Top'}Width`) + computeStyleInt(ele, `padding${xAxis ? 'Left' : 'Top'}`) + computeStyleInt(ele, `padding${xAxis ? 'Right' : 'Bottom'}`) + computeStyleInt(ele, `border${xAxis ? 'Right' : 'Bottom'}Width`);
+}
+// @require css/helpers/compute_style.ts
+const defaultDisplay = {};
+function getDefaultDisplay(tagName) {
+    if (defaultDisplay[tagName])
+        return defaultDisplay[tagName];
+    const ele = createElement(tagName);
+    doc.body.insertBefore(ele, null);
+    const display = computeStyle(ele, 'display');
+    doc.body.removeChild(ele);
+    return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
+}
+// @require css/helpers/compute_style.ts
+function isHidden(ele) {
+    return computeStyle(ele, 'display') === 'none';
+}
+// @require ./cash.ts
+function matches(ele, selector) {
+    const matches = ele && (ele['matches'] || ele['webkitMatchesSelector'] || ele['msMatchesSelector']);
+    return !!matches && !!selector && matches.call(ele, selector);
+}
+// @require ./matches.ts
+// @require ./type_checking.ts
+function getCompareFunction(comparator) {
+    return isString(comparator)
+        ? (i, ele) => matches(ele, comparator)
+        : isFunction(comparator)
+            ? comparator
+            : isCash(comparator)
+                ? (i, ele) => comparator.is(ele)
+                : !comparator
+                    ? () => false
+                    : (i, ele) => ele === comparator;
+}
+fn.filter = function (comparator) {
+    const compare = getCompareFunction(comparator);
+    return cash(filter.call(this, (ele, i) => compare.call(ele, i, ele)));
+};
+// @require collection/filter.ts
+function filtered(collection, comparator) {
+    return !comparator ? collection : collection.filter(comparator);
+}
+fn.detach = function (comparator) {
+    filtered(this, comparator).each((i, ele) => {
+        if (ele.parentNode) {
+            ele.parentNode.removeChild(ele);
+        }
+    });
+    return this;
+};
+const fragmentRe = /^\s*<(\w+)[^>]*>/;
+const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
+const containers = {
+    '*': div,
+    tr: tbody,
+    td: tr,
+    th: tr,
+    thead: table,
+    tbody: table,
+    tfoot: table
+};
+//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
+//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
+function parseHTML(html) {
+    if (!isString(html))
+        return [];
+    if (singleTagRe.test(html))
+        return [createElement(RegExp.$1)];
+    const fragment = fragmentRe.test(html) && RegExp.$1;
+    const container = containers[fragment] || containers['*'];
+    container.innerHTML = html;
+    return cash(container.childNodes).detach().get();
+}
+cash.parseHTML = parseHTML;
+fn.has = function (selector) {
+    const comparator = isString(selector)
+        ? (i, ele) => find(selector, ele).length
+        : (i, ele) => ele.contains(selector);
+    return this.filter(comparator);
+};
+fn.not = function (comparator) {
+    const compare = getCompareFunction(comparator);
+    return this.filter((i, ele) => (!isString(comparator) || isElement(ele)) && !compare.call(ele, i, ele));
+};
 function pluck(arr, prop, deep, until) {
-    const plucked = [], isCallback = isFunction(prop), compare = until && getCompareFunction(until);
+    const plucked = [];
+    const isCallback = isFunction(prop);
+    const compare = until && getCompareFunction(until);
     for (let i = 0, l = arr.length; i < l; i++) {
         if (isCallback) {
             const val = prop(arr[i]);
@@ -330,6 +385,40 @@ function pluck(arr, prop, deep, until) {
     }
     return plucked;
 }
+// @require core/pluck.ts
+// @require core/variables.ts
+function getValue(ele) {
+    if (ele.multiple && ele.options)
+        return pluck(filter.call(ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled), 'value');
+    return ele.value || '';
+}
+function val(value) {
+    if (!arguments.length)
+        return this[0] && getValue(this[0]);
+    return this.each((i, ele) => {
+        const isSelect = ele.multiple && ele.options;
+        if (isSelect || checkableRe.test(ele.type)) {
+            const eleValue = isArray(value) ? map.call(value, String) : (isNull(value) ? [] : [String(value)]);
+            if (isSelect) {
+                each(ele.options, (i, option) => {
+                    option.selected = eleValue.indexOf(option.value) >= 0;
+                }, true);
+            }
+            else {
+                ele.checked = eleValue.indexOf(ele.value) >= 0;
+            }
+        }
+        else {
+            ele.value = isUndefined(value) || isNull(value) ? '' : value;
+        }
+    });
+}
+fn.val = val;
+fn.is = function (comparator) {
+    const compare = getCompareFunction(comparator);
+    return some.call(this, (ele, i) => compare.call(ele, i, ele));
+};
+cash.guid = 1;
 function unique(arr) {
     return arr.length > 1 ? filter.call(arr, (item, index, self) => indexOf.call(self, item) === index) : arr;
 }
@@ -337,18 +426,282 @@ cash.unique = unique;
 fn.add = function (selector, context) {
     return cash(unique(this.get().concat(cash(selector, context).get())));
 };
-// @require core/type_checking.ts
+fn.children = function (comparator) {
+    return filtered(cash(unique(pluck(this, ele => ele.children))), comparator);
+};
+fn.parent = function (comparator) {
+    return filtered(cash(unique(pluck(this, 'parentNode'))), comparator);
+};
+fn.index = function (selector) {
+    const child = selector ? cash(selector)[0] : this[0];
+    const collection = selector ? this : cash(child).parent().children();
+    return indexOf.call(collection, child);
+};
+fn.closest = function (comparator) {
+    const filtered = this.filter(comparator);
+    if (filtered.length)
+        return filtered;
+    const $parent = this.parent();
+    if (!$parent.length)
+        return filtered;
+    return $parent.closest(comparator);
+};
+fn.siblings = function (comparator) {
+    return filtered(cash(unique(pluck(this, ele => cash(ele).parent().children().not(ele)))), comparator);
+};
+fn.find = function (selector) {
+    return cash(unique(pluck(this, ele => find(selector, ele))));
+};
 // @require core/variables.ts
-function computeStyle(ele, prop, isVariable) {
-    if (!isElement(ele))
+// @require collection/filter.ts
+// @require traversal/find.ts
+const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+const scriptTypeRe = /^$|^module$|\/(java|ecma)script/i;
+const scriptAttributes = ['type', 'src', 'nonce', 'noModule'];
+function evalScripts(node, doc) {
+    const collection = cash(node);
+    collection.filter('script').add(collection.find('script')).each((i, ele) => {
+        if (scriptTypeRe.test(ele.type) && docEle.contains(ele)) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
+            const script = createElement('script');
+            script.text = ele.textContent.replace(HTMLCDATARe, '');
+            each(scriptAttributes, (i, attr) => {
+                if (ele[attr])
+                    script[attr] = ele[attr];
+            });
+            doc.head.insertBefore(script, null);
+            doc.head.removeChild(script);
+        }
+    });
+}
+// @require ./eval_scripts.ts
+function insertElement(anchor, target, left, inside, evaluate) {
+    if (inside) { // prepend/append
+        anchor.insertBefore(target, left ? anchor.firstChild : null);
+    }
+    else { // before/after
+        if (anchor.nodeName === 'HTML') {
+            anchor.parentNode.replaceChild(target, anchor);
+        }
+        else {
+            anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
+        }
+    }
+    if (evaluate) {
+        evalScripts(target, anchor.ownerDocument);
+    }
+}
+// @require ./insert_element.ts
+function insertSelectors(selectors, anchors, inverse, left, inside, reverseLoop1, reverseLoop2, reverseLoop3) {
+    each(selectors, (si, selector) => {
+        each(cash(selector), (ti, target) => {
+            each(cash(anchors), (ai, anchor) => {
+                const anchorFinal = inverse ? target : anchor;
+                const targetFinal = inverse ? anchor : target;
+                const indexFinal = inverse ? ti : ai;
+                insertElement(anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode(true), left, inside, !indexFinal);
+            }, reverseLoop3);
+        }, reverseLoop2);
+    }, reverseLoop1);
+    return anchors;
+}
+fn.after = function () {
+    return insertSelectors(arguments, this, false, false, false, true, true);
+};
+fn.append = function () {
+    return insertSelectors(arguments, this, false, false, true);
+};
+function html(html) {
+    if (!arguments.length)
+        return this[0] && this[0].innerHTML;
+    if (isUndefined(html))
+        return this;
+    const hasScript = /<script[\s>]/.test(html);
+    return this.each((i, ele) => {
+        if (!isElement(ele))
+            return;
+        if (hasScript) {
+            cash(ele).empty().append(html);
+        }
+        else {
+            ele.innerHTML = html;
+        }
+    });
+}
+fn.html = html;
+fn.appendTo = function (selector) {
+    return insertSelectors(arguments, this, true, false, true);
+};
+fn.wrapInner = function (selector) {
+    return this.each((i, ele) => {
+        const $ele = cash(ele);
+        const contents = $ele.contents();
+        contents.length ? contents.wrapAll(selector) : $ele.append(selector);
+    });
+};
+fn.before = function () {
+    return insertSelectors(arguments, this, false, true);
+};
+fn.wrapAll = function (selector) {
+    let structure = cash(selector);
+    let wrapper = structure[0];
+    while (wrapper.children.length)
+        wrapper = wrapper.firstElementChild;
+    this.first().before(structure);
+    return this.appendTo(wrapper);
+};
+fn.wrap = function (selector) {
+    return this.each((i, ele) => {
+        const wrapper = cash(selector)[0];
+        cash(ele).wrapAll(!i ? wrapper : wrapper.cloneNode(true));
+    });
+};
+fn.insertAfter = function (selector) {
+    return insertSelectors(arguments, this, true, false, false, false, false, true);
+};
+fn.insertBefore = function (selector) {
+    return insertSelectors(arguments, this, true, true);
+};
+fn.prepend = function () {
+    return insertSelectors(arguments, this, false, true, true, true, true);
+};
+fn.prependTo = function (selector) {
+    return insertSelectors(arguments, this, true, true, true, false, false, true);
+};
+fn.contents = function () {
+    return cash(unique(pluck(this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : (ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes))));
+};
+fn.next = function (comparator, _all, _until) {
+    return filtered(cash(unique(pluck(this, 'nextElementSibling', _all, _until))), comparator);
+};
+fn.nextAll = function (comparator) {
+    return this.next(comparator, true);
+};
+fn.nextUntil = function (until, comparator) {
+    return this.next(comparator, true, until);
+};
+fn.parents = function (comparator, _until) {
+    return filtered(cash(unique(pluck(this, 'parentElement', true, _until))), comparator);
+};
+fn.parentsUntil = function (until, comparator) {
+    return this.parents(comparator, until);
+};
+fn.prev = function (comparator, _all, _until) {
+    return filtered(cash(unique(pluck(this, 'previousElementSibling', _all, _until))), comparator);
+};
+fn.prevAll = function (comparator) {
+    return this.prev(comparator, true);
+};
+fn.prevUntil = function (until, comparator) {
+    return this.prev(comparator, true, until);
+};
+fn.map = function (callback) {
+    return cash(concat.apply([], map.call(this, (ele, i) => callback.call(ele, i, ele))));
+};
+fn.clone = function () {
+    return this.map((i, ele) => ele.cloneNode(true));
+};
+fn.offsetParent = function () {
+    return this.map((i, ele) => {
+        let offsetParent = ele.offsetParent;
+        while (offsetParent && computeStyle(offsetParent, 'position') === 'static') {
+            offsetParent = offsetParent.offsetParent;
+        }
+        return offsetParent || docEle;
+    });
+};
+fn.slice = function (start, end) {
+    return cash(slice.call(this, start, end));
+};
+// @require ./cash.ts
+const dashAlphaRe = /-([a-z])/g;
+function camelCase(str) {
+    return str.replace(dashAlphaRe, (match, letter) => letter.toUpperCase());
+}
+fn.ready = function (callback) {
+    const cb = () => setTimeout(callback, 0, cash);
+    if (doc.readyState !== 'loading') {
+        cb();
+    }
+    else {
+        doc.addEventListener('DOMContentLoaded', cb);
+    }
+    return this;
+};
+fn.unwrap = function () {
+    this.parent().each((i, ele) => {
+        if (ele.tagName === 'BODY')
+            return;
+        const $ele = cash(ele);
+        $ele.replaceWith($ele.children());
+    });
+    return this;
+};
+fn.offset = function () {
+    const ele = this[0];
+    if (!ele)
         return;
-    const style = win.getComputedStyle(ele, null);
-    return isVariable ? style.getPropertyValue(prop) || undefined : style[prop] || ele.style[prop];
-}
-// @require ./compute_style.ts
-function computeStyleInt(ele, prop) {
-    return parseInt(computeStyle(ele, prop), 10) || 0;
-}
+    const rect = ele.getBoundingClientRect();
+    return {
+        top: rect.top + win.pageYOffset,
+        left: rect.left + win.pageXOffset
+    };
+};
+fn.position = function () {
+    const ele = this[0];
+    if (!ele)
+        return;
+    const isFixed = (computeStyle(ele, 'position') === 'fixed');
+    const offset = isFixed ? ele.getBoundingClientRect() : this.offset();
+    if (!isFixed) {
+        const doc = ele.ownerDocument;
+        let offsetParent = ele.offsetParent || doc.documentElement;
+        while ((offsetParent === doc.body || offsetParent === doc.documentElement) && computeStyle(offsetParent, 'position') === 'static') {
+            offsetParent = offsetParent.parentNode;
+        }
+        if (offsetParent !== ele && isElement(offsetParent)) {
+            const parentOffset = cash(offsetParent).offset();
+            offset.top -= parentOffset.top + computeStyleInt(offsetParent, 'borderTopWidth');
+            offset.left -= parentOffset.left + computeStyleInt(offsetParent, 'borderLeftWidth');
+        }
+    }
+    return {
+        top: offset.top - computeStyleInt(ele, 'marginTop'),
+        left: offset.left - computeStyleInt(ele, 'marginLeft')
+    };
+};
+const propMap = {
+    /* GENERAL */
+    class: 'className',
+    contenteditable: 'contentEditable',
+    /* LABEL */
+    for: 'htmlFor',
+    /* INPUT */
+    readonly: 'readOnly',
+    maxlength: 'maxLength',
+    tabindex: 'tabIndex',
+    /* TABLE */
+    colspan: 'colSpan',
+    rowspan: 'rowSpan',
+    /* IMAGE */
+    usemap: 'useMap'
+};
+fn.prop = function (prop, value) {
+    if (!prop)
+        return;
+    if (isString(prop)) {
+        prop = propMap[prop] || prop;
+        if (arguments.length < 2)
+            return this[0] && this[0][prop];
+        return this.each((i, ele) => { ele[prop] = value; });
+    }
+    for (const key in prop) {
+        this.prop(key, prop[key]);
+    }
+    return this;
+};
+fn.removeProp = function (prop) {
+    return this.each((i, ele) => { delete ele[propMap[prop] || prop]; });
+};
 const cssVariableRe = /^--/;
 // @require ./variables.ts
 function isCSSVariable(prop) {
@@ -359,12 +712,16 @@ function isCSSVariable(prop) {
 // @require core/each.ts
 // @require core/variables.ts
 // @require ./is_css_variable.ts
-const prefixedProps = {}, { style } = div, vendorsPrefixes = ['webkit', 'moz', 'ms'];
+const prefixedProps = {};
+const { style } = div;
+const vendorsPrefixes = ['webkit', 'moz', 'ms'];
 function getPrefixedProp(prop, isVariable = isCSSVariable(prop)) {
     if (isVariable)
         return prop;
     if (!prefixedProps[prop]) {
-        const propCC = camelCase(prop), propUC = `${propCC[0].toUpperCase()}${propCC.slice(1)}`, props = (`${propCC} ${vendorsPrefixes.join(`${propUC} `)}${propUC}`).split(' ');
+        const propCC = camelCase(prop);
+        const propUC = `${propCC[0].toUpperCase()}${propCC.slice(1)}`;
+        const props = (`${propCC} ${vendorsPrefixes.join(`${propUC} `)}${propUC}`).split(' ');
         each(props, (i, p) => {
             if (p in style) {
                 prefixedProps[prop] = p;
@@ -374,7 +731,6 @@ function getPrefixedProp(prop, isVariable = isCSSVariable(prop)) {
     }
     return prefixedProps[prop];
 }
-;
 // @require core/type_checking.ts
 // @require ./is_css_variable.ts
 const numericProps = {
@@ -427,7 +783,14 @@ function css(prop, value) {
 }
 ;
 fn.css = css;
-// @optional ./css.ts
+function attempt(fn, arg) {
+    try {
+        return fn(arg);
+    }
+    catch (_a) {
+        return arg;
+    }
+}
 // @require core/attempt.ts
 // @require core/camel_case.ts
 const JSONStringRe = /^\s+|\s+$/;
@@ -466,14 +829,9 @@ function data(name, value) {
     return this;
 }
 fn.data = data;
-// @optional ./data.ts
 function getDocumentDimension(doc, dimension) {
     const docEle = doc.documentElement;
     return Math.max(doc.body[`scroll${dimension}`], docEle[`scroll${dimension}`], doc.body[`offset${dimension}`], docEle[`offset${dimension}`], docEle[`client${dimension}`]);
-}
-// @require css/helpers/compute_style_int.ts
-function getExtraSpace(ele, xAxis) {
-    return computeStyleInt(ele, `border${xAxis ? 'Left' : 'Top'}Width`) + computeStyleInt(ele, `padding${xAxis ? 'Left' : 'Top'}`) + computeStyleInt(ele, `padding${xAxis ? 'Right' : 'Bottom'}`) + computeStyleInt(ele, `border${xAxis ? 'Right' : 'Bottom'}Width`);
 }
 each([true, false], (i, outer) => {
     each(['Width', 'Height'], (i, prop) => {
@@ -510,23 +868,6 @@ each(['Width', 'Height'], (index, prop) => {
         });
     };
 });
-// @optional ./inner_outer.ts
-// @optional ./normal.ts
-// @require css/helpers/compute_style.ts
-const defaultDisplay = {};
-function getDefaultDisplay(tagName) {
-    if (defaultDisplay[tagName])
-        return defaultDisplay[tagName];
-    const ele = createElement(tagName);
-    doc.body.insertBefore(ele, null);
-    const display = computeStyle(ele, 'display');
-    doc.body.removeChild(ele);
-    return defaultDisplay[tagName] = display !== 'none' ? display : 'block';
-}
-// @require css/helpers/compute_style.ts
-function isHidden(ele) {
-    return computeStyle(ele, 'display') === 'none';
-}
 const displayProperty = '___cd';
 fn.toggle = function (force) {
     return this.each((i, ele) => {
@@ -551,17 +892,43 @@ fn.hide = function () {
 fn.show = function () {
     return this.toggle(true);
 };
-// @optional ./hide.ts
-// @optional ./show.ts
-// @optional ./toggle.ts
-function hasNamespaces(ns1, ns2) {
-    return !ns2 || !some.call(ns2, (ns) => ns1.indexOf(ns) < 0);
-}
-const eventsNamespace = '___ce', eventsNamespacesSeparator = '.', eventsFocus = { focus: 'focusin', blur: 'focusout' }, eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }, eventsMouseRe = /^(mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
+const eventsNamespace = '___ce';
+const eventsNamespacesSeparator = '.';
+const eventsFocus = { focus: 'focusin', blur: 'focusout' };
+const eventsHover = { mouseenter: 'mouseover', mouseleave: 'mouseout' };
+const eventsMouseRe = /^(mouse|pointer|contextmenu|drag|drop|click|dblclick)/i;
 // @require ./variables.ts
 function getEventNameBubbling(name) {
     return eventsHover[name] || eventsFocus[name] || name;
 }
+// @require ./variables.ts
+function parseEventName(eventName) {
+    const parts = eventName.split(eventsNamespacesSeparator);
+    return [parts[0], parts.slice(1).sort()]; // [name, namespace[]]
+}
+fn.trigger = function (event, data) {
+    if (isString(event)) {
+        const [nameOriginal, namespaces] = parseEventName(event);
+        const name = getEventNameBubbling(nameOriginal);
+        if (!name)
+            return this;
+        const type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
+        event = doc.createEvent(type);
+        event.initEvent(name, true, true);
+        event.namespace = namespaces.join(eventsNamespacesSeparator);
+        event.___ot = nameOriginal;
+    }
+    event.___td = data;
+    const isEventFocus = (event.___ot in eventsFocus);
+    return this.each((i, ele) => {
+        if (isEventFocus && isFunction(ele[event.___ot])) {
+            ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
+            ele[event.___ot]();
+            ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
+        }
+        ele.dispatchEvent(event);
+    });
+};
 // @require ./variables.ts
 function getEventsCache(ele) {
     return ele[eventsNamespace] = (ele[eventsNamespace] || {});
@@ -574,10 +941,8 @@ function addEvent(ele, name, namespaces, selector, callback) {
     eventCache[name].push([namespaces, selector, callback]);
     ele.addEventListener(name, callback);
 }
-// @require ./variables.ts
-function parseEventName(eventName) {
-    const parts = eventName.split(eventsNamespacesSeparator);
-    return [parts[0], parts.slice(1).sort()]; // [name, namespace[]]
+function hasNamespaces(ns1, ns2) {
+    return !ns2 || !some.call(ns2, (ns) => ns1.indexOf(ns) < 0);
 }
 // @require ./get_events_cache.ts
 // @require ./has_namespaces.ts
@@ -616,7 +981,8 @@ fn.off = function (eventFullName, selector, callback) {
             selector = '';
         }
         each(getSplitValues(eventFullName), (i, eventFullName) => {
-            const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal);
+            const [nameOriginal, namespaces] = parseEventName(eventFullName);
+            const name = getEventNameBubbling(nameOriginal);
             this.each((i, ele) => {
                 if (!isElement(ele) && !isDocument(ele) && !isWindow(ele))
                     return;
@@ -624,6 +990,17 @@ fn.off = function (eventFullName, selector, callback) {
             });
         });
     }
+    return this;
+};
+fn.remove = function (comparator) {
+    filtered(this, comparator).detach().off();
+    return this;
+};
+fn.replaceWith = function (selector) {
+    return this.before(selector).remove();
+};
+fn.replaceAll = function (selector) {
+    cash(selector).replaceWith(this);
     return this;
 };
 function on(eventFullName, selector, data, callback, _one) {
@@ -654,7 +1031,10 @@ function on(eventFullName, selector, data, callback, _one) {
     if (!callback)
         return this;
     each(getSplitValues(eventFullName), (i, eventFullName) => {
-        const [nameOriginal, namespaces] = parseEventName(eventFullName), name = getEventNameBubbling(nameOriginal), isEventHover = (nameOriginal in eventsHover), isEventFocus = (nameOriginal in eventsFocus);
+        const [nameOriginal, namespaces] = parseEventName(eventFullName);
+        const name = getEventNameBubbling(nameOriginal);
+        const isEventHover = (nameOriginal in eventsHover);
+        const isEventFocus = (nameOriginal in eventsFocus);
         if (!name)
             return;
         this.each((i, ele) => {
@@ -718,55 +1098,13 @@ function one(eventFullName, selector, data, callback) {
 }
 ;
 fn.one = one;
-fn.ready = function (callback) {
-    const cb = () => setTimeout(callback, 0, cash);
-    if (doc.readyState !== 'loading') {
-        cb();
-    }
-    else {
-        doc.addEventListener('DOMContentLoaded', cb);
-    }
-    return this;
-};
-fn.trigger = function (event, data) {
-    if (isString(event)) {
-        const [nameOriginal, namespaces] = parseEventName(event), name = getEventNameBubbling(nameOriginal);
-        if (!name)
-            return this;
-        const type = eventsMouseRe.test(name) ? 'MouseEvents' : 'HTMLEvents';
-        event = doc.createEvent(type);
-        event.initEvent(name, true, true);
-        event.namespace = namespaces.join(eventsNamespacesSeparator);
-        event.___ot = nameOriginal;
-    }
-    event.___td = data;
-    const isEventFocus = (event.___ot in eventsFocus);
-    return this.each((i, ele) => {
-        if (isEventFocus && isFunction(ele[event.___ot])) {
-            ele[`___i${event.type}`] = true; // Ensuring the native event is ignored
-            ele[event.___ot]();
-            ele[`___i${event.type}`] = false; // Ensuring the custom event is not ignored
-        }
-        ele.dispatchEvent(event);
-    });
-};
-// @optional ./off.ts
-// @optional ./on.ts
-// @optional ./one.ts
-// @optional ./ready.ts
-// @optional ./trigger.ts
-// @require core/pluck.ts
-// @require core/variables.ts
-function getValue(ele) {
-    if (ele.multiple && ele.options)
-        return pluck(filter.call(ele.options, option => option.selected && !option.disabled && !option.parentNode.disabled), 'value');
-    return ele.value || '';
-}
-const queryEncodeSpaceRe = /%20/g, queryEncodeCRLFRe = /\r?\n/g;
+const queryEncodeSpaceRe = /%20/g;
+const queryEncodeCRLFRe = /\r?\n/g;
 function queryEncode(prop, value) {
     return `&${encodeURIComponent(prop)}=${encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+')}`;
 }
-const skippableRe = /file|reset|submit|button|image/i, checkableRe = /radio|checkbox/i;
+const skippableRe = /file|reset|submit|button|image/i;
+const checkableRe = /radio|checkbox/i;
 fn.serialize = function () {
     let query = '';
     this.each((i, ele) => {
@@ -784,340 +1122,92 @@ fn.serialize = function () {
     });
     return query.slice(1);
 };
-function val(value) {
-    if (!arguments.length)
-        return this[0] && getValue(this[0]);
-    return this.each((i, ele) => {
-        const isSelect = ele.multiple && ele.options;
-        if (isSelect || checkableRe.test(ele.type)) {
-            const eleValue = isArray(value) ? map.call(value, String) : (isNull(value) ? [] : [String(value)]);
-            if (isSelect) {
-                each(ele.options, (i, option) => {
-                    option.selected = eleValue.indexOf(option.value) >= 0;
-                }, true);
-            }
-            else {
-                ele.checked = eleValue.indexOf(ele.value) >= 0;
-            }
-        }
-        else {
-            ele.value = isUndefined(value) || isNull(value) ? '' : value;
-        }
-    });
-}
-fn.val = val;
-fn.clone = function () {
-    return this.map((i, ele) => ele.cloneNode(true));
-};
-fn.detach = function (comparator) {
-    filtered(this, comparator).each((i, ele) => {
-        if (ele.parentNode) {
-            ele.parentNode.removeChild(ele);
-        }
-    });
-    return this;
-};
-const fragmentRe = /^\s*<(\w+)[^>]*>/, singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
-const containers = {
-    '*': div,
-    tr: tbody,
-    td: tr,
-    th: tr,
-    thead: table,
-    tbody: table,
-    tfoot: table
-};
-//TODO: Create elements inside a document fragment, in order to prevent inline event handlers from firing
-//TODO: Ensure the created elements have the fragment as their parent instead of null, this also ensures we can deal with detatched nodes more reliably
-function parseHTML(html) {
-    if (!isString(html))
-        return [];
-    if (singleTagRe.test(html))
-        return [createElement(RegExp.$1)];
-    const fragment = fragmentRe.test(html) && RegExp.$1, container = containers[fragment] || containers['*'];
-    container.innerHTML = html;
-    return cash(container.childNodes).detach().get();
-}
-cash.parseHTML = parseHTML;
-fn.empty = function () {
-    return this.each((i, ele) => {
-        while (ele.firstChild) {
-            ele.removeChild(ele.firstChild);
-        }
-    });
-};
-function html(html) {
-    if (!arguments.length)
-        return this[0] && this[0].innerHTML;
-    if (isUndefined(html))
-        return this;
-    return this.each((i, ele) => {
-        if (!isElement(ele))
-            return;
-        ele.innerHTML = html;
-    });
-}
-fn.html = html;
-fn.remove = function (comparator) {
-    filtered(this, comparator).detach().off();
-    return this;
-};
-function text(text) {
-    if (isUndefined(text))
-        return this[0] ? this[0].textContent : '';
-    return this.each((i, ele) => {
-        if (!isElement(ele))
-            return;
-        ele.textContent = text;
-    });
-}
-;
-fn.text = text;
-fn.unwrap = function () {
-    this.parent().each((i, ele) => {
-        if (ele.tagName === 'BODY')
-            return;
-        const $ele = cash(ele);
-        $ele.replaceWith($ele.children());
-    });
-    return this;
-};
-fn.offset = function () {
-    const ele = this[0];
-    if (!ele)
-        return;
-    const rect = ele.getBoundingClientRect();
-    return {
-        top: rect.top + win.pageYOffset,
-        left: rect.left + win.pageXOffset
-    };
-};
-fn.offsetParent = function () {
-    return this.map((i, ele) => {
-        let offsetParent = ele.offsetParent;
-        while (offsetParent && computeStyle(offsetParent, 'position') === 'static') {
-            offsetParent = offsetParent.offsetParent;
-        }
-        return offsetParent || docEle;
-    });
-};
-fn.position = function () {
-    const ele = this[0];
-    if (!ele)
-        return;
-    const isFixed = (computeStyle(ele, 'position') === 'fixed'), offset = isFixed ? ele.getBoundingClientRect() : this.offset();
-    if (!isFixed) {
-        const doc = ele.ownerDocument;
-        let offsetParent = ele.offsetParent || doc.documentElement;
-        while ((offsetParent === doc.body || offsetParent === doc.documentElement) && computeStyle(offsetParent, 'position') === 'static') {
-            offsetParent = offsetParent.parentNode;
-        }
-        if (offsetParent !== ele && isElement(offsetParent)) {
-            const parentOffset = cash(offsetParent).offset();
-            offset.top -= parentOffset.top + computeStyleInt(offsetParent, 'borderTopWidth');
-            offset.left -= parentOffset.left + computeStyleInt(offsetParent, 'borderLeftWidth');
-        }
-    }
-    return {
-        top: offset.top - computeStyleInt(ele, 'marginTop'),
-        left: offset.left - computeStyleInt(ele, 'marginLeft')
-    };
-};
-fn.children = function (comparator) {
-    return filtered(cash(unique(pluck(this, ele => ele.children))), comparator);
-};
-fn.contents = function () {
-    return cash(unique(pluck(this, ele => ele.tagName === 'IFRAME' ? [ele.contentDocument] : (ele.tagName === 'TEMPLATE' ? ele.content.childNodes : ele.childNodes))));
-};
-fn.find = function (selector) {
-    return cash(unique(pluck(this, ele => find(selector, ele))));
-};
+// @require core/types.ts
+// @require core/cash.ts
+// @require core/type_checking.ts
 // @require core/variables.ts
+// @require core/each.ts
+// @require core/extend.ts
+// @require core/find.ts
+// @require core/get_compare_function.ts
+// @require core/get_split_values.ts
+// @require core/guid.ts
+// @require core/parse_html.ts
+// @require core/unique.ts
+// @require attributes/add_class.ts
+// @require attributes/attr.ts
+// @require attributes/has_class.ts
+// @require attributes/prop.ts
+// @require attributes/remove_attr.ts
+// @require attributes/remove_class.ts
+// @require attributes/remove_prop.ts
+// @require attributes/toggle_class.ts
+// @require collection/add.ts
+// @require collection/each.ts
+// @require collection/eq.ts
 // @require collection/filter.ts
+// @require collection/first.ts
+// @require collection/get.ts
+// @require collection/index.ts
+// @require collection/last.ts
+// @require collection/map.ts
+// @require collection/slice.ts
+// @require css/css.ts
+// @require data/data.ts
+// @require dimensions/inner_outer.ts
+// @require dimensions/normal.ts
+// @require effects/hide.ts
+// @require effects/show.ts
+// @require effects/toggle.ts
+// @require events/off.ts
+// @require events/on.ts
+// @require events/one.ts
+// @require events/ready.ts
+// @require events/trigger.ts
+// @require forms/serialize.ts
+// @require forms/val.ts
+// @require manipulation/after.ts
+// @require manipulation/append.ts
+// @require manipulation/append_to.ts
+// @require manipulation/before.ts
+// @require manipulation/clone.ts
+// @require manipulation/detach.ts
+// @require manipulation/empty.ts
+// @require manipulation/html.ts
+// @require manipulation/insert_after.ts
+// @require manipulation/insert_before.ts
+// @require manipulation/prepend.ts
+// @require manipulation/prepend_to.ts
+// @require manipulation/remove.ts
+// @require manipulation/replace_all.ts
+// @require manipulation/replace_with.ts
+// @require manipulation/text.ts
+// @require manipulation/unwrap.ts
+// @require manipulation/wrap.ts
+// @require manipulation/wrap_all.ts
+// @require manipulation/wrap_inner.ts
+// @require offset/offset.ts
+// @require offset/offset_parent.ts
+// @require offset/position.ts
+// @require traversal/children.ts
+// @require traversal/closest.ts
+// @require traversal/contents.ts
 // @require traversal/find.ts
-const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g, scriptTypeRe = /^$|^module$|\/(java|ecma)script/i, scriptAttributes = ['type', 'src', 'nonce', 'noModule'];
-function evalScripts(node, doc) {
-    const collection = cash(node);
-    collection.filter('script').add(collection.find('script')).each((i, ele) => {
-        if (scriptTypeRe.test(ele.type) && docEle.contains(ele)) { // The script type is supported // The element is attached to the DOM // Using `documentElement` for broader browser support
-            const script = createElement('script');
-            script.text = ele.textContent.replace(HTMLCDATARe, '');
-            each(scriptAttributes, (i, attr) => {
-                if (ele[attr])
-                    script[attr] = ele[attr];
-            });
-            doc.head.insertBefore(script, null);
-            doc.head.removeChild(script);
-        }
-    });
-}
-// @require ./eval_scripts.ts
-function insertElement(anchor, target, left, inside, evaluate) {
-    if (inside) { // prepend/append
-        anchor.insertBefore(target, left ? anchor.firstChild : null);
-    }
-    else { // before/after
-        if (anchor.nodeName === 'HTML') {
-            anchor.parentNode.replaceChild(target, anchor);
-        }
-        else {
-            anchor.parentNode.insertBefore(target, left ? anchor : anchor.nextSibling);
-        }
-    }
-    if (evaluate) {
-        evalScripts(target, anchor.ownerDocument);
-    }
-}
-// @require ./insert_element.ts
-function insertSelectors(selectors, anchors, inverse, left, inside, reverseLoop1, reverseLoop2, reverseLoop3) {
-    each(selectors, (si, selector) => {
-        each(cash(selector), (ti, target) => {
-            each(cash(anchors), (ai, anchor) => {
-                const anchorFinal = inverse ? target : anchor, targetFinal = inverse ? anchor : target, indexFinal = inverse ? ti : ai;
-                insertElement(anchorFinal, !indexFinal ? targetFinal : targetFinal.cloneNode(true), left, inside, !indexFinal);
-            }, reverseLoop3);
-        }, reverseLoop2);
-    }, reverseLoop1);
-    return anchors;
-}
-fn.after = function () {
-    return insertSelectors(arguments, this, false, false, false, true, true);
-};
-fn.append = function () {
-    return insertSelectors(arguments, this, false, false, true);
-};
-fn.appendTo = function (selector) {
-    return insertSelectors(arguments, this, true, false, true);
-};
-fn.before = function () {
-    return insertSelectors(arguments, this, false, true);
-};
-fn.insertAfter = function (selector) {
-    return insertSelectors(arguments, this, true, false, false, false, false, true);
-};
-fn.insertBefore = function (selector) {
-    return insertSelectors(arguments, this, true, true);
-};
-fn.prepend = function () {
-    return insertSelectors(arguments, this, false, true, true, true, true);
-};
-fn.prependTo = function (selector) {
-    return insertSelectors(arguments, this, true, true, true, false, false, true);
-};
-fn.replaceWith = function (selector) {
-    return this.before(selector).remove();
-};
-fn.replaceAll = function (selector) {
-    cash(selector).replaceWith(this);
-    return this;
-};
-fn.wrapAll = function (selector) {
-    let structure = cash(selector), wrapper = structure[0];
-    while (wrapper.children.length)
-        wrapper = wrapper.firstElementChild;
-    this.first().before(structure);
-    return this.appendTo(wrapper);
-};
-fn.wrap = function (selector) {
-    return this.each((i, ele) => {
-        const wrapper = cash(selector)[0];
-        cash(ele).wrapAll(!i ? wrapper : wrapper.cloneNode(true));
-    });
-};
-fn.wrapInner = function (selector) {
-    return this.each((i, ele) => {
-        const $ele = cash(ele), contents = $ele.contents();
-        contents.length ? contents.wrapAll(selector) : $ele.append(selector);
-    });
-};
-fn.has = function (selector) {
-    const comparator = isString(selector)
-        ? (i, ele) => find(selector, ele).length
-        : (i, ele) => ele.contains(selector);
-    return this.filter(comparator);
-};
-fn.is = function (comparator) {
-    const compare = getCompareFunction(comparator);
-    return some.call(this, (ele, i) => compare.call(ele, i, ele));
-};
-fn.next = function (comparator, _all, _until) {
-    return filtered(cash(unique(pluck(this, 'nextElementSibling', _all, _until))), comparator);
-};
-fn.nextAll = function (comparator) {
-    return this.next(comparator, true);
-};
-fn.nextUntil = function (until, comparator) {
-    return this.next(comparator, true, until);
-};
-fn.not = function (comparator) {
-    const compare = getCompareFunction(comparator);
-    return this.filter((i, ele) => (!isString(comparator) || isElement(ele)) && !compare.call(ele, i, ele));
-};
-fn.parent = function (comparator) {
-    return filtered(cash(unique(pluck(this, 'parentNode'))), comparator);
-};
-fn.index = function (selector) {
-    const child = selector ? cash(selector)[0] : this[0], collection = selector ? this : cash(child).parent().children();
-    return indexOf.call(collection, child);
-};
-fn.closest = function (comparator) {
-    const filtered = this.filter(comparator);
-    if (filtered.length)
-        return filtered;
-    const $parent = this.parent();
-    if (!$parent.length)
-        return filtered;
-    return $parent.closest(comparator);
-};
-fn.parents = function (comparator, _until) {
-    return filtered(cash(unique(pluck(this, 'parentElement', true, _until))), comparator);
-};
-fn.parentsUntil = function (until, comparator) {
-    return this.parents(comparator, until);
-};
-fn.prev = function (comparator, _all, _until) {
-    return filtered(cash(unique(pluck(this, 'previousElementSibling', _all, _until))), comparator);
-};
-fn.prevAll = function (comparator) {
-    return this.prev(comparator, true);
-};
-fn.prevUntil = function (until, comparator) {
-    return this.prev(comparator, true, until);
-};
-fn.siblings = function (comparator) {
-    return filtered(cash(unique(pluck(this, ele => cash(ele).parent().children().not(ele)))), comparator);
-};
-// @optional ./children.ts
-// @optional ./closest.ts
-// @optional ./contents.ts
-// @optional ./find.ts
-// @optional ./has.ts
-// @optional ./is.ts
-// @optional ./next.ts
-// @optional ./next_all.ts
-// @optional ./next_until.ts
-// @optional ./not.ts
-// @optional ./parent.ts
-// @optional ./parents.ts
-// @optional ./parents_until.ts
-// @optional ./prev.ts
-// @optional ./prev_all.ts
-// @optional ./prev_until.ts
-// @optional ./siblings.ts
-// @optional attributes/index.ts
-// @optional collection/index.ts
-// @optional css/index.ts
-// @optional data/index.ts
-// @optional dimensions/index.ts
-// @optional effects/index.ts
-// @optional events/index.ts
-// @optional forms/index.ts
-// @optional manipulation/index.ts
-// @optional offset/index.ts
-// @optional traversal/index.ts
-// @require core/index.ts
-// @priority -100
-// @require ./cash.ts
+// @require traversal/has.ts
+// @require traversal/is.ts
+// @require traversal/next.ts
+// @require traversal/next_all.ts
+// @require traversal/next_until.ts
+// @require traversal/not.ts
+// @require traversal/parent.ts
+// @require traversal/parents.ts
+// @require traversal/parents_until.ts
+// @require traversal/prev.ts
+// @require traversal/prev_all.ts
+// @require traversal/prev_until.ts
+// @require traversal/siblings.ts
+// @no-require extras/get_script.ts
+// @no-require extras/shorthands.ts
+// @require methods.ts
 export default cash;
 export { Cash };
-
