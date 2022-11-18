@@ -11,8 +11,8 @@ interface Cash {
 
 fn.index = function ( this: Cash, selector?: Selector ) {
 
-  const child = selector ? cash ( selector )[0] : this[0],
-        collection = selector ? this : cash ( child ).parent ().children ();
+  const child = selector ? cash ( selector )[0] : this[0];
+  const collection = selector ? this : cash ( child ).parent ().children ();
 
   return indexOf.call ( collection, child );
 

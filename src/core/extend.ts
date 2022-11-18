@@ -15,9 +15,9 @@ interface Cash {
 
 function extend ( ...sources: any[] ) {
 
-  const deep = isBoolean ( sources[0] ) ? sources.shift () : false,
-        target = sources.shift (),
-        length = sources.length;
+  const deep = isBoolean ( sources[0] ) ? sources.shift () : false;
+  const target = sources.shift ();
+  const length = sources.length;
 
   if ( !target ) return {};
 

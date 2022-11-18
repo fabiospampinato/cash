@@ -3,84 +3,84 @@
 // @require ./variables.ts
 
 interface CashStatic {
-  isWindow ( x: any ): x is Window;
-  isFunction ( x: any ): x is Function;
-  isArray ( x: any ): x is Array<any>;
-  isNumeric ( x: any ): boolean;
-  isPlainObject ( x: any ): x is PlainObject<any>;
+  isWindow ( x: unknown ): x is Window;
+  isFunction ( x: unknown ): x is Function;
+  isArray ( x: unknown ): x is Array<any>;
+  isNumeric ( x: unknown ): boolean;
+  isPlainObject ( x: unknown ): x is PlainObject<any>;
 }
 
-function isCash ( x: any ): x is Cash {
+function isCash ( value: unknown ): value is Cash {
 
-  return x instanceof Cash;
-
-}
-
-function isWindow ( x: any ): x is Window {
-
-  return !!x && x === x.window;
+  return value instanceof Cash;
 
 }
 
-function isDocument ( x: any ): x is Document {
+function isWindow ( value: unknown ): value is Window {
 
-  return !!x && x.nodeType === 9;
-
-}
-
-function isDocumentFragment ( x: any ): x is DocumentFragment {
-
-  return !!x && x.nodeType === 11;
+  return !!value && value === value.window;
 
 }
 
-function isElement ( x: any ): x is HTMLElement {
+function isDocument ( value: unknown ): value is Document {
 
-  return !!x && x.nodeType === 1;
-
-}
-
-function isBoolean ( x: any ): x is boolean {
-
-  return typeof x === 'boolean';
+  return !!value && value.nodeType === 9;
 
 }
 
-function isFunction ( x: any ): x is Function {
+function isDocumentFragment ( value: unknown ): value is DocumentFragment {
 
-  return typeof x === 'function';
-
-}
-
-function isString ( x: any ): x is string {
-
-  return typeof x === 'string';
+  return !!value && value.nodeType === 11;
 
 }
 
-function isUndefined ( x: any ): x is undefined {
+function isElement ( value: unknown ): value is HTMLElement {
 
-  return x === undefined;
-
-}
-
-function isNull ( x: any ): x is null {
-
-  return x === null;
+  return !!value && value.nodeType === 1;
 
 }
 
-function isNumeric ( x: any ): boolean {
+function isBoolean ( value: unknown ): value is boolean {
 
-  return !isNaN ( parseFloat ( x ) ) && isFinite ( x );
+  return typeof value === 'boolean';
 
 }
 
-function isPlainObject ( x: any ): x is PlainObject<any> {
+function isFunction ( value: unknown ): value is Function {
 
-  if ( typeof x !== 'object' || x === null ) return false;
+  return typeof value === 'function';
 
-  const proto = Object.getPrototypeOf ( x );
+}
+
+function isString ( value: unknown ): value is string {
+
+  return typeof value === 'string';
+
+}
+
+function isUndefined ( value: unknown ): value is undefined {
+
+  return value === undefined;
+
+}
+
+function isNull ( value: unknown ): value is null {
+
+  return value === null;
+
+}
+
+function isNumeric ( value: unknown ): boolean {
+
+  return !isNaN ( parseFloat ( value ) ) && isFinite ( value );
+
+}
+
+function isPlainObject ( value: unknown ): value is PlainObject<any> {
+
+  if ( typeof value !== 'object' || value === null ) return false;
+
+  const proto = Object.getPrototypeOf ( value );
 
   return proto === null || proto === Object.prototype;
 

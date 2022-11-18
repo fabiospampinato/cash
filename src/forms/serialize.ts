@@ -9,8 +9,8 @@ interface Cash {
   serialize (): string;
 }
 
-const skippableRe = /file|reset|submit|button|image/i,
-      checkableRe = /radio|checkbox/i;
+const skippableRe = /file|reset|submit|button|image/i;
+const checkableRe = /radio|checkbox/i;
 
 fn.serialize = function ( this: Cash ) {
 

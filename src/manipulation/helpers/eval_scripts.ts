@@ -3,9 +3,9 @@
 // @require collection/filter.ts
 // @require traversal/find.ts
 
-const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g,
-      scriptTypeRe = /^$|^module$|\/(java|ecma)script/i,
-      scriptAttributes: ('type' | 'src' | 'nonce' | 'noModule')[] = ['type', 'src', 'nonce', 'noModule'];
+const HTMLCDATARe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
+const scriptTypeRe = /^$|^module$|\/(java|ecma)script/i;
+const scriptAttributes: ('type' | 'src' | 'nonce' | 'noModule')[] = ['type', 'src', 'nonce', 'noModule'];
 
 function evalScripts ( node: Node, doc: Document ): void {
 

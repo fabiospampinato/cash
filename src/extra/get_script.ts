@@ -8,8 +8,8 @@ interface CashStatic {
 
 cash.getScript = function ( url: string, success?: Function ): void {
 
-  const script = createElement ( 'script' ),
-        $anchor = cash ( 'script' );
+  const script = createElement ( 'script' );
+  const $anchor = cash ( 'script' );
 
   script.async = true;
   script.src = url;

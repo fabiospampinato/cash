@@ -11,8 +11,8 @@ interface Cash {
 
 fn.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
 
-  const classes = getSplitValues ( cls ),
-        isForce = !isUndefined ( force );
+  const classes = getSplitValues ( cls );
+  const isForce = !isUndefined ( force );
 
   return this.each ( ( i, ele ) => {
 

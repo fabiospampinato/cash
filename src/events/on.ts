@@ -77,10 +77,10 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
   each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-    const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-          name = getEventNameBubbling ( nameOriginal ),
-          isEventHover = ( nameOriginal in eventsHover ),
-          isEventFocus = ( nameOriginal in eventsFocus );
+    const [nameOriginal, namespaces] = parseEventName ( eventFullName );
+    const name = getEventNameBubbling ( nameOriginal );
+    const isEventHover = ( nameOriginal in eventsHover );
+    const isEventFocus = ( nameOriginal in eventsFocus );
 
     if ( !name ) return;
 

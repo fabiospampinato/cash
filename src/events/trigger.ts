@@ -15,8 +15,8 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   if ( isString ( event ) ) {
 
-    const [nameOriginal, namespaces] = parseEventName ( event ),
-          name = getEventNameBubbling ( nameOriginal );
+    const [nameOriginal, namespaces] = parseEventName ( event );
+    const name = getEventNameBubbling ( nameOriginal );
 
     if ( !name ) return this;
 

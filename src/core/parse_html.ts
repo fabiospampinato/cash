@@ -9,8 +9,8 @@ interface CashStatic {
   parseHTML ( html: string ): EleLoose[];
 }
 
-const fragmentRe = /^\s*<(\w+)[^>]*>/,
-      singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
+const fragmentRe = /^\s*<(\w+)[^>]*>/;
+const singleTagRe = /^<(\w+)\s*\/?>(?:<\/\1>)?$/;
 
 const containers = {
   '*': div,
@@ -31,8 +31,8 @@ function parseHTML ( html: string ): EleLoose[] {
 
   if ( singleTagRe.test ( html ) ) return [createElement ( RegExp.$1 )];
 
-  const fragment = fragmentRe.test ( html ) && RegExp.$1,
-        container = containers[fragment] || containers['*'];
+  const fragment = fragmentRe.test ( html ) && RegExp.$1;
+  const container = containers[fragment] || containers['*'];
 
   container.innerHTML = html;
 

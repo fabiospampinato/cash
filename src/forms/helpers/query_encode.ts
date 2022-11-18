@@ -1,6 +1,6 @@
 
-const queryEncodeSpaceRe = /%20/g,
-      queryEncodeCRLFRe = /\r?\n/g;
+const queryEncodeSpaceRe = /%20/g;
+const queryEncodeCRLFRe = /\r?\n/g;
 
 function queryEncode ( prop: string, value: string ): string {
 

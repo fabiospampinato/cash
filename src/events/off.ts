@@ -46,8 +46,8 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
     each ( getSplitValues ( eventFullName ), ( i, eventFullName ) => {
 
-      const [nameOriginal, namespaces] = parseEventName ( eventFullName ),
-            name = getEventNameBubbling ( nameOriginal );
+      const [nameOriginal, namespaces] = parseEventName ( eventFullName );
+      const name = getEventNameBubbling ( nameOriginal );
 
       this.each ( ( i, ele ) => {
 

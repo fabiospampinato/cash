@@ -7,9 +7,9 @@ type PluckCallback<T> = ( ele: T ) => ArrayLike<Ele>;
 
 function pluck<T, U extends ArrayLike<T> = ArrayLike<T>> ( arr: U, prop: string | PluckCallback<U[0]>, deep?: boolean, until?: Comparator ): Array<Ele> {
 
-  const plucked: Array<Ele> = [],
-        isCallback = isFunction ( prop ),
-        compare = until && getCompareFunction ( until );
+  const plucked: Array<Ele> = [];
+  const isCallback = isFunction ( prop );
+  const compare = until && getCompareFunction ( until );
 
   for ( let i = 0, l = arr.length; i < l; i++ ) {
 

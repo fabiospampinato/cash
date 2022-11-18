@@ -50,8 +50,8 @@ class Cash {
 
 }
 
-const fn = Cash.prototype,
-      cash = fn.init as typeof Cash.prototype.init & CashStatic;
+const fn = Cash.prototype;
+const cash = fn.init as ( typeof Cash.prototype.init & CashStatic );
 
 cash.fn = cash.prototype = fn; // Ensuring that `cash () instanceof cash`
 

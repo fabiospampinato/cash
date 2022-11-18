@@ -5,9 +5,9 @@
 // @require core/variables.ts
 // @require ./is_css_variable.ts
 
-const prefixedProps: { [prop: string]: string } = {},
-      {style} = div,
-      vendorsPrefixes = ['webkit', 'moz', 'ms'];
+const prefixedProps: { [prop: string]: string } = {};
+const {style} = div;
+const vendorsPrefixes = ['webkit', 'moz', 'ms'];
 
 function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( prop ) ): string {
 
@@ -15,9 +15,9 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
 
   if ( !prefixedProps[prop] ) {
 
-    const propCC = camelCase ( prop ),
-          propUC = `${propCC[0].toUpperCase ()}${propCC.slice ( 1 )}`,
-          props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
+    const propCC = camelCase ( prop );
+    const propUC = `${propCC[0].toUpperCase ()}${propCC.slice ( 1 )}`;
+    const props = ( `${propCC} ${vendorsPrefixes.join ( `${propUC} ` )}${propUC}` ).split ( ' ' );
 
     each ( props, ( i, p ) => {
 
@@ -35,4 +35,4 @@ function getPrefixedProp ( prop: string, isVariable: boolean = isCSSVariable ( p
 
   return prefixedProps[prop];
 
-};
+}

@@ -18,8 +18,8 @@ fn.position = function ( this: Cash ) {
 
   if ( !ele ) return;
 
-  const isFixed = ( computeStyle ( ele, 'position' ) === 'fixed' ),
-        offset = isFixed ? ele.getBoundingClientRect () : this.offset ();
+  const isFixed = ( computeStyle ( ele, 'position' ) === 'fixed' );
+  const offset = isFixed ? ele.getBoundingClientRect () : this.offset ();
 
   if ( !isFixed ) {
 
