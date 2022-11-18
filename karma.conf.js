@@ -1,86 +1,7 @@
 
-/* SAUCE LABS LAUNCHERS */
+/* HELPERS */
 
-const isSauceLabs = process.argv.includes ( '--sauce' ),
-      needsCoverage = process.argv.includes ( '--generate-coverage' );
-
-const SauceLabsLaunchers = {
-  win_ie_11: {
-    base: 'SauceLabs',
-    browserName: 'internet explorer',
-    version: '11.0',
-    platform: 'Windows 8.1'
-  },
-  win_edge: {
-    base: 'SauceLabs',
-    browserName: 'MicrosoftEdge',
-    version: 'latest',
-    platform: 'Windows 10'
-  },
-  win_chrome: {
-    base: 'SauceLabs',
-    browserName: 'chrome',
-    version: 'latest-5',
-    platform: 'Windows 10'
-  },
-  win_firefox: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    version: 'latest-5',
-    platform: 'Windows 10'
-  },
-  linux_chrome: {
-    base: 'SauceLabs',
-    browserName: 'chrome',
-    version: 'latest',
-    platform: 'Linux'
-  },
-  linux_firefox: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    version: 'latest',
-    platform: 'Linux'
-  },
-  mac_chrome: {
-    base: 'SauceLabs',
-    browserName: 'chrome',
-    version: 'latest-5',
-    platform: 'macOS 10.13'
-  },
-  mac_firefox: {
-    base: 'SauceLabs',
-    browserName: 'firefox',
-    version: 'latest-5',
-    platform: 'macOS 10.13'
-  },
-  mac_safari: {
-    base: 'SauceLabs',
-    browserName: 'safari',
-    version: 'latest',
-    platform: 'macOS 10.13'
-  },
-  ios_11: {
-    base: 'SauceLabs',
-    deviceName: 'iPhone 6 Simulator',
-    browserName: 'Safari',
-    platformVersion: '11.0',
-    platformName: 'iOS'
-  },
-  ios_12: {
-    base: 'SauceLabs',
-    deviceName: 'iPhone XS Simulator',
-    browserName: 'Safari',
-    platformVersion: '12.0',
-    platformName: 'iOS'
-  },
-  android_6: {
-    base: 'SauceLabs',
-    deviceName: 'Android Emulator',
-    browserName: 'Chrome',
-    platformVersion: '6.0',
-    platformName: 'Android'
-  }
-};
+const needsCoverage = process.argv.includes ( '--generate-coverage' );
 
 /* CONFIG */
 
@@ -94,7 +15,6 @@ function config ( config ) {
       'karma-qunit',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
-      'karma-sauce-launcher',
       'karma-spec-reporter'
     ],
     files: [
@@ -115,12 +35,10 @@ function config ( config ) {
       'test/modules/traversal.js',
       'test/modules/utilities.js'
     ],
-    browsers: isSauceLabs ? Object.keys ( SauceLabsLaunchers ) : ['Chrome', 'Firefox'],
-    customLaunchers: SauceLabsLaunchers,
+    browsers: ['Chrome', 'Firefox'],
     preprocessors: {},
     reporters: [
-      'spec',
-      'saucelabs'
+      'spec'
     ],
     coverageReporter: {
       dir: 'coverage',

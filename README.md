@@ -972,7 +972,6 @@ If you want to make a pull request you should:
 
 - **[@kenwheeler](https://github.com/kenwheeler), [@shshaw](https://github.com/shshaw), [@jamiebuilds](https://github.com/jamiebuilds), [@simeydotme](https://github.com/simeydotme)** and all the contributors who helped making Cash.
 - **[@hisk](https://github.com/hisk)** - The "design focused engineer" behind our awesome logo.
-- **[Sauce Labs](https://saucelabs.com)** - The cross-browser testing platform we use for testing our builds in all the supported environments.
 
 ## License
 
