@@ -3,6 +3,7 @@
 // @require core/type_checking.ts
 // @require css/helpers/compute_style.ts
 // @require ./helpers/get_default_display.ts
+// @require ./helpers/is_hidden.ts
 // @require ./helpers/variables.ts
 
 interface Cash {

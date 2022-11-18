@@ -1,7 +1,5 @@
 
-// @priority -100
-// @require ./cash.ts
-// @require ./variables.ts
+// @require methods.ts
 
 if ( typeof exports !== 'undefined' ) { // Node.js
 

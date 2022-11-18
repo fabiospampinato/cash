@@ -7,20 +7,14 @@
   "main": "./dist/cash.js",
   "module": "./dist/cash.esm.js",
   "jsnext:main": "./dist/cash.esm.js",
+  "types": "dist/cash.d.ts",
   "files": [
     "dist"
   ],
-  "types": "dist/cash.d.ts",
   "scripts": {
-    "clean": "pacco clean",
-    "build:esm": "pacco build-javascript -e esm",
-    "build:prod": "pacco build-javascript",
-    "build:deploy": "npm run build:prod && npm run build:esm",
-    "build:dev": "pacco build-javascript -e development",
-    "watch:prod": "pacco watch-javascript",
-    "watch:dev": "pacco watch-javascript -e development",
-    "dev": "npm run build:dev && npm run watch:dev",
-    "prod": "npm run build:prod && npm run watch:prod",
+    "build": "bash ./tasks/build.sh",
+    "watch": "monex --watch src --exec npm:build",
+    "dev": "npm run build && npm run watch",
     "test": "opn ./test/index.html",
     "test:watch": "browser-sync start -s . --files test,dist/cash.js --startPath test --no-notify",
     "test:karma": "karma start --single-run",
@@ -33,22 +27,13 @@
     "test:jquery:reverse": "npm run test:jquery:init && npm run test:jquery:reverse:build && npm run test:watch",
     "test:jquery:reverse:build": "cat ./node_modules/jquery/dist/jquery.js ./dist/cash.min.js ./test/jquery_reverse_patch.js > ./dist/cash.js",
     "test:jquery:reverse:build:watch": "while sleep 1; do npm run test:jquery:reverse:build; done",
-    "graph": "pacco build-javascript --dependencies-graph --fresh",
-    "prepublishOnly": "npm run clean && npm run build:deploy && npm run test:karma"
+    "graph": "minipacco graph src/export_esm.ts",
+    "prepublishOnly": "npm run build && npm run test:karma"
   },
-  "bugs": {
-    "url": "https://github.com/fabiospampinato/cash/issues"
-  },
-  "homepage": "https://github.com/fabiospampinato/cash",
-  "author": "Ken Wheeler <ken_wheeler@me.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fabiospampinato/cash.git"
-  },
-  "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.26.14",
     "coveralls": "^3.1.0",
+    "esbuild": "^0.15.14",
     "jquery": "^3.6.0",
     "karma": "^4.0.0",
     "karma-chrome-launcher": "^3.1.0",
@@ -57,8 +42,9 @@
     "karma-qunit": "^4.1.2",
     "karma-sauce-launcher": "^4.3.6",
     "karma-spec-reporter": "0.0.32",
+    "minipacco": "^1.0.3",
+    "monex": "^1.4.1",
     "opn-cli": "^3.1.0",
-    "pacco": "^2.1.17",
     "qunit": "^2.7.1",
     "qunit-ava-spec": "^1.0.0",
     "typescript": "^4.2.4"

@@ -728,7 +728,7 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
       var done = assert.async ();
 
       window.onerror = function ( err ) {
-        assert.ok ( /ready/i.test ( err ) );
+        assert.ok ( err );
       };
 
       var handler = function () {
