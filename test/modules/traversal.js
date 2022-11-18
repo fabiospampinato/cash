@@ -13,6 +13,12 @@ var fixture = '\
     <div class="uncle"></div>\
     <div class="aunt"></div>\
   </div>\
+  <div class="dotsgrandparent">\
+    <div class="dotsparent">\
+      <div class="dots.first"></div>\
+      <div id="id.with.dots" class="class.with.dots"></div>\
+    </div>\
+  </div>\
   <iframe src="about:blank"></iframe>\
 ';
 
@@ -33,6 +39,22 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var children = $('.parent').children ( '.prev, .next' );
 
       t.is ( children.length, 2 );
+
+    });
+
+    it ( 'supports filtering by a class with dots', function ( t ) {
+
+      var children = $('.dotsparent').children ( '.class\\.with\\.dots' );
+
+      t.is ( children.length, 1 );
+
+    });
+
+    it ( 'supports filtering by a id with dots', function ( t ) {
+
+      var children = $('.dotsparent').children ( '#id\\.with\\.dots' );
+
+      t.is ( children.length, 1 );
 
     });
 
@@ -112,9 +134,11 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       var grandparent = $('.grandparent');
       var all = grandparent.find ( '*' );
       var siblings = grandparent.find ( '.sibling' );
+      var dots = $('.dotsparent').find ( '.class\\.with\\.dots' );
 
       t.is ( all.length, 8 );
       t.is ( siblings.length, 5 );
+      t.is ( dots.length, 1 );
 
     });
 
@@ -154,6 +178,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
     });
 
+    it ( 'supports dots in selectors', function ( t ) {
+
+      var eles = $('.dotsgrandparent').children ();
+
+      t.is ( eles.has ( '.class\\.with\\.dots' ).length, 1 );
+      t.is ( eles.has ( '#id\\.with\\.dots' ).length, 1 );
+
+    });
+
     it ( 'supports nodes', function ( t ) {
 
       var eles = $('.grandparent').children ();
@@ -179,6 +212,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
       t.true ( child.is ( $('div') ) );
       t.false ( child.is () );
       t.false ( child.is ( $('#foo') ) );
+
+    });
+
+    it ( 'check if the collection matches a selector with dots', function ( t ) {
+
+      var child = $('.class\\.with\\.dots');
+
+      t.true ( child.is ( '.class\\.with\\.dots' ) );
+      t.true ( child.is ( '#id\\.with\\.dots' ) );
 
     });
 
@@ -211,6 +253,15 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
 
       t.deepEqual ( child.next ( '.next' ).get (), next.get () );
       t.is ( child.next ( 'foo' ).length, 0 );
+
+    });
+
+    it ( 'supports selector with dots', function ( t ) {
+
+      var child = $('.dots\\.first');
+      var next = $('.class\\.with\\.dots');
+
+      t.deepEqual ( child.next ( '.class\\.with\\.dots' ).get (), next.get () );
 
     });
 
