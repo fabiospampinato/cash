@@ -97,9 +97,9 @@ describe ( 'Events', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       if ( !document.hasFocus () ) return; // If the document isn't focused the element won't get the focus either
 
-      var events = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur', 'mouseenter', 'mouseleave'],
-          eventsTrigger = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focusin', 'focusout', 'mouseover', 'mouseout'],
-          counts = [[1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [0, 0, 2, 2, 2, 2, 0], [0, 0, 2, 2, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0]];
+      var events = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focus', 'blur', 'mouseenter', 'mouseleave'];
+      var eventsTrigger = ['focus.namespace', 'focus', 'blur', 'focusin', 'focusout', 'mouseenter', 'mouseleave', 'mouseover', 'mouseout', 'focusin', 'focusout', 'mouseover', 'mouseout'];
+      var counts = [[1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [1, 1, 3, 3, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0], [0, 0, 2, 2, 2, 2, 0], [0, 0, 2, 2, 2, 2, 0], [2, 2, 5, 5, 5, 5, 0], [2, 2, 5, 5, 5, 5, 0]];
 
       events.forEach ( function ( event, index ) {
 

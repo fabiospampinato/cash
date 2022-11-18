@@ -1,5 +1,6 @@
 {
   "name": "cash-dom",
+  "repository": "github:fabiospampinato/cash",
   "description": "An absurdly small jQuery alternative for modern browsers.",
   "version": "8.1.1",
   "license": "MIT",

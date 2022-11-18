@@ -1,11 +1,7 @@
 
-/* HELPERS */
+/* MAIN */
 
-const needsCoverage = process.argv.includes ( '--generate-coverage' );
-
-/* CONFIG */
-
-function config ( config ) {
+const config = config => {
 
   const obj = {
     frameworks: [
@@ -35,33 +31,40 @@ function config ( config ) {
       'test/modules/traversal.js',
       'test/modules/utilities.js'
     ],
-    browsers: ['Chrome', 'Firefox'],
-    preprocessors: {},
+    browsers: [
+      'Chrome',
+      'Firefox'
+    ],
     reporters: [
       'spec'
     ],
     coverageReporter: {
       dir: 'coverage',
       reporters: [
-        { type: 'html', subdir: '.' },
-        { type: 'lcov', subdir: '.' }
+        {
+          type: 'html',
+          subdir: '.'
+        },
+        {
+          type: 'lcov',
+          subdir: '.'
+        }
       ]
-    },
-    captureTimeout: 360000,
-    browserNoActivityTimeout: 360000
+    }
   };
 
-  if ( needsCoverage ) {
+  if ( process.argv.includes ( '--generate-coverage' ) ) {
 
+    obj.browsers.pop ();
     obj.plugins.push ( 'karma-coverage' );
-    obj.preprocessors['dist/cash.js'] = ['coverage'];
+    obj.preprocessors = { 'dist/cash.js': ['coverage'] };
     obj.reporters.push ( 'coverage' );
 
   }
 
   config.set ( obj );
 
-}
+};
 
 /* EXPORT */
 

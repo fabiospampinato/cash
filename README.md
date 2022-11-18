@@ -15,7 +15,7 @@ Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that pr
 | Minified           | **16 KB**   | 26 KB       | 71 KB             |
 | Minified & Gzipped | **6 KB**    | 9.8 KB      | 24.4 KB           |
 
-A **76.6%** gain in size reduction compared to jQuery. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
+A **76.6%** gain in size reduction compared to jQuery Slim. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
 
 | Features                 | Cash                               | Zepto 1.2.0                    | jQuery Slim 3.4.1              |
 | ------------------------ | ---------------------------------- | ------------------------------ | ------------------------------ |
@@ -62,7 +62,7 @@ $(function () {
 
 ## Documentation
 
-Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, everything what we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/fabiospampinato/cash/blob/master/docs/extending_cash.md).
+Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, pretty much everything that we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/fabiospampinato/cash/blob/master/docs/extending_cash.md).
 
 ### $()
 
@@ -88,7 +88,7 @@ These methods from the collection prototype ([$.fn](#fn)) are available once you
 $(element).addClass ( className ) // => collection
 ```
 
-Some [extra methods](https://github.com/fabiospampinato/cash/tree/master/src/extra) are available but [disabled](https://github.com/fabiospampinato/cash/blob/master/pacco.json#L3) by default.
+Some [extra methods](https://github.com/fabiospampinato/cash/tree/master/src/extra) are available but disabled by default.
 
 | Attributes                           | Collection                 | CSS                  | Data                   | Dimensions                           | Effects                    |
 | ------------------------------------ | -------------------------- | -------------------- | ---------------------- | ------------------------------------ | -------------------------- |
