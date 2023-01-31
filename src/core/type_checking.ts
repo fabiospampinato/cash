@@ -40,6 +40,12 @@ function isElement ( value: unknown ): value is HTMLElement {
 
 }
 
+function isText ( value: unknown ): value is Text {
+
+  return !!value && value.nodeType === 3;
+
+}
+
 function isBoolean ( value: unknown ): value is boolean {
 
   return typeof value === 'boolean';

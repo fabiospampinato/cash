@@ -82,6 +82,9 @@ function isDocumentFragment(value) {
 function isElement(value) {
     return !!value && value.nodeType === 1;
 }
+function isText(value) {
+    return !!value && value.nodeType === 3;
+}
 function isBoolean(value) {
     return typeof value === 'boolean';
 }
@@ -146,17 +149,6 @@ fn.empty = function () {
         }
     });
 };
-function text(text) {
-    if (isUndefined(text))
-        return this[0] ? this[0].textContent : '';
-    return this.each(function (i, ele) {
-        if (!isElement(ele))
-            return;
-        ele.textContent = text;
-    });
-}
-;
-fn.text = text;
 function extend() {
     var sources = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -271,6 +263,17 @@ fn.first = function () {
 fn.last = function () {
     return this.eq(-1);
 };
+function text(text) {
+    if (isUndefined(text)) {
+        return this.get().map(function (ele) { return isElement(ele) || isText(ele) ? ele.textContent : ''; }).join('');
+    }
+    return this.each(function (i, ele) {
+        if (!isElement(ele))
+            return;
+        ele.textContent = text;
+    });
+}
+fn.text = text;
 // @require core/type_checking.ts
 // @require core/variables.ts
 function computeStyle(ele, prop, isVariable) {

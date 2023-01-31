@@ -545,13 +545,21 @@ describe ( 'Manipulation', { beforeEach: getFixtureInit ( fixture ) }, function 
 
   describe ( '$.fn.text', function ( it ) {
 
-    it ( 'gets the text', function ( t ) {
+    it ( 'gets the text from a single child', function ( t ) {
 
       var anchor = $('.anchor');
 
       t.is ( anchor.text (), 'content' );
 
     });
+
+    // it ( 'gets the text from a single child', function ( t ) {
+
+    //   var value = $('<p>1</p>\n<p>2</p>').text ();
+
+    //   t.is ( value, '1\n2 ' );
+
+    // });
 
     it ( 'sets html strings', function ( t ) {
 

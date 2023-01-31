@@ -176,6 +176,12 @@ function isElement ( value: unknown ): value is HTMLElement {
 
 }
 
+function isText ( value: unknown ): value is Text {
+
+  return !!value && value.nodeType === 3;
+
+}
+
 function isBoolean ( value: unknown ): value is boolean {
 
   return typeof value === 'boolean';
@@ -317,34 +323,6 @@ fn.empty = function ( this: Cash ) {
   });
 
 };
-
-
-// @require core/cash.ts
-// @require core/type_checking.ts
-// @require collection/each.ts
-
-interface Cash {
-  text (): string;
-  text ( text: string ): this;
-}
-
-function text ( this: Cash ): string;
-function text ( this: Cash, text: string ): Cash;
-function text ( this: Cash, text?: string ) {
-
-  if ( isUndefined ( text ) ) return this[0] ? this[0].textContent : '';
-
-  return this.each ( ( i, ele ) => {
-
-    if ( !isElement ( ele ) ) return;
-
-    ele.textContent = text
-
-  });
-
-};
-
-fn.text = text;
 
 
 // @require ./cash.ts
@@ -648,6 +626,39 @@ fn.last = function ( this: Cash ) {
   return this.eq ( -1 );
 
 };
+
+
+// @require core/cash.ts
+// @require core/type_checking.ts
+// @require collection/each.ts
+// @require collection/get.ts
+
+interface Cash {
+  text (): string;
+  text ( text: string ): this;
+}
+
+function text ( this: Cash ): string;
+function text ( this: Cash, text: string ): Cash;
+function text ( this: Cash, text?: string ) {
+
+  if ( isUndefined ( text ) ) {
+
+    return this.get ().map ( ele => isElement ( ele ) || isText ( ele ) ? ele.textContent : '' ).join ( '' );
+
+  }
+
+  return this.each ( ( i, ele ) => {
+
+    if ( !isElement ( ele ) ) return;
+
+    ele.textContent = text;
+
+  });
+
+}
+
+fn.text = text;
 
 
 // @require core/type_checking.ts

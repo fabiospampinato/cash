@@ -52,10 +52,6 @@ interface Cash {
 interface Cash {
     empty(): this;
 }
-interface Cash {
-    text(): string;
-    text(text: string): this;
-}
 interface CashStatic {
     extend(): any;
     extend(deep: true, target: any, ...sources: any[]): any;
@@ -98,6 +94,10 @@ interface Cash {
 }
 interface Cash {
     last(): Cash;
+}
+interface Cash {
+    text(): string;
+    text(text: string): this;
 }
 interface Cash {
     filter(comparator?: Comparator): Cash;
