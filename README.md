@@ -31,10 +31,10 @@ If you're migrating from jQuery be sure to read our [migration guide](https://gi
 
 ## Usage
 
-Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.2/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@8.1.2/dist/cash.min.js) and use it like this:
+Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.3/cash.min.js) or [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom@8.1.3/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.2/cash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.3/cash.min.js"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );

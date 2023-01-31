@@ -1,3 +1,7 @@
+### [v8.1.3](https://github.com/fabiospampinato/cash/releases/tag/8.1.3) (2023-01-31)
+
+- $.fn.text: ensuring it reads text from every node in the collection, not just the first one, for better alignment with jQuery
+
 ### [v8.1.2](https://github.com/fabiospampinato/cash/releases/tag/8.1.2) (2022-11-18)
 
 - Migration guide: mentioning $.fn.css as a potential workaround for ignoring the effects of CSS transforms
