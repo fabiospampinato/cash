@@ -965,7 +965,7 @@ If you want to make a pull request you should:
 2. Enter the cloned repository: `cd cash`
 3. Install the dependencies: `npm install`.
 4. Automatically recompile Cash whenever a change is made: `npm run dev`.
-5. Automatically rerun the tests whenever a change is made: `npm run test:watch`.
+5. Open the test suite: `npm run test`.
 6. Remember to update the readme, if necessary.
 
 ## Thanks
