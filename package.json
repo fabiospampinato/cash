@@ -17,8 +17,6 @@
     "watch": "monex --watch src --exec npm:build",
     "dev": "npm run build && npm run watch",
     "test": "open ./test/index.html",
-    "test:karma": "karma start --single-run",
-    "test:karma:coverage": "karma start --single-run --generate-coverage && open ./coverage/index.html",
     "test:jquery:init": "( git -C ./test/jquery reset --hard HEAD && git -C ./test/jquery pull ) || git clone https://github.com/jquery/jquery.git ./test/jquery",
     "test:jquery": "npm run test:jquery:init && npm run test:jquery:build && cd ./test/jquery && npm i && opn http://localhost:4444/test/index.html\\?module=css && php -S localhost:4444",
     "test:jquery:build": "cat ./node_modules/jquery/dist/jquery.js ./dist/cash.js ./test/jquery_patch.js > ./test/jquery/dist/jquery.js && cp ./test/jquery/dist/jquery.js ./test/jquery/dist/jquery.min.js",
@@ -26,22 +24,19 @@
     "test:jquery:reverse": "npm run test:jquery:init && npm run test:jquery:reverse:build && npm run test:watch",
     "test:jquery:reverse:build": "cat ./node_modules/jquery/dist/jquery.js ./dist/cash.min.js ./test/jquery_reverse_patch.js > ./dist/cash.js",
     "test:jquery:reverse:build:watch": "while sleep 1; do npm run test:jquery:reverse:build; done",
+    "test:playwright": "node ./test/playwright.mjs",
     "graph": "minipacco graph src/export_esm.ts",
-    "prepublishOnly": "npm run build && npm run test:karma"
+    "prepublishOnly": "npm run build && npm run test:playwright"
   },
   "devDependencies": {
     "esbuild": "^0.15.14",
     "jquery": "^3.6.1",
-    "karma": "^6.4.1",
-    "karma-chrome-launcher": "^3.1.1",
-    "karma-coverage": "^2.2.0",
-    "karma-firefox-launcher": "^2.1.2",
-    "karma-qunit": "^4.1.2",
-    "karma-spec-reporter": "0.0.34",
     "minipacco": "^1.0.3",
     "monex": "^1.4.1",
+    "playwright": "^1.30.0",
     "qunit": "^2.19.3",
     "qunit-ava-spec": "^2.0.0",
+    "tiny-colors": "^2.0.2",
     "typescript": "^4.9.3"
   }
 }
