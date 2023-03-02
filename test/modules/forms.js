@@ -2,7 +2,7 @@
 var fixture = '\
   <form class="form">\
     <input type="hidden" value="5" name="hidden"/>\
-    <input type="text" value="text" name="text"/>\
+    <input type="text" value="text with spaces" name="text"/>\
     <input type="text" value="disabled" name="disabled-check" disabled />\
     <input type="checkbox" value="yes" checked="checked" name="checkbox-yes" />\
     <input type="checkbox" value="no" name="checkbox-no" />\
@@ -32,7 +32,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('.form').serialize ();
 
-      t.is ( val, 'hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2' );
+      t.is ( val, 'hidden=5&text=text%20with%20spaces&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2' );
 
     });
 
@@ -40,7 +40,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('.form input[type=text]').serialize ();
 
-      t.is ( val, 'text=text' );
+      t.is ( val, 'text=text%20with%20spaces' );
 
     });
 
@@ -48,7 +48,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('.form input, .form textarea, .form select').serialize ();
 
-      t.is ( val, 'hidden=5&text=text&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2' );
+      t.is ( val, 'hidden=5&text=text%20with%20spaces&checkbox-yes=yes&radio=yes&select=selected&select-multiple=option-1&select-multiple=option-2' );
 
     });
 
@@ -68,7 +68,7 @@ describe ( 'Forms', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       var val = $('.form input[type=text]').val ();
 
-      t.is ( val, 'text' );
+      t.is ( val, 'text with spaces' );
 
     });
 
