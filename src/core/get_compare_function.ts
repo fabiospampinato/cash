@@ -10,8 +10,10 @@ function getCompareFunction ( comparator?: Comparator ): (( i: number, ele: EleL
              ? comparator
              : isCash ( comparator )
                ? ( i: number, ele: EleLoose ) => comparator.is ( ele )
-               : !comparator
-                 ? () => false
-                 : ( i: number, ele: EleLoose ) => ele === comparator;
+               : isArray(comparator)
+                 ? ( i: number, ele: EleLoose ) => comparator.indexOf ( ele ) >= 0
+                 : !comparator
+                   ? () => false
+                   : ( i: number, ele: EleLoose ) => ele === comparator;
 
 }

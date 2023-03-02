@@ -142,6 +142,15 @@ describe ( 'Collection', { beforeEach: getFixtureInit ( fixture ) }, function ()
 
     });
 
+    it ( 'supports array', function ( t ) {
+
+      var collection = $([0, 1, 2, 3, 4]);
+      var filtered = collection.filter ( [0, 3] ).get ();
+
+      t.deepEqual ( filtered, [0, 3] );
+
+    });
+
     it ( 'doesn\'t throw with an empty selector', function ( t ) {
 
       $('*').filter ( '' );
