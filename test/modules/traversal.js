@@ -330,7 +330,7 @@ describe ( 'Traversal', { beforeEach: getFixtureInit ( fixture ) }, function () 
     it ( 'works with arrays', function ( t ) {
 
       var collection = $([0, 1, 2, 3, 4]);
-      var filtered = collection.not( [1, 3] ).get();
+      var filtered = collection.not( [1, 3] ).get ();
 
       t.deepEqual ( filtered, [0, 2, 4] );
 
