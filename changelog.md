@@ -1,3 +1,12 @@
+### [v8.1.4](https://github.com/fabiospampinato/cash/releases/tag/8.1.4) (2023-03-08)
+
+- Updatd contribution guide
+- Replaced Karma with Playwright, removing most dev dependencies, removing coverage reports, and adding support for Safari
+- Updated dependencies
+- Lowercased readme file
+- Lowercased changelog file
+- $.serialize: avoiding encoding "%20" as "+", for better alignment with jQuery
+
 ### [v8.1.3](https://github.com/fabiospampinato/cash/releases/tag/8.1.3) (2023-01-31)
 
 - $.fn.text: ensuring it reads text from every node in the collection, not just the first one, for better alignment with jQuery

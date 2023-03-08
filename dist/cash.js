@@ -1113,10 +1113,9 @@ function one(eventFullName, selector, data, callback) {
 }
 ;
 fn.one = one;
-var queryEncodeSpaceRe = /%20/g;
 var queryEncodeCRLFRe = /\r?\n/g;
 function queryEncode(prop, value) {
-    return "&".concat(encodeURIComponent(prop), "=").concat(encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+'));
+    return "&".concat(encodeURIComponent(prop), "=").concat(encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')));
 }
 var skippableRe = /file|reset|submit|button|image/i;
 var checkableRe = /radio|checkbox/i;

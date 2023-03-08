@@ -1101,10 +1101,9 @@ function one(eventFullName, selector, data, callback) {
 }
 ;
 fn.one = one;
-const queryEncodeSpaceRe = /%20/g;
 const queryEncodeCRLFRe = /\r?\n/g;
 function queryEncode(prop, value) {
-    return `&${encodeURIComponent(prop)}=${encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n')).replace(queryEncodeSpaceRe, '+')}`;
+    return `&${encodeURIComponent(prop)}=${encodeURIComponent(value.replace(queryEncodeCRLFRe, '\r\n'))}`;
 }
 const skippableRe = /file|reset|submit|button|image/i;
 const checkableRe = /radio|checkbox/i;
