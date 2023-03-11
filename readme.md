@@ -46,7 +46,7 @@ Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.4/cas
 Cash is also available through [npm](https://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
 
 ```sh
-npm install cash-dom
+npm install --save cash-dom
 ```
 
 That you can then use like this:
