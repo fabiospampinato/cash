@@ -20,7 +20,9 @@ class Cash {
                 ? ( ctx as Document ).getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
-                  : cash( context || doc ).find( selector );
+                  : context
+                    ? cash( context ).find( selector )
+                    : find ( selector, ctx );
 
       if ( !eles ) return;
 
