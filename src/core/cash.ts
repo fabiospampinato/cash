@@ -21,7 +21,7 @@ class Cash {
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
                   : context
-                    ? cash( context ).find( selector )
+                    ? cash ( context ).find ( selector )
                     : find ( selector, ctx );
 
       if ( !eles ) return;
