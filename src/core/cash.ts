@@ -14,13 +14,17 @@ class Cash {
 
     if ( isString ( selector ) ) {
 
-      const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
+      const ctx = context || doc;
 
-      eles = idRe.test ( selector ) && 'getElementById' in ctx
-                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
+      eles = idRe.test ( selector ) && isDocument ( ctx )
+                ? ctx.getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
-                  : find ( selector, ctx );
+                  : isCash ( ctx )
+                    ? ctx.find ( selector )
+                      : isString ( ctx )
+                        ? cash ( ctx ).find ( selector )
+                        : find ( selector, ctx );
 
       if ( !eles ) return;
 

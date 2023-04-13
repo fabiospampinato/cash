@@ -6,8 +6,8 @@ var fixture = '\
   <div id="id"></div>\
   <div id="id"></div>\
   <div class="single"></div>\
-  <div class="multiple"></div>\
-  <div class="multiple"></div>\
+  <div class="multiple"><div class="child"></div></div>\
+  <div class="multiple"><div class="child"></div></div>\
   <main></main>\
   <main></main>\
 ';
@@ -210,6 +210,13 @@ describe ( 'Core', { beforeEach: getFixtureInit ( fixture ) }, function ( it ) {
 
       t.is ( $('.subcontext').length, 0 );
       t.is ( $( '.subcontext', context ).length, 1 );
+      t.is ( $( '.child', $('.multiple') ).length, 2 );
+
+    });
+
+    it ( 'supports selector', function ( t ) {
+
+      t.is ( $( '.child', '.multiple' ).length, 2 );
 
     });
 
