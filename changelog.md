@@ -1,3 +1,8 @@
+### [v8.1.5](https://github.com/fabiospampinato/cash/releases/tag/8.1.5) (2023-04-13)
+
+- Fixed support for using a selector as context
+- $.hide: ensuring calling it multiple times sequentially works too
+
 ### [v8.1.4](https://github.com/fabiospampinato/cash/releases/tag/8.1.4) (2023-03-08)
 
 - Updatd contribution guide

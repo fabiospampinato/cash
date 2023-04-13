@@ -27,7 +27,7 @@ type Ele = Window | Document | HTMLElement | Element | Node;
 type EleLoose = HTMLElement & Element & Node; //UGLY: Trick to remove some kind-of useless type errors //URL: https://github.com/fabiospampinato/cash/issues/278
 type Selector = falsy | string | Function | HTMLCollection | NodeList | Ele | Ele[] | ArrayLike<Ele> | Cash;
 type Comparator = string | Ele | Cash | (( this: EleLoose, index: number, ele: EleLoose ) => boolean);
-type Context = Document | HTMLElement | Element;
+type Context = Document | HTMLElement | Element | string;
 
 type PlainObject<T> = Record<string, T>; //FIXME: Arrays can be assigned to this type, for whatever reason
 
@@ -86,13 +86,17 @@ class Cash {
 
     if ( isString ( selector ) ) {
 
-      const ctx = ( isCash ( context ) ? context[0] : context ) || doc;
+      const ctx = context || doc;
 
-      eles = idRe.test ( selector ) && 'getElementById' in ctx
-                ? ( ctx as Document ).getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
+      eles = idRe.test ( selector ) && isDocument ( ctx )
+                ? ctx.getElementById ( selector.slice ( 1 ).replace ( /\\/g, '' ) )
                 : htmlRe.test ( selector )
                   ? parseHTML ( selector )
-                  : find ( selector, ctx );
+                  : isCash ( ctx )
+                    ? ctx.find ( selector )
+                      : isString ( ctx )
+                        ? cash ( ctx ).find ( selector )
+                        : find ( selector, ctx );
 
       if ( !eles ) return;
 
@@ -2259,7 +2263,8 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
 
     if ( !isElement ( ele ) ) return;
 
-    const show = isUndefined ( force ) ? isHidden ( ele ) : force;
+    const hidden = isHidden ( ele );
+    const show = isUndefined ( force ) ? hidden : force;
 
     if ( show ) {
 
@@ -2271,7 +2276,7 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
 
       }
 
-    } else {
+    } else if ( !hidden ) {
 
       ele[displayProperty] = computeStyle ( ele, 'display' );
 

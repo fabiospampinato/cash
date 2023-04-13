@@ -33,12 +33,16 @@ class Cash {
             return selector;
         let eles = selector;
         if (isString(selector)) {
-            const ctx = (isCash(context) ? context[0] : context) || doc;
-            eles = idRe.test(selector) && 'getElementById' in ctx
+            const ctx = context || doc;
+            eles = idRe.test(selector) && isDocument(ctx)
                 ? ctx.getElementById(selector.slice(1).replace(/\\/g, ''))
                 : htmlRe.test(selector)
                     ? parseHTML(selector)
-                    : find(selector, ctx);
+                    : isCash(ctx)
+                        ? ctx.find(selector)
+                        : isString(ctx)
+                            ? cash(ctx).find(selector)
+                            : find(selector, ctx);
             if (!eles)
                 return;
         }
@@ -876,14 +880,15 @@ fn.toggle = function (force) {
     return this.each((i, ele) => {
         if (!isElement(ele))
             return;
-        const show = isUndefined(force) ? isHidden(ele) : force;
+        const hidden = isHidden(ele);
+        const show = isUndefined(force) ? hidden : force;
         if (show) {
             ele.style.display = ele[displayProperty] || '';
             if (isHidden(ele)) {
                 ele.style.display = getDefaultDisplay(ele.tagName);
             }
         }
-        else {
+        else if (!hidden) {
             ele[displayProperty] = computeStyle(ele, 'display');
             ele.style.display = 'none';
         }
