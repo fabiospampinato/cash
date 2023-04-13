@@ -1,6 +1,7 @@
 
 var fixture = '\
   <style>.show-custom { display: inline-block }</style>\
+  <style>.show-custom-style { display: flex }</style>\
   <style>.show-cls { display: block }</style>\
   <style>.hide-cls { display: none }</style>\
   <div class="toggleable shown"></div>\
@@ -10,7 +11,14 @@ var fixture = '\
   <div class="toggleable hidden" style="display: none"></div>\
   <span class="toggleable hide-cls"></span>\
   <span class="show-custom"></span>\
+  <span class="show-custom-style"></span>\
 ';
+
+function isDisplay ( collection, display ) {
+  return [].every.call ( collection, function ( ele ) {
+    return $(ele).css ( 'display' ) === display;
+  });
+}
 
 function isShown ( collection ) {
   return [].every.call ( collection, function ( ele ) {
@@ -141,6 +149,18 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
       eles.toggle ().toggle ().toggle ().toggle ();
 
       t.pass ();
+
+    });
+
+    it ( 'supports showing after hiding multiple times', function ( t ) {
+
+      var eles = $('.show-custom-style');
+
+      eles.toggle ( false );
+      eles.toggle ( false );
+      eles.toggle ( true );
+
+      t.true ( isDisplay ( eles, 'flex' ) );
 
     });
 
