@@ -43,7 +43,7 @@ Get Cash from [CloudFlare](https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.4/cas
 </script>
 ```
 
-Cash is also available through [npm](http://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
+Cash is also available through [npm](https://npmjs.com) as the [`cash-dom`](https://www.npmjs.com/package/cash-dom) package:
 
 ```sh
 npm install --save cash-dom
@@ -62,7 +62,7 @@ $(function () {
 
 ## Documentation
 
-Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](http://api.jquery.com), while we don't implement everything that jQuery provides, pretty much everything that we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/fabiospampinato/cash/blob/master/docs/extending_cash.md).
+Cash gives you a query selector, [collection methods](#collection-methods) and some [library methods](#cash-methods). If you need more details about our API just check out [jQuery's](https://api.jquery.com), while we don't implement everything that jQuery provides, pretty much everything that we do implement should be compatible with jQuery. Cash can be extended with custom methods, read how [here](https://github.com/fabiospampinato/cash/blob/master/docs/extending_cash.md).
 
 ### $()
 
