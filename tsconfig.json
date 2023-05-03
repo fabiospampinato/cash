@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["ES2015.Collection"],
     "forceConsistentCasingInFileNames": true,
     "noUnusedParameters": false,
     "strictNullChecks": false

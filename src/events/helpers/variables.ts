@@ -1,5 +1,5 @@
 
-const eventsNamespace = '___ce';
+const eventsWeakMapCache = new WeakMap ();
 const eventsNamespacesSeparator = '.';
 const eventsFocus: { [event: string]: string | undefined } = { focus: 'focusin', blur: 'focusout' };
 const eventsHover: { [event: string]: string | undefined } = { mouseenter: 'mouseover', mouseleave: 'mouseout' };
