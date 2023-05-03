@@ -20,10 +20,9 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
     if ( !name ) return this;
 
-    const type = eventsMouseRe.test ( name ) ? 'MouseEvents' : 'HTMLEvents';
+    const EventClass = eventsMouseRe.test ( name ) ? MouseEvent : Event;
 
-    event = doc.createEvent ( type );
-    event.initEvent ( name, true, true );
+    event = new EventClass ( name, { bubbles: true, cancelable: true } ) as Event;
     event.namespace = namespaces.join ( eventsNamespacesSeparator );
     event.___ot = nameOriginal;
 
