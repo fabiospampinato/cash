@@ -2,7 +2,8 @@
 // @require ./find.ts
 // @require ./variables.ts
 
-class Cash {
+class Cash implements ArrayLike<HTMLElement> {
+  [key: string]: Function;
 
   constructor ( selector?: Selector, context?: Context | Cash ) {
 
