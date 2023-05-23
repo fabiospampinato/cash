@@ -2,7 +2,7 @@
 // @require ./find.ts
 // @require ./variables.ts
 
-class Cash implements ArrayLike<HTMLElement> {
+class Cash implements ArrayLike<EleLoose> {
   [key: string]: Function;
 
   constructor ( selector?: Selector, context?: Context | Cash ) {
