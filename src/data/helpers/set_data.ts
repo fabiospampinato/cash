@@ -4,7 +4,7 @@
 
 function setData ( ele: EleLoose, key: string, value: any ): void {
 
-  value = attempt ( JSON.stringify, value );
+  value = attempt ( JSON.stringify, value ).replace(/^"(.*)"$/, "$1");
 
   ele.dataset[camelCase ( key )] = value;
 
