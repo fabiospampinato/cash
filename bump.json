@@ -2,12 +2,6 @@
   "changelog": {
     "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])\n"
   },
-  "files": {
-    "README.md": [
-      ["cash/([^/]+?)/cash.min.js", "cash/[version]/cash.min.js"],
-      ["@([^/]+?)/dist/cash.min.js", "@[version]/dist/cash.min.js"]
-    ]
-  },
   "tag": {
     "enabled": false,
     "name": "[version]"
@@ -16,7 +10,7 @@
     "github": {
       "enabled": true,
       "files": [
-        "dist/**"
+        "**/dist/**"
       ]
     }
   },
