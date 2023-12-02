@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require collection/each.ts
 // @require ./helpers/variables.ts
 

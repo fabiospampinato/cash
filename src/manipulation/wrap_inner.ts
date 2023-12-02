@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require collection/first.ts
 // @require manipulation/append_to.ts
 

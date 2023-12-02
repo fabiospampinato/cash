@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/get_split_values.ts
 // @require collection/each.ts
 
