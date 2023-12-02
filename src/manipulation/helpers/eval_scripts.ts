@@ -25,7 +25,7 @@ function evalScripts ( node: Node, doc: Document ): void {
 
       });
 
-      doc.head.insertBefore ( script, null );
+      doc.head.appendChild ( script );
       doc.head.removeChild ( script );
 
     }
