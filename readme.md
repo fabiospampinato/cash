@@ -5,7 +5,7 @@
 
 # Cash
 
-Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but Cash comes helpfully close, covering most day to day use cases.
+Cash is an absurdly small jQuery alternative for modern browsers that provides jQuery-style syntax for manipulating the DOM. Utilizing modern browser features to minimize the codebase, developers can use the familiar chainable methods at a fraction of the file size. 100% feature parity with jQuery isn't a goal, but Cash comes helpfully close, covering most day to day use cases.
 
 ## Comparison
 
@@ -15,7 +15,7 @@ Cash is an absurdly small jQuery alternative for modern browsers (IE11+) that pr
 | Minified           | **16.5 KB**  | 25.8 KB       | 68.6 KB              |
 | Minified & Gzipped | **6.1 KB**   | 9.6 KB        | 23.6 KB              |
 
-A **76.6%** gain in size reduction compared to jQuery Slim. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
+A **74.2%** gain in size reduction compared to jQuery Slim. If you need a smaller bundle, we support [partial builds](https://github.com/fabiospampinato/cash/blob/master/docs/partial_builds.md) too.
 
 | Features                 | Cash                               | Zepto 1.2.0                    | jQuery Slim 3.4.1              |
 | ------------------------ | ---------------------------------- | ------------------------------ | ------------------------------ |
