@@ -16,7 +16,7 @@ function val ( this: Cash, value?: string | string[] ) {
 
   if ( !arguments.length ) return this[0] && getValue ( this[0] );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     const isSelect = ele.multiple && ele.options;
 

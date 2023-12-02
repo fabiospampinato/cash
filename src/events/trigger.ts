@@ -33,7 +33,7 @@ fn.trigger = function ( this: Cash, event: Event | string, data?: any ) {
 
   const isEventFocus = ( event.___ot in eventsFocus );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( isEventFocus && isFunction ( ele[event.___ot] ) ) {
 

@@ -9,6 +9,6 @@ interface Cash {
 
 fn.removeProp = function ( this: Cash, prop: string ) {
 
-  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
+  return each ( this, ( i, ele ) => { delete ele[propMap[prop] || prop] } );
 
 };

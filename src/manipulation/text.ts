@@ -19,7 +19,7 @@ function text ( this: Cash, text?: string ) {
 
   }
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

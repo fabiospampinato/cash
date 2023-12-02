@@ -30,7 +30,7 @@ function css ( this: Cash, prop: string | Record<string, number | string>, value
 
     value = getSuffixedValue ( prop, value, isVariable );
 
-    return this.each ( ( i, ele ) => {
+    return each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) ) return;
 

@@ -20,7 +20,7 @@ function html ( this: Cash, html?: string ) {
 
   const hasScript = /<script[\s>]/.test ( html );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

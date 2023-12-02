@@ -8,7 +8,7 @@ interface Cash {
 
 fn.empty = function ( this: Cash ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     while ( ele.firstChild ) {
 

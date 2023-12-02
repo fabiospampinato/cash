@@ -11,7 +11,7 @@ fn.removeAttr = function ( this: Cash, attr: string ) {
 
   const attrs = getSplitValues ( attr );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

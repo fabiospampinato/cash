@@ -12,7 +12,7 @@ interface Cash {
 
 fn.toggle = function ( this: Cash, force?: boolean ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

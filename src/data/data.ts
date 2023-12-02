@@ -40,7 +40,7 @@ function data ( this: Cash, name?: string | Record<string, any>, value?: any ) {
 
     if ( isUndefined ( value ) ) return this;
 
-    return this.each ( ( i, ele ) => { setData ( ele, name, value ) } );
+    return each ( this, ( i, ele ) => { setData ( ele, name, value ) } );
 
   }
 

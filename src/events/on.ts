@@ -84,7 +84,7 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
     if ( !name ) return;
 
-    this.each ( ( i, ele ) => {
+    each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 

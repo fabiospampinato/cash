@@ -9,7 +9,7 @@ interface Cash {
 
 fn.wrap = function ( this: Cash, selector?: Selector ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     const wrapper = cash ( selector )[0];
 

@@ -35,7 +35,7 @@ function attr ( this: Cash, attr?: string | Record<string, string>, value?: stri
 
     if ( isNull ( value ) ) return this.removeAttr ( attr );
 
-    return this.each ( ( i, ele ) => {
+    return each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) ) return;
 
