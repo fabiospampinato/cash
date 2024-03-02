@@ -1,7 +1,7 @@
 {
   "changelog": {
     "path": "changelog.md",
-    "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])\n"
+    "version": "### [v[version]](https://github.com/fabiospampinato/cash/releases/tag/[version]) ([version_date])"
   },
   "tag": {
     "enabled": false,
