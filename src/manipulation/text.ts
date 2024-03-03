@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
 // @require collection/get.ts
@@ -19,7 +20,7 @@ function text ( this: Cash, text?: string ) {
 
   }
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

@@ -19,7 +19,7 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
 
   if ( isUndefined ( eventFullName ) ) {
 
-    this.each ( ( i, ele ) => {
+    each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 
@@ -49,7 +49,7 @@ fn.off = function ( this: Cash, eventFullName?: string | Record<string, EventCal
       const [nameOriginal, namespaces] = parseEventName ( eventFullName );
       const name = getEventNameBubbling ( nameOriginal );
 
-      this.each ( ( i, ele ) => {
+      each ( this, ( i, ele ) => {
 
         if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 

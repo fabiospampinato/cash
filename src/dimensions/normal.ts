@@ -35,7 +35,7 @@ each ( ['Width', 'Height'], ( index: number, prop: 'Width' | 'Height' ) => {
 
     const valueNumber = parseInt ( value, 10 );
 
-    return this.each ( ( i, ele ) => {
+    return each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) ) return;
 

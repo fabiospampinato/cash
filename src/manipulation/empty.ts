@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require collection/each.ts
 
 interface Cash {
@@ -8,7 +9,7 @@ interface Cash {
 
 fn.empty = function ( this: Cash ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     while ( ele.firstChild ) {
 

@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/get_split_values.ts
 // @require collection/each.ts
 
@@ -11,7 +12,7 @@ fn.removeAttr = function ( this: Cash, attr: string ) {
 
   const attrs = getSplitValues ( attr );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 
