@@ -34,7 +34,7 @@ If you're migrating from jQuery be sure to read our [migration guide](https://gi
 You can get Cash from [jsDelivr](https://cdn.jsdelivr.net/npm/cash-dom/dist/cash.min.js) and use it like this:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/cash-dom/dist/cash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cash-dom/dist/cash.min.js" integrity="sha384-sneJ8IAzK7XeryU1YdEpAKSjiDCFZct7PbBhhggDMnkDMoiXbxD+k72hbdfSSeTx" crossorigin="anonymous"></script>
 <script>
   $(function () {
     $('html').addClass ( 'dom-loaded' );
