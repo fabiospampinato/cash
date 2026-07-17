@@ -33,7 +33,7 @@ jQuery's `$.fn.data` function caches retrieved values, and doesn't refresh them 
 
 Cash doesn't implement such caching functionality and doesn't have this problem, the retrieved values are always fresh.
 
-Also values set via Cash's `$.fn.data` function are stored as JSON values in `data-*` attributes set on the DOM nodes, so for instance calling `$('#foo').data ( 'test', 123 )` will add the `data-test="123"` attribute to the `#foo` node, as a concequence of this values that are not JSON-serializable are not supported.
+Also values set via Cash's `$.fn.data` function are stored as JSON values in `data-*` attributes set on the DOM nodes, so for instance calling `$('#foo').data ( 'test', 123 )` will add the `data-test="123"` attribute to the `#foo` node, as a consequence of this values that are not JSON-serializable are not supported.
 
 ### Plain objects
 
@@ -166,7 +166,7 @@ jQuery supports inserting plain text using different methods (`$.fn.after`, `$.f
 $('.foo').append ( 'something' );
 ```
 
-Cash doesn't support that because it instead supports receiving a selector as an argument, and that can be ambigous when also supporting plain text.
+Cash doesn't support that because it instead supports receiving a selector as an argument, and that can be ambiguous when also supporting plain text.
 
 ```javascript
 $('.foo').append ( '.foo' ); // Is that a target or do we actually wanto to append ".foo"?

@@ -78,7 +78,7 @@
 ### [v6.0.1](https://github.com/fabiospampinato/cash/releases/tag/6.0.1) (2020-01-05)
 
 - Ensuring events work with Document and Window objects
-- Ensuring "event.data" is setted reliably
+- Ensuring "event.data" is set reliably
 
 ### [v6.0.0](https://github.com/fabiospampinato/cash/releases/tag/6.0.0) (2020-01-05)
 
@@ -399,7 +399,7 @@
 - $.fn.attr: removing the attribute when setting a value of `null`
 - $.fn.removeAttr: added support for passing a space-separated string of attributes
 - $.fn.css: added support for CSS variables
-- $.fn.detach: avoding throwing an error when the parent node is missing
+- $.fn.detach: avoiding throwing an error when the parent node is missing
 - getData: some minor changes
 - $.fn.data: added support for getting the entire data object
 - Test: added some tests for `$.fn.before` and `$.fn.after`
@@ -635,7 +635,7 @@
 - updated utilities &amp; type checking links
 - Merge pull request #89 from devinargenta/docs/index-added
 - Size alignment
-- Documentation for `$.fn.offet`, `$.fn.offetParent` and `$.fn.position`
+- Documentation for `$.fn.offset`, `$.fn.offsetParent` and `$.fn.position`
 - Documentation for `$.fn.removeProp`
 - Documentation for setting properties
 - Utility alphabetical order
