@@ -5,7 +5,7 @@
 
 ### [v8.1.4](https://github.com/fabiospampinato/cash/releases/tag/8.1.4) (2023-03-08)
 
-- Updatd contribution guide
+- Updated contribution guide
 - Replaced Karma with Playwright, removing most dev dependencies, removing coverage reports, and adding support for Safari
 - Updated dependencies
 - Lowercased readme file
@@ -283,7 +283,7 @@
 - camelCase: removed description
 - $.fn.each: improved performance
 - $.matches: removed support for older browsers
-- Travis: addded bundlesize
+- Travis: added bundlesize
 - $.fn.prev|next: retrieving all previous/next elements
 - Test: ensuring `$.fn.replaceWith` and `$.fn.replaceAll` support multiple elements
 - Test: ensuring that `$.fn.data` supports more data types
