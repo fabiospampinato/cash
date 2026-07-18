@@ -12,6 +12,7 @@ var fixture = '\
   <span class="toggleable hide-cls"></span>\
   <span class="show-custom"></span>\
   <span class="show-custom-style"></span>\
+  <span class="span-with-display-block" style="display: block"></span>\
 ';
 
 function isDisplay ( collection, display ) {
@@ -66,7 +67,7 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
 
       ele.hide ().show ();
 
-      t.is ( ele[0].style.display, 'inline-block' );
+      t.is ( ele.css ( 'display' ), 'inline-block' );
 
     });
 
@@ -93,6 +94,16 @@ describe ( 'Effects', { beforeEach: getFixtureInit ( fixture ) }, function () {
       t.is ( title.css ( 'display' ), 'block' );
 
       title.detach ();
+
+    });
+
+    it ( 'does not changing display for already visible item', function ( t ) {
+
+      var eles = $('.span-with-display-block');
+
+      eles.show ();
+
+      t.true ( isDisplay ( eles, 'block' ) );
 
     });
 

@@ -16,22 +16,26 @@ fn.toggle = function ( this: Cash, force?: boolean ) {
 
     if ( !isElement ( ele ) ) return;
 
-    const hidden = isHidden ( ele );
-    const show = isUndefined ( force ) ? hidden : force;
+    const show = isUndefined ( force ) ? isHidden ( ele ) : force;
+    const display = ele.style.display;
 
     if ( show ) {
 
-      ele.style.display = ele[displayProperty] || '';
+      if ( !display || display === 'none' ) {
 
-      if ( isHidden ( ele ) ) {
+        ele.style.display = ele[displayProperty] || '';
 
-        ele.style.display = getDefaultDisplay ( ele.tagName );
+        if ( isHidden ( ele ) ) {
+
+          ele.style.display = getDefaultDisplay ( ele.tagName );
+
+        }
 
       }
 
-    } else if ( !hidden ) {
+    } else if ( display !== 'none' ) {
 
-      ele[displayProperty] = computeStyle ( ele, 'display' );
+      ele[displayProperty] = display;
 
       ele.style.display = 'none';
 
