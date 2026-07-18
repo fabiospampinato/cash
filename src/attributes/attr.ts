@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
 // @require ./remove_attr.ts
@@ -35,7 +36,7 @@ function attr ( this: Cash, attr?: string | Record<string, string>, value?: stri
 
     if ( isNull ( value ) ) return this.removeAttr ( attr );
 
-    return this.each ( ( i, ele ) => {
+    return each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) ) return;
 

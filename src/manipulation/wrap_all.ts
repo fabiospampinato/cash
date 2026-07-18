@@ -12,8 +12,9 @@ fn.wrapAll = function ( this: Cash, selector?: Selector ) {
 
   let structure = cash ( selector );
   let wrapper: Element = structure[0];
+  let t: Element | undefined;
 
-  while ( wrapper.children.length ) wrapper = wrapper.firstElementChild;
+  while ( t = wrapper.firstElementChild ) wrapper = t;
 
   this.first ().before ( structure );
 

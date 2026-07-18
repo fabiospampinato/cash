@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/get_split_values.ts
 // @require core/guid.ts
 // @require core/matches.ts
@@ -84,7 +85,7 @@ function on ( this: Cash, eventFullName: Record<string, EventCallback> | string,
 
     if ( !name ) return;
 
-    this.each ( ( i, ele ) => {
+    each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) && !isDocument ( ele ) && !isWindow ( ele ) ) return;
 

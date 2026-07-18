@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
 // @require ./helpers/compute_style.ts
@@ -30,7 +31,7 @@ function css ( this: Cash, prop: string | Record<string, number | string>, value
 
     value = getSuffixedValue ( prop, value, isVariable );
 
-    return this.each ( ( i, ele ) => {
+    return each ( this, ( i, ele ) => {
 
       if ( !isElement ( ele ) ) return;
 

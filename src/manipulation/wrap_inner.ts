@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require collection/first.ts
 // @require manipulation/append_to.ts
 
@@ -9,7 +10,7 @@ interface Cash {
 
 fn.wrapInner = function ( this: Cash, selector?: Selector ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     const $ele = cash ( ele );
     const contents = $ele.contents ();

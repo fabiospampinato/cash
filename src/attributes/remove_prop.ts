@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require collection/each.ts
 // @require ./helpers/variables.ts
 
@@ -9,6 +10,6 @@ interface Cash {
 
 fn.removeProp = function ( this: Cash, prop: string ) {
 
-  return this.each ( ( i, ele ) => { delete ele[propMap[prop] || prop] } );
+  return each ( this, ( i, ele ) => { delete ele[propMap[prop] || prop] } );
 
 };

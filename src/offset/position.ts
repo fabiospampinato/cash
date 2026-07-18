@@ -25,9 +25,11 @@ fn.position = function ( this: Cash ) {
 
     const doc = ele.ownerDocument;
 
-    let offsetParent = ele.offsetParent || doc.documentElement;
+    const root = doc.documentElement;
+    
+    let offsetParent = ele.offsetParent || root;
 
-    while ( ( offsetParent === doc.body || offsetParent === doc.documentElement ) && computeStyle ( offsetParent, 'position' ) === 'static' ) {
+    while ( ( offsetParent === doc.body || offsetParent === root ) && computeStyle ( offsetParent, 'position' ) === 'static' ) {
 
       offsetParent = offsetParent.parentNode;
 

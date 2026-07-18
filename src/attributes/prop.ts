@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/type_checking.ts
 // @require collection/each.ts
 // @require ./helpers/variables.ts
@@ -20,7 +21,7 @@ fn.prop = function ( this: Cash, prop: string | Record<string, any>, value?: any
 
     if ( arguments.length < 2 ) return this[0] && this[0][prop];
 
-    return this.each ( ( i, ele ) => { ele[prop] = value } );
+    return each ( this, ( i, ele ) => { ele[prop] = value } );
 
   }
 

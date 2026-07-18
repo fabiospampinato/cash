@@ -16,7 +16,7 @@ fn.serialize = function ( this: Cash ) {
 
   let query = '';
 
-  this.each ( ( i, ele ) => {
+  each ( this, ( i, ele ) => {
 
     each ( ele.elements || [ele], ( i, ele: EleLoose ) => {
 

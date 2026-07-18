@@ -14,7 +14,7 @@ fn.toggleClass = function ( this: Cash, cls: string, force?: boolean ) {
   const classes = getSplitValues ( cls );
   const isForce = !isUndefined ( force );
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 

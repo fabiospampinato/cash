@@ -1,5 +1,6 @@
 
 // @require core/cash.ts
+// @require core/each.ts
 // @require core/type_checking.ts
 // @require css/helpers/compute_style.ts
 // @require ./helpers/get_default_display.ts
@@ -12,7 +13,7 @@ interface Cash {
 
 fn.toggle = function ( this: Cash, force?: boolean ) {
 
-  return this.each ( ( i, ele ) => {
+  return each ( this, ( i, ele ) => {
 
     if ( !isElement ( ele ) ) return;
 
