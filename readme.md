@@ -328,7 +328,7 @@ $(element).filter ( function ( index, element ) {} ) // => collection
 
 #### fn.find ()
 
-Returns selector match descendants from the first element in the collection.
+Returns a collection of matching descendants from all elements in the collection, with duplicates removed.
 
 ```js
 $(element).find ( selector ) // => collection
@@ -387,11 +387,11 @@ $(element).hide () // => collection
 
 #### fn.html ()
 
-Returns the HTML text of the first element in the collection, sets the HTML if provided.
+Returns the HTML text of the first element in the collection. If `htmlString` is provided, sets the HTML of each element and returns the collection.
 
 ```js
 $(element).html () // => HTML Text
-$(element).html ( htmlString ) // => HTML Text
+$(element).html ( htmlString ) // => collection
 ```
 
 #### fn.index ()
@@ -762,7 +762,7 @@ $(selector).slice ( start, end ) // => collection
 
 #### fn.text ()
 
-Returns the inner text of the first element in the collection, sets the text if textContent is provided.
+Returns the combined text content of all elements in the collection. If `textContent` is provided, sets the text of each element and returns the collection.
 
 ```js
 $(element).text () // => text
